@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 import TableManageAccount from "@/components/TableManageAccount";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
 
   const navigateTo = (path: string) => {
@@ -14,7 +14,7 @@ const page = () => {
   };
 
   return (
-    <div className="px-5 py-5 flex flex-col w-full items-center">
+    <div className="mr-10 px-5 py-5 flex flex-col bg-grey-300 border">
       <div className="flex flex-row-reverse mb-5">
         <Button
           className="hover:text-white hover:bg-violet-800"
@@ -34,4 +34,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
