@@ -1,0 +1,30 @@
+type Patient @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  sex: String
+  phone_number: String
+  dob: String
+  institutionID: ID! @index(name: "byInstitution")
+}
+
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  institutionID: ID! @index(name: "byInstitution")
+  role_type: Int
+  email: String
+  Category: String
+  Specialty: String
+}
+
+type Institution @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  contact: String
+  address: String
+  subscription_type: String
+  email: String
+  Users: [User] @hasMany(indexName: "byInstitution", fields: ["id"])
+  Patients: [Patient] @hasMany(indexName: "byInstitution", fields: ["id"])
+}
+ 

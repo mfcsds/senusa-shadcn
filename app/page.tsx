@@ -1,10 +1,19 @@
+import React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Amplify } from "aws-amplify";
+import awsconfig from "@/src/aws-exports";
+import LoginForm from "@/components/auth/LoginForm";
 
-export default function Home() {
+Amplify.configure(awsconfig);
+
+import { signIn, type SignInInput } from "aws-amplify/auth";
+
+const page = () => {
   return (
     <div>
-        Should Be Login
+      <LoginForm />
     </div>
   );
-}
+};
+
+export default page;
