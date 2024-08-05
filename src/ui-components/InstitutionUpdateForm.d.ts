@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { Institution } from "../API.ts";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
@@ -28,6 +28,11 @@ export declare type InstitutionUpdateFormInputValues = {
     address?: string;
     subscription_type?: string;
     email?: string;
+    userQuotas?: number;
+    currentUserQuota?: number;
+    storageQuota?: number;
+    registrationDate?: string;
+    accountStatus?: boolean;
 };
 export declare type InstitutionUpdateFormValidationValues = {
     name?: ValidationFunction<string>;
@@ -35,6 +40,11 @@ export declare type InstitutionUpdateFormValidationValues = {
     address?: ValidationFunction<string>;
     subscription_type?: ValidationFunction<string>;
     email?: ValidationFunction<string>;
+    userQuotas?: ValidationFunction<number>;
+    currentUserQuota?: ValidationFunction<number>;
+    storageQuota?: ValidationFunction<number>;
+    registrationDate?: ValidationFunction<string>;
+    accountStatus?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type InstitutionUpdateFormOverridesProps = {
@@ -44,6 +54,11 @@ export declare type InstitutionUpdateFormOverridesProps = {
     address?: PrimitiveOverrideProps<TextFieldProps>;
     subscription_type?: PrimitiveOverrideProps<TextFieldProps>;
     email?: PrimitiveOverrideProps<TextFieldProps>;
+    userQuotas?: PrimitiveOverrideProps<TextFieldProps>;
+    currentUserQuota?: PrimitiveOverrideProps<TextFieldProps>;
+    storageQuota?: PrimitiveOverrideProps<TextFieldProps>;
+    registrationDate?: PrimitiveOverrideProps<TextFieldProps>;
+    accountStatus?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type InstitutionUpdateFormProps = React.PropsWithChildren<{
     overrides?: InstitutionUpdateFormOverridesProps | undefined | null;

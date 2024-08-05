@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
 import { getInstitution } from "../graphql/queries";
@@ -30,6 +36,11 @@ export default function InstitutionUpdateForm(props) {
     address: "",
     subscription_type: "",
     email: "",
+    userQuotas: "",
+    currentUserQuota: "",
+    storageQuota: "",
+    registrationDate: "",
+    accountStatus: false,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [contact, setContact] = React.useState(initialValues.contact);
@@ -38,6 +49,19 @@ export default function InstitutionUpdateForm(props) {
     initialValues.subscription_type
   );
   const [email, setEmail] = React.useState(initialValues.email);
+  const [userQuotas, setUserQuotas] = React.useState(initialValues.userQuotas);
+  const [currentUserQuota, setCurrentUserQuota] = React.useState(
+    initialValues.currentUserQuota
+  );
+  const [storageQuota, setStorageQuota] = React.useState(
+    initialValues.storageQuota
+  );
+  const [registrationDate, setRegistrationDate] = React.useState(
+    initialValues.registrationDate
+  );
+  const [accountStatus, setAccountStatus] = React.useState(
+    initialValues.accountStatus
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = institutionRecord
@@ -48,6 +72,11 @@ export default function InstitutionUpdateForm(props) {
     setAddress(cleanValues.address);
     setSubscription_type(cleanValues.subscription_type);
     setEmail(cleanValues.email);
+    setUserQuotas(cleanValues.userQuotas);
+    setCurrentUserQuota(cleanValues.currentUserQuota);
+    setStorageQuota(cleanValues.storageQuota);
+    setRegistrationDate(cleanValues.registrationDate);
+    setAccountStatus(cleanValues.accountStatus);
     setErrors({});
   };
   const [institutionRecord, setInstitutionRecord] =
@@ -73,6 +102,11 @@ export default function InstitutionUpdateForm(props) {
     address: [],
     subscription_type: [],
     email: [],
+    userQuotas: [],
+    currentUserQuota: [],
+    storageQuota: [],
+    registrationDate: [],
+    accountStatus: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -105,6 +139,11 @@ export default function InstitutionUpdateForm(props) {
           address: address ?? null,
           subscription_type: subscription_type ?? null,
           email: email ?? null,
+          userQuotas: userQuotas ?? null,
+          currentUserQuota: currentUserQuota ?? null,
+          storageQuota: storageQuota ?? null,
+          registrationDate: registrationDate ?? null,
+          accountStatus: accountStatus ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -170,6 +209,11 @@ export default function InstitutionUpdateForm(props) {
               address,
               subscription_type,
               email,
+              userQuotas,
+              currentUserQuota,
+              storageQuota,
+              registrationDate,
+              accountStatus,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -198,6 +242,11 @@ export default function InstitutionUpdateForm(props) {
               address,
               subscription_type,
               email,
+              userQuotas,
+              currentUserQuota,
+              storageQuota,
+              registrationDate,
+              accountStatus,
             };
             const result = onChange(modelFields);
             value = result?.contact ?? value;
@@ -226,6 +275,11 @@ export default function InstitutionUpdateForm(props) {
               address: value,
               subscription_type,
               email,
+              userQuotas,
+              currentUserQuota,
+              storageQuota,
+              registrationDate,
+              accountStatus,
             };
             const result = onChange(modelFields);
             value = result?.address ?? value;
@@ -254,6 +308,11 @@ export default function InstitutionUpdateForm(props) {
               address,
               subscription_type: value,
               email,
+              userQuotas,
+              currentUserQuota,
+              storageQuota,
+              registrationDate,
+              accountStatus,
             };
             const result = onChange(modelFields);
             value = result?.subscription_type ?? value;
@@ -284,6 +343,11 @@ export default function InstitutionUpdateForm(props) {
               address,
               subscription_type,
               email: value,
+              userQuotas,
+              currentUserQuota,
+              storageQuota,
+              registrationDate,
+              accountStatus,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -298,6 +362,183 @@ export default function InstitutionUpdateForm(props) {
         hasError={errors.email?.hasError}
         {...getOverrideProps(overrides, "email")}
       ></TextField>
+      <TextField
+        label="User quotas"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={userQuotas}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              contact,
+              address,
+              subscription_type,
+              email,
+              userQuotas: value,
+              currentUserQuota,
+              storageQuota,
+              registrationDate,
+              accountStatus,
+            };
+            const result = onChange(modelFields);
+            value = result?.userQuotas ?? value;
+          }
+          if (errors.userQuotas?.hasError) {
+            runValidationTasks("userQuotas", value);
+          }
+          setUserQuotas(value);
+        }}
+        onBlur={() => runValidationTasks("userQuotas", userQuotas)}
+        errorMessage={errors.userQuotas?.errorMessage}
+        hasError={errors.userQuotas?.hasError}
+        {...getOverrideProps(overrides, "userQuotas")}
+      ></TextField>
+      <TextField
+        label="Current user quota"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={currentUserQuota}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              contact,
+              address,
+              subscription_type,
+              email,
+              userQuotas,
+              currentUserQuota: value,
+              storageQuota,
+              registrationDate,
+              accountStatus,
+            };
+            const result = onChange(modelFields);
+            value = result?.currentUserQuota ?? value;
+          }
+          if (errors.currentUserQuota?.hasError) {
+            runValidationTasks("currentUserQuota", value);
+          }
+          setCurrentUserQuota(value);
+        }}
+        onBlur={() => runValidationTasks("currentUserQuota", currentUserQuota)}
+        errorMessage={errors.currentUserQuota?.errorMessage}
+        hasError={errors.currentUserQuota?.hasError}
+        {...getOverrideProps(overrides, "currentUserQuota")}
+      ></TextField>
+      <TextField
+        label="Storage quota"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={storageQuota}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              contact,
+              address,
+              subscription_type,
+              email,
+              userQuotas,
+              currentUserQuota,
+              storageQuota: value,
+              registrationDate,
+              accountStatus,
+            };
+            const result = onChange(modelFields);
+            value = result?.storageQuota ?? value;
+          }
+          if (errors.storageQuota?.hasError) {
+            runValidationTasks("storageQuota", value);
+          }
+          setStorageQuota(value);
+        }}
+        onBlur={() => runValidationTasks("storageQuota", storageQuota)}
+        errorMessage={errors.storageQuota?.errorMessage}
+        hasError={errors.storageQuota?.hasError}
+        {...getOverrideProps(overrides, "storageQuota")}
+      ></TextField>
+      <TextField
+        label="Registration date"
+        isRequired={false}
+        isReadOnly={false}
+        value={registrationDate}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              contact,
+              address,
+              subscription_type,
+              email,
+              userQuotas,
+              currentUserQuota,
+              storageQuota,
+              registrationDate: value,
+              accountStatus,
+            };
+            const result = onChange(modelFields);
+            value = result?.registrationDate ?? value;
+          }
+          if (errors.registrationDate?.hasError) {
+            runValidationTasks("registrationDate", value);
+          }
+          setRegistrationDate(value);
+        }}
+        onBlur={() => runValidationTasks("registrationDate", registrationDate)}
+        errorMessage={errors.registrationDate?.errorMessage}
+        hasError={errors.registrationDate?.hasError}
+        {...getOverrideProps(overrides, "registrationDate")}
+      ></TextField>
+      <SwitchField
+        label="Account status"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={accountStatus}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              name,
+              contact,
+              address,
+              subscription_type,
+              email,
+              userQuotas,
+              currentUserQuota,
+              storageQuota,
+              registrationDate,
+              accountStatus: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.accountStatus ?? value;
+          }
+          if (errors.accountStatus?.hasError) {
+            runValidationTasks("accountStatus", value);
+          }
+          setAccountStatus(value);
+        }}
+        onBlur={() => runValidationTasks("accountStatus", accountStatus)}
+        errorMessage={errors.accountStatus?.errorMessage}
+        hasError={errors.accountStatus?.hasError}
+        {...getOverrideProps(overrides, "accountStatus")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

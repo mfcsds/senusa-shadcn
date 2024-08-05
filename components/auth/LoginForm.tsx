@@ -22,6 +22,10 @@ const LoginForm = () => {
 
   const router = useRouter();
 
+  const navigateTo = (path: string) => {
+    router.push(path);
+  };
+
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
@@ -29,8 +33,9 @@ const LoginForm = () => {
         username: email,
         password,
       });
-
-      router.push("/dashboard");
+      if (isSignedIn) {
+        router.push("/dashboard");
+      }
     } catch (error) {
       console.log("error signing in", error);
     }

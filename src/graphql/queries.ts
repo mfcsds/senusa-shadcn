@@ -171,6 +171,11 @@ export const getInstitution = /* GraphQL */ `query GetInstitution($id: ID!) {
       nextToken
       __typename
     }
+    userQuotas
+    currentUserQuota
+    storageQuota
+    registrationDate
+    accountStatus
     createdAt
     updatedAt
     __typename
@@ -193,6 +198,11 @@ export const listInstitutions = /* GraphQL */ `query ListInstitutions(
       address
       subscription_type
       email
+      userQuotas
+      currentUserQuota
+      storageQuota
+      registrationDate
+      accountStatus
       createdAt
       updatedAt
       __typename

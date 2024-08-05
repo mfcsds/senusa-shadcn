@@ -26,5 +26,10 @@ type Institution @model @auth(rules: [{allow: public}]) {
   email: String
   Users: [User] @hasMany(indexName: "byInstitution", fields: ["id"])
   Patients: [Patient] @hasMany(indexName: "byInstitution", fields: ["id"])
+  userQuotas: Int
+  currentUserQuota: Int
+  storageQuota: Int
+  registrationDate: String
+  accountStatus: Boolean
 }
  

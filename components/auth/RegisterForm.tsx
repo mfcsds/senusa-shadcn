@@ -8,7 +8,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { CalendarCheck } from "lucide-react";
-import { createUser } from "@/src/graphql/mutations";
+import { createInstitution, createUser } from "@/src/graphql/mutations";
+
+import { useRouter } from "next/navigation";
 
 import { signUp } from "aws-amplify/auth";
 
@@ -25,6 +27,7 @@ type signUpParameters = {
   institution_name: string;
   institution_id: string;
   institution_address: string;
+  subscription: string;
 };
 
 async function handleSignUp({
@@ -35,6 +38,7 @@ async function handleSignUp({
   institution_name,
   institution_id,
   institution_address,
+  subscription,
 }: signUpParameters) {
   try {
     const { isSignUpComplete, userId, nextStep } = await signUp({
@@ -50,20 +54,37 @@ async function handleSignUp({
       },
     });
 
-    console.log(userId);
-
     // Insert the user into your data model
     const client = generateClient();
-    const newUser = await client.graphql({
-      query: createUser,
+    // const newUser = await client.graphql({
+    //   query: createUser,
+    //   variables: {
+    //     input: {
+    //       name: "Lorem ipsum dolor sit amet",
+    //       institutionID: "a3f4095e-39de-43d2-baf4-f8c16f0f6f4d",
+    //       role_type: 1020,
+    //       email: "Lorem ipsum dolor sit amet",
+    //       Category: "Lorem ipsum dolor sit amet",
+    //       Specialty: "Lorem ipsum dolor sit amet",
+    //     },
+    //   },
+    // });
+    const date = new Date();
+    const newInstitution = await client.graphql({
+      query: createInstitution,
       variables: {
         input: {
-          name: "Lorem ipsum dolor sit amet",
-          institutionID: "a3f4095e-39de-43d2-baf4-f8c16f0f6f4d",
-          role_type: 1020,
-          email: "Lorem ipsum dolor sit amet",
-          Category: "Lorem ipsum dolor sit amet",
-          Specialty: "Lorem ipsum dolor sit amet",
+          id: institution_id,
+          name: institution_name,
+          contact: email,
+          address: institution_address,
+          subscription_type: subscription,
+          email: email,
+          currentUserQuota: 0,
+          userQuotas: 5,
+          registrationDate: date.toDateString(),
+          storageQuota: 5,
+          accountStatus: true,
         },
       },
     });
@@ -74,6 +95,7 @@ async function handleSignUp({
 
 function generateID(baseID: number, institutionName: string): string {
   const now: Date = new Date();
+
   const currentYear: number = now.getFullYear();
 
   // Get current time formatted as HHMMSS
@@ -105,6 +127,15 @@ const RegisterForm = () => {
   const [institution_id, setInstitutionId] = useState("");
   const [institution_name, setInstitutionName] = useState("");
   const [institution_address, setInstitutionAddress] = useState("");
+  const [subscription, setSubscription] = useState("Monthly Subscription");
+  const [dateRegister, setDateRegister] = useState("");
+
+  const nowDate = new Date();
+
+  const router = useRouter();
+  const navigateTo = (path: string) => {
+    router.push(path);
+  };
 
   useEffect(() => {
     // Update the institution_id whenever institution_name changes
@@ -113,7 +144,6 @@ const RegisterForm = () => {
 
   const submitSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
-    setInstitutionId(generateID(1, institution_name));
     try {
       await handleSignUp({
         username,
@@ -123,7 +153,9 @@ const RegisterForm = () => {
         institution_name,
         institution_id,
         institution_address,
+        subscription,
       });
+      navigateTo("/manageaccount");
     } catch (error) {}
   };
 
@@ -215,7 +247,11 @@ const RegisterForm = () => {
             <Label>Select Subscriptions</Label>
             <div className="w-64">
               <div className="relative inline-block w-full text-gray-700">
-                <select className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline focus:border-indigo-500">
+                <select
+                  value={subscription}
+                  onChange={(e) => setSubscription(e.target.value)}
+                  className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline focus:border-indigo-500"
+                >
                   <option>Monthly Trial</option>
                   <option>Regular Services</option>
                 </select>
@@ -231,7 +267,11 @@ const RegisterForm = () => {
           <div className="flex flex-col mt-5 gap-2 w-[250px]">
             <Label>Start Date</Label>
             <div className="flex flex-row gap-2">
-              <Input type="text"></Input>
+              <Input
+                type="text"
+                value={nowDate.toDateString()}
+                onChange={(e) => setDateRegister(e.target.value)}
+              ></Input>
               <Button
                 variant="ghost"
                 className="icon group hover:bg-violet-800"

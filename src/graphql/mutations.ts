@@ -150,6 +150,11 @@ export const createInstitution = /* GraphQL */ `mutation CreateInstitution(
       nextToken
       __typename
     }
+    userQuotas
+    currentUserQuota
+    storageQuota
+    registrationDate
+    accountStatus
     createdAt
     updatedAt
     __typename
@@ -178,6 +183,11 @@ export const updateInstitution = /* GraphQL */ `mutation UpdateInstitution(
       nextToken
       __typename
     }
+    userQuotas
+    currentUserQuota
+    storageQuota
+    registrationDate
+    accountStatus
     createdAt
     updatedAt
     __typename
@@ -206,6 +216,11 @@ export const deleteInstitution = /* GraphQL */ `mutation DeleteInstitution(
       nextToken
       __typename
     }
+    userQuotas
+    currentUserQuota
+    storageQuota
+    registrationDate
+    accountStatus
     createdAt
     updatedAt
     __typename

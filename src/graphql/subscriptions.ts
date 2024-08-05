@@ -131,6 +131,11 @@ export const onCreateInstitution = /* GraphQL */ `subscription OnCreateInstituti
       nextToken
       __typename
     }
+    userQuotas
+    currentUserQuota
+    storageQuota
+    registrationDate
+    accountStatus
     createdAt
     updatedAt
     __typename
@@ -158,6 +163,11 @@ export const onUpdateInstitution = /* GraphQL */ `subscription OnUpdateInstituti
       nextToken
       __typename
     }
+    userQuotas
+    currentUserQuota
+    storageQuota
+    registrationDate
+    accountStatus
     createdAt
     updatedAt
     __typename
@@ -185,6 +195,11 @@ export const onDeleteInstitution = /* GraphQL */ `subscription OnDeleteInstituti
       nextToken
       __typename
     }
+    userQuotas
+    currentUserQuota
+    storageQuota
+    registrationDate
+    accountStatus
     createdAt
     updatedAt
     __typename

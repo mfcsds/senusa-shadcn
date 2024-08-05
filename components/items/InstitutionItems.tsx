@@ -2,8 +2,8 @@ import React from "react";
 import { Hospital } from "lucide-react";
 
 interface InstitutionItemsProops {
-  id: string;
-  name: string;
+  id?: string | null;
+  name?: string | null;
 }
 
 const InstitutionItems: React.FC<InstitutionItemsProops> = ({ id, name }) => {
