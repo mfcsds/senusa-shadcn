@@ -2,24 +2,22 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreatePatientInput = {
+export type CreatePatientDocumentsInput = {
   id?: string | null,
   name?: string | null,
-  sex?: string | null,
-  phone_number?: string | null,
-  dob?: string | null,
-  institutionID: string,
+  patientID: string,
+  size?: number | null,
+  link?: string | null,
 };
 
-export type ModelPatientConditionInput = {
+export type ModelPatientDocumentsConditionInput = {
   name?: ModelStringInput | null,
-  sex?: ModelStringInput | null,
-  phone_number?: ModelStringInput | null,
-  dob?: ModelStringInput | null,
-  institutionID?: ModelIDInput | null,
-  and?: Array< ModelPatientConditionInput | null > | null,
-  or?: Array< ModelPatientConditionInput | null > | null,
-  not?: ModelPatientConditionInput | null,
+  patientID?: ModelIDInput | null,
+  size?: ModelIntInput | null,
+  link?: ModelStringInput | null,
+  and?: Array< ModelPatientDocumentsConditionInput | null > | null,
+  or?: Array< ModelPatientDocumentsConditionInput | null > | null,
+  not?: ModelPatientDocumentsConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
 };
@@ -80,6 +78,63 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
+export type ModelIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
+export type PatientDocuments = {
+  __typename: "PatientDocuments",
+  id: string,
+  name?: string | null,
+  patientID: string,
+  size?: number | null,
+  link?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdatePatientDocumentsInput = {
+  id: string,
+  name?: string | null,
+  patientID?: string | null,
+  size?: number | null,
+  link?: string | null,
+};
+
+export type DeletePatientDocumentsInput = {
+  id: string,
+};
+
+export type CreatePatientInput = {
+  id?: string | null,
+  name?: string | null,
+  sex?: string | null,
+  phone_number?: string | null,
+  dob?: string | null,
+  institutionID: string,
+};
+
+export type ModelPatientConditionInput = {
+  name?: ModelStringInput | null,
+  sex?: ModelStringInput | null,
+  phone_number?: ModelStringInput | null,
+  dob?: ModelStringInput | null,
+  institutionID?: ModelIDInput | null,
+  and?: Array< ModelPatientConditionInput | null > | null,
+  or?: Array< ModelPatientConditionInput | null > | null,
+  not?: ModelPatientConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
 export type Patient = {
   __typename: "Patient",
   id: string,
@@ -88,8 +143,15 @@ export type Patient = {
   phone_number?: string | null,
   dob?: string | null,
   institutionID: string,
+  PatientDokuments?: ModelPatientDocumentsConnection | null,
   createdAt: string,
   updatedAt: string,
+};
+
+export type ModelPatientDocumentsConnection = {
+  __typename: "ModelPatientDocumentsConnection",
+  items:  Array<PatientDocuments | null >,
+  nextToken?: string | null,
 };
 
 export type UpdatePatientInput = {
@@ -129,18 +191,6 @@ export type ModelUserConditionInput = {
   updatedAt?: ModelStringInput | null,
 };
 
-export type ModelIntInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-};
-
 export type User = {
   __typename: "User",
   id: string,
@@ -177,7 +227,7 @@ export type CreateInstitutionInput = {
   email?: string | null,
   userQuotas?: number | null,
   currentUserQuota?: number | null,
-  storageQuota?: number | null,
+  storageQuota?: string | null,
   registrationDate?: string | null,
   accountStatus?: boolean | null,
 };
@@ -190,7 +240,7 @@ export type ModelInstitutionConditionInput = {
   email?: ModelStringInput | null,
   userQuotas?: ModelIntInput | null,
   currentUserQuota?: ModelIntInput | null,
-  storageQuota?: ModelIntInput | null,
+  storageQuota?: ModelStringInput | null,
   registrationDate?: ModelStringInput | null,
   accountStatus?: ModelBooleanInput | null,
   and?: Array< ModelInstitutionConditionInput | null > | null,
@@ -219,7 +269,7 @@ export type Institution = {
   Patients?: ModelPatientConnection | null,
   userQuotas?: number | null,
   currentUserQuota?: number | null,
-  storageQuota?: number | null,
+  storageQuota?: string | null,
   registrationDate?: string | null,
   accountStatus?: boolean | null,
   createdAt: string,
@@ -247,7 +297,7 @@ export type UpdateInstitutionInput = {
   email?: string | null,
   userQuotas?: number | null,
   currentUserQuota?: number | null,
-  storageQuota?: number | null,
+  storageQuota?: string | null,
   registrationDate?: string | null,
   accountStatus?: boolean | null,
 };
@@ -255,6 +305,25 @@ export type UpdateInstitutionInput = {
 export type DeleteInstitutionInput = {
   id: string,
 };
+
+export type ModelPatientDocumentsFilterInput = {
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  patientID?: ModelIDInput | null,
+  size?: ModelIntInput | null,
+  link?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelPatientDocumentsFilterInput | null > | null,
+  or?: Array< ModelPatientDocumentsFilterInput | null > | null,
+  not?: ModelPatientDocumentsFilterInput | null,
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
 
 export type ModelPatientFilterInput = {
   id?: ModelIDInput | null,
@@ -269,12 +338,6 @@ export type ModelPatientFilterInput = {
   or?: Array< ModelPatientFilterInput | null > | null,
   not?: ModelPatientFilterInput | null,
 };
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
 
 export type ModelUserFilterInput = {
   id?: ModelIDInput | null,
@@ -300,7 +363,7 @@ export type ModelInstitutionFilterInput = {
   email?: ModelStringInput | null,
   userQuotas?: ModelIntInput | null,
   currentUserQuota?: ModelIntInput | null,
-  storageQuota?: ModelIntInput | null,
+  storageQuota?: ModelStringInput | null,
   registrationDate?: ModelStringInput | null,
   accountStatus?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
@@ -316,17 +379,16 @@ export type ModelInstitutionConnection = {
   nextToken?: string | null,
 };
 
-export type ModelSubscriptionPatientFilterInput = {
+export type ModelSubscriptionPatientDocumentsFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   name?: ModelSubscriptionStringInput | null,
-  sex?: ModelSubscriptionStringInput | null,
-  phone_number?: ModelSubscriptionStringInput | null,
-  dob?: ModelSubscriptionStringInput | null,
-  institutionID?: ModelSubscriptionIDInput | null,
+  patientID?: ModelSubscriptionIDInput | null,
+  size?: ModelSubscriptionIntInput | null,
+  link?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionPatientFilterInput | null > | null,
-  or?: Array< ModelSubscriptionPatientFilterInput | null > | null,
+  and?: Array< ModelSubscriptionPatientDocumentsFilterInput | null > | null,
+  or?: Array< ModelSubscriptionPatientDocumentsFilterInput | null > | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -359,6 +421,31 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array< string | null > | null,
 };
 
+export type ModelSubscriptionIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  in?: Array< number | null > | null,
+  notIn?: Array< number | null > | null,
+};
+
+export type ModelSubscriptionPatientFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  sex?: ModelSubscriptionStringInput | null,
+  phone_number?: ModelSubscriptionStringInput | null,
+  dob?: ModelSubscriptionStringInput | null,
+  institutionID?: ModelSubscriptionIDInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionPatientFilterInput | null > | null,
+  or?: Array< ModelSubscriptionPatientFilterInput | null > | null,
+};
+
 export type ModelSubscriptionUserFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   name?: ModelSubscriptionStringInput | null,
@@ -373,18 +460,6 @@ export type ModelSubscriptionUserFilterInput = {
   or?: Array< ModelSubscriptionUserFilterInput | null > | null,
 };
 
-export type ModelSubscriptionIntInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  in?: Array< number | null > | null,
-  notIn?: Array< number | null > | null,
-};
-
 export type ModelSubscriptionInstitutionFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   name?: ModelSubscriptionStringInput | null,
@@ -394,7 +469,7 @@ export type ModelSubscriptionInstitutionFilterInput = {
   email?: ModelSubscriptionStringInput | null,
   userQuotas?: ModelSubscriptionIntInput | null,
   currentUserQuota?: ModelSubscriptionIntInput | null,
-  storageQuota?: ModelSubscriptionIntInput | null,
+  storageQuota?: ModelSubscriptionStringInput | null,
   registrationDate?: ModelSubscriptionStringInput | null,
   accountStatus?: ModelSubscriptionBooleanInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
@@ -406,6 +481,60 @@ export type ModelSubscriptionInstitutionFilterInput = {
 export type ModelSubscriptionBooleanInput = {
   ne?: boolean | null,
   eq?: boolean | null,
+};
+
+export type CreatePatientDocumentsMutationVariables = {
+  input: CreatePatientDocumentsInput,
+  condition?: ModelPatientDocumentsConditionInput | null,
+};
+
+export type CreatePatientDocumentsMutation = {
+  createPatientDocuments?:  {
+    __typename: "PatientDocuments",
+    id: string,
+    name?: string | null,
+    patientID: string,
+    size?: number | null,
+    link?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdatePatientDocumentsMutationVariables = {
+  input: UpdatePatientDocumentsInput,
+  condition?: ModelPatientDocumentsConditionInput | null,
+};
+
+export type UpdatePatientDocumentsMutation = {
+  updatePatientDocuments?:  {
+    __typename: "PatientDocuments",
+    id: string,
+    name?: string | null,
+    patientID: string,
+    size?: number | null,
+    link?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeletePatientDocumentsMutationVariables = {
+  input: DeletePatientDocumentsInput,
+  condition?: ModelPatientDocumentsConditionInput | null,
+};
+
+export type DeletePatientDocumentsMutation = {
+  deletePatientDocuments?:  {
+    __typename: "PatientDocuments",
+    id: string,
+    name?: string | null,
+    patientID: string,
+    size?: number | null,
+    link?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
 };
 
 export type CreatePatientMutationVariables = {
@@ -422,6 +551,10 @@ export type CreatePatientMutation = {
     phone_number?: string | null,
     dob?: string | null,
     institutionID: string,
+    PatientDokuments?:  {
+      __typename: "ModelPatientDocumentsConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -441,6 +574,10 @@ export type UpdatePatientMutation = {
     phone_number?: string | null,
     dob?: string | null,
     institutionID: string,
+    PatientDokuments?:  {
+      __typename: "ModelPatientDocumentsConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -460,6 +597,10 @@ export type DeletePatientMutation = {
     phone_number?: string | null,
     dob?: string | null,
     institutionID: string,
+    PatientDokuments?:  {
+      __typename: "ModelPatientDocumentsConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -549,7 +690,7 @@ export type CreateInstitutionMutation = {
     } | null,
     userQuotas?: number | null,
     currentUserQuota?: number | null,
-    storageQuota?: number | null,
+    storageQuota?: string | null,
     registrationDate?: string | null,
     accountStatus?: boolean | null,
     createdAt: string,
@@ -581,7 +722,7 @@ export type UpdateInstitutionMutation = {
     } | null,
     userQuotas?: number | null,
     currentUserQuota?: number | null,
-    storageQuota?: number | null,
+    storageQuota?: string | null,
     registrationDate?: string | null,
     accountStatus?: boolean | null,
     createdAt: string,
@@ -613,11 +754,76 @@ export type DeleteInstitutionMutation = {
     } | null,
     userQuotas?: number | null,
     currentUserQuota?: number | null,
-    storageQuota?: number | null,
+    storageQuota?: string | null,
     registrationDate?: string | null,
     accountStatus?: boolean | null,
     createdAt: string,
     updatedAt: string,
+  } | null,
+};
+
+export type GetPatientDocumentsQueryVariables = {
+  id: string,
+};
+
+export type GetPatientDocumentsQuery = {
+  getPatientDocuments?:  {
+    __typename: "PatientDocuments",
+    id: string,
+    name?: string | null,
+    patientID: string,
+    size?: number | null,
+    link?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListPatientDocumentsQueryVariables = {
+  filter?: ModelPatientDocumentsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListPatientDocumentsQuery = {
+  listPatientDocuments?:  {
+    __typename: "ModelPatientDocumentsConnection",
+    items:  Array< {
+      __typename: "PatientDocuments",
+      id: string,
+      name?: string | null,
+      patientID: string,
+      size?: number | null,
+      link?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type PatientDocumentsByPatientIDQueryVariables = {
+  patientID: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPatientDocumentsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type PatientDocumentsByPatientIDQuery = {
+  patientDocumentsByPatientID?:  {
+    __typename: "ModelPatientDocumentsConnection",
+    items:  Array< {
+      __typename: "PatientDocuments",
+      id: string,
+      name?: string | null,
+      patientID: string,
+      size?: number | null,
+      link?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
   } | null,
 };
 
@@ -634,6 +840,10 @@ export type GetPatientQuery = {
     phone_number?: string | null,
     dob?: string | null,
     institutionID: string,
+    PatientDokuments?:  {
+      __typename: "ModelPatientDocumentsConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -783,7 +993,7 @@ export type GetInstitutionQuery = {
     } | null,
     userQuotas?: number | null,
     currentUserQuota?: number | null,
-    storageQuota?: number | null,
+    storageQuota?: string | null,
     registrationDate?: string | null,
     accountStatus?: boolean | null,
     createdAt: string,
@@ -810,13 +1020,64 @@ export type ListInstitutionsQuery = {
       email?: string | null,
       userQuotas?: number | null,
       currentUserQuota?: number | null,
-      storageQuota?: number | null,
+      storageQuota?: string | null,
       registrationDate?: string | null,
       accountStatus?: boolean | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
+  } | null,
+};
+
+export type OnCreatePatientDocumentsSubscriptionVariables = {
+  filter?: ModelSubscriptionPatientDocumentsFilterInput | null,
+};
+
+export type OnCreatePatientDocumentsSubscription = {
+  onCreatePatientDocuments?:  {
+    __typename: "PatientDocuments",
+    id: string,
+    name?: string | null,
+    patientID: string,
+    size?: number | null,
+    link?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdatePatientDocumentsSubscriptionVariables = {
+  filter?: ModelSubscriptionPatientDocumentsFilterInput | null,
+};
+
+export type OnUpdatePatientDocumentsSubscription = {
+  onUpdatePatientDocuments?:  {
+    __typename: "PatientDocuments",
+    id: string,
+    name?: string | null,
+    patientID: string,
+    size?: number | null,
+    link?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeletePatientDocumentsSubscriptionVariables = {
+  filter?: ModelSubscriptionPatientDocumentsFilterInput | null,
+};
+
+export type OnDeletePatientDocumentsSubscription = {
+  onDeletePatientDocuments?:  {
+    __typename: "PatientDocuments",
+    id: string,
+    name?: string | null,
+    patientID: string,
+    size?: number | null,
+    link?: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -833,6 +1094,10 @@ export type OnCreatePatientSubscription = {
     phone_number?: string | null,
     dob?: string | null,
     institutionID: string,
+    PatientDokuments?:  {
+      __typename: "ModelPatientDocumentsConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -851,6 +1116,10 @@ export type OnUpdatePatientSubscription = {
     phone_number?: string | null,
     dob?: string | null,
     institutionID: string,
+    PatientDokuments?:  {
+      __typename: "ModelPatientDocumentsConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -869,6 +1138,10 @@ export type OnDeletePatientSubscription = {
     phone_number?: string | null,
     dob?: string | null,
     institutionID: string,
+    PatientDokuments?:  {
+      __typename: "ModelPatientDocumentsConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -954,7 +1227,7 @@ export type OnCreateInstitutionSubscription = {
     } | null,
     userQuotas?: number | null,
     currentUserQuota?: number | null,
-    storageQuota?: number | null,
+    storageQuota?: string | null,
     registrationDate?: string | null,
     accountStatus?: boolean | null,
     createdAt: string,
@@ -985,7 +1258,7 @@ export type OnUpdateInstitutionSubscription = {
     } | null,
     userQuotas?: number | null,
     currentUserQuota?: number | null,
-    storageQuota?: number | null,
+    storageQuota?: string | null,
     registrationDate?: string | null,
     accountStatus?: boolean | null,
     createdAt: string,
@@ -1016,7 +1289,7 @@ export type OnDeleteInstitutionSubscription = {
     } | null,
     userQuotas?: number | null,
     currentUserQuota?: number | null,
-    storageQuota?: number | null,
+    storageQuota?: string | null,
     registrationDate?: string | null,
     accountStatus?: boolean | null,
     createdAt: string,

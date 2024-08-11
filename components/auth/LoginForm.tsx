@@ -22,10 +22,6 @@ const LoginForm = () => {
 
   const router = useRouter();
 
-  const navigateTo = (path: string) => {
-    router.push(path);
-  };
-
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     try {

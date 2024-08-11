@@ -30,7 +30,7 @@ export declare type InstitutionUpdateFormInputValues = {
     email?: string;
     userQuotas?: number;
     currentUserQuota?: number;
-    storageQuota?: number;
+    storageQuota?: string;
     registrationDate?: string;
     accountStatus?: boolean;
 };
@@ -42,7 +42,7 @@ export declare type InstitutionUpdateFormValidationValues = {
     email?: ValidationFunction<string>;
     userQuotas?: ValidationFunction<number>;
     currentUserQuota?: ValidationFunction<number>;
-    storageQuota?: ValidationFunction<number>;
+    storageQuota?: ValidationFunction<string>;
     registrationDate?: ValidationFunction<string>;
     accountStatus?: ValidationFunction<boolean>;
 };

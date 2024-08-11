@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
-import TableManageAccount from "@/components/TableManageAccount";
+import TableManageAccount from "@/components/table/TableManageAccount";
 
 const Page = () => {
   const router = useRouter();

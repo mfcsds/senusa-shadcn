@@ -8,6 +8,78 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getPatientDocuments = /* GraphQL */ `query GetPatientDocuments($id: ID!) {
+  getPatientDocuments(id: $id) {
+    id
+    name
+    patientID
+    size
+    link
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetPatientDocumentsQueryVariables,
+  APITypes.GetPatientDocumentsQuery
+>;
+export const listPatientDocuments = /* GraphQL */ `query ListPatientDocuments(
+  $filter: ModelPatientDocumentsFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listPatientDocuments(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      patientID
+      size
+      link
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListPatientDocumentsQueryVariables,
+  APITypes.ListPatientDocumentsQuery
+>;
+export const patientDocumentsByPatientID = /* GraphQL */ `query PatientDocumentsByPatientID(
+  $patientID: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelPatientDocumentsFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  patientDocumentsByPatientID(
+    patientID: $patientID
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      patientID
+      size
+      link
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.PatientDocumentsByPatientIDQueryVariables,
+  APITypes.PatientDocumentsByPatientIDQuery
+>;
 export const getPatient = /* GraphQL */ `query GetPatient($id: ID!) {
   getPatient(id: $id) {
     id
@@ -16,6 +88,10 @@ export const getPatient = /* GraphQL */ `query GetPatient($id: ID!) {
     phone_number
     dob
     institutionID
+    PatientDokuments {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename

@@ -440,13 +440,9 @@ export default function InstitutionUpdateForm(props) {
         label="Storage quota"
         isRequired={false}
         isReadOnly={false}
-        type="number"
-        step="any"
         value={storageQuota}
         onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
               name,

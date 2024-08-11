@@ -8,6 +8,60 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreatePatientDocuments = /* GraphQL */ `subscription OnCreatePatientDocuments(
+  $filter: ModelSubscriptionPatientDocumentsFilterInput
+) {
+  onCreatePatientDocuments(filter: $filter) {
+    id
+    name
+    patientID
+    size
+    link
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreatePatientDocumentsSubscriptionVariables,
+  APITypes.OnCreatePatientDocumentsSubscription
+>;
+export const onUpdatePatientDocuments = /* GraphQL */ `subscription OnUpdatePatientDocuments(
+  $filter: ModelSubscriptionPatientDocumentsFilterInput
+) {
+  onUpdatePatientDocuments(filter: $filter) {
+    id
+    name
+    patientID
+    size
+    link
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdatePatientDocumentsSubscriptionVariables,
+  APITypes.OnUpdatePatientDocumentsSubscription
+>;
+export const onDeletePatientDocuments = /* GraphQL */ `subscription OnDeletePatientDocuments(
+  $filter: ModelSubscriptionPatientDocumentsFilterInput
+) {
+  onDeletePatientDocuments(filter: $filter) {
+    id
+    name
+    patientID
+    size
+    link
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeletePatientDocumentsSubscriptionVariables,
+  APITypes.OnDeletePatientDocumentsSubscription
+>;
 export const onCreatePatient = /* GraphQL */ `subscription OnCreatePatient($filter: ModelSubscriptionPatientFilterInput) {
   onCreatePatient(filter: $filter) {
     id
@@ -16,6 +70,10 @@ export const onCreatePatient = /* GraphQL */ `subscription OnCreatePatient($filt
     phone_number
     dob
     institutionID
+    PatientDokuments {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -33,6 +91,10 @@ export const onUpdatePatient = /* GraphQL */ `subscription OnUpdatePatient($filt
     phone_number
     dob
     institutionID
+    PatientDokuments {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -50,6 +112,10 @@ export const onDeletePatient = /* GraphQL */ `subscription OnDeletePatient($filt
     phone_number
     dob
     institutionID
+    PatientDokuments {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename

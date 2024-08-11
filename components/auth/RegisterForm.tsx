@@ -9,7 +9,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { CalendarCheck } from "lucide-react";
 import { createInstitution, createUser } from "@/src/graphql/mutations";
-
 import { useRouter } from "next/navigation";
 
 import { signUp } from "aws-amplify/auth";
@@ -28,6 +27,7 @@ type signUpParameters = {
   institution_id: string;
   institution_address: string;
   subscription: string;
+  storageQuota: string;
 };
 
 async function handleSignUp({
@@ -39,6 +39,7 @@ async function handleSignUp({
   institution_id,
   institution_address,
   subscription,
+  storageQuota,
 }: signUpParameters) {
   try {
     const { isSignUpComplete, userId, nextStep } = await signUp({
@@ -83,7 +84,7 @@ async function handleSignUp({
           currentUserQuota: 0,
           userQuotas: 5,
           registrationDate: date.toDateString(),
-          storageQuota: 5,
+          storageQuota: storageQuota,
           accountStatus: true,
         },
       },
@@ -129,6 +130,7 @@ const RegisterForm = () => {
   const [institution_address, setInstitutionAddress] = useState("");
   const [subscription, setSubscription] = useState("Monthly Subscription");
   const [dateRegister, setDateRegister] = useState("");
+  const [storageQuota, setStorageQuota] = useState("");
 
   const nowDate = new Date();
 
@@ -154,8 +156,9 @@ const RegisterForm = () => {
         institution_id,
         institution_address,
         subscription,
+        storageQuota,
       });
-      navigateTo("/manageaccount");
+      navigateTo("/dashboard/manageaccount");
     } catch (error) {}
   };
 
@@ -254,6 +257,28 @@ const RegisterForm = () => {
                 >
                   <option>Monthly Trial</option>
                   <option>Regular Services</option>
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                    <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col mt-5 gap-2 w-[250px]">
+            <Label>Select User Quota</Label>
+            <div className="w-64">
+              <div className="relative inline-block w-full text-gray-700">
+                <select
+                  value={storageQuota}
+                  onChange={(e) => setStorageQuota(e.target.value)}
+                  className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline focus:border-indigo-500"
+                >
+                  <option>5 GB</option>
+                  <option>10 GB</option>
+                  <option>15 GB</option>
                 </select>
                 <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                   <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">

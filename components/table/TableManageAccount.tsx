@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import graphqlOperation, { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
-
 import { listInstitutions } from "@/src/graphql/queries";
+
 import {
   Table,
   TableBody,
@@ -13,9 +13,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import InstitutionItems from "./items/InstitutionItems";
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
+import InstitutionItems from "@/components/items/InstitutionItems";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Pencil, Trash } from "lucide-react";
 
 import config from "@/src/amplifyconfiguration.json";
@@ -57,7 +57,7 @@ const TableManageAccount = () => {
         <TableCaption>User Accounts Details.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
+            <TableHead className="w-[600px]">Name</TableHead>
             <TableHead>Contact</TableHead>
             <TableHead className="w-[400px]">Address</TableHead>
             <TableHead>Subscription Type</TableHead>

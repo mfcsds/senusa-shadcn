@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,15 +24,12 @@ export default function RootLayout({
           "${inter.className} flex h-screen items-start justify-between"
         }
       >
-        <Sidebar></Sidebar>
-
         <div className="flex flex-col items-start flex-1">
-          <Navbar></Navbar>
-
-          <main className="px-10 py-10 flex-column justify-content items-center w-full ">
+          <main className="flex-column justify-content items-center w-full ">
             {children}
           </main>
         </div>
+        <Toaster />
       </body>
     </html>
   );

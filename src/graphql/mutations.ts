@@ -8,6 +8,63 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const createPatientDocuments = /* GraphQL */ `mutation CreatePatientDocuments(
+  $input: CreatePatientDocumentsInput!
+  $condition: ModelPatientDocumentsConditionInput
+) {
+  createPatientDocuments(input: $input, condition: $condition) {
+    id
+    name
+    patientID
+    size
+    link
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreatePatientDocumentsMutationVariables,
+  APITypes.CreatePatientDocumentsMutation
+>;
+export const updatePatientDocuments = /* GraphQL */ `mutation UpdatePatientDocuments(
+  $input: UpdatePatientDocumentsInput!
+  $condition: ModelPatientDocumentsConditionInput
+) {
+  updatePatientDocuments(input: $input, condition: $condition) {
+    id
+    name
+    patientID
+    size
+    link
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdatePatientDocumentsMutationVariables,
+  APITypes.UpdatePatientDocumentsMutation
+>;
+export const deletePatientDocuments = /* GraphQL */ `mutation DeletePatientDocuments(
+  $input: DeletePatientDocumentsInput!
+  $condition: ModelPatientDocumentsConditionInput
+) {
+  deletePatientDocuments(input: $input, condition: $condition) {
+    id
+    name
+    patientID
+    size
+    link
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeletePatientDocumentsMutationVariables,
+  APITypes.DeletePatientDocumentsMutation
+>;
 export const createPatient = /* GraphQL */ `mutation CreatePatient(
   $input: CreatePatientInput!
   $condition: ModelPatientConditionInput
@@ -19,6 +76,10 @@ export const createPatient = /* GraphQL */ `mutation CreatePatient(
     phone_number
     dob
     institutionID
+    PatientDokuments {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -39,6 +100,10 @@ export const updatePatient = /* GraphQL */ `mutation UpdatePatient(
     phone_number
     dob
     institutionID
+    PatientDokuments {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -59,6 +124,10 @@ export const deletePatient = /* GraphQL */ `mutation DeletePatient(
     phone_number
     dob
     institutionID
+    PatientDokuments {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename

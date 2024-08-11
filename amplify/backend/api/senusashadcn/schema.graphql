@@ -1,3 +1,23 @@
+type VariantReport @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  status: String
+  create_at: String
+  isApproved: Boolean
+  medical_history: String
+  current_diagnosis: String
+  userID: ID! @index(name: "byUser")
+  download_link_report: String
+  institutionID: ID! @index(name: "byInstitution")
+}
+
+type PatientDocuments @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  patientID: ID! @index(name: "byPatient")
+  size: Int
+  link: AWSURL
+}
+
 type Patient @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String
@@ -5,6 +25,7 @@ type Patient @model @auth(rules: [{allow: public}]) {
   phone_number: String
   dob: String
   institutionID: ID! @index(name: "byInstitution")
+  PatientDokuments: [PatientDocuments] @hasMany(indexName: "byPatient", fields: ["id"])
 }
 
 type User @model @auth(rules: [{allow: public}]) {
@@ -15,6 +36,7 @@ type User @model @auth(rules: [{allow: public}]) {
   email: String
   Category: String
   Specialty: String
+  VariantReports: [VariantReport] @hasMany(indexName: "byUser", fields: ["id"])
 }
 
 type Institution @model @auth(rules: [{allow: public}]) {
@@ -28,8 +50,9 @@ type Institution @model @auth(rules: [{allow: public}]) {
   Patients: [Patient] @hasMany(indexName: "byInstitution", fields: ["id"])
   userQuotas: Int
   currentUserQuota: Int
-  storageQuota: Int
+  storageQuota: String
   registrationDate: String
   accountStatus: Boolean
+  VariantReports: [VariantReport] @hasMany(indexName: "byInstitution", fields: ["id"])
 }
  
