@@ -1,16 +1,17 @@
+"use client";
+
 import React from "react";
 
 import TableReportList from "./TableReportList";
-import { VariantReportData } from "@/utils/object";
-
+import { VariantReportData, Patient } from "@/utils/object";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader } from "../ui/card";
 
 const TableVariantReport = () => {
   return (
     <div className="w-full">
-      <Tabs defaultValue="variant report " className="h-[20px]">
-        <TabsList>
+      <Tabs defaultValue={"draft"} className="h-[20px]">
+        <TabsList defaultValue="draft">
           <TabsTrigger value="draft" className="w-[200px]">
             Draft
           </TabsTrigger>
@@ -25,7 +26,7 @@ const TableVariantReport = () => {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="draft">
+        <TabsContent value="draft" defaultChecked={true}>
           <Card>
             <CardHeader></CardHeader>
             <CardContent>

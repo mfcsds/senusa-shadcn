@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -9,36 +9,45 @@ import {
   TableCell,
 } from "../ui/table";
 import { Button } from "../ui/button";
-import { Plus } from "lucide-react";
-
-interface DataUser {
-  id: string;
-  name: string;
-  level: number;
-  role: string;
-  specialty: string;
-  status: string;
-  email?: string;
-  phone_number?: string;
-}
+import { Eraser, Plus } from "lucide-react";
+import { Badge } from "../ui/badge";
+import UserAccountItem from "../items/UserAccountItem";
+import { DataUser } from "@/utils/object";
 
 const TableUserAccount = () => {
+  const colors = [
+    "bg-red-900",
+    "bg-blue-900",
+    "bg-green-900",
+    "bg-yellow-900",
+    "bg-purple-900",
+    "bg-pink-900",
+    "bg-indigo-900",
+  ];
+
+  const [bgColor, setBgColor] = useState("");
+  const [randomId, setRandomId] = useState("");
+
   const [dataAccount, setAccounts] = useState<DataUser[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [newUser, setNewUser] = useState<DataUser>({
     id: "",
-    name: "",
-    level: 1,
+    first_name: "",
+    last_name: "",
+    level: "",
     role: "",
     specialty: "",
     status: "Active",
+    initial: "",
   });
 
   const handleAddNewUser = () => {
     setNewUser({
       id: `${dataAccount.length + 1}`,
-      name: "",
-      level: 1,
+      first_name: "",
+      last_name: "",
+      initial: "",
+      level: "",
       role: "",
       specialty: "",
       status: "Active",
@@ -69,14 +78,14 @@ const TableUserAccount = () => {
         <TableHeader>
           <TableRow>
             <TableHead>No</TableHead>
-            <TableHead>ID and Name</TableHead>
+            <TableHead className="text-left">ID and Name</TableHead>
             <TableHead>User Level</TableHead>
             <TableHead>Role</TableHead>
             <TableHead>Specialty</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Phone Number</TableHead>
-            <TableHead>Account Status</TableHead>
-            <TableHead>Reset Password</TableHead>
+            <TableHead className="text-center">Account Status</TableHead>
+            <TableHead className="text-center">Reset Password</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -84,15 +93,34 @@ const TableUserAccount = () => {
           {dataAccount.map((user, index) => (
             <TableRow key={user.id}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{`${user.id} - ${user.name}`}</TableCell>
+              <TableCell className="text-left">
+                <UserAccountItem
+                  id={user.id}
+                  name={user.first_name + " " + user.last_name}
+                  initial={
+                    user.first_name.charAt(0) + "" + user.last_name.charAt(0)
+                  }
+                />
+              </TableCell>
               <TableCell>{user.level}</TableCell>
               <TableCell>{user.role}</TableCell>
+              <TableCell>{user.specialty}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.phone_number}</TableCell>
-              <TableCell>{user.specialty}</TableCell>
-              <TableCell>{user.status}</TableCell>
-              <TableCell>
-                <Button variant="outline">Reset Password</Button>
+              <TableCell className="text-center">
+                <Badge className="bg-green-600 hover:bg-green-600">
+                  {user.status}
+                </Badge>
+              </TableCell>
+              <TableCell className="text-center">
+                <Button
+                  variant="ghost"
+                  className="hover:bg-red-700 hover:text-white"
+                >
+                  <small>
+                    <Eraser className="w-4 h-4"></Eraser>
+                  </small>
+                </Button>
               </TableCell>
               <TableCell>
                 <Button variant="outline">Edit</Button>
@@ -105,47 +133,81 @@ const TableUserAccount = () => {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-md w-full max-w-md">
-            <h2 className="text-xl font-semibold mb-4">Add New User</h2>
+          <div className="bg-white p-6 rounded-md w-full max-w-screen-md">
+            <div className="flex flex-col mb-4">
+              <h2 className="text-xl font-semibold mb-1">
+                Add New User Account
+              </h2>
+              <small className="text-muted-foreground">
+                User account registration
+              </small>
+            </div>
             <form>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                  Name
+                  First Name
                 </label>
                 <input
                   type="text"
-                  value={newUser.name}
+                  value={newUser.first_name}
                   onChange={(e) =>
-                    setNewUser({ ...newUser, name: e.target.value })
+                    setNewUser({ ...newUser, first_name: e.target.value })
                   }
                   className="mt-1 block w-full border border-gray-300 rounded-md p-2"
                 />
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                  User Level
+                  Last Name
                 </label>
                 <input
-                  type="number"
-                  value={newUser.level}
+                  type="text"
+                  value={newUser.last_name}
                   onChange={(e) =>
-                    setNewUser({ ...newUser, level: Number(e.target.value) })
+                    setNewUser({ ...newUser, last_name: e.target.value })
                   }
                   className="mt-1 block w-full border border-gray-300 rounded-md p-2"
                 />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  User Level Type
+                </label>
+                <small className="text-muted-foreground">
+                  Level 1 indicate the limited access, while the Level 2 provide
+                  the user to full access
+                </small>
+                <select
+                  value={newUser.level}
+                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, level: e.target.value })
+                  }
+                >
+                  <option value="Select User Type">Selece User Type</option>
+                  <option value="Level 1">Level 1</option>
+                  <option value="Level 2">Level 2</option>
+                </select>
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
                   Role
                 </label>
-                <input
-                  type="text"
+                <select
                   value={newUser.role}
                   onChange={(e) =>
                     setNewUser({ ...newUser, role: e.target.value })
                   }
                   className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                />
+                >
+                  <option value="">Select Role</option>
+                  <option value="Admin Lab">Admin Lab</option>
+                  <option value="User Lab">User Lab</option>
+                  <option value="Bioinformatician">Bioinformatician</option>
+                  <option value="Genetic Counselor">Genetic Counselor</option>
+                  <option value="Clinical Pathology">Clinical Pathology</option>
+                  <option value="Head Lab">Head Lab</option>
+                </select>
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
@@ -155,7 +217,7 @@ const TableUserAccount = () => {
                   type="email"
                   value={newUser.email}
                   onChange={(e) =>
-                    setNewUser({ ...newUser, role: e.target.value })
+                    setNewUser({ ...newUser, email: e.target.value })
                   }
                   className="mt-1 block w-full border border-gray-300 rounded-md p-2"
                 />
@@ -168,7 +230,7 @@ const TableUserAccount = () => {
                   type="text"
                   value={newUser.phone_number}
                   onChange={(e) =>
-                    setNewUser({ ...newUser, role: e.target.value })
+                    setNewUser({ ...newUser, phone_number: e.target.value })
                   }
                   className="mt-1 block w-full border border-gray-300 rounded-md p-2"
                 />

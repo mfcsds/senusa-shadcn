@@ -9,6 +9,7 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
 import TableUserAccount from "../table/TableUserAccount";
+import ProfileInstitution from "./ProfileInstitution";
 
 const ManageInstituionData = () => {
   return (
@@ -18,8 +19,8 @@ const ManageInstituionData = () => {
         <CardDescription>Manage and Detail Account</CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs>
-          <TabsList>
+        <Tabs defaultValue="Profile">
+          <TabsList defaultValue="Profile">
             <TabsTrigger value="Profile" className="w-[200px]">
               Profile
             </TabsTrigger>
@@ -30,6 +31,9 @@ const ManageInstituionData = () => {
               Invoices
             </TabsTrigger>
           </TabsList>
+          <TabsContent value="Profile">
+            <ProfileInstitution></ProfileInstitution>
+          </TabsContent>
           <TabsContent value="Account">
             <TableUserAccount></TableUserAccount>
           </TabsContent>
