@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import graphqlOperation, { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
 import { listInstitutions } from "@/src/graphql/queries";
+import { useRouter } from "next/navigation";
 
 import {
   Table,
@@ -48,6 +49,12 @@ const TableManageAccount = () => {
     };
     fetchInstitution();
   }, []);
+
+  const router = useRouter();
+  const handleEditInstitutionButton = (path: string) => {
+    router.push(path);
+    console.log("Click Edit");
+  };
 
   // console.log(institutions.at(0).);
 
@@ -110,7 +117,15 @@ const TableManageAccount = () => {
                       <Trash className="group-hover:text-white w-3 h-3 " />
                     </span>
                   </Button>
-                  <Button variant="ghost" className="group hover:bg-violet-800">
+                  <Button
+                    variant="ghost"
+                    className="group hover:bg-violet-800"
+                    onClick={(e) =>
+                      handleEditInstitutionButton(
+                        "/dashboard/manageaccount/manageinstitution/"
+                      )
+                    }
+                  >
                     <span>
                       <Pencil className="w-3 h-3 group-hover:text-white" />
                     </span>

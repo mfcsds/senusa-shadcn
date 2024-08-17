@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import graphqlOperation, { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
 import { listInstitutions, listPatients } from "@/src/graphql/queries";
+import { useRouter } from "next/navigation";
 
 import {
   Table,
@@ -42,6 +43,8 @@ const TableManagePatient = () => {
     };
     fetchInstitution();
   }, []);
+
+  const router = useRouter();
 
   // console.log(institutions.at(0).);
 

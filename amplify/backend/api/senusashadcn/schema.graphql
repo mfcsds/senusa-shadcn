@@ -1,4 +1,27 @@
-type VariantReport @model @auth(rules: [{allow: public}]) {
+type GeneticsConselor @model @auth(rules: [{allow: public}, {allow: groups, groups: ["Level2"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}]) {
+  id: ID!
+  text: String
+  variantreportID: ID! @index(name: "byVariantReport")
+}
+
+type Phenotype @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  PhenotypeCode: String
+  Description: String
+}
+
+type Conclusion @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  text: String
+}
+
+type Recommendation @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  text: String
+  variantreportID: ID! @index(name: "byVariantReport")
+}
+
+type VariantReport @model @auth(rules: [{allow: public}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Level1"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Level2"], operations: [read, create, update, delete]}]) {
   id: ID!
   status: String
   create_at: String
@@ -8,6 +31,8 @@ type VariantReport @model @auth(rules: [{allow: public}]) {
   userID: ID! @index(name: "byUser")
   download_link_report: String
   institutionID: ID! @index(name: "byInstitution")
+  Recommendations: [GeneticsConselor] @hasMany(indexName: "byVariantReport", fields: ["id"])
+  GeneticsConselors: [GeneticsConselor] @hasMany(indexName: "byVariantReport", fields: ["id"])
 }
 
 type PatientDocuments @model @auth(rules: [{allow: public}]) {
@@ -18,7 +43,7 @@ type PatientDocuments @model @auth(rules: [{allow: public}]) {
   link: AWSURL
 }
 
-type Patient @model @auth(rules: [{allow: public}]) {
+type Patient @model @auth(rules: [{allow: public}, {allow: groups, groups: ["Level1"], operations: [read, create, update, delete]}]) {
   id: ID!
   name: String
   sex: String
@@ -46,13 +71,13 @@ type Institution @model @auth(rules: [{allow: public}]) {
   address: String
   subscription_type: String
   email: String
-  Users: [User] @hasMany(indexName: "byInstitution", fields: ["id"])
+  Users: [Patient] @hasMany(indexName: "byInstitution", fields: ["id"])
   Patients: [Patient] @hasMany(indexName: "byInstitution", fields: ["id"])
   userQuotas: Int
   currentUserQuota: Int
   storageQuota: String
   registrationDate: String
   accountStatus: Boolean
-  VariantReports: [VariantReport] @hasMany(indexName: "byInstitution", fields: ["id"])
+  VariantReports: [Patient] @hasMany(indexName: "byInstitution", fields: ["id"])
 }
  
