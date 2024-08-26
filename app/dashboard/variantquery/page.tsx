@@ -84,9 +84,34 @@ const VariantQuery = () => {
         <div className="mb-10">
           <p className="text-2xl">Type the Variant</p>
           <p className="text-gray-400 text-sm">
-            Keep up to date for the new variant
+            Please enter the variant using the following format:
+            <br />
+            <code>
+              &lt;Chromosome&gt; &lt;Position&gt; &lt;ID&gt; &lt;Reference
+              Allele&gt; &lt;Alternate Allele&gt;
+            </code>
+            <br />
+            For example: <code>9 128328460 . TA A</code>
+            <br />
+            <br />
+            <strong>Explanation:</strong>
+            <br />- <strong>Chromosome:</strong> The chromosome number where the
+            variant is located (e.g., <code>9</code>).
+            <br />- <strong>Position:</strong> The exact base position on the
+            chromosome (e.g., <code>128328460</code>).
+            <br />- <strong>ID:</strong> An identifier for the variant (if
+            available). If unknown, use a dot (<code>.</code>).
+            <br />- <strong>Reference Allele:</strong> The reference sequence at
+            this position (e.g., <code>TA</code>).
+            <br />- <strong>Alternate Allele:</strong> The sequence that
+            replaces the reference (e.g., <code>A</code>).
+            <br />
+            <br />
+            Ensure that the position and alleles correspond to the correct
+            reference genome version used for your data.
           </p>
         </div>
+
         <div className="grid grid-cols-4 gap-4 items-center">
           <div className="col-span-3">
             <Input

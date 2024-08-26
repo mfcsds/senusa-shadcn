@@ -8,7 +8,6 @@ import TableManageAccount from "@/components/table/TableManageAccount";
 
 const Page = () => {
   const router = useRouter();
-
   const navigateTo = (path: string) => {
     router.push(path);
   };
