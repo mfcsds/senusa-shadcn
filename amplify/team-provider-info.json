@@ -17,6 +17,9 @@
       },
       "api": {
         "senusashadcn": {}
+      },
+      "storage": {
+        "s3senusashadcnstorage31e4d581": {}
       }
     }
   }

@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import TabsVariantReport from "@/components/table/TabsVariantReport";
 import { Button } from "@/components/ui/button";
@@ -52,6 +53,18 @@ interface Patient {
   sex?: string;
   phone_number?: string;
   dob?: string;
+}
+
+function generatePatientID() {
+  const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let patientID = "";
+
+  for (let i = 0; i < 12; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    patientID += characters[randomIndex];
+  }
+
+  return patientID;
 }
 
 const VariantReport = () => {

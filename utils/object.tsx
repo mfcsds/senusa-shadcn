@@ -30,3 +30,18 @@ export interface DataUser {
   phone_number?: string;
   password?: string;
 }
+
+export interface Institution {
+  id: string;
+  name?: string | null;
+  contact?: string | null;
+  address?: string | null;
+  subscription_type?: string | null;
+  currentUserQuota: number;
+  email?: string | null;
+  userQuotas?: string | null;
+  storageQuota?: string | null;
+  registrationDate: string;
+  updatedAt: string;
+  accountStatus: boolean;
+}

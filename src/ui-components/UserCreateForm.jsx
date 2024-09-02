@@ -27,8 +27,8 @@ export default function UserCreateForm(props) {
     institutionID: "",
     role_type: "",
     email: "",
-    Category: "",
-    Specialty: "",
+    category: "",
+    specialty: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [institutionID, setInstitutionID] = React.useState(
@@ -36,16 +36,16 @@ export default function UserCreateForm(props) {
   );
   const [role_type, setRole_type] = React.useState(initialValues.role_type);
   const [email, setEmail] = React.useState(initialValues.email);
-  const [Category, setCategory] = React.useState(initialValues.Category);
-  const [Specialty, setSpecialty] = React.useState(initialValues.Specialty);
+  const [category, setCategory] = React.useState(initialValues.category);
+  const [specialty, setSpecialty] = React.useState(initialValues.specialty);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
     setInstitutionID(initialValues.institutionID);
     setRole_type(initialValues.role_type);
     setEmail(initialValues.email);
-    setCategory(initialValues.Category);
-    setSpecialty(initialValues.Specialty);
+    setCategory(initialValues.category);
+    setSpecialty(initialValues.specialty);
     setErrors({});
   };
   const validations = {
@@ -53,8 +53,8 @@ export default function UserCreateForm(props) {
     institutionID: [{ type: "Required" }],
     role_type: [],
     email: [],
-    Category: [],
-    Specialty: [],
+    category: [],
+    specialty: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -86,8 +86,8 @@ export default function UserCreateForm(props) {
           institutionID,
           role_type,
           email,
-          Category,
-          Specialty,
+          category,
+          specialty,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -154,8 +154,8 @@ export default function UserCreateForm(props) {
               institutionID,
               role_type,
               email,
-              Category,
-              Specialty,
+              category,
+              specialty,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -183,8 +183,8 @@ export default function UserCreateForm(props) {
               institutionID: value,
               role_type,
               email,
-              Category,
-              Specialty,
+              category,
+              specialty,
             };
             const result = onChange(modelFields);
             value = result?.institutionID ?? value;
@@ -216,8 +216,8 @@ export default function UserCreateForm(props) {
               institutionID,
               role_type: value,
               email,
-              Category,
-              Specialty,
+              category,
+              specialty,
             };
             const result = onChange(modelFields);
             value = result?.role_type ?? value;
@@ -245,8 +245,8 @@ export default function UserCreateForm(props) {
               institutionID,
               role_type,
               email: value,
-              Category,
-              Specialty,
+              category,
+              specialty,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -265,7 +265,7 @@ export default function UserCreateForm(props) {
         label="Category"
         isRequired={false}
         isReadOnly={false}
-        value={Category}
+        value={category}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -274,27 +274,27 @@ export default function UserCreateForm(props) {
               institutionID,
               role_type,
               email,
-              Category: value,
-              Specialty,
+              category: value,
+              specialty,
             };
             const result = onChange(modelFields);
-            value = result?.Category ?? value;
+            value = result?.category ?? value;
           }
-          if (errors.Category?.hasError) {
-            runValidationTasks("Category", value);
+          if (errors.category?.hasError) {
+            runValidationTasks("category", value);
           }
           setCategory(value);
         }}
-        onBlur={() => runValidationTasks("Category", Category)}
-        errorMessage={errors.Category?.errorMessage}
-        hasError={errors.Category?.hasError}
-        {...getOverrideProps(overrides, "Category")}
+        onBlur={() => runValidationTasks("category", category)}
+        errorMessage={errors.category?.errorMessage}
+        hasError={errors.category?.hasError}
+        {...getOverrideProps(overrides, "category")}
       ></TextField>
       <TextField
         label="Specialty"
         isRequired={false}
         isReadOnly={false}
-        value={Specialty}
+        value={specialty}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -303,21 +303,21 @@ export default function UserCreateForm(props) {
               institutionID,
               role_type,
               email,
-              Category,
-              Specialty: value,
+              category,
+              specialty: value,
             };
             const result = onChange(modelFields);
-            value = result?.Specialty ?? value;
+            value = result?.specialty ?? value;
           }
-          if (errors.Specialty?.hasError) {
-            runValidationTasks("Specialty", value);
+          if (errors.specialty?.hasError) {
+            runValidationTasks("specialty", value);
           }
           setSpecialty(value);
         }}
-        onBlur={() => runValidationTasks("Specialty", Specialty)}
-        errorMessage={errors.Specialty?.errorMessage}
-        hasError={errors.Specialty?.hasError}
-        {...getOverrideProps(overrides, "Specialty")}
+        onBlur={() => runValidationTasks("specialty", specialty)}
+        errorMessage={errors.specialty?.errorMessage}
+        hasError={errors.specialty?.hasError}
+        {...getOverrideProps(overrides, "specialty")}
       ></TextField>
       <Flex
         justifyContent="space-between"

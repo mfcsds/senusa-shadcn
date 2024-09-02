@@ -50,6 +50,8 @@ import { keysEqual } from "@aws-amplify/datastore/dist/esm/util";
 
 Amplify.configure(config);
 
+import { generatePatientID } from "@/utils/function";
+
 interface Patient {
   id: string;
   institutionID?: string;
@@ -89,7 +91,7 @@ const TableManagePatient = () => {
   const savePatient = async () => {
     try {
       const newPatient = {
-        id: id,
+        id: generatePatientID(),
         name: name,
         sex: sex,
         institutionID: "ID-0012024-224420-YARSI",
@@ -259,12 +261,12 @@ const TableManagePatient = () => {
             <CardContent>
               <div className="flex flex-col ">
                 <form className="gap-y-10 ">
-                  <Label>Patient ID</Label>
+                  {/* <Label>Patient ID</Label>
                   <Input
                     type="text"
                     placeholder="ID"
                     onChange={(e) => setIdPatient(e.target.value)}
-                  ></Input>
+                  ></Input> */}
                   <Label>Patient Name</Label>
                   <Input
                     type="text"

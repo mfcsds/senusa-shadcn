@@ -14,6 +14,8 @@ import { Badge } from "../ui/badge";
 import UserAccountItem from "../items/UserAccountItem";
 import { DataUser } from "@/utils/object";
 
+import { generateUserID } from "@/utils/function";
+
 const TableUserAccount = () => {
   const colors = [
     "bg-red-900",
@@ -37,20 +39,20 @@ const TableUserAccount = () => {
     level: "",
     role: "",
     specialty: "",
-    status: "Active",
+    status: "In Verification",
     initial: "",
   });
 
   const handleAddNewUser = () => {
     setNewUser({
-      id: `${dataAccount.length + 1}`,
+      id: `${generateUserID()}`,
       first_name: "",
       last_name: "",
       initial: "",
       level: "",
       role: "",
       specialty: "",
-      status: "Active",
+      status: "In verification",
     });
     setShowModal(true);
   };
@@ -76,7 +78,7 @@ const TableUserAccount = () => {
       </div>
       <Table className="mt-10">
         <TableHeader>
-          <TableRow>
+          <TableRow className="bg-slate-100">
             <TableHead>No</TableHead>
             <TableHead className="text-left">ID and Name</TableHead>
             <TableHead>User Level</TableHead>
@@ -95,7 +97,7 @@ const TableUserAccount = () => {
               <TableCell>{index + 1}</TableCell>
               <TableCell className="text-left">
                 <UserAccountItem
-                  id={user.id}
+                  id={user.role}
                   name={user.first_name + " " + user.last_name}
                   initial={
                     user.first_name.charAt(0) + "" + user.last_name.charAt(0)

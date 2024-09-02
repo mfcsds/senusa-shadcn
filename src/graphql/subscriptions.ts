@@ -8,6 +8,279 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateGeneticsConselor = /* GraphQL */ `subscription OnCreateGeneticsConselor(
+  $filter: ModelSubscriptionGeneticsConselorFilterInput
+) {
+  onCreateGeneticsConselor(filter: $filter) {
+    id
+    text
+    variantreportID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateGeneticsConselorSubscriptionVariables,
+  APITypes.OnCreateGeneticsConselorSubscription
+>;
+export const onUpdateGeneticsConselor = /* GraphQL */ `subscription OnUpdateGeneticsConselor(
+  $filter: ModelSubscriptionGeneticsConselorFilterInput
+) {
+  onUpdateGeneticsConselor(filter: $filter) {
+    id
+    text
+    variantreportID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateGeneticsConselorSubscriptionVariables,
+  APITypes.OnUpdateGeneticsConselorSubscription
+>;
+export const onDeleteGeneticsConselor = /* GraphQL */ `subscription OnDeleteGeneticsConselor(
+  $filter: ModelSubscriptionGeneticsConselorFilterInput
+) {
+  onDeleteGeneticsConselor(filter: $filter) {
+    id
+    text
+    variantreportID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteGeneticsConselorSubscriptionVariables,
+  APITypes.OnDeleteGeneticsConselorSubscription
+>;
+export const onCreatePhenotype = /* GraphQL */ `subscription OnCreatePhenotype($filter: ModelSubscriptionPhenotypeFilterInput) {
+  onCreatePhenotype(filter: $filter) {
+    id
+    PhenotypeCode
+    Description
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreatePhenotypeSubscriptionVariables,
+  APITypes.OnCreatePhenotypeSubscription
+>;
+export const onUpdatePhenotype = /* GraphQL */ `subscription OnUpdatePhenotype($filter: ModelSubscriptionPhenotypeFilterInput) {
+  onUpdatePhenotype(filter: $filter) {
+    id
+    PhenotypeCode
+    Description
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdatePhenotypeSubscriptionVariables,
+  APITypes.OnUpdatePhenotypeSubscription
+>;
+export const onDeletePhenotype = /* GraphQL */ `subscription OnDeletePhenotype($filter: ModelSubscriptionPhenotypeFilterInput) {
+  onDeletePhenotype(filter: $filter) {
+    id
+    PhenotypeCode
+    Description
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeletePhenotypeSubscriptionVariables,
+  APITypes.OnDeletePhenotypeSubscription
+>;
+export const onCreateConclusion = /* GraphQL */ `subscription OnCreateConclusion(
+  $filter: ModelSubscriptionConclusionFilterInput
+) {
+  onCreateConclusion(filter: $filter) {
+    id
+    text
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateConclusionSubscriptionVariables,
+  APITypes.OnCreateConclusionSubscription
+>;
+export const onUpdateConclusion = /* GraphQL */ `subscription OnUpdateConclusion(
+  $filter: ModelSubscriptionConclusionFilterInput
+) {
+  onUpdateConclusion(filter: $filter) {
+    id
+    text
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateConclusionSubscriptionVariables,
+  APITypes.OnUpdateConclusionSubscription
+>;
+export const onDeleteConclusion = /* GraphQL */ `subscription OnDeleteConclusion(
+  $filter: ModelSubscriptionConclusionFilterInput
+) {
+  onDeleteConclusion(filter: $filter) {
+    id
+    text
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteConclusionSubscriptionVariables,
+  APITypes.OnDeleteConclusionSubscription
+>;
+export const onCreateRecommendation = /* GraphQL */ `subscription OnCreateRecommendation(
+  $filter: ModelSubscriptionRecommendationFilterInput
+) {
+  onCreateRecommendation(filter: $filter) {
+    id
+    text
+    variantreportID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateRecommendationSubscriptionVariables,
+  APITypes.OnCreateRecommendationSubscription
+>;
+export const onUpdateRecommendation = /* GraphQL */ `subscription OnUpdateRecommendation(
+  $filter: ModelSubscriptionRecommendationFilterInput
+) {
+  onUpdateRecommendation(filter: $filter) {
+    id
+    text
+    variantreportID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateRecommendationSubscriptionVariables,
+  APITypes.OnUpdateRecommendationSubscription
+>;
+export const onDeleteRecommendation = /* GraphQL */ `subscription OnDeleteRecommendation(
+  $filter: ModelSubscriptionRecommendationFilterInput
+) {
+  onDeleteRecommendation(filter: $filter) {
+    id
+    text
+    variantreportID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteRecommendationSubscriptionVariables,
+  APITypes.OnDeleteRecommendationSubscription
+>;
+export const onCreateVariantReport = /* GraphQL */ `subscription OnCreateVariantReport(
+  $filter: ModelSubscriptionVariantReportFilterInput
+) {
+  onCreateVariantReport(filter: $filter) {
+    id
+    status
+    create_at
+    isApproved
+    medical_history
+    current_diagnosis
+    userID
+    download_link_report
+    institutionID
+    Recommendations {
+      nextToken
+      __typename
+    }
+    GeneticsConselors {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateVariantReportSubscriptionVariables,
+  APITypes.OnCreateVariantReportSubscription
+>;
+export const onUpdateVariantReport = /* GraphQL */ `subscription OnUpdateVariantReport(
+  $filter: ModelSubscriptionVariantReportFilterInput
+) {
+  onUpdateVariantReport(filter: $filter) {
+    id
+    status
+    create_at
+    isApproved
+    medical_history
+    current_diagnosis
+    userID
+    download_link_report
+    institutionID
+    Recommendations {
+      nextToken
+      __typename
+    }
+    GeneticsConselors {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateVariantReportSubscriptionVariables,
+  APITypes.OnUpdateVariantReportSubscription
+>;
+export const onDeleteVariantReport = /* GraphQL */ `subscription OnDeleteVariantReport(
+  $filter: ModelSubscriptionVariantReportFilterInput
+) {
+  onDeleteVariantReport(filter: $filter) {
+    id
+    status
+    create_at
+    isApproved
+    medical_history
+    current_diagnosis
+    userID
+    download_link_report
+    institutionID
+    Recommendations {
+      nextToken
+      __typename
+    }
+    GeneticsConselors {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteVariantReportSubscriptionVariables,
+  APITypes.OnDeleteVariantReportSubscription
+>;
 export const onCreatePatientDocuments = /* GraphQL */ `subscription OnCreatePatientDocuments(
   $filter: ModelSubscriptionPatientDocumentsFilterInput
 ) {
@@ -132,8 +405,12 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser($filter: Mo
     institutionID
     role_type
     email
-    Category
-    Specialty
+    category
+    specialty
+    VariantReports {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -150,8 +427,12 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser($filter: Mo
     institutionID
     role_type
     email
-    Category
-    Specialty
+    category
+    specialty
+    VariantReports {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -168,8 +449,12 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser($filter: Mo
     institutionID
     role_type
     email
-    Category
-    Specialty
+    category
+    specialty
+    VariantReports {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -202,6 +487,10 @@ export const onCreateInstitution = /* GraphQL */ `subscription OnCreateInstituti
     storageQuota
     registrationDate
     accountStatus
+    VariantReports {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -234,6 +523,10 @@ export const onUpdateInstitution = /* GraphQL */ `subscription OnUpdateInstituti
     storageQuota
     registrationDate
     accountStatus
+    VariantReports {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -266,6 +559,10 @@ export const onDeleteInstitution = /* GraphQL */ `subscription OnDeleteInstituti
     storageQuota
     registrationDate
     accountStatus
+    VariantReports {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename

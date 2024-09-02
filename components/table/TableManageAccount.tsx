@@ -20,32 +20,24 @@ import { Button } from "@/components/ui/button";
 import { Pencil, Trash } from "lucide-react";
 
 import config from "@/src/amplifyconfiguration.json";
+import { Institution } from "@/utils/object";
 Amplify.configure(config);
-
-interface Institution {
-  id: string;
-  name?: string | null;
-  contact?: string | null;
-  address?: string | null;
-  subscription_type?: string | null;
-  currentUserQuota: number;
-  email?: string | null;
-  userQuotas?: string | null;
-  storageQuota?: string | null;
-  registrationDate: string;
-  updatedAt: string;
-  accountStatus: boolean;
-}
 
 const TableManageAccount = () => {
   const [institutions, setInstitutions] = useState<Institution[]>([]);
+  const [loadings, setLoadings] = useState(true);
+
   const client = generateClient();
   useEffect(() => {
     const fetchInstitution = async () => {
       try {
         const result = await client.graphql({ query: listInstitutions });
         setInstitutions(result.data.listInstitutions.items as Institution[]);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoadings(false);
+      }
     };
     fetchInstitution();
   }, []);
@@ -59,13 +51,16 @@ const TableManageAccount = () => {
   // console.log(institutions.at(0).);
 
   return (
-    <div className="w-full border">
-      <Table>
-        <TableCaption>User Accounts Details.</TableCaption>
+    <div className="w-full border-none flex flex-col-reverse overflow-x-auto">
+      {loadings && (
+        <p className="text-gray-500 text-center p-10 text-2xl">
+          Fetching Data...
+        </p>
+      )}
+      <Table className="overflow-x-visible">
         <TableHeader>
-          <TableRow>
+          <TableRow className="text-xs">
             <TableHead className="w-[600px]">Name</TableHead>
-            <TableHead>Contact</TableHead>
             <TableHead className="w-[400px]">Address</TableHead>
             <TableHead>Subscription Type</TableHead>
             <TableHead className="w-[400px]">Cur-User Quota</TableHead>
@@ -78,16 +73,18 @@ const TableManageAccount = () => {
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="text-xs">
           {institutions.map((institution) => (
-            <TableRow key={institution.id}>
+            <TableRow
+              key={institution.id}
+              className="hover:text-white hover:bg-violet-900"
+            >
               <TableCell>
                 <InstitutionItems
                   id={institution.id}
                   name={institution.name}
                 ></InstitutionItems>
               </TableCell>
-              <TableCell>{institution.contact || ""}</TableCell>
               <TableCell>{institution.address || ""}</TableCell>
               <TableCell>{institution.subscription_type || ""}</TableCell>
               <TableCell>{institution.currentUserQuota}</TableCell>

@@ -13,8 +13,12 @@ const InstitutionItems: React.FC<InstitutionItemsProops> = ({ id, name }) => {
         <Hospital />
       </span>
       <div className="flex flex-col text-left">
-        <p className="text-[12px] text-black-900">{name}</p>
-        <p className="text-[10px] text-gray-500">{id}</p>
+        <p className="text-sm text-black-900">
+          <strong>{name}</strong>
+        </p>
+        <p className="text-[14px]">
+          <small>{id}</small>
+        </p>
       </div>
     </div>
   );

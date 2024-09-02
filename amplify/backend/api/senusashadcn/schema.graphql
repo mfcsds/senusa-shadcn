@@ -59,8 +59,8 @@ type User @model @auth(rules: [{allow: public}]) {
   institutionID: ID! @index(name: "byInstitution")
   role_type: Int
   email: String
-  Category: String
-  Specialty: String
+  category: String
+  specialty: String
   VariantReports: [VariantReport] @hasMany(indexName: "byUser", fields: ["id"])
 }
 
@@ -79,5 +79,4 @@ type Institution @model @auth(rules: [{allow: public}]) {
   registrationDate: String
   accountStatus: Boolean
   VariantReports: [Patient] @hasMany(indexName: "byInstitution", fields: ["id"])
-}
- 
+} 

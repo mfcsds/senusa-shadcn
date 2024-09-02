@@ -18,6 +18,8 @@ import { Amplify } from "aws-amplify";
 
 import { generateClient } from "aws-amplify/api";
 
+import { generateInstutionID } from "@/utils/function";
+
 type signUpParameters = {
   username: string;
   password: string;
@@ -94,30 +96,6 @@ async function handleSignUp({
   }
 }
 
-function generateID(baseID: number, institutionName: string): string {
-  const now: Date = new Date();
-
-  const currentYear: number = now.getFullYear();
-
-  // Get current time formatted as HHMMSS
-  const hours: string = now.getHours().toString().padStart(2, "0");
-  const minutes: string = now.getMinutes().toString().padStart(2, "0");
-  const seconds: string = now.getSeconds().toString().padStart(2, "0");
-  const currentTime: string = `${hours}${minutes}${seconds}`;
-
-  // Ensure baseID is a 3-digit number
-  const paddedBaseID: string = baseID.toString().padStart(3, "0");
-
-  // Remove any spaces from the institution name and convert to uppercase
-  const institutionNameFormatted: string = institutionName
-    .replace(/\s+/g, "")
-    .toUpperCase();
-
-  // Generate the final ID string
-  const id: string = `ID-${paddedBaseID}${currentYear}-${currentTime}-${institutionNameFormatted}`;
-
-  return id;
-}
 Amplify.configure(awsconfig);
 
 const RegisterForm = () => {
@@ -141,7 +119,7 @@ const RegisterForm = () => {
 
   useEffect(() => {
     // Update the institution_id whenever institution_name changes
-    setInstitutionId(generateID(1, institution_name));
+    setInstitutionId(generateInstutionID());
   }, [institution_name]);
 
   const submitSignUp = async (event: React.FormEvent) => {
@@ -176,7 +154,7 @@ const RegisterForm = () => {
         <div className="flex flex-col mt-5 gap-2">
           <Label>Institution ID</Label>
           <Input
-            value={generateID(1, institution_name)}
+            value={generateInstutionID()}
             onChange={(e) => setInstitutionId(e.target.value)}
             type="text"
             id="insitution_id"

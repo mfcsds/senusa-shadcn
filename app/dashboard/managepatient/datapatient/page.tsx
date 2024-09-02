@@ -26,6 +26,7 @@ import config from "@/src/amplifyconfiguration.json";
 import { uploadData } from "aws-amplify/storage";
 import { getUrl } from "aws-amplify/storage";
 import { Label } from "@/components/ui/label";
+
 Amplify.configure(config);
 
 interface vcfData {
