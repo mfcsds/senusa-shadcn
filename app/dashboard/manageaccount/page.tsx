@@ -32,44 +32,35 @@ import {
 } from "@/components/ui/popover";
 
 import config from "@/src/amplifyconfiguration.json";
-import graphqlOperation, { Amplify } from "aws-amplify";
+import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
 import { listInstitutions } from "@/src/graphql/queries";
 import { createInstitution, createUser } from "@/src/graphql/mutations";
+import { CreateInstitutionInput } from "@/src/API";
 import { Institution } from "@/utils/object";
-import RegisterForm from "@/components/auth/RegisterForm";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { generateUserID } from "@/utils/function";
 import LabelAndDescription from "@/components/items/LabelAndDescription";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { subscribe } from "diagnostics_channel";
-import { getDateNextMonth, getDateToday } from "@/utils/DateHelperFunction";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ID } from "@aws-amplify/datastore/dist/esm/util";
-import { IdCardIcon } from "@radix-ui/react-icons";
 
+import {
+  getDateNext,
+  getDateNextMonth,
+  getDateToday,
+} from "@/utils/DateHelperFunction";
+import { Checkbox } from "@/components/ui/checkbox";
+
+import { IdCardIcon } from "@radix-ui/react-icons";
 Amplify.configure(config);
 
-const storageQuota = [
-  { value: "5", label: "5 GB" },
-  { value: "15", label: "15 GB" },
-  { value: "25", label: "25 GB" },
-];
-
-const userSubscriptionType = [
-  { value: "Regular", label: "Regular Subscription" },
-  { value: "Monthly", label: "Monthly Subscriptions" },
-];
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const ManageAccount = () => {
   const router = useRouter();
@@ -77,7 +68,7 @@ const ManageAccount = () => {
     router.push(path);
   };
 
-  const [institution, setInstitutions] = useState<Institution[]>([]);
+  const [institutionList, setInstitutionsList] = useState<Institution[]>([]);
 
   const [prosesSubmit, setProcessSubmit] = useState(false);
 
@@ -92,25 +83,42 @@ const ManageAccount = () => {
   const [address, setAddress] = useState("");
 
   // for storage values
-  const [storageValue, setStorageValue] = useState("");
-  const [openStoragePopOver, setOpenStoragePopover] = useState(false);
+  const [storageValue, setStorageValue] = useState<number>(0);
   // for subscription values
   const [userSubscription, setUserSubscription] = useState("");
-  const [openSubscriptionPopOver, setOpenSubscriptionPopover] = useState(false);
+
   // set Registration Date =
   const [registrationDate, setRegistrationDate] = useState(getDateToday());
+
   // set Due Date
   const [dueDate, setDueDate] = useState(getDateNextMonth());
-
   // Password Visibility
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  // Register User as Admin
+  const handleSubscriptionChange = (value: string) => {
+    setUserSubscription(value);
 
+    switch (value) {
+      case "1":
+        setDueDate(getDateNext(1));
+        break;
+      case "3":
+        setDueDate(getDateNext(3));
+        break;
+      case "12":
+        setDueDate(getDateNext(12));
+        break;
+      default:
+        setDueDate(getDateToday());
+    }
+  };
+
+  // Register User as Admin
   const handleCreateUser = async (event: React.FormEvent): Promise<void> => {
     event.preventDefault();
     try {
-      setProcessSubmit(true);
+      setProcessSubmit(true); // Generate ID directly
+      setInstitutionId(generateUserID());
       const { isSignUpComplete, userId, nextStep } = await signUp({
         username: emailContact,
         password: userPassword,
@@ -122,44 +130,45 @@ const ManageAccount = () => {
         role_type: 2,
         category: "Admin",
         specialty: "Administrator",
+        email: emailContact,
       };
 
-      const newInstitution = {
+      const newDataInstitution: CreateInstitutionInput = {
         id: institution_id,
         name: institutionName,
-        contact: phoneNumber,
-        address: address,
-        email: emailContact,
-        subscription_type: userSubscription,
-        registrationDate: registrationDate,
-        accountStatus: true,
-        storageQuota: storageValue,
-        userQuotas: 5,
         currentUserQuota: 0,
+        currentStorageQuota: 0,
+        accountStatus: true,
+        registrationDate: registrationDate,
+        dueDate: dueDate,
+        subscription_type: userSubscription,
+        storageQuota: storageValue,
+        email: emailContact,
+        contactname: contactName,
+        contactphone: phoneNumber,
+        userQuotas: 10,
+        address: address,
       };
 
       try {
         const registerInstitutionAccount = await client.graphql({
           query: createInstitution,
-          variables: { input: newInstitution },
+          variables: { input: newDataInstitution },
         });
-        console.log("Institution Sucessfull");
-      } catch (error) {
-        console.log(error);
-      }
-
-      try {
+        console.log("Institution Sucessfull", registerInstitutionAccount);
         const registerAdminAccount = await client.graphql({
           query: createUser,
           variables: { input: adminUser },
         });
-        console.log("Institution Admin Sucessull");
+        console.log("Institution Admin Sucessull", registerAdminAccount);
       } catch (error) {
-        console.log(error);
+        console.log("Error registering institution or admin:", error);
       }
     } catch (error) {
+      console.log(error);
     } finally {
       setProcessSubmit(false);
+      setOpenRegisterModal(false);
     }
   };
 
@@ -168,6 +177,7 @@ const ManageAccount = () => {
   };
 
   const handleOpenRegisterModal = () => {
+    setInstitutionId(generateUserID()); // Generate a new ID every time the modal is opened
     setOpenRegisterModal(!openRegisterModal);
   };
   const client = generateClient();
@@ -176,7 +186,9 @@ const ManageAccount = () => {
     const fetchInstitutionData = async () => {
       try {
         const result = await client.graphql({ query: listInstitutions });
-        setInstitutions(result.data.listInstitutions.items as Institution[]);
+        setInstitutionsList(
+          result.data.listInstitutions.items as Institution[]
+        );
       } catch (error) {
         console.log(error);
       } finally {
@@ -203,7 +215,6 @@ const ManageAccount = () => {
                 className="hover:text-white hover:bg-violet-800"
                 variant="secondary"
                 onClick={handleOpenRegisterModal}
-                // onClick={() => navigateTo("./manageaccount/createnewuser")}
               >
                 <span>
                   <Plus className="w-3 h-3 mr-2"></Plus>
@@ -245,6 +256,7 @@ const ManageAccount = () => {
                           onChange={() => setInstitutionId(generateUserID())}
                         ></Input>
                         <Button
+                          disabled={true}
                           variant={"ghost"}
                           className="absolute inset-y-0 right-0"
                         >
@@ -264,6 +276,7 @@ const ManageAccount = () => {
                           onChange={(e) => setInstitutionName(e.target.value)}
                         ></Input>
                         <Button
+                          disabled={true}
                           variant={"ghost"}
                           className="absolute inset-y-0 right-0"
                         >
@@ -286,6 +299,7 @@ const ManageAccount = () => {
                           onChange={(e) => setContactName(e.target.value)}
                         ></Input>
                         <Button
+                          disabled={true}
                           variant={"ghost"}
                           className="absolute inset-y-0 right-0"
                         >
@@ -305,6 +319,7 @@ const ManageAccount = () => {
                           onChange={(e) => setPhoneNumber(e.target.value)}
                         ></Input>
                         <Button
+                          disabled={true}
                           variant={"ghost"}
                           className="absolute inset-y-0 right-0"
                         >
@@ -325,8 +340,9 @@ const ManageAccount = () => {
                           onChange={(e) => setEmailContact(e.target.value)}
                         ></Input>
                         <Button
+                          disabled={true}
                           variant={"ghost"}
-                          className="absolute inset-y-0 right-0"
+                          className="absolute inset-y-0 right-0 outline-none text-black"
                         >
                           <Mail className=" w-4 h-4"></Mail>
                         </Button>
@@ -381,63 +397,21 @@ const ManageAccount = () => {
                         label="Storage Quota"
                         desc="The allocated storage capacity for the institution's data, measured in gigabytes (GB)."
                       />
-                      <Popover
-                        open={openStoragePopOver}
-                        onOpenChange={setOpenStoragePopover}
+                      <Select
+                        value={`${storageValue}`}
+                        onValueChange={(value) =>
+                          setStorageValue(Number(value))
+                        }
                       >
-                        <PopoverTrigger asChild>
-                          <Button
-                            role="combobox"
-                            variant={"outline"}
-                            className="w-full text-muted-foreground"
-                            aria-expanded={openStoragePopOver}
-                          >
-                            {storageValue
-                              ? storageQuota.find(
-                                  (storage) => storage.value === storageValue
-                                )?.label
-                              : "Select Storage Quota"}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-full p-0">
-                          <Command>
-                            <CommandInput
-                              placeholder="Quota..."
-                              className="h-9"
-                            />
-                            <CommandList>
-                              <CommandEmpty>No Quota Found</CommandEmpty>
-                              <CommandGroup>
-                                {storageQuota.map((storage) => (
-                                  <CommandItem
-                                    key={storage.label}
-                                    value={storage.value}
-                                    onSelect={(currentValue) => {
-                                      setStorageValue(
-                                        currentValue === storageValue
-                                          ? ""
-                                          : currentValue
-                                      );
-                                      setOpenStoragePopover(false);
-                                    }}
-                                  >
-                                    {storage.label}
-                                    <CheckIcon
-                                      className={cn(
-                                        "ml-auto h-4 w-4",
-                                        storageValue === storage.value
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                    {storage.label}
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Storage Quota" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="5">5 GB</SelectItem>
+                          <SelectItem value="25">25 GB</SelectItem>
+                          <SelectItem value="50">50 GB</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     {/* This is user subscription type */}
                     <div className="flex flex-col gap-4 justify-between">
@@ -445,64 +419,19 @@ const ManageAccount = () => {
                         label="Subscription Type"
                         desc="The type of subscription plan selected for the institution."
                       />
-                      <Popover
-                        open={openSubscriptionPopOver}
-                        onOpenChange={setOpenSubscriptionPopover}
+                      <Select
+                        value={userSubscription}
+                        onValueChange={handleSubscriptionChange}
                       >
-                        <PopoverTrigger asChild>
-                          <Button
-                            role="combobox"
-                            variant={"outline"}
-                            className="w-full text-muted-foreground"
-                            aria-expanded={openStoragePopOver}
-                          >
-                            {userSubscription
-                              ? userSubscriptionType.find(
-                                  (subscription) =>
-                                    subscription.value === userSubscription
-                                )?.label
-                              : "Select Subscription Type"}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-full p-0">
-                          <Command>
-                            <CommandInput
-                              placeholder="Subscription"
-                              className="h-9"
-                            />
-                            <CommandList>
-                              <CommandEmpty>No Service Type Found</CommandEmpty>
-                              <CommandGroup>
-                                {userSubscriptionType.map((subscription) => (
-                                  <CommandItem
-                                    key={subscription.value}
-                                    value={subscription.value}
-                                    onSelect={(currentValue) => {
-                                      setUserSubscription(
-                                        currentValue === userSubscription
-                                          ? ""
-                                          : currentValue
-                                      );
-                                      setOpenSubscriptionPopover(false);
-                                    }}
-                                  >
-                                    {subscription.label}
-                                    <CheckIcon
-                                      className={cn(
-                                        "ml-auto h-4 w-4",
-                                        userSubscription === subscription.value
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                    {subscription.label}
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Subscription Type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="1">1-Month Trial</SelectItem>
+                          <SelectItem value="3">3 Month</SelectItem>
+                          <SelectItem value="12"> 1 Year</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     {/* This is Register Date Quota */}
                     <div className="flex flex-col gap-4 justify-between">

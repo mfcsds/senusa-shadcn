@@ -1,7 +1,30 @@
+type Vcfdata @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  id_patient: String
+  sample_date: String
+  uploadAt: String
+  public_link: String
+  genome_reference: String
+}
+
+type Variant @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  chrom: String
+  pos: String
+  ref: String
+  alt: String
+  qual: String
+  filter: String
+  info: String
+  hgvs: String
+  id_var: String
+  id_patient: String
+  id_vcf: String
+}
+
 type GeneticsConselor @model @auth(rules: [{allow: public}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}]) {
   id: ID!
   text: String
-  variantreportID: ID! @index(name: "byVariantReport")
 }
 
 type Phenotype @model @auth(rules: [{allow: public}]) {
@@ -18,27 +41,26 @@ type Conclusion @model @auth(rules: [{allow: public}]) {
 type Recommendation @model @auth(rules: [{allow: public}]) {
   id: ID!
   text: String
-  variantreportID: ID! @index(name: "byVariantReport")
+  variantreportID: ID!
 }
 
 type VariantReport @model @auth(rules: [{allow: public}]) {
   id: ID!
-  status: String
-  create_at: String
+  status: Int
   isApproved: Boolean
   medical_history: String
   current_diagnosis: String
-  userID: ID! @index(name: "byUser")
-  download_link_report: String
-  institutionID: ID! @index(name: "byInstitution")
-  Recommendations: [GeneticsConselor] @hasMany(indexName: "byVariantReport", fields: ["id"])
-  GeneticsConselors: [GeneticsConselor] @hasMany(indexName: "byVariantReport", fields: ["id"])
+  institutionID: ID
+  createAt: AWSDate
+  phenotype: [String]
+  sample_collection: String
+  idPatient: String
 }
 
 type PatientDocuments @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String
-  patientID: ID! @index(name: "byPatient")
+  patientID: ID!
   size: Int
   link: AWSURL
 }
@@ -49,34 +71,41 @@ type Patient @model @auth(rules: [{allow: public}]) {
   sex: String
   phone_number: String
   dob: String
-  institutionID: ID! @index(name: "byInstitution")
-  PatientDokuments: [PatientDocuments] @hasMany(indexName: "byPatient", fields: ["id"])
+  institutionID: ID!
+  PatientDokuments: [PatientDocuments] @hasMany(fields: ["id"])
 }
 
 type User @model @auth(rules: [{allow: public}]) {
   id: ID!
-  name: String
-  institutionID: ID! @index(name: "byInstitution")
-  role_type: Int
+  first_name: String
+  last_name: String
+  role: String
   email: String
   category: String
   specialty: String
-  VariantReports: [VariantReport] @hasMany(indexName: "byUser", fields: ["id"])
+  institutionID: ID!
+  level: Int
+  status: Int
+  phone_number: String
 }
 
 type Institution @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String
-  contact: String
+  contactname: String
   address: String
   subscription_type: String
   email: String
-  Users: [Patient] @hasMany(indexName: "byInstitution", fields: ["id"])
-  Patients: [Patient] @hasMany(indexName: "byInstitution", fields: ["id"])
+  Users: [Patient] @hasMany(fields: ["id"])
+  Patients: [Patient] @hasMany(fields: ["id"])
   userQuotas: Int
   currentUserQuota: Int
-  storageQuota: String
+  storageQuota: Float
   registrationDate: String
   accountStatus: Boolean
-  VariantReports: [Patient] @hasMany(indexName: "byInstitution", fields: ["id"])
-} 
+  VariantReports: [Patient] @hasMany(fields: ["id"])
+  contactphone: String
+  dueDate: String
+  currentStorageQuota: Float
+}
+ 

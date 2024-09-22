@@ -1,47 +1,104 @@
 export interface VariantReportData {
   id: string;
-  institutionID: string;
-  userID: string;
-  status: string;
-  samplecollection: string;
-  medical_diagnosis: string;
-  phenotype: string;
-  patient: Patient;
+  status?: number;
+  isApproved?: boolean;
+  medical_history?: string;
+  current_diagnosis?: string;
+  userID?: string;
+  institutionID?: string;
+  createAt?: string;
+  phenotype?: string[];
+  sample_collection?: string;
+  createdAt?: string; // These fields appear in the query but were not in the original model
+  updatedAt?: string;
+  variantReportPatientId?: string;
+  __typename?: string; // This is automati
+}
+
+export interface Variant {
+  id: string;
+  id_vcf: string;
+  id_patient: string;
+  chrom: string;
+  pos: string;
+  id_var: string;
+  ref: string;
+  alt: string;
+  qual: string;
+  filter: string;
+  info: string;
+  hgvs: string;
+  variantReportID: string;
+  zygosity: string;
+  globalallele: number | null;
+  functional_impact: string;
+  acmg: string;
+  clinicalSign: string | null;
+  severeconsequence: string | null;
+  sift_score: number | null;
+  sift_prediction: string | null;
+  gene_symbol: string | null;
+  gene_id: string | null;
+  phenotypes: string | null;
+}
+
+export interface Recommendation {
+  id: string;
+  text: string;
+  variantReportID: string;
+}
+
+export interface GeneticsConselor {
+  id: string;
+  text: string;
+  variantReportID: string;
 }
 
 export interface Patient {
   id: string;
   sex: string;
+  name: string;
   phone_number?: string;
   dob: string;
   institutionID?: string;
 }
 
 export interface DataUser {
+  institutionID?: string | null;
   id: string;
   first_name: string;
   last_name: string;
-  initial?: string;
-  level: string;
+  level: number;
   role: string;
   specialty: string;
-  status: string;
-  email?: string;
+  status: number;
+  email: string;
   phone_number?: string;
-  password?: string;
 }
 
 export interface Institution {
-  id: string;
+  id: string | null;
   name?: string | null;
-  contact?: string | null;
+  contactname?: string | null;
   address?: string | null;
   subscription_type?: string | null;
   currentUserQuota: number;
   email?: string | null;
-  userQuotas?: string | null;
-  storageQuota?: string | null;
+  userQuotas?: number;
+  storageQuota?: number;
   registrationDate: string;
   updatedAt: string;
+  contactphone?: string | null;
+  dueDate?: string;
   accountStatus: boolean;
+  currentStorageQuota: number;
+}
+
+export interface VcfData {
+  id: string | null;
+  id_patient: string | null;
+  sample_date: string | null;
+  uploadAt: string | null;
+  public_link: string | null;
+  genome_reference: string | null;
 }

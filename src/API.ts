@@ -2,18 +2,24 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateGeneticsConselorInput = {
+export type CreateVcfdataInput = {
   id?: string | null,
-  text?: string | null,
-  variantreportID: string,
+  id_patient?: string | null,
+  sample_date?: string | null,
+  uploadAt?: string | null,
+  public_link?: string | null,
+  genome_reference?: string | null,
 };
 
-export type ModelGeneticsConselorConditionInput = {
-  text?: ModelStringInput | null,
-  variantreportID?: ModelIDInput | null,
-  and?: Array< ModelGeneticsConselorConditionInput | null > | null,
-  or?: Array< ModelGeneticsConselorConditionInput | null > | null,
-  not?: ModelGeneticsConselorConditionInput | null,
+export type ModelVcfdataConditionInput = {
+  id_patient?: ModelStringInput | null,
+  sample_date?: ModelStringInput | null,
+  uploadAt?: ModelStringInput | null,
+  public_link?: ModelStringInput | null,
+  genome_reference?: ModelStringInput | null,
+  and?: Array< ModelVcfdataConditionInput | null > | null,
+  or?: Array< ModelVcfdataConditionInput | null > | null,
+  not?: ModelVcfdataConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
 };
@@ -58,27 +64,120 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
+export type Vcfdata = {
+  __typename: "Vcfdata",
+  id: string,
+  id_patient?: string | null,
+  sample_date?: string | null,
+  uploadAt?: string | null,
+  public_link?: string | null,
+  genome_reference?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateVcfdataInput = {
+  id: string,
+  id_patient?: string | null,
+  sample_date?: string | null,
+  uploadAt?: string | null,
+  public_link?: string | null,
+  genome_reference?: string | null,
+};
+
+export type DeleteVcfdataInput = {
+  id: string,
+};
+
+export type CreateVariantInput = {
+  id?: string | null,
+  chrom?: string | null,
+  pos?: string | null,
+  ref?: string | null,
+  alt?: string | null,
+  qual?: string | null,
+  filter?: string | null,
+  info?: string | null,
+  hgvs?: string | null,
+  id_var?: string | null,
+  id_patient?: string | null,
+  id_vcf?: string | null,
+};
+
+export type ModelVariantConditionInput = {
+  chrom?: ModelStringInput | null,
+  pos?: ModelStringInput | null,
+  ref?: ModelStringInput | null,
+  alt?: ModelStringInput | null,
+  qual?: ModelStringInput | null,
+  filter?: ModelStringInput | null,
+  info?: ModelStringInput | null,
+  hgvs?: ModelStringInput | null,
+  id_var?: ModelStringInput | null,
+  id_patient?: ModelStringInput | null,
+  id_vcf?: ModelStringInput | null,
+  and?: Array< ModelVariantConditionInput | null > | null,
+  or?: Array< ModelVariantConditionInput | null > | null,
+  not?: ModelVariantConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type Variant = {
+  __typename: "Variant",
+  id: string,
+  chrom?: string | null,
+  pos?: string | null,
+  ref?: string | null,
+  alt?: string | null,
+  qual?: string | null,
+  filter?: string | null,
+  info?: string | null,
+  hgvs?: string | null,
+  id_var?: string | null,
+  id_patient?: string | null,
+  id_vcf?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateVariantInput = {
+  id: string,
+  chrom?: string | null,
+  pos?: string | null,
+  ref?: string | null,
+  alt?: string | null,
+  qual?: string | null,
+  filter?: string | null,
+  info?: string | null,
+  hgvs?: string | null,
+  id_var?: string | null,
+  id_patient?: string | null,
+  id_vcf?: string | null,
+};
+
+export type DeleteVariantInput = {
+  id: string,
+};
+
+export type CreateGeneticsConselorInput = {
+  id?: string | null,
+  text?: string | null,
+};
+
+export type ModelGeneticsConselorConditionInput = {
+  text?: ModelStringInput | null,
+  and?: Array< ModelGeneticsConselorConditionInput | null > | null,
+  or?: Array< ModelGeneticsConselorConditionInput | null > | null,
+  not?: ModelGeneticsConselorConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type GeneticsConselor = {
   __typename: "GeneticsConselor",
   id: string,
   text?: string | null,
-  variantreportID: string,
   createdAt: string,
   updatedAt: string,
 };
@@ -86,7 +185,6 @@ export type GeneticsConselor = {
 export type UpdateGeneticsConselorInput = {
   id: string,
   text?: string | null,
-  variantreportID?: string | null,
 };
 
 export type DeleteGeneticsConselorInput = {
@@ -175,6 +273,22 @@ export type ModelRecommendationConditionInput = {
   updatedAt?: ModelStringInput | null,
 };
 
+export type ModelIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
 export type Recommendation = {
   __typename: "Recommendation",
   id: string,
@@ -196,30 +310,44 @@ export type DeleteRecommendationInput = {
 
 export type CreateVariantReportInput = {
   id?: string | null,
-  status?: string | null,
-  create_at?: string | null,
+  status?: number | null,
   isApproved?: boolean | null,
   medical_history?: string | null,
   current_diagnosis?: string | null,
-  userID: string,
-  download_link_report?: string | null,
-  institutionID: string,
+  institutionID?: string | null,
+  createAt?: string | null,
+  phenotype?: Array< string | null > | null,
+  sample_collection?: string | null,
+  idPatient?: string | null,
 };
 
 export type ModelVariantReportConditionInput = {
-  status?: ModelStringInput | null,
-  create_at?: ModelStringInput | null,
+  status?: ModelIntInput | null,
   isApproved?: ModelBooleanInput | null,
   medical_history?: ModelStringInput | null,
   current_diagnosis?: ModelStringInput | null,
-  userID?: ModelIDInput | null,
-  download_link_report?: ModelStringInput | null,
   institutionID?: ModelIDInput | null,
+  createAt?: ModelStringInput | null,
+  phenotype?: ModelStringInput | null,
+  sample_collection?: ModelStringInput | null,
+  idPatient?: ModelStringInput | null,
   and?: Array< ModelVariantReportConditionInput | null > | null,
   or?: Array< ModelVariantReportConditionInput | null > | null,
   not?: ModelVariantReportConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+};
+
+export type ModelIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
 };
 
 export type ModelBooleanInput = {
@@ -232,36 +360,30 @@ export type ModelBooleanInput = {
 export type VariantReport = {
   __typename: "VariantReport",
   id: string,
-  status?: string | null,
-  create_at?: string | null,
+  status?: number | null,
   isApproved?: boolean | null,
   medical_history?: string | null,
   current_diagnosis?: string | null,
-  userID: string,
-  download_link_report?: string | null,
-  institutionID: string,
-  Recommendations?: ModelGeneticsConselorConnection | null,
-  GeneticsConselors?: ModelGeneticsConselorConnection | null,
+  institutionID?: string | null,
+  createAt?: string | null,
+  phenotype?: Array< string | null > | null,
+  sample_collection?: string | null,
+  idPatient?: string | null,
   createdAt: string,
   updatedAt: string,
 };
 
-export type ModelGeneticsConselorConnection = {
-  __typename: "ModelGeneticsConselorConnection",
-  items:  Array<GeneticsConselor | null >,
-  nextToken?: string | null,
-};
-
 export type UpdateVariantReportInput = {
   id: string,
-  status?: string | null,
-  create_at?: string | null,
+  status?: number | null,
   isApproved?: boolean | null,
   medical_history?: string | null,
   current_diagnosis?: string | null,
-  userID?: string | null,
-  download_link_report?: string | null,
   institutionID?: string | null,
+  createAt?: string | null,
+  phenotype?: Array< string | null > | null,
+  sample_collection?: string | null,
+  idPatient?: string | null,
 };
 
 export type DeleteVariantReportInput = {
@@ -286,18 +408,6 @@ export type ModelPatientDocumentsConditionInput = {
   not?: ModelPatientDocumentsConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
-};
-
-export type ModelIntInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
 };
 
 export type PatientDocuments = {
@@ -379,21 +489,29 @@ export type DeletePatientInput = {
 
 export type CreateUserInput = {
   id?: string | null,
-  name?: string | null,
-  institutionID: string,
-  role_type?: number | null,
+  first_name?: string | null,
+  last_name?: string | null,
+  role?: string | null,
   email?: string | null,
   category?: string | null,
   specialty?: string | null,
+  institutionID: string,
+  level?: number | null,
+  status?: number | null,
+  phone_number?: string | null,
 };
 
 export type ModelUserConditionInput = {
-  name?: ModelStringInput | null,
-  institutionID?: ModelIDInput | null,
-  role_type?: ModelIntInput | null,
+  first_name?: ModelStringInput | null,
+  last_name?: ModelStringInput | null,
+  role?: ModelStringInput | null,
   email?: ModelStringInput | null,
   category?: ModelStringInput | null,
   specialty?: ModelStringInput | null,
+  institutionID?: ModelIDInput | null,
+  level?: ModelIntInput | null,
+  status?: ModelIntInput | null,
+  phone_number?: ModelStringInput | null,
   and?: Array< ModelUserConditionInput | null > | null,
   or?: Array< ModelUserConditionInput | null > | null,
   not?: ModelUserConditionInput | null,
@@ -404,31 +522,32 @@ export type ModelUserConditionInput = {
 export type User = {
   __typename: "User",
   id: string,
-  name?: string | null,
-  institutionID: string,
-  role_type?: number | null,
+  first_name?: string | null,
+  last_name?: string | null,
+  role?: string | null,
   email?: string | null,
   category?: string | null,
   specialty?: string | null,
-  VariantReports?: ModelVariantReportConnection | null,
+  institutionID: string,
+  level?: number | null,
+  status?: number | null,
+  phone_number?: string | null,
   createdAt: string,
   updatedAt: string,
 };
 
-export type ModelVariantReportConnection = {
-  __typename: "ModelVariantReportConnection",
-  items:  Array<VariantReport | null >,
-  nextToken?: string | null,
-};
-
 export type UpdateUserInput = {
   id: string,
-  name?: string | null,
-  institutionID?: string | null,
-  role_type?: number | null,
+  first_name?: string | null,
+  last_name?: string | null,
+  role?: string | null,
   email?: string | null,
   category?: string | null,
   specialty?: string | null,
+  institutionID?: string | null,
+  level?: number | null,
+  status?: number | null,
+  phone_number?: string | null,
 };
 
 export type DeleteUserInput = {
@@ -438,28 +557,34 @@ export type DeleteUserInput = {
 export type CreateInstitutionInput = {
   id?: string | null,
   name?: string | null,
-  contact?: string | null,
+  contactname?: string | null,
   address?: string | null,
   subscription_type?: string | null,
   email?: string | null,
   userQuotas?: number | null,
   currentUserQuota?: number | null,
-  storageQuota?: string | null,
+  storageQuota?: number | null,
   registrationDate?: string | null,
   accountStatus?: boolean | null,
+  contactphone?: string | null,
+  dueDate?: string | null,
+  currentStorageQuota?: number | null,
 };
 
 export type ModelInstitutionConditionInput = {
   name?: ModelStringInput | null,
-  contact?: ModelStringInput | null,
+  contactname?: ModelStringInput | null,
   address?: ModelStringInput | null,
   subscription_type?: ModelStringInput | null,
   email?: ModelStringInput | null,
   userQuotas?: ModelIntInput | null,
   currentUserQuota?: ModelIntInput | null,
-  storageQuota?: ModelStringInput | null,
+  storageQuota?: ModelFloatInput | null,
   registrationDate?: ModelStringInput | null,
   accountStatus?: ModelBooleanInput | null,
+  contactphone?: ModelStringInput | null,
+  dueDate?: ModelStringInput | null,
+  currentStorageQuota?: ModelFloatInput | null,
   and?: Array< ModelInstitutionConditionInput | null > | null,
   or?: Array< ModelInstitutionConditionInput | null > | null,
   not?: ModelInstitutionConditionInput | null,
@@ -467,11 +592,23 @@ export type ModelInstitutionConditionInput = {
   updatedAt?: ModelStringInput | null,
 };
 
+export type ModelFloatInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
 export type Institution = {
   __typename: "Institution",
   id: string,
   name?: string | null,
-  contact?: string | null,
+  contactname?: string | null,
   address?: string | null,
   subscription_type?: string | null,
   email?: string | null,
@@ -479,10 +616,13 @@ export type Institution = {
   Patients?: ModelPatientConnection | null,
   userQuotas?: number | null,
   currentUserQuota?: number | null,
-  storageQuota?: string | null,
+  storageQuota?: number | null,
   registrationDate?: string | null,
   accountStatus?: boolean | null,
   VariantReports?: ModelPatientConnection | null,
+  contactphone?: string | null,
+  dueDate?: string | null,
+  currentStorageQuota?: number | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -496,25 +636,73 @@ export type ModelPatientConnection = {
 export type UpdateInstitutionInput = {
   id: string,
   name?: string | null,
-  contact?: string | null,
+  contactname?: string | null,
   address?: string | null,
   subscription_type?: string | null,
   email?: string | null,
   userQuotas?: number | null,
   currentUserQuota?: number | null,
-  storageQuota?: string | null,
+  storageQuota?: number | null,
   registrationDate?: string | null,
   accountStatus?: boolean | null,
+  contactphone?: string | null,
+  dueDate?: string | null,
+  currentStorageQuota?: number | null,
 };
 
 export type DeleteInstitutionInput = {
   id: string,
 };
 
+export type ModelVcfdataFilterInput = {
+  id?: ModelIDInput | null,
+  id_patient?: ModelStringInput | null,
+  sample_date?: ModelStringInput | null,
+  uploadAt?: ModelStringInput | null,
+  public_link?: ModelStringInput | null,
+  genome_reference?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelVcfdataFilterInput | null > | null,
+  or?: Array< ModelVcfdataFilterInput | null > | null,
+  not?: ModelVcfdataFilterInput | null,
+};
+
+export type ModelVcfdataConnection = {
+  __typename: "ModelVcfdataConnection",
+  items:  Array<Vcfdata | null >,
+  nextToken?: string | null,
+};
+
+export type ModelVariantFilterInput = {
+  id?: ModelIDInput | null,
+  chrom?: ModelStringInput | null,
+  pos?: ModelStringInput | null,
+  ref?: ModelStringInput | null,
+  alt?: ModelStringInput | null,
+  qual?: ModelStringInput | null,
+  filter?: ModelStringInput | null,
+  info?: ModelStringInput | null,
+  hgvs?: ModelStringInput | null,
+  id_var?: ModelStringInput | null,
+  id_patient?: ModelStringInput | null,
+  id_vcf?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelVariantFilterInput | null > | null,
+  or?: Array< ModelVariantFilterInput | null > | null,
+  not?: ModelVariantFilterInput | null,
+};
+
+export type ModelVariantConnection = {
+  __typename: "ModelVariantConnection",
+  items:  Array<Variant | null >,
+  nextToken?: string | null,
+};
+
 export type ModelGeneticsConselorFilterInput = {
   id?: ModelIDInput | null,
   text?: ModelStringInput | null,
-  variantreportID?: ModelIDInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelGeneticsConselorFilterInput | null > | null,
@@ -522,11 +710,11 @@ export type ModelGeneticsConselorFilterInput = {
   not?: ModelGeneticsConselorFilterInput | null,
 };
 
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
+export type ModelGeneticsConselorConnection = {
+  __typename: "ModelGeneticsConselorConnection",
+  items:  Array<GeneticsConselor | null >,
+  nextToken?: string | null,
+};
 
 export type ModelPhenotypeFilterInput = {
   id?: ModelIDInput | null,
@@ -580,19 +768,26 @@ export type ModelRecommendationConnection = {
 
 export type ModelVariantReportFilterInput = {
   id?: ModelIDInput | null,
-  status?: ModelStringInput | null,
-  create_at?: ModelStringInput | null,
+  status?: ModelIntInput | null,
   isApproved?: ModelBooleanInput | null,
   medical_history?: ModelStringInput | null,
   current_diagnosis?: ModelStringInput | null,
-  userID?: ModelIDInput | null,
-  download_link_report?: ModelStringInput | null,
   institutionID?: ModelIDInput | null,
+  createAt?: ModelStringInput | null,
+  phenotype?: ModelStringInput | null,
+  sample_collection?: ModelStringInput | null,
+  idPatient?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelVariantReportFilterInput | null > | null,
   or?: Array< ModelVariantReportFilterInput | null > | null,
   not?: ModelVariantReportFilterInput | null,
+};
+
+export type ModelVariantReportConnection = {
+  __typename: "ModelVariantReportConnection",
+  items:  Array<VariantReport | null >,
+  nextToken?: string | null,
 };
 
 export type ModelPatientDocumentsFilterInput = {
@@ -624,12 +819,16 @@ export type ModelPatientFilterInput = {
 
 export type ModelUserFilterInput = {
   id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  institutionID?: ModelIDInput | null,
-  role_type?: ModelIntInput | null,
+  first_name?: ModelStringInput | null,
+  last_name?: ModelStringInput | null,
+  role?: ModelStringInput | null,
   email?: ModelStringInput | null,
   category?: ModelStringInput | null,
   specialty?: ModelStringInput | null,
+  institutionID?: ModelIDInput | null,
+  level?: ModelIntInput | null,
+  status?: ModelIntInput | null,
+  phone_number?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelUserFilterInput | null > | null,
@@ -646,15 +845,18 @@ export type ModelUserConnection = {
 export type ModelInstitutionFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
-  contact?: ModelStringInput | null,
+  contactname?: ModelStringInput | null,
   address?: ModelStringInput | null,
   subscription_type?: ModelStringInput | null,
   email?: ModelStringInput | null,
   userQuotas?: ModelIntInput | null,
   currentUserQuota?: ModelIntInput | null,
-  storageQuota?: ModelStringInput | null,
+  storageQuota?: ModelFloatInput | null,
   registrationDate?: ModelStringInput | null,
   accountStatus?: ModelBooleanInput | null,
+  contactphone?: ModelStringInput | null,
+  dueDate?: ModelStringInput | null,
+  currentStorageQuota?: ModelFloatInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelInstitutionFilterInput | null > | null,
@@ -668,14 +870,17 @@ export type ModelInstitutionConnection = {
   nextToken?: string | null,
 };
 
-export type ModelSubscriptionGeneticsConselorFilterInput = {
+export type ModelSubscriptionVcfdataFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  text?: ModelSubscriptionStringInput | null,
-  variantreportID?: ModelSubscriptionIDInput | null,
+  id_patient?: ModelSubscriptionStringInput | null,
+  sample_date?: ModelSubscriptionStringInput | null,
+  uploadAt?: ModelSubscriptionStringInput | null,
+  public_link?: ModelSubscriptionStringInput | null,
+  genome_reference?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionGeneticsConselorFilterInput | null > | null,
-  or?: Array< ModelSubscriptionGeneticsConselorFilterInput | null > | null,
+  and?: Array< ModelSubscriptionVcfdataFilterInput | null > | null,
+  or?: Array< ModelSubscriptionVcfdataFilterInput | null > | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -706,6 +911,34 @@ export type ModelSubscriptionStringInput = {
   beginsWith?: string | null,
   in?: Array< string | null > | null,
   notIn?: Array< string | null > | null,
+};
+
+export type ModelSubscriptionVariantFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  chrom?: ModelSubscriptionStringInput | null,
+  pos?: ModelSubscriptionStringInput | null,
+  ref?: ModelSubscriptionStringInput | null,
+  alt?: ModelSubscriptionStringInput | null,
+  qual?: ModelSubscriptionStringInput | null,
+  filter?: ModelSubscriptionStringInput | null,
+  info?: ModelSubscriptionStringInput | null,
+  hgvs?: ModelSubscriptionStringInput | null,
+  id_var?: ModelSubscriptionStringInput | null,
+  id_patient?: ModelSubscriptionStringInput | null,
+  id_vcf?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionVariantFilterInput | null > | null,
+  or?: Array< ModelSubscriptionVariantFilterInput | null > | null,
+};
+
+export type ModelSubscriptionGeneticsConselorFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  text?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionGeneticsConselorFilterInput | null > | null,
+  or?: Array< ModelSubscriptionGeneticsConselorFilterInput | null > | null,
 };
 
 export type ModelSubscriptionPhenotypeFilterInput = {
@@ -739,18 +972,31 @@ export type ModelSubscriptionRecommendationFilterInput = {
 
 export type ModelSubscriptionVariantReportFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  status?: ModelSubscriptionStringInput | null,
-  create_at?: ModelSubscriptionStringInput | null,
+  status?: ModelSubscriptionIntInput | null,
   isApproved?: ModelSubscriptionBooleanInput | null,
   medical_history?: ModelSubscriptionStringInput | null,
   current_diagnosis?: ModelSubscriptionStringInput | null,
-  userID?: ModelSubscriptionIDInput | null,
-  download_link_report?: ModelSubscriptionStringInput | null,
   institutionID?: ModelSubscriptionIDInput | null,
+  createAt?: ModelSubscriptionStringInput | null,
+  phenotype?: ModelSubscriptionStringInput | null,
+  sample_collection?: ModelSubscriptionStringInput | null,
+  idPatient?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionVariantReportFilterInput | null > | null,
   or?: Array< ModelSubscriptionVariantReportFilterInput | null > | null,
+};
+
+export type ModelSubscriptionIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  in?: Array< number | null > | null,
+  notIn?: Array< number | null > | null,
 };
 
 export type ModelSubscriptionBooleanInput = {
@@ -770,18 +1016,6 @@ export type ModelSubscriptionPatientDocumentsFilterInput = {
   or?: Array< ModelSubscriptionPatientDocumentsFilterInput | null > | null,
 };
 
-export type ModelSubscriptionIntInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  in?: Array< number | null > | null,
-  notIn?: Array< number | null > | null,
-};
-
 export type ModelSubscriptionPatientFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   name?: ModelSubscriptionStringInput | null,
@@ -797,12 +1031,16 @@ export type ModelSubscriptionPatientFilterInput = {
 
 export type ModelSubscriptionUserFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  name?: ModelSubscriptionStringInput | null,
-  institutionID?: ModelSubscriptionIDInput | null,
-  role_type?: ModelSubscriptionIntInput | null,
+  first_name?: ModelSubscriptionStringInput | null,
+  last_name?: ModelSubscriptionStringInput | null,
+  role?: ModelSubscriptionStringInput | null,
   email?: ModelSubscriptionStringInput | null,
   category?: ModelSubscriptionStringInput | null,
   specialty?: ModelSubscriptionStringInput | null,
+  institutionID?: ModelSubscriptionIDInput | null,
+  level?: ModelSubscriptionIntInput | null,
+  status?: ModelSubscriptionIntInput | null,
+  phone_number?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionUserFilterInput | null > | null,
@@ -812,19 +1050,166 @@ export type ModelSubscriptionUserFilterInput = {
 export type ModelSubscriptionInstitutionFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   name?: ModelSubscriptionStringInput | null,
-  contact?: ModelSubscriptionStringInput | null,
+  contactname?: ModelSubscriptionStringInput | null,
   address?: ModelSubscriptionStringInput | null,
   subscription_type?: ModelSubscriptionStringInput | null,
   email?: ModelSubscriptionStringInput | null,
   userQuotas?: ModelSubscriptionIntInput | null,
   currentUserQuota?: ModelSubscriptionIntInput | null,
-  storageQuota?: ModelSubscriptionStringInput | null,
+  storageQuota?: ModelSubscriptionFloatInput | null,
   registrationDate?: ModelSubscriptionStringInput | null,
   accountStatus?: ModelSubscriptionBooleanInput | null,
+  contactphone?: ModelSubscriptionStringInput | null,
+  dueDate?: ModelSubscriptionStringInput | null,
+  currentStorageQuota?: ModelSubscriptionFloatInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionInstitutionFilterInput | null > | null,
   or?: Array< ModelSubscriptionInstitutionFilterInput | null > | null,
+};
+
+export type ModelSubscriptionFloatInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  in?: Array< number | null > | null,
+  notIn?: Array< number | null > | null,
+};
+
+export type CreateVcfdataMutationVariables = {
+  input: CreateVcfdataInput,
+  condition?: ModelVcfdataConditionInput | null,
+};
+
+export type CreateVcfdataMutation = {
+  createVcfdata?:  {
+    __typename: "Vcfdata",
+    id: string,
+    id_patient?: string | null,
+    sample_date?: string | null,
+    uploadAt?: string | null,
+    public_link?: string | null,
+    genome_reference?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateVcfdataMutationVariables = {
+  input: UpdateVcfdataInput,
+  condition?: ModelVcfdataConditionInput | null,
+};
+
+export type UpdateVcfdataMutation = {
+  updateVcfdata?:  {
+    __typename: "Vcfdata",
+    id: string,
+    id_patient?: string | null,
+    sample_date?: string | null,
+    uploadAt?: string | null,
+    public_link?: string | null,
+    genome_reference?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteVcfdataMutationVariables = {
+  input: DeleteVcfdataInput,
+  condition?: ModelVcfdataConditionInput | null,
+};
+
+export type DeleteVcfdataMutation = {
+  deleteVcfdata?:  {
+    __typename: "Vcfdata",
+    id: string,
+    id_patient?: string | null,
+    sample_date?: string | null,
+    uploadAt?: string | null,
+    public_link?: string | null,
+    genome_reference?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateVariantMutationVariables = {
+  input: CreateVariantInput,
+  condition?: ModelVariantConditionInput | null,
+};
+
+export type CreateVariantMutation = {
+  createVariant?:  {
+    __typename: "Variant",
+    id: string,
+    chrom?: string | null,
+    pos?: string | null,
+    ref?: string | null,
+    alt?: string | null,
+    qual?: string | null,
+    filter?: string | null,
+    info?: string | null,
+    hgvs?: string | null,
+    id_var?: string | null,
+    id_patient?: string | null,
+    id_vcf?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateVariantMutationVariables = {
+  input: UpdateVariantInput,
+  condition?: ModelVariantConditionInput | null,
+};
+
+export type UpdateVariantMutation = {
+  updateVariant?:  {
+    __typename: "Variant",
+    id: string,
+    chrom?: string | null,
+    pos?: string | null,
+    ref?: string | null,
+    alt?: string | null,
+    qual?: string | null,
+    filter?: string | null,
+    info?: string | null,
+    hgvs?: string | null,
+    id_var?: string | null,
+    id_patient?: string | null,
+    id_vcf?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteVariantMutationVariables = {
+  input: DeleteVariantInput,
+  condition?: ModelVariantConditionInput | null,
+};
+
+export type DeleteVariantMutation = {
+  deleteVariant?:  {
+    __typename: "Variant",
+    id: string,
+    chrom?: string | null,
+    pos?: string | null,
+    ref?: string | null,
+    alt?: string | null,
+    qual?: string | null,
+    filter?: string | null,
+    info?: string | null,
+    hgvs?: string | null,
+    id_var?: string | null,
+    id_patient?: string | null,
+    id_vcf?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
 };
 
 export type CreateGeneticsConselorMutationVariables = {
@@ -837,7 +1222,6 @@ export type CreateGeneticsConselorMutation = {
     __typename: "GeneticsConselor",
     id: string,
     text?: string | null,
-    variantreportID: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -853,7 +1237,6 @@ export type UpdateGeneticsConselorMutation = {
     __typename: "GeneticsConselor",
     id: string,
     text?: string | null,
-    variantreportID: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -869,7 +1252,6 @@ export type DeleteGeneticsConselorMutation = {
     __typename: "GeneticsConselor",
     id: string,
     text?: string | null,
-    variantreportID: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1025,22 +1407,15 @@ export type CreateVariantReportMutation = {
   createVariantReport?:  {
     __typename: "VariantReport",
     id: string,
-    status?: string | null,
-    create_at?: string | null,
+    status?: number | null,
     isApproved?: boolean | null,
     medical_history?: string | null,
     current_diagnosis?: string | null,
-    userID: string,
-    download_link_report?: string | null,
-    institutionID: string,
-    Recommendations?:  {
-      __typename: "ModelGeneticsConselorConnection",
-      nextToken?: string | null,
-    } | null,
-    GeneticsConselors?:  {
-      __typename: "ModelGeneticsConselorConnection",
-      nextToken?: string | null,
-    } | null,
+    institutionID?: string | null,
+    createAt?: string | null,
+    phenotype?: Array< string | null > | null,
+    sample_collection?: string | null,
+    idPatient?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1055,22 +1430,15 @@ export type UpdateVariantReportMutation = {
   updateVariantReport?:  {
     __typename: "VariantReport",
     id: string,
-    status?: string | null,
-    create_at?: string | null,
+    status?: number | null,
     isApproved?: boolean | null,
     medical_history?: string | null,
     current_diagnosis?: string | null,
-    userID: string,
-    download_link_report?: string | null,
-    institutionID: string,
-    Recommendations?:  {
-      __typename: "ModelGeneticsConselorConnection",
-      nextToken?: string | null,
-    } | null,
-    GeneticsConselors?:  {
-      __typename: "ModelGeneticsConselorConnection",
-      nextToken?: string | null,
-    } | null,
+    institutionID?: string | null,
+    createAt?: string | null,
+    phenotype?: Array< string | null > | null,
+    sample_collection?: string | null,
+    idPatient?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1085,22 +1453,15 @@ export type DeleteVariantReportMutation = {
   deleteVariantReport?:  {
     __typename: "VariantReport",
     id: string,
-    status?: string | null,
-    create_at?: string | null,
+    status?: number | null,
     isApproved?: boolean | null,
     medical_history?: string | null,
     current_diagnosis?: string | null,
-    userID: string,
-    download_link_report?: string | null,
-    institutionID: string,
-    Recommendations?:  {
-      __typename: "ModelGeneticsConselorConnection",
-      nextToken?: string | null,
-    } | null,
-    GeneticsConselors?:  {
-      __typename: "ModelGeneticsConselorConnection",
-      nextToken?: string | null,
-    } | null,
+    institutionID?: string | null,
+    createAt?: string | null,
+    phenotype?: Array< string | null > | null,
+    sample_collection?: string | null,
+    idPatient?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1238,16 +1599,16 @@ export type CreateUserMutation = {
   createUser?:  {
     __typename: "User",
     id: string,
-    name?: string | null,
-    institutionID: string,
-    role_type?: number | null,
+    first_name?: string | null,
+    last_name?: string | null,
+    role?: string | null,
     email?: string | null,
     category?: string | null,
     specialty?: string | null,
-    VariantReports?:  {
-      __typename: "ModelVariantReportConnection",
-      nextToken?: string | null,
-    } | null,
+    institutionID: string,
+    level?: number | null,
+    status?: number | null,
+    phone_number?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1262,16 +1623,16 @@ export type UpdateUserMutation = {
   updateUser?:  {
     __typename: "User",
     id: string,
-    name?: string | null,
-    institutionID: string,
-    role_type?: number | null,
+    first_name?: string | null,
+    last_name?: string | null,
+    role?: string | null,
     email?: string | null,
     category?: string | null,
     specialty?: string | null,
-    VariantReports?:  {
-      __typename: "ModelVariantReportConnection",
-      nextToken?: string | null,
-    } | null,
+    institutionID: string,
+    level?: number | null,
+    status?: number | null,
+    phone_number?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1286,16 +1647,16 @@ export type DeleteUserMutation = {
   deleteUser?:  {
     __typename: "User",
     id: string,
-    name?: string | null,
-    institutionID: string,
-    role_type?: number | null,
+    first_name?: string | null,
+    last_name?: string | null,
+    role?: string | null,
     email?: string | null,
     category?: string | null,
     specialty?: string | null,
-    VariantReports?:  {
-      __typename: "ModelVariantReportConnection",
-      nextToken?: string | null,
-    } | null,
+    institutionID: string,
+    level?: number | null,
+    status?: number | null,
+    phone_number?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1311,7 +1672,7 @@ export type CreateInstitutionMutation = {
     __typename: "Institution",
     id: string,
     name?: string | null,
-    contact?: string | null,
+    contactname?: string | null,
     address?: string | null,
     subscription_type?: string | null,
     email?: string | null,
@@ -1325,13 +1686,16 @@ export type CreateInstitutionMutation = {
     } | null,
     userQuotas?: number | null,
     currentUserQuota?: number | null,
-    storageQuota?: string | null,
+    storageQuota?: number | null,
     registrationDate?: string | null,
     accountStatus?: boolean | null,
     VariantReports?:  {
       __typename: "ModelPatientConnection",
       nextToken?: string | null,
     } | null,
+    contactphone?: string | null,
+    dueDate?: string | null,
+    currentStorageQuota?: number | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1347,7 +1711,7 @@ export type UpdateInstitutionMutation = {
     __typename: "Institution",
     id: string,
     name?: string | null,
-    contact?: string | null,
+    contactname?: string | null,
     address?: string | null,
     subscription_type?: string | null,
     email?: string | null,
@@ -1361,13 +1725,16 @@ export type UpdateInstitutionMutation = {
     } | null,
     userQuotas?: number | null,
     currentUserQuota?: number | null,
-    storageQuota?: string | null,
+    storageQuota?: number | null,
     registrationDate?: string | null,
     accountStatus?: boolean | null,
     VariantReports?:  {
       __typename: "ModelPatientConnection",
       nextToken?: string | null,
     } | null,
+    contactphone?: string | null,
+    dueDate?: string | null,
+    currentStorageQuota?: number | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1383,7 +1750,7 @@ export type DeleteInstitutionMutation = {
     __typename: "Institution",
     id: string,
     name?: string | null,
-    contact?: string | null,
+    contactname?: string | null,
     address?: string | null,
     subscription_type?: string | null,
     email?: string | null,
@@ -1397,15 +1764,114 @@ export type DeleteInstitutionMutation = {
     } | null,
     userQuotas?: number | null,
     currentUserQuota?: number | null,
-    storageQuota?: string | null,
+    storageQuota?: number | null,
     registrationDate?: string | null,
     accountStatus?: boolean | null,
     VariantReports?:  {
       __typename: "ModelPatientConnection",
       nextToken?: string | null,
     } | null,
+    contactphone?: string | null,
+    dueDate?: string | null,
+    currentStorageQuota?: number | null,
     createdAt: string,
     updatedAt: string,
+  } | null,
+};
+
+export type GetVcfdataQueryVariables = {
+  id: string,
+};
+
+export type GetVcfdataQuery = {
+  getVcfdata?:  {
+    __typename: "Vcfdata",
+    id: string,
+    id_patient?: string | null,
+    sample_date?: string | null,
+    uploadAt?: string | null,
+    public_link?: string | null,
+    genome_reference?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListVcfdataQueryVariables = {
+  filter?: ModelVcfdataFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListVcfdataQuery = {
+  listVcfdata?:  {
+    __typename: "ModelVcfdataConnection",
+    items:  Array< {
+      __typename: "Vcfdata",
+      id: string,
+      id_patient?: string | null,
+      sample_date?: string | null,
+      uploadAt?: string | null,
+      public_link?: string | null,
+      genome_reference?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetVariantQueryVariables = {
+  id: string,
+};
+
+export type GetVariantQuery = {
+  getVariant?:  {
+    __typename: "Variant",
+    id: string,
+    chrom?: string | null,
+    pos?: string | null,
+    ref?: string | null,
+    alt?: string | null,
+    qual?: string | null,
+    filter?: string | null,
+    info?: string | null,
+    hgvs?: string | null,
+    id_var?: string | null,
+    id_patient?: string | null,
+    id_vcf?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListVariantsQueryVariables = {
+  filter?: ModelVariantFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListVariantsQuery = {
+  listVariants?:  {
+    __typename: "ModelVariantConnection",
+    items:  Array< {
+      __typename: "Variant",
+      id: string,
+      chrom?: string | null,
+      pos?: string | null,
+      ref?: string | null,
+      alt?: string | null,
+      qual?: string | null,
+      filter?: string | null,
+      info?: string | null,
+      hgvs?: string | null,
+      id_var?: string | null,
+      id_patient?: string | null,
+      id_vcf?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
   } | null,
 };
 
@@ -1418,7 +1884,6 @@ export type GetGeneticsConselorQuery = {
     __typename: "GeneticsConselor",
     id: string,
     text?: string | null,
-    variantreportID: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1437,30 +1902,6 @@ export type ListGeneticsConselorsQuery = {
       __typename: "GeneticsConselor",
       id: string,
       text?: string | null,
-      variantreportID: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type GeneticsConselorsByVariantreportIDQueryVariables = {
-  variantreportID: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelGeneticsConselorFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type GeneticsConselorsByVariantreportIDQuery = {
-  geneticsConselorsByVariantreportID?:  {
-    __typename: "ModelGeneticsConselorConnection",
-    items:  Array< {
-      __typename: "GeneticsConselor",
-      id: string,
-      text?: string | null,
-      variantreportID: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -1574,29 +2015,6 @@ export type ListRecommendationsQuery = {
   } | null,
 };
 
-export type RecommendationsByVariantreportIDQueryVariables = {
-  variantreportID: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelRecommendationFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type RecommendationsByVariantreportIDQuery = {
-  recommendationsByVariantreportID?:  {
-    __typename: "ModelRecommendationConnection",
-    items:  Array< {
-      __typename: "Recommendation",
-      id: string,
-      text?: string | null,
-      variantreportID: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
 export type GetVariantReportQueryVariables = {
   id: string,
 };
@@ -1605,22 +2023,15 @@ export type GetVariantReportQuery = {
   getVariantReport?:  {
     __typename: "VariantReport",
     id: string,
-    status?: string | null,
-    create_at?: string | null,
+    status?: number | null,
     isApproved?: boolean | null,
     medical_history?: string | null,
     current_diagnosis?: string | null,
-    userID: string,
-    download_link_report?: string | null,
-    institutionID: string,
-    Recommendations?:  {
-      __typename: "ModelGeneticsConselorConnection",
-      nextToken?: string | null,
-    } | null,
-    GeneticsConselors?:  {
-      __typename: "ModelGeneticsConselorConnection",
-      nextToken?: string | null,
-    } | null,
+    institutionID?: string | null,
+    createAt?: string | null,
+    phenotype?: Array< string | null > | null,
+    sample_collection?: string | null,
+    idPatient?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1638,72 +2049,15 @@ export type ListVariantReportsQuery = {
     items:  Array< {
       __typename: "VariantReport",
       id: string,
-      status?: string | null,
-      create_at?: string | null,
+      status?: number | null,
       isApproved?: boolean | null,
       medical_history?: string | null,
       current_diagnosis?: string | null,
-      userID: string,
-      download_link_report?: string | null,
-      institutionID: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type VariantReportsByUserIDQueryVariables = {
-  userID: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelVariantReportFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type VariantReportsByUserIDQuery = {
-  variantReportsByUserID?:  {
-    __typename: "ModelVariantReportConnection",
-    items:  Array< {
-      __typename: "VariantReport",
-      id: string,
-      status?: string | null,
-      create_at?: string | null,
-      isApproved?: boolean | null,
-      medical_history?: string | null,
-      current_diagnosis?: string | null,
-      userID: string,
-      download_link_report?: string | null,
-      institutionID: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type VariantReportsByInstitutionIDQueryVariables = {
-  institutionID: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelVariantReportFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type VariantReportsByInstitutionIDQuery = {
-  variantReportsByInstitutionID?:  {
-    __typename: "ModelVariantReportConnection",
-    items:  Array< {
-      __typename: "VariantReport",
-      id: string,
-      status?: string | null,
-      create_at?: string | null,
-      isApproved?: boolean | null,
-      medical_history?: string | null,
-      current_diagnosis?: string | null,
-      userID: string,
-      download_link_report?: string | null,
-      institutionID: string,
+      institutionID?: string | null,
+      createAt?: string | null,
+      phenotype?: Array< string | null > | null,
+      sample_collection?: string | null,
+      idPatient?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -1736,31 +2090,6 @@ export type ListPatientDocumentsQueryVariables = {
 
 export type ListPatientDocumentsQuery = {
   listPatientDocuments?:  {
-    __typename: "ModelPatientDocumentsConnection",
-    items:  Array< {
-      __typename: "PatientDocuments",
-      id: string,
-      name?: string | null,
-      patientID: string,
-      size?: number | null,
-      link?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type PatientDocumentsByPatientIDQueryVariables = {
-  patientID: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelPatientDocumentsFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type PatientDocumentsByPatientIDQuery = {
-  patientDocumentsByPatientID?:  {
     __typename: "ModelPatientDocumentsConnection",
     items:  Array< {
       __typename: "PatientDocuments",
@@ -1822,32 +2151,6 @@ export type ListPatientsQuery = {
   } | null,
 };
 
-export type PatientsByInstitutionIDQueryVariables = {
-  institutionID: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelPatientFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type PatientsByInstitutionIDQuery = {
-  patientsByInstitutionID?:  {
-    __typename: "ModelPatientConnection",
-    items:  Array< {
-      __typename: "Patient",
-      id: string,
-      name?: string | null,
-      sex?: string | null,
-      phone_number?: string | null,
-      dob?: string | null,
-      institutionID: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
 export type GetUserQueryVariables = {
   id: string,
 };
@@ -1856,16 +2159,16 @@ export type GetUserQuery = {
   getUser?:  {
     __typename: "User",
     id: string,
-    name?: string | null,
-    institutionID: string,
-    role_type?: number | null,
+    first_name?: string | null,
+    last_name?: string | null,
+    role?: string | null,
     email?: string | null,
     category?: string | null,
     specialty?: string | null,
-    VariantReports?:  {
-      __typename: "ModelVariantReportConnection",
-      nextToken?: string | null,
-    } | null,
+    institutionID: string,
+    level?: number | null,
+    status?: number | null,
+    phone_number?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1883,39 +2186,16 @@ export type ListUsersQuery = {
     items:  Array< {
       __typename: "User",
       id: string,
-      name?: string | null,
-      institutionID: string,
-      role_type?: number | null,
+      first_name?: string | null,
+      last_name?: string | null,
+      role?: string | null,
       email?: string | null,
       category?: string | null,
       specialty?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type UsersByInstitutionIDQueryVariables = {
-  institutionID: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelUserFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type UsersByInstitutionIDQuery = {
-  usersByInstitutionID?:  {
-    __typename: "ModelUserConnection",
-    items:  Array< {
-      __typename: "User",
-      id: string,
-      name?: string | null,
       institutionID: string,
-      role_type?: number | null,
-      email?: string | null,
-      category?: string | null,
-      specialty?: string | null,
+      level?: number | null,
+      status?: number | null,
+      phone_number?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -1932,7 +2212,7 @@ export type GetInstitutionQuery = {
     __typename: "Institution",
     id: string,
     name?: string | null,
-    contact?: string | null,
+    contactname?: string | null,
     address?: string | null,
     subscription_type?: string | null,
     email?: string | null,
@@ -1946,13 +2226,16 @@ export type GetInstitutionQuery = {
     } | null,
     userQuotas?: number | null,
     currentUserQuota?: number | null,
-    storageQuota?: string | null,
+    storageQuota?: number | null,
     registrationDate?: string | null,
     accountStatus?: boolean | null,
     VariantReports?:  {
       __typename: "ModelPatientConnection",
       nextToken?: string | null,
     } | null,
+    contactphone?: string | null,
+    dueDate?: string | null,
+    currentStorageQuota?: number | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1971,19 +2254,148 @@ export type ListInstitutionsQuery = {
       __typename: "Institution",
       id: string,
       name?: string | null,
-      contact?: string | null,
+      contactname?: string | null,
       address?: string | null,
       subscription_type?: string | null,
       email?: string | null,
       userQuotas?: number | null,
       currentUserQuota?: number | null,
-      storageQuota?: string | null,
+      storageQuota?: number | null,
       registrationDate?: string | null,
       accountStatus?: boolean | null,
+      contactphone?: string | null,
+      dueDate?: string | null,
+      currentStorageQuota?: number | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
+  } | null,
+};
+
+export type OnCreateVcfdataSubscriptionVariables = {
+  filter?: ModelSubscriptionVcfdataFilterInput | null,
+};
+
+export type OnCreateVcfdataSubscription = {
+  onCreateVcfdata?:  {
+    __typename: "Vcfdata",
+    id: string,
+    id_patient?: string | null,
+    sample_date?: string | null,
+    uploadAt?: string | null,
+    public_link?: string | null,
+    genome_reference?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateVcfdataSubscriptionVariables = {
+  filter?: ModelSubscriptionVcfdataFilterInput | null,
+};
+
+export type OnUpdateVcfdataSubscription = {
+  onUpdateVcfdata?:  {
+    __typename: "Vcfdata",
+    id: string,
+    id_patient?: string | null,
+    sample_date?: string | null,
+    uploadAt?: string | null,
+    public_link?: string | null,
+    genome_reference?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteVcfdataSubscriptionVariables = {
+  filter?: ModelSubscriptionVcfdataFilterInput | null,
+};
+
+export type OnDeleteVcfdataSubscription = {
+  onDeleteVcfdata?:  {
+    __typename: "Vcfdata",
+    id: string,
+    id_patient?: string | null,
+    sample_date?: string | null,
+    uploadAt?: string | null,
+    public_link?: string | null,
+    genome_reference?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateVariantSubscriptionVariables = {
+  filter?: ModelSubscriptionVariantFilterInput | null,
+};
+
+export type OnCreateVariantSubscription = {
+  onCreateVariant?:  {
+    __typename: "Variant",
+    id: string,
+    chrom?: string | null,
+    pos?: string | null,
+    ref?: string | null,
+    alt?: string | null,
+    qual?: string | null,
+    filter?: string | null,
+    info?: string | null,
+    hgvs?: string | null,
+    id_var?: string | null,
+    id_patient?: string | null,
+    id_vcf?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateVariantSubscriptionVariables = {
+  filter?: ModelSubscriptionVariantFilterInput | null,
+};
+
+export type OnUpdateVariantSubscription = {
+  onUpdateVariant?:  {
+    __typename: "Variant",
+    id: string,
+    chrom?: string | null,
+    pos?: string | null,
+    ref?: string | null,
+    alt?: string | null,
+    qual?: string | null,
+    filter?: string | null,
+    info?: string | null,
+    hgvs?: string | null,
+    id_var?: string | null,
+    id_patient?: string | null,
+    id_vcf?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteVariantSubscriptionVariables = {
+  filter?: ModelSubscriptionVariantFilterInput | null,
+};
+
+export type OnDeleteVariantSubscription = {
+  onDeleteVariant?:  {
+    __typename: "Variant",
+    id: string,
+    chrom?: string | null,
+    pos?: string | null,
+    ref?: string | null,
+    alt?: string | null,
+    qual?: string | null,
+    filter?: string | null,
+    info?: string | null,
+    hgvs?: string | null,
+    id_var?: string | null,
+    id_patient?: string | null,
+    id_vcf?: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -1996,7 +2408,6 @@ export type OnCreateGeneticsConselorSubscription = {
     __typename: "GeneticsConselor",
     id: string,
     text?: string | null,
-    variantreportID: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2011,7 +2422,6 @@ export type OnUpdateGeneticsConselorSubscription = {
     __typename: "GeneticsConselor",
     id: string,
     text?: string | null,
-    variantreportID: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2026,7 +2436,6 @@ export type OnDeleteGeneticsConselorSubscription = {
     __typename: "GeneticsConselor",
     id: string,
     text?: string | null,
-    variantreportID: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2172,22 +2581,15 @@ export type OnCreateVariantReportSubscription = {
   onCreateVariantReport?:  {
     __typename: "VariantReport",
     id: string,
-    status?: string | null,
-    create_at?: string | null,
+    status?: number | null,
     isApproved?: boolean | null,
     medical_history?: string | null,
     current_diagnosis?: string | null,
-    userID: string,
-    download_link_report?: string | null,
-    institutionID: string,
-    Recommendations?:  {
-      __typename: "ModelGeneticsConselorConnection",
-      nextToken?: string | null,
-    } | null,
-    GeneticsConselors?:  {
-      __typename: "ModelGeneticsConselorConnection",
-      nextToken?: string | null,
-    } | null,
+    institutionID?: string | null,
+    createAt?: string | null,
+    phenotype?: Array< string | null > | null,
+    sample_collection?: string | null,
+    idPatient?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2201,22 +2603,15 @@ export type OnUpdateVariantReportSubscription = {
   onUpdateVariantReport?:  {
     __typename: "VariantReport",
     id: string,
-    status?: string | null,
-    create_at?: string | null,
+    status?: number | null,
     isApproved?: boolean | null,
     medical_history?: string | null,
     current_diagnosis?: string | null,
-    userID: string,
-    download_link_report?: string | null,
-    institutionID: string,
-    Recommendations?:  {
-      __typename: "ModelGeneticsConselorConnection",
-      nextToken?: string | null,
-    } | null,
-    GeneticsConselors?:  {
-      __typename: "ModelGeneticsConselorConnection",
-      nextToken?: string | null,
-    } | null,
+    institutionID?: string | null,
+    createAt?: string | null,
+    phenotype?: Array< string | null > | null,
+    sample_collection?: string | null,
+    idPatient?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2230,22 +2625,15 @@ export type OnDeleteVariantReportSubscription = {
   onDeleteVariantReport?:  {
     __typename: "VariantReport",
     id: string,
-    status?: string | null,
-    create_at?: string | null,
+    status?: number | null,
     isApproved?: boolean | null,
     medical_history?: string | null,
     current_diagnosis?: string | null,
-    userID: string,
-    download_link_report?: string | null,
-    institutionID: string,
-    Recommendations?:  {
-      __typename: "ModelGeneticsConselorConnection",
-      nextToken?: string | null,
-    } | null,
-    GeneticsConselors?:  {
-      __typename: "ModelGeneticsConselorConnection",
-      nextToken?: string | null,
-    } | null,
+    institutionID?: string | null,
+    createAt?: string | null,
+    phenotype?: Array< string | null > | null,
+    sample_collection?: string | null,
+    idPatient?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2376,16 +2764,16 @@ export type OnCreateUserSubscription = {
   onCreateUser?:  {
     __typename: "User",
     id: string,
-    name?: string | null,
-    institutionID: string,
-    role_type?: number | null,
+    first_name?: string | null,
+    last_name?: string | null,
+    role?: string | null,
     email?: string | null,
     category?: string | null,
     specialty?: string | null,
-    VariantReports?:  {
-      __typename: "ModelVariantReportConnection",
-      nextToken?: string | null,
-    } | null,
+    institutionID: string,
+    level?: number | null,
+    status?: number | null,
+    phone_number?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2399,16 +2787,16 @@ export type OnUpdateUserSubscription = {
   onUpdateUser?:  {
     __typename: "User",
     id: string,
-    name?: string | null,
-    institutionID: string,
-    role_type?: number | null,
+    first_name?: string | null,
+    last_name?: string | null,
+    role?: string | null,
     email?: string | null,
     category?: string | null,
     specialty?: string | null,
-    VariantReports?:  {
-      __typename: "ModelVariantReportConnection",
-      nextToken?: string | null,
-    } | null,
+    institutionID: string,
+    level?: number | null,
+    status?: number | null,
+    phone_number?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2422,16 +2810,16 @@ export type OnDeleteUserSubscription = {
   onDeleteUser?:  {
     __typename: "User",
     id: string,
-    name?: string | null,
-    institutionID: string,
-    role_type?: number | null,
+    first_name?: string | null,
+    last_name?: string | null,
+    role?: string | null,
     email?: string | null,
     category?: string | null,
     specialty?: string | null,
-    VariantReports?:  {
-      __typename: "ModelVariantReportConnection",
-      nextToken?: string | null,
-    } | null,
+    institutionID: string,
+    level?: number | null,
+    status?: number | null,
+    phone_number?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2446,7 +2834,7 @@ export type OnCreateInstitutionSubscription = {
     __typename: "Institution",
     id: string,
     name?: string | null,
-    contact?: string | null,
+    contactname?: string | null,
     address?: string | null,
     subscription_type?: string | null,
     email?: string | null,
@@ -2460,13 +2848,16 @@ export type OnCreateInstitutionSubscription = {
     } | null,
     userQuotas?: number | null,
     currentUserQuota?: number | null,
-    storageQuota?: string | null,
+    storageQuota?: number | null,
     registrationDate?: string | null,
     accountStatus?: boolean | null,
     VariantReports?:  {
       __typename: "ModelPatientConnection",
       nextToken?: string | null,
     } | null,
+    contactphone?: string | null,
+    dueDate?: string | null,
+    currentStorageQuota?: number | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2481,7 +2872,7 @@ export type OnUpdateInstitutionSubscription = {
     __typename: "Institution",
     id: string,
     name?: string | null,
-    contact?: string | null,
+    contactname?: string | null,
     address?: string | null,
     subscription_type?: string | null,
     email?: string | null,
@@ -2495,13 +2886,16 @@ export type OnUpdateInstitutionSubscription = {
     } | null,
     userQuotas?: number | null,
     currentUserQuota?: number | null,
-    storageQuota?: string | null,
+    storageQuota?: number | null,
     registrationDate?: string | null,
     accountStatus?: boolean | null,
     VariantReports?:  {
       __typename: "ModelPatientConnection",
       nextToken?: string | null,
     } | null,
+    contactphone?: string | null,
+    dueDate?: string | null,
+    currentStorageQuota?: number | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2516,7 +2910,7 @@ export type OnDeleteInstitutionSubscription = {
     __typename: "Institution",
     id: string,
     name?: string | null,
-    contact?: string | null,
+    contactname?: string | null,
     address?: string | null,
     subscription_type?: string | null,
     email?: string | null,
@@ -2530,13 +2924,16 @@ export type OnDeleteInstitutionSubscription = {
     } | null,
     userQuotas?: number | null,
     currentUserQuota?: number | null,
-    storageQuota?: string | null,
+    storageQuota?: number | null,
     registrationDate?: string | null,
     accountStatus?: boolean | null,
     VariantReports?:  {
       __typename: "ModelPatientConnection",
       nextToken?: string | null,
     } | null,
+    contactphone?: string | null,
+    dueDate?: string | null,
+    currentStorageQuota?: number | null,
     createdAt: string,
     updatedAt: string,
   } | null,

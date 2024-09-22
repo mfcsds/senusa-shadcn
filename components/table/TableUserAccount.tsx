@@ -8,6 +8,18 @@ import {
   TableBody,
   TableCell,
 } from "../ui/table";
+
+import { signUp } from "aws-amplify/auth";
+
+import {
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { Button } from "../ui/button";
 import { Eraser, Plus } from "lucide-react";
 import { Badge } from "../ui/badge";
@@ -16,7 +28,30 @@ import { DataUser } from "@/utils/object";
 
 import { generateUserID } from "@/utils/function";
 
+import { listUsers } from "@/src/graphql/queries";
+import {
+  CreateUserInput,
+  ListUsersQuery,
+  ListUsersQueryVariables,
+} from "@/src/API";
+
+import { createUser } from "@/src/graphql/mutations";
+
+import { generateClient } from "aws-amplify/api";
+import LabelAndDescription from "../items/LabelAndDescription";
+import { Select } from "../ui/select";
+import { Input } from "../ui/input";
+import { useSearchParams } from "next/navigation";
+
+import { Amplify } from "aws-amplify";
+import config from "@/src/amplifyconfiguration.json";
+import { userStatus } from "@/utils/DateHelperFunction";
+
+Amplify.configure(config);
+
 const TableUserAccount = () => {
+  const idParamsEmail = useSearchParams().get("id");
+
   const colors = [
     "bg-red-900",
     "bg-blue-900",
@@ -31,35 +66,88 @@ const TableUserAccount = () => {
   const [randomId, setRandomId] = useState("");
 
   const [dataAccount, setAccounts] = useState<DataUser[]>([]);
+
+  const client = generateClient();
+
+  useEffect(() => {
+    try {
+      const fecthUserData = async () => {
+        const result = await client.graphql({
+          query: listUsers,
+          variables: {
+            filter: {
+              institutionID: {
+                eq: idParamsEmail ?? "", // Fetch users with the specific institutionID
+              },
+            },
+          },
+        });
+        setAccounts(result.data.listUsers.items as DataUser[]);
+      };
+      fecthUserData();
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
   const [showModal, setShowModal] = useState(false);
   const [newUser, setNewUser] = useState<DataUser>({
+    institutionID: idParamsEmail,
     id: "",
     first_name: "",
     last_name: "",
-    level: "",
+    level: 1,
     role: "",
     specialty: "",
-    status: "In Verification",
-    initial: "",
+    status: 1,
+    email: "",
+    phone_number: "",
   });
 
   const handleAddNewUser = () => {
-    setNewUser({
-      id: `${generateUserID()}`,
-      first_name: "",
-      last_name: "",
-      initial: "",
-      level: "",
-      role: "",
-      specialty: "",
-      status: "In verification",
-    });
     setShowModal(true);
   };
 
-  const handleSaveUser = () => {
-    setAccounts([...dataAccount, newUser]);
-    setShowModal(false);
+  const handleSaveUser = (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      console.log("Masuk Sini");
+      const registerUser = async () => {
+        const { isSignUpComplete, userId, nextStep } = await signUp({
+          username: newUser.email,
+          password: "userpassword",
+        });
+
+        const newData: CreateUserInput = {
+          institutionID: idParamsEmail ?? "",
+          id: userId,
+          email: newUser.email,
+          phone_number: newUser.phone_number,
+          first_name: newUser.first_name,
+          last_name: newUser.last_name,
+          role: newUser.role,
+          specialty: newUser.specialty,
+          status: newUser.status,
+          category: newUser.role,
+        };
+
+        const insertData = async () => {
+          const result = await client.graphql({
+            query: createUser,
+            variables: { input: newData },
+          });
+          console.log("Sukses tambahkan data", result);
+        };
+        insertData();
+      };
+      registerUser();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setShowModal(false);
+    }
+
+    // setAccounts([...dataAccount, newUser]);
   };
 
   return (
@@ -81,7 +169,6 @@ const TableUserAccount = () => {
           <TableRow className="bg-slate-100">
             <TableHead>No</TableHead>
             <TableHead className="text-left">ID and Name</TableHead>
-            <TableHead>User Level</TableHead>
             <TableHead>Role</TableHead>
             <TableHead>Specialty</TableHead>
             <TableHead>Email</TableHead>
@@ -104,14 +191,13 @@ const TableUserAccount = () => {
                   }
                 />
               </TableCell>
-              <TableCell>{user.level}</TableCell>
               <TableCell>{user.role}</TableCell>
               <TableCell>{user.specialty}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.phone_number}</TableCell>
               <TableCell className="text-center">
                 <Badge className="bg-green-600 hover:bg-green-600">
-                  {user.status}
+                  {userStatus(user.status)}
                 </Badge>
               </TableCell>
               <TableCell className="text-center">
@@ -144,125 +230,154 @@ const TableUserAccount = () => {
                 User account registration
               </small>
             </div>
-            <form>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  First Name
-                </label>
-                <input
-                  type="text"
-                  value={newUser.first_name}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, first_name: e.target.value })
-                  }
-                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  value={newUser.last_name}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, last_name: e.target.value })
-                  }
-                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  User Level Type
-                </label>
-                <small className="text-muted-foreground">
-                  Level 1 indicate the limited access, while the Level 2 provide
-                  the user to full access
-                </small>
-                <select
-                  value={newUser.level}
-                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, level: e.target.value })
-                  }
-                >
-                  <option value="Select User Type">Selece User Type</option>
-                  <option value="Level 1">Level 1</option>
-                  <option value="Level 2">Level 2</option>
-                </select>
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Role
-                </label>
-                <select
-                  value={newUser.role}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, role: e.target.value })
-                  }
-                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                >
-                  <option value="">Select Role</option>
-                  <option value="Admin Lab">Admin Lab</option>
-                  <option value="User Lab">User Lab</option>
-                  <option value="Bioinformatician">Bioinformatician</option>
-                  <option value="Genetic Counselor">Genetic Counselor</option>
-                  <option value="Clinical Pathology">Clinical Pathology</option>
-                  <option value="Head Lab">Head Lab</option>
-                </select>
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={newUser.email}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, email: e.target.value })
-                  }
-                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Phone Number
-                </label>
-                <input
-                  type="text"
-                  value={newUser.phone_number}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, phone_number: e.target.value })
-                  }
-                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Specialty
-                </label>
-                <input
-                  type="text"
-                  value={newUser.specialty}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, specialty: e.target.value })
-                  }
-                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                />
-              </div>
-              <div className="flex justify-end">
-                <Button
-                  variant="outline"
-                  className="mr-2"
-                  onClick={() => setShowModal(false)}
-                >
-                  Cancel
-                </Button>
-                <Button variant="outline" onClick={handleSaveUser}>
-                  Save
-                </Button>
-              </div>
-            </form>
+            <div className="mb-4">
+              <LabelAndDescription
+                label="Institution ID"
+                desc="Your Institution ID"
+              ></LabelAndDescription>
+              <Input
+                disabled={true}
+                type="text"
+                value={newUser.institutionID ?? "ADA"}
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              />
+            </div>
+            <div className="mb-4">
+              <LabelAndDescription
+                label="First Name"
+                desc="Enter user is First Name"
+              ></LabelAndDescription>
+              <Input
+                type="text"
+                value={newUser.first_name}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, first_name: e.target.value })
+                }
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              />
+            </div>
+            <div className="mb-4">
+              <LabelAndDescription
+                label="Last Name"
+                desc="Enter user is Last Name"
+              ></LabelAndDescription>
+              <Input
+                type="text"
+                value={newUser.last_name}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, last_name: e.target.value })
+                }
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              />
+            </div>
+            <div className="flex flex-col mb-4 gap-4">
+              <LabelAndDescription
+                label="User Level"
+                desc="Level 1 indicate the limited access, while the Level 2 provide
+                  the user to full access"
+              ></LabelAndDescription>
+              <Select
+                value={`${newUser.level}`}
+                onValueChange={(value) => {
+                  newUser.level = Number(value);
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select user Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>User Type</SelectLabel>
+                    <SelectItem value="1">Level 1</SelectItem>
+                    <SelectItem value="2">Level 2</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className=" flex flex-col gap-2 mb-4">
+              <LabelAndDescription
+                label="Role"
+                desc="Select the role assigned to the user, such as Genetic Counselor."
+              ></LabelAndDescription>
+              <Select
+                value={`${newUser.role}`}
+                onValueChange={(value) => {
+                  newUser.role = value;
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="User Role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>User Role</SelectLabel>
+                    <SelectItem value="Admin Lab">Admin Lab</SelectItem>
+                    <SelectItem value="User Lab">User Lab</SelectItem>
+                    <SelectItem value="Bioinformatician">
+                      Bioinformatician
+                    </SelectItem>
+                    <SelectItem value="Genetics Conselor">
+                      Genetic Conselor
+                    </SelectItem>
+                    <SelectItem value="Clinical Pathology">
+                      Clinical Pathology
+                    </SelectItem>
+                    <SelectItem value="Head Lab">Head Lab</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <Input
+                type="email"
+                value={newUser.email}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, email: e.target.value })
+                }
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Phone Number
+              </label>
+              <Input
+                type="text"
+                value={newUser.phone_number}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, phone_number: e.target.value })
+                }
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Specialty
+              </label>
+              <Input
+                type="text"
+                value={newUser.specialty}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, specialty: e.target.value })
+                }
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              />
+            </div>
+            <div className="flex justify-end">
+              <Button
+                variant="outline"
+                className="mr-2"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" onClick={handleSaveUser}>
+                Save
+              </Button>
+            </div>
           </div>
         </div>
       )}

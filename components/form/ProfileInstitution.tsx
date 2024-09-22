@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -12,7 +12,44 @@ import { Progress } from "../ui/progress";
 import { Button } from "../ui/button";
 import { Pencil } from "lucide-react";
 
-const ProfileInstitution = () => {
+import { generateClient } from "aws-amplify/api";
+
+import { getInstitution } from "@/src/graphql/queries";
+import { Institution } from "@/utils/object";
+
+import { Amplify } from "aws-amplify";
+import config from "@/src/amplifyconfiguration.json";
+
+Amplify.configure(config);
+
+interface ProfileInstitutionProops {
+  id?: string | null;
+}
+
+const ProfileInstitution: React.FC<ProfileInstitutionProops> = ({ id }) => {
+  const [institution, setInstitution] = useState<Institution>();
+  const [loading, setLoading] = useState(true);
+  const client = generateClient();
+
+  useEffect(() => {
+    try {
+      const fecthSingleData = async (idInstitution: string) => {
+        const resultInstitution = await client.graphql({
+          query: getInstitution,
+          variables: { id: idInstitution },
+        });
+        if (resultInstitution.data && resultInstitution.data.getInstitution) {
+          setInstitution(resultInstitution.data.getInstitution as Institution);
+        }
+      };
+      fecthSingleData(id ?? "");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   return (
     <Card className="w-full h-full border-0">
       <CardHeader>
@@ -33,29 +70,35 @@ const ProfileInstitution = () => {
           <MenuHeading title="General Information"></MenuHeading>
           <div className="flex flex-row mt-2">
             <p className="text-sm font-semibold w-[400px]">ID</p>
-            <p className="text-sm font-thin">MDK202408120000A1</p>
+            <p className="text-sm font-thin">{institution?.id}</p>
           </div>
           <div className="flex flex-row mb-2">
             <p className="text-sm font-semibold w-[400px]">Institution Name</p>
-            <p className="text-sm font-thin">Medika Genomics</p>
+            <p className="text-sm font-thin">{institution?.name}</p>
           </div>
           <div className="flex flex-row mb-2 ">
             <p className="text-sm font-semibold w-[400px]">Address</p>
-            <p className="text-sm font-thin">
-              Jalan Merdeka Selatan, No 10. Jakarta Barata
-            </p>
+            <p className="text-sm font-thin">{institution?.address}</p>
           </div>
           <div className="flex flex-row mb-2 ">
             <p className="text-sm font-semibold w-[400px]">Contact Person</p>
-            <p className="text-sm font-thin">Jhon Edy</p>
+            <p className="text-sm font-thin">{institution?.contactname}</p>
+          </div>
+          <div className="flex flex-row mb-2 ">
+            <p className="text-sm font-semibold w-[400px]">
+              Phone or Telephone
+            </p>
+            <p className="text-sm font-thin">{institution?.contactphone}</p>
           </div>
           <div className="flex flex-row mb-2 ">
             <p className="text-sm font-semibold w-[400px]">Email</p>
-            <p className="text-sm font-thin">adminuser@medika.go.id</p>
+            <p className="text-sm font-thin">{institution?.email}</p>
           </div>
           <div className="flex flex-row mb-2 ">
             <p className="text-sm font-semibold w-[400px]">Subscription Type</p>
-            <p className="text-sm font-thin">Regular Services</p>
+            <p className="text-sm font-thin">
+              {institution?.subscription_type} Months
+            </p>
           </div>
           <div className="flex flex-row mb-2 ">
             <p className="text-sm font-semibold w-[400px]">Account Status</p>
@@ -65,22 +108,24 @@ const ProfileInstitution = () => {
           </div>
           <MenuHeading title="User and Account"></MenuHeading>
           <div className="flex flex-row mb-2 ">
-            <p className="text-sm font-semibold w-[200px]">
+            <p className="text-sm font-semibold w-[400px]">
               Number of User Quotas
             </p>
-            <p className="text-sm font-thin">10</p>
+            <p className="text-sm font-thin">{institution?.userQuotas}</p>
           </div>
           <div className="flex flex-row mb-2 ">
-            <p className="text-sm font-semibold w-[200px]">
+            <p className="text-sm font-semibold w-[400px]">
               Current Number of User
             </p>
-            <p className="text-sm font-thin">5</p>
+            <p className="text-sm font-thin">{institution?.currentUserQuota}</p>
           </div>
 
           <MenuHeading title="Storage Quota"></MenuHeading>
           <div className="flex flex-col w-2/4 gap-1">
-            <small className="text-right">2.3/15GB</small>
-            <Progress value={10}></Progress>
+            <small className="text-right">
+              {`${institution?.currentStorageQuota} / ${institution?.storageQuota} GB`}
+            </small>
+            <Progress value={institution?.currentStorageQuota}></Progress>
           </div>
         </div>
       </CardContent>

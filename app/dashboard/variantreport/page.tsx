@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import TabsVariantReport from "@/components/table/TabsVariantReport";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Ellipsis, Ghost, Plus } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -15,13 +15,24 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Table,
+  TableRow,
+  TableHeader,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/ui/table";
 import axios from "axios";
 
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 
-import { listPatients } from "@/src/graphql/queries";
+import { listPatients, listVariantReports } from "@/src/graphql/queries";
+import { createVariantReport } from "@/src/graphql/mutations";
+import { CreateVariantReportInput } from "@/src/API";
 
 import { generateClient } from "aws-amplify/api";
+import { useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import {
@@ -40,32 +51,17 @@ import {
 import { useDropzone } from "react-dropzone";
 
 import config from "@/src/amplifyconfiguration.json";
-import graphqlOperation, { Amplify } from "aws-amplify";
+import { Amplify } from "aws-amplify";
 
 import { uploadData } from "aws-amplify/storage";
 
+import { VariantReportData, Patient } from "@/utils/object";
+import { generateReportID } from "@/utils/function";
+import { getDateToday, ReportStatus } from "@/utils/DateHelperFunction";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import TableReportList from "@/components/table/TableReportList";
+
 Amplify.configure(config);
-
-interface Patient {
-  id: string;
-  institutionID?: string;
-  name?: string;
-  sex?: string;
-  phone_number?: string;
-  dob?: string;
-}
-
-function generatePatientID() {
-  const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  let patientID = "";
-
-  for (let i = 0; i < 12; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    patientID += characters[randomIndex];
-  }
-
-  return patientID;
-}
 
 const VariantReport = () => {
   const [phenotypeQuery, setPhenotypeQuery] = useState("");
@@ -79,10 +75,18 @@ const VariantReport = () => {
   const [files, setFiles] = useState<File[]>([]); // State for files
 
   const [patients, setPatients] = useState<Patient[]>([]);
-  const [selectedPatient, setSelectedPatient] = React.useState<Patient | null>(
-    null
-  );
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>();
+
+  // Current Diagnosis
+  const [currentDiagnosis, setCurrentDiagnosis] = useState("");
+  const [medicalHistory, setMedicalHistory] = useState("");
+
   const client = generateClient();
+  const router = useRouter();
+
+  const navigateTo = (path: string) => {
+    router.push(path);
+  };
 
   useEffect(() => {
     const fetchPatient = async () => {
@@ -140,7 +144,7 @@ const VariantReport = () => {
 
   const [modal, setShowModal] = useState(false);
 
-  const handleCreateReport = () => {
+  const openModalReport = () => {
     setShowModal(true);
   };
   const handleSetOfModal = () => {
@@ -162,6 +166,58 @@ const VariantReport = () => {
     }, // Accepted file types, // Accepted file types
   });
 
+  // Handle the Data Report
+
+  const [varReports, setVarReports] = useState<CreateVariantReportInput[]>([]);
+
+  const fetchVariantReport = async (event?: React.SyntheticEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
+    try {
+      const result = await client.graphql({ query: listVariantReports });
+      console.log(result.data.listVariantReports.items);
+      setVarReports(
+        result.data.listVariantReports.items as CreateVariantReportInput[]
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchVariantReport();
+    console.log(varReports);
+  }, []);
+
+  const handleCreateReport = async () => {
+    try {
+      const newReport: CreateVariantReportInput = {
+        id: generateReportID(),
+        status: 1,
+        medical_history: medicalHistory,
+        current_diagnosis: currentDiagnosis,
+        sample_collection: getDateToday(),
+        phenotype: selectedPhenotypes,
+        idPatient: selectedPatient?.id,
+      };
+      const resultReport = await client.graphql({
+        query: createVariantReport,
+        variables: { input: newReport },
+      });
+      if (
+        resultReport &&
+        resultReport.data &&
+        resultReport.data.createVariantReport
+      ) {
+        // setVarReports([...varReports, newReport]);
+        console.log("Hore Finish Create Report");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="flex w-full">
       <Card className="w-full h-svh">
@@ -179,7 +235,7 @@ const VariantReport = () => {
               <Button
                 className="hover:text-white hover:bg-violet-800 w-50 text-right"
                 variant="secondary"
-                onClick={handleCreateReport}
+                onClick={openModalReport}
               >
                 <span>
                   <Plus className="w-3 h-3 mr-2"></Plus>
@@ -189,7 +245,99 @@ const VariantReport = () => {
             </div>
           </div>
           <div className="flex flex-row mb-10">
-            <TabsVariantReport></TabsVariantReport>
+            {/* <TabsVariantReport></TabsVariantReport> */}
+            <div className="w-full">
+              <Tabs defaultValue={"draft"} className="h-[20px]">
+                <TabsList defaultValue="draft">
+                  <TabsTrigger value="draft" className="w-[200px]">
+                    Draft
+                  </TabsTrigger>
+                  <TabsTrigger value="process" className="w-[200px]">
+                    In Process
+                  </TabsTrigger>
+                  <TabsTrigger value="approve" className="w-[200px]">
+                    Waiting for Approval
+                  </TabsTrigger>
+                  <TabsTrigger value="completed" className="w-[200px]">
+                    Completed
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="draft" defaultChecked={true}>
+                  <Card>
+                    <CardHeader></CardHeader>
+                    <CardContent>
+                      {/* <TableReportList></TableReportList> */}
+                      <Table className="w-full">
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Report ID</TableHead>
+                            <TableHead>Patient ID</TableHead>
+                            <TableHead>Medical History</TableHead>
+                            <TableHead>Current Diagnosis</TableHead>
+                            <TableHead>Sample Collected</TableHead>
+                            <TableHead>Report Status</TableHead>
+                            <TableHead>Action</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {varReports.map((varItem, index) => (
+                            <TableRow key={index}>
+                              <TableCell>{varItem.id}</TableCell>
+                              <TableCell>{varItem.idPatient}</TableCell>
+                              <TableCell>{varItem.medical_history}</TableCell>
+                              <TableCell>{varItem.current_diagnosis}</TableCell>
+                              <TableCell>{varItem.sample_collection}</TableCell>
+                              <TableCell>
+                                {ReportStatus(varItem.status ?? 4)}
+                              </TableCell>
+                              <TableCell>
+                                <Button
+                                  variant={"ghost"}
+                                  onClick={() =>
+                                    navigateTo(
+                                      `variantreport/editreport?id=${varItem.id}`
+                                    )
+                                  }
+                                >
+                                  <small>
+                                    <Ellipsis></Ellipsis>
+                                  </small>
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                <TabsContent value="process">
+                  <Card>
+                    <CardHeader></CardHeader>
+                    <CardContent>
+                      <TableReportList></TableReportList>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                <TabsContent value="approve">
+                  <Card>
+                    <CardHeader></CardHeader>
+                    <CardContent>
+                      <TableReportList></TableReportList>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                <TabsContent value="completed">
+                  <Card>
+                    <CardHeader></CardHeader>
+                    <CardContent>
+                      <TableReportList></TableReportList>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </Tabs>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -320,7 +468,10 @@ const VariantReport = () => {
                       Provide a summary of the patient is s relevant medical
                       history that is pertinent to this variant analysis.
                     </small>
-                    <Textarea></Textarea>
+                    <Textarea
+                      value={medicalHistory}
+                      onChange={(e) => setMedicalHistory(e.target.value)}
+                    ></Textarea>
                   </div>
                   <div className="flex flex-col gap-1 mb-3">
                     <small className="text-gray-500">
@@ -328,7 +479,11 @@ const VariantReport = () => {
                       this patient.
                     </small>
                     <Label>Current Diagnosis</Label>
-                    <Input type="Text"></Input>
+                    <Input
+                      value={currentDiagnosis}
+                      onChange={(e) => setCurrentDiagnosis(e.target.value)}
+                      type="Text"
+                    ></Input>
                   </div>
                   <div className="flex flex-col gap-1 mb-3">
                     <Label>Supplementary Files</Label>
@@ -364,7 +519,7 @@ const VariantReport = () => {
               </form>
             </CardContent>
             <CardFooter className="flex flex-row-reverse gap-2">
-              <Button>Save</Button>
+              <Button onClick={handleCreateReport}>Save</Button>
               <Button variant={"secondary"} onClick={handleSetOfModal}>
                 Cancel
               </Button>

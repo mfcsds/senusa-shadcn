@@ -24,33 +24,39 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type InstitutionUpdateFormInputValues = {
     name?: string;
-    contact?: string;
+    contactname?: string;
     address?: string;
     subscription_type?: string;
     email?: string;
     userQuotas?: number;
     currentUserQuota?: number;
-    storageQuota?: string;
+    storageQuota?: number;
     registrationDate?: string;
     accountStatus?: boolean;
+    contactphone?: string;
+    dueDate?: string;
+    currentStorageQuota?: number;
 };
 export declare type InstitutionUpdateFormValidationValues = {
     name?: ValidationFunction<string>;
-    contact?: ValidationFunction<string>;
+    contactname?: ValidationFunction<string>;
     address?: ValidationFunction<string>;
     subscription_type?: ValidationFunction<string>;
     email?: ValidationFunction<string>;
     userQuotas?: ValidationFunction<number>;
     currentUserQuota?: ValidationFunction<number>;
-    storageQuota?: ValidationFunction<string>;
+    storageQuota?: ValidationFunction<number>;
     registrationDate?: ValidationFunction<string>;
     accountStatus?: ValidationFunction<boolean>;
+    contactphone?: ValidationFunction<string>;
+    dueDate?: ValidationFunction<string>;
+    currentStorageQuota?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type InstitutionUpdateFormOverridesProps = {
     InstitutionUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
-    contact?: PrimitiveOverrideProps<TextFieldProps>;
+    contactname?: PrimitiveOverrideProps<TextFieldProps>;
     address?: PrimitiveOverrideProps<TextFieldProps>;
     subscription_type?: PrimitiveOverrideProps<TextFieldProps>;
     email?: PrimitiveOverrideProps<TextFieldProps>;
@@ -59,6 +65,9 @@ export declare type InstitutionUpdateFormOverridesProps = {
     storageQuota?: PrimitiveOverrideProps<TextFieldProps>;
     registrationDate?: PrimitiveOverrideProps<TextFieldProps>;
     accountStatus?: PrimitiveOverrideProps<SwitchFieldProps>;
+    contactphone?: PrimitiveOverrideProps<TextFieldProps>;
+    dueDate?: PrimitiveOverrideProps<TextFieldProps>;
+    currentStorageQuota?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type InstitutionUpdateFormProps = React.PropsWithChildren<{
     overrides?: InstitutionUpdateFormOverridesProps | undefined | null;

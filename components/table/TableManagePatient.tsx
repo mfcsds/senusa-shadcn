@@ -37,7 +37,6 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Label } from "../ui/label";
-import { Form } from "../ui/form";
 import { Input } from "../ui/input";
 
 import {
@@ -197,7 +196,11 @@ const TableManagePatient = () => {
                   <Button
                     variant="ghost"
                     className="group hover:bg-violet-800"
-                    onClick={(e) => navigateTo("./managepatient/datapatient")}
+                    onClick={(e) =>
+                      navigateTo(
+                        `./managepatient/datapatient?idpatient=${patients.id}`
+                      )
+                    }
                   >
                     <span>
                       <Pencil className="w-3 h-3 group-hover:text-white" />

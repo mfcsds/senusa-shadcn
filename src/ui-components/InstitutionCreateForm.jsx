@@ -30,7 +30,7 @@ export default function InstitutionCreateForm(props) {
   } = props;
   const initialValues = {
     name: "",
-    contact: "",
+    contactname: "",
     address: "",
     subscription_type: "",
     email: "",
@@ -39,9 +39,14 @@ export default function InstitutionCreateForm(props) {
     storageQuota: "",
     registrationDate: "",
     accountStatus: false,
+    contactphone: "",
+    dueDate: "",
+    currentStorageQuota: "",
   };
   const [name, setName] = React.useState(initialValues.name);
-  const [contact, setContact] = React.useState(initialValues.contact);
+  const [contactname, setContactname] = React.useState(
+    initialValues.contactname
+  );
   const [address, setAddress] = React.useState(initialValues.address);
   const [subscription_type, setSubscription_type] = React.useState(
     initialValues.subscription_type
@@ -60,10 +65,17 @@ export default function InstitutionCreateForm(props) {
   const [accountStatus, setAccountStatus] = React.useState(
     initialValues.accountStatus
   );
+  const [contactphone, setContactphone] = React.useState(
+    initialValues.contactphone
+  );
+  const [dueDate, setDueDate] = React.useState(initialValues.dueDate);
+  const [currentStorageQuota, setCurrentStorageQuota] = React.useState(
+    initialValues.currentStorageQuota
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
-    setContact(initialValues.contact);
+    setContactname(initialValues.contactname);
     setAddress(initialValues.address);
     setSubscription_type(initialValues.subscription_type);
     setEmail(initialValues.email);
@@ -72,11 +84,14 @@ export default function InstitutionCreateForm(props) {
     setStorageQuota(initialValues.storageQuota);
     setRegistrationDate(initialValues.registrationDate);
     setAccountStatus(initialValues.accountStatus);
+    setContactphone(initialValues.contactphone);
+    setDueDate(initialValues.dueDate);
+    setCurrentStorageQuota(initialValues.currentStorageQuota);
     setErrors({});
   };
   const validations = {
     name: [],
-    contact: [],
+    contactname: [],
     address: [],
     subscription_type: [],
     email: [],
@@ -85,6 +100,9 @@ export default function InstitutionCreateForm(props) {
     storageQuota: [],
     registrationDate: [],
     accountStatus: [],
+    contactphone: [],
+    dueDate: [],
+    currentStorageQuota: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -113,7 +131,7 @@ export default function InstitutionCreateForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          contact,
+          contactname,
           address,
           subscription_type,
           email,
@@ -122,6 +140,9 @@ export default function InstitutionCreateForm(props) {
           storageQuota,
           registrationDate,
           accountStatus,
+          contactphone,
+          dueDate,
+          currentStorageQuota,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -185,7 +206,7 @@ export default function InstitutionCreateForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              contact,
+              contactname,
               address,
               subscription_type,
               email,
@@ -194,6 +215,9 @@ export default function InstitutionCreateForm(props) {
               storageQuota,
               registrationDate,
               accountStatus,
+              contactphone,
+              dueDate,
+              currentStorageQuota,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -209,16 +233,16 @@ export default function InstitutionCreateForm(props) {
         {...getOverrideProps(overrides, "name")}
       ></TextField>
       <TextField
-        label="Contact"
+        label="Contactname"
         isRequired={false}
         isReadOnly={false}
-        value={contact}
+        value={contactname}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               name,
-              contact: value,
+              contactname: value,
               address,
               subscription_type,
               email,
@@ -227,19 +251,22 @@ export default function InstitutionCreateForm(props) {
               storageQuota,
               registrationDate,
               accountStatus,
+              contactphone,
+              dueDate,
+              currentStorageQuota,
             };
             const result = onChange(modelFields);
-            value = result?.contact ?? value;
+            value = result?.contactname ?? value;
           }
-          if (errors.contact?.hasError) {
-            runValidationTasks("contact", value);
+          if (errors.contactname?.hasError) {
+            runValidationTasks("contactname", value);
           }
-          setContact(value);
+          setContactname(value);
         }}
-        onBlur={() => runValidationTasks("contact", contact)}
-        errorMessage={errors.contact?.errorMessage}
-        hasError={errors.contact?.hasError}
-        {...getOverrideProps(overrides, "contact")}
+        onBlur={() => runValidationTasks("contactname", contactname)}
+        errorMessage={errors.contactname?.errorMessage}
+        hasError={errors.contactname?.hasError}
+        {...getOverrideProps(overrides, "contactname")}
       ></TextField>
       <TextField
         label="Address"
@@ -251,7 +278,7 @@ export default function InstitutionCreateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              contact,
+              contactname,
               address: value,
               subscription_type,
               email,
@@ -260,6 +287,9 @@ export default function InstitutionCreateForm(props) {
               storageQuota,
               registrationDate,
               accountStatus,
+              contactphone,
+              dueDate,
+              currentStorageQuota,
             };
             const result = onChange(modelFields);
             value = result?.address ?? value;
@@ -284,7 +314,7 @@ export default function InstitutionCreateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              contact,
+              contactname,
               address,
               subscription_type: value,
               email,
@@ -293,6 +323,9 @@ export default function InstitutionCreateForm(props) {
               storageQuota,
               registrationDate,
               accountStatus,
+              contactphone,
+              dueDate,
+              currentStorageQuota,
             };
             const result = onChange(modelFields);
             value = result?.subscription_type ?? value;
@@ -319,7 +352,7 @@ export default function InstitutionCreateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              contact,
+              contactname,
               address,
               subscription_type,
               email: value,
@@ -328,6 +361,9 @@ export default function InstitutionCreateForm(props) {
               storageQuota,
               registrationDate,
               accountStatus,
+              contactphone,
+              dueDate,
+              currentStorageQuota,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -356,7 +392,7 @@ export default function InstitutionCreateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              contact,
+              contactname,
               address,
               subscription_type,
               email,
@@ -365,6 +401,9 @@ export default function InstitutionCreateForm(props) {
               storageQuota,
               registrationDate,
               accountStatus,
+              contactphone,
+              dueDate,
+              currentStorageQuota,
             };
             const result = onChange(modelFields);
             value = result?.userQuotas ?? value;
@@ -393,7 +432,7 @@ export default function InstitutionCreateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              contact,
+              contactname,
               address,
               subscription_type,
               email,
@@ -402,6 +441,9 @@ export default function InstitutionCreateForm(props) {
               storageQuota,
               registrationDate,
               accountStatus,
+              contactphone,
+              dueDate,
+              currentStorageQuota,
             };
             const result = onChange(modelFields);
             value = result?.currentUserQuota ?? value;
@@ -420,13 +462,17 @@ export default function InstitutionCreateForm(props) {
         label="Storage quota"
         isRequired={false}
         isReadOnly={false}
+        type="number"
+        step="any"
         value={storageQuota}
         onChange={(e) => {
-          let { value } = e.target;
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
           if (onChange) {
             const modelFields = {
               name,
-              contact,
+              contactname,
               address,
               subscription_type,
               email,
@@ -435,6 +481,9 @@ export default function InstitutionCreateForm(props) {
               storageQuota: value,
               registrationDate,
               accountStatus,
+              contactphone,
+              dueDate,
+              currentStorageQuota,
             };
             const result = onChange(modelFields);
             value = result?.storageQuota ?? value;
@@ -459,7 +508,7 @@ export default function InstitutionCreateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              contact,
+              contactname,
               address,
               subscription_type,
               email,
@@ -468,6 +517,9 @@ export default function InstitutionCreateForm(props) {
               storageQuota,
               registrationDate: value,
               accountStatus,
+              contactphone,
+              dueDate,
+              currentStorageQuota,
             };
             const result = onChange(modelFields);
             value = result?.registrationDate ?? value;
@@ -492,7 +544,7 @@ export default function InstitutionCreateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              contact,
+              contactname,
               address,
               subscription_type,
               email,
@@ -501,6 +553,9 @@ export default function InstitutionCreateForm(props) {
               storageQuota,
               registrationDate,
               accountStatus: value,
+              contactphone,
+              dueDate,
+              currentStorageQuota,
             };
             const result = onChange(modelFields);
             value = result?.accountStatus ?? value;
@@ -515,6 +570,120 @@ export default function InstitutionCreateForm(props) {
         hasError={errors.accountStatus?.hasError}
         {...getOverrideProps(overrides, "accountStatus")}
       ></SwitchField>
+      <TextField
+        label="Contactphone"
+        isRequired={false}
+        isReadOnly={false}
+        value={contactphone}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              contactname,
+              address,
+              subscription_type,
+              email,
+              userQuotas,
+              currentUserQuota,
+              storageQuota,
+              registrationDate,
+              accountStatus,
+              contactphone: value,
+              dueDate,
+              currentStorageQuota,
+            };
+            const result = onChange(modelFields);
+            value = result?.contactphone ?? value;
+          }
+          if (errors.contactphone?.hasError) {
+            runValidationTasks("contactphone", value);
+          }
+          setContactphone(value);
+        }}
+        onBlur={() => runValidationTasks("contactphone", contactphone)}
+        errorMessage={errors.contactphone?.errorMessage}
+        hasError={errors.contactphone?.hasError}
+        {...getOverrideProps(overrides, "contactphone")}
+      ></TextField>
+      <TextField
+        label="Due date"
+        isRequired={false}
+        isReadOnly={false}
+        value={dueDate}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              contactname,
+              address,
+              subscription_type,
+              email,
+              userQuotas,
+              currentUserQuota,
+              storageQuota,
+              registrationDate,
+              accountStatus,
+              contactphone,
+              dueDate: value,
+              currentStorageQuota,
+            };
+            const result = onChange(modelFields);
+            value = result?.dueDate ?? value;
+          }
+          if (errors.dueDate?.hasError) {
+            runValidationTasks("dueDate", value);
+          }
+          setDueDate(value);
+        }}
+        onBlur={() => runValidationTasks("dueDate", dueDate)}
+        errorMessage={errors.dueDate?.errorMessage}
+        hasError={errors.dueDate?.hasError}
+        {...getOverrideProps(overrides, "dueDate")}
+      ></TextField>
+      <TextField
+        label="Current storage quota"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={currentStorageQuota}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              contactname,
+              address,
+              subscription_type,
+              email,
+              userQuotas,
+              currentUserQuota,
+              storageQuota,
+              registrationDate,
+              accountStatus,
+              contactphone,
+              dueDate,
+              currentStorageQuota: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.currentStorageQuota ?? value;
+          }
+          if (errors.currentStorageQuota?.hasError) {
+            runValidationTasks("currentStorageQuota", value);
+          }
+          setCurrentStorageQuota(value);
+        }}
+        onBlur={() =>
+          runValidationTasks("currentStorageQuota", currentStorageQuota)
+        }
+        errorMessage={errors.currentStorageQuota?.errorMessage}
+        hasError={errors.currentStorageQuota?.hasError}
+        {...getOverrideProps(overrides, "currentStorageQuota")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

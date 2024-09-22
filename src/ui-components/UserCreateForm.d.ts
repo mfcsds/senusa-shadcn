@@ -22,30 +22,42 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type UserCreateFormInputValues = {
-    name?: string;
-    institutionID?: string;
-    role_type?: number;
+    first_name?: string;
+    last_name?: string;
+    role?: string;
     email?: string;
     category?: string;
     specialty?: string;
+    institutionID?: string;
+    level?: number;
+    status?: number;
+    phone_number?: string;
 };
 export declare type UserCreateFormValidationValues = {
-    name?: ValidationFunction<string>;
-    institutionID?: ValidationFunction<string>;
-    role_type?: ValidationFunction<number>;
+    first_name?: ValidationFunction<string>;
+    last_name?: ValidationFunction<string>;
+    role?: ValidationFunction<string>;
     email?: ValidationFunction<string>;
     category?: ValidationFunction<string>;
     specialty?: ValidationFunction<string>;
+    institutionID?: ValidationFunction<string>;
+    level?: ValidationFunction<number>;
+    status?: ValidationFunction<number>;
+    phone_number?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UserCreateFormOverridesProps = {
     UserCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    name?: PrimitiveOverrideProps<TextFieldProps>;
-    institutionID?: PrimitiveOverrideProps<TextFieldProps>;
-    role_type?: PrimitiveOverrideProps<TextFieldProps>;
+    first_name?: PrimitiveOverrideProps<TextFieldProps>;
+    last_name?: PrimitiveOverrideProps<TextFieldProps>;
+    role?: PrimitiveOverrideProps<TextFieldProps>;
     email?: PrimitiveOverrideProps<TextFieldProps>;
     category?: PrimitiveOverrideProps<TextFieldProps>;
     specialty?: PrimitiveOverrideProps<TextFieldProps>;
+    institutionID?: PrimitiveOverrideProps<TextFieldProps>;
+    level?: PrimitiveOverrideProps<TextFieldProps>;
+    status?: PrimitiveOverrideProps<TextFieldProps>;
+    phone_number?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type UserCreateFormProps = React.PropsWithChildren<{
     overrides?: UserCreateFormOverridesProps | undefined | null;

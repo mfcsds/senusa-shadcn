@@ -1,3 +1,5 @@
+import exp from "constants";
+
 export function getDateToday() {
   const today = new Date();
   const year = today.getFullYear();
@@ -7,10 +9,42 @@ export function getDateToday() {
   return `${year}-${month}-${day}`;
 }
 
+export function userStatus(counter: number) {
+  if (counter == 1) {
+    return "In verification";
+  } else if (counter == 2) {
+    return "Active";
+  } else if (counter == 3) {
+    return "Deactivated";
+  }
+}
+export function ReportStatus(counter: number) {
+  if (counter == 1) {
+    return "Draft";
+  } else if (counter == 2) {
+    return "In Process";
+  } else if (counter == 3) {
+    return "Approved";
+  }
+}
+
 export function getDateNextMonth() {
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth() + 1; // Months are 0-based, so adding 1
+  const nextMonthDate = new Date(year, month, today.getDate());
+
+  const nextYear = nextMonthDate.getFullYear();
+  const nextMonth = String(nextMonthDate.getMonth() + 1).padStart(2, "0");
+  const day = String(nextMonthDate.getDate()).padStart(2, "0");
+
+  return `${nextYear}-${nextMonth}-${day}`;
+}
+
+export function getDateNext(counter: number) {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + counter; // Months are 0-based, so adding 1
   const nextMonthDate = new Date(year, month, today.getDate());
 
   const nextYear = nextMonthDate.getFullYear();

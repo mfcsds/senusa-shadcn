@@ -25,32 +25,46 @@ export default function UserUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: "",
-    institutionID: "",
-    role_type: "",
+    first_name: "",
+    last_name: "",
+    role: "",
     email: "",
     category: "",
     specialty: "",
+    institutionID: "",
+    level: "",
+    status: "",
+    phone_number: "",
   };
-  const [name, setName] = React.useState(initialValues.name);
-  const [institutionID, setInstitutionID] = React.useState(
-    initialValues.institutionID
-  );
-  const [role_type, setRole_type] = React.useState(initialValues.role_type);
+  const [first_name, setFirst_name] = React.useState(initialValues.first_name);
+  const [last_name, setLast_name] = React.useState(initialValues.last_name);
+  const [role, setRole] = React.useState(initialValues.role);
   const [email, setEmail] = React.useState(initialValues.email);
   const [category, setCategory] = React.useState(initialValues.category);
   const [specialty, setSpecialty] = React.useState(initialValues.specialty);
+  const [institutionID, setInstitutionID] = React.useState(
+    initialValues.institutionID
+  );
+  const [level, setLevel] = React.useState(initialValues.level);
+  const [status, setStatus] = React.useState(initialValues.status);
+  const [phone_number, setPhone_number] = React.useState(
+    initialValues.phone_number
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = userRecord
       ? { ...initialValues, ...userRecord }
       : initialValues;
-    setName(cleanValues.name);
-    setInstitutionID(cleanValues.institutionID);
-    setRole_type(cleanValues.role_type);
+    setFirst_name(cleanValues.first_name);
+    setLast_name(cleanValues.last_name);
+    setRole(cleanValues.role);
     setEmail(cleanValues.email);
     setCategory(cleanValues.category);
     setSpecialty(cleanValues.specialty);
+    setInstitutionID(cleanValues.institutionID);
+    setLevel(cleanValues.level);
+    setStatus(cleanValues.status);
+    setPhone_number(cleanValues.phone_number);
     setErrors({});
   };
   const [userRecord, setUserRecord] = React.useState(userModelProp);
@@ -70,12 +84,16 @@ export default function UserUpdateForm(props) {
   }, [idProp, userModelProp]);
   React.useEffect(resetStateValues, [userRecord]);
   const validations = {
-    name: [],
-    institutionID: [{ type: "Required" }],
-    role_type: [],
+    first_name: [],
+    last_name: [],
+    role: [],
     email: [],
     category: [],
     specialty: [],
+    institutionID: [{ type: "Required" }],
+    level: [],
+    status: [],
+    phone_number: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -103,12 +121,16 @@ export default function UserUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          name: name ?? null,
-          institutionID,
-          role_type: role_type ?? null,
+          first_name: first_name ?? null,
+          last_name: last_name ?? null,
+          role: role ?? null,
           email: email ?? null,
           category: category ?? null,
           specialty: specialty ?? null,
+          institutionID,
+          level: level ?? null,
+          status: status ?? null,
+          phone_number: phone_number ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -161,95 +183,103 @@ export default function UserUpdateForm(props) {
       {...rest}
     >
       <TextField
-        label="Name"
+        label="First name"
         isRequired={false}
         isReadOnly={false}
-        value={name}
+        value={first_name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name: value,
-              institutionID,
-              role_type,
+              first_name: value,
+              last_name,
+              role,
               email,
               category,
               specialty,
+              institutionID,
+              level,
+              status,
+              phone_number,
             };
             const result = onChange(modelFields);
-            value = result?.name ?? value;
+            value = result?.first_name ?? value;
           }
-          if (errors.name?.hasError) {
-            runValidationTasks("name", value);
+          if (errors.first_name?.hasError) {
+            runValidationTasks("first_name", value);
           }
-          setName(value);
+          setFirst_name(value);
         }}
-        onBlur={() => runValidationTasks("name", name)}
-        errorMessage={errors.name?.errorMessage}
-        hasError={errors.name?.hasError}
-        {...getOverrideProps(overrides, "name")}
+        onBlur={() => runValidationTasks("first_name", first_name)}
+        errorMessage={errors.first_name?.errorMessage}
+        hasError={errors.first_name?.hasError}
+        {...getOverrideProps(overrides, "first_name")}
       ></TextField>
       <TextField
-        label="Institution id"
-        isRequired={true}
+        label="Last name"
+        isRequired={false}
         isReadOnly={false}
-        value={institutionID}
+        value={last_name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name,
-              institutionID: value,
-              role_type,
+              first_name,
+              last_name: value,
+              role,
               email,
               category,
               specialty,
+              institutionID,
+              level,
+              status,
+              phone_number,
             };
             const result = onChange(modelFields);
-            value = result?.institutionID ?? value;
+            value = result?.last_name ?? value;
           }
-          if (errors.institutionID?.hasError) {
-            runValidationTasks("institutionID", value);
+          if (errors.last_name?.hasError) {
+            runValidationTasks("last_name", value);
           }
-          setInstitutionID(value);
+          setLast_name(value);
         }}
-        onBlur={() => runValidationTasks("institutionID", institutionID)}
-        errorMessage={errors.institutionID?.errorMessage}
-        hasError={errors.institutionID?.hasError}
-        {...getOverrideProps(overrides, "institutionID")}
+        onBlur={() => runValidationTasks("last_name", last_name)}
+        errorMessage={errors.last_name?.errorMessage}
+        hasError={errors.last_name?.hasError}
+        {...getOverrideProps(overrides, "last_name")}
       ></TextField>
       <TextField
-        label="Role type"
+        label="Role"
         isRequired={false}
         isReadOnly={false}
-        type="number"
-        step="any"
-        value={role_type}
+        value={role}
         onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name,
-              institutionID,
-              role_type: value,
+              first_name,
+              last_name,
+              role: value,
               email,
               category,
               specialty,
+              institutionID,
+              level,
+              status,
+              phone_number,
             };
             const result = onChange(modelFields);
-            value = result?.role_type ?? value;
+            value = result?.role ?? value;
           }
-          if (errors.role_type?.hasError) {
-            runValidationTasks("role_type", value);
+          if (errors.role?.hasError) {
+            runValidationTasks("role", value);
           }
-          setRole_type(value);
+          setRole(value);
         }}
-        onBlur={() => runValidationTasks("role_type", role_type)}
-        errorMessage={errors.role_type?.errorMessage}
-        hasError={errors.role_type?.hasError}
-        {...getOverrideProps(overrides, "role_type")}
+        onBlur={() => runValidationTasks("role", role)}
+        errorMessage={errors.role?.errorMessage}
+        hasError={errors.role?.hasError}
+        {...getOverrideProps(overrides, "role")}
       ></TextField>
       <TextField
         label="Email"
@@ -260,12 +290,16 @@ export default function UserUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name,
-              institutionID,
-              role_type,
+              first_name,
+              last_name,
+              role,
               email: value,
               category,
               specialty,
+              institutionID,
+              level,
+              status,
+              phone_number,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -289,12 +323,16 @@ export default function UserUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name,
-              institutionID,
-              role_type,
+              first_name,
+              last_name,
+              role,
               email,
               category: value,
               specialty,
+              institutionID,
+              level,
+              status,
+              phone_number,
             };
             const result = onChange(modelFields);
             value = result?.category ?? value;
@@ -318,12 +356,16 @@ export default function UserUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name,
-              institutionID,
-              role_type,
+              first_name,
+              last_name,
+              role,
               email,
               category,
               specialty: value,
+              institutionID,
+              level,
+              status,
+              phone_number,
             };
             const result = onChange(modelFields);
             value = result?.specialty ?? value;
@@ -337,6 +379,146 @@ export default function UserUpdateForm(props) {
         errorMessage={errors.specialty?.errorMessage}
         hasError={errors.specialty?.hasError}
         {...getOverrideProps(overrides, "specialty")}
+      ></TextField>
+      <TextField
+        label="Institution id"
+        isRequired={true}
+        isReadOnly={false}
+        value={institutionID}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              first_name,
+              last_name,
+              role,
+              email,
+              category,
+              specialty,
+              institutionID: value,
+              level,
+              status,
+              phone_number,
+            };
+            const result = onChange(modelFields);
+            value = result?.institutionID ?? value;
+          }
+          if (errors.institutionID?.hasError) {
+            runValidationTasks("institutionID", value);
+          }
+          setInstitutionID(value);
+        }}
+        onBlur={() => runValidationTasks("institutionID", institutionID)}
+        errorMessage={errors.institutionID?.errorMessage}
+        hasError={errors.institutionID?.hasError}
+        {...getOverrideProps(overrides, "institutionID")}
+      ></TextField>
+      <TextField
+        label="Level"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={level}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              first_name,
+              last_name,
+              role,
+              email,
+              category,
+              specialty,
+              institutionID,
+              level: value,
+              status,
+              phone_number,
+            };
+            const result = onChange(modelFields);
+            value = result?.level ?? value;
+          }
+          if (errors.level?.hasError) {
+            runValidationTasks("level", value);
+          }
+          setLevel(value);
+        }}
+        onBlur={() => runValidationTasks("level", level)}
+        errorMessage={errors.level?.errorMessage}
+        hasError={errors.level?.hasError}
+        {...getOverrideProps(overrides, "level")}
+      ></TextField>
+      <TextField
+        label="Status"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={status}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              first_name,
+              last_name,
+              role,
+              email,
+              category,
+              specialty,
+              institutionID,
+              level,
+              status: value,
+              phone_number,
+            };
+            const result = onChange(modelFields);
+            value = result?.status ?? value;
+          }
+          if (errors.status?.hasError) {
+            runValidationTasks("status", value);
+          }
+          setStatus(value);
+        }}
+        onBlur={() => runValidationTasks("status", status)}
+        errorMessage={errors.status?.errorMessage}
+        hasError={errors.status?.hasError}
+        {...getOverrideProps(overrides, "status")}
+      ></TextField>
+      <TextField
+        label="Phone number"
+        isRequired={false}
+        isReadOnly={false}
+        value={phone_number}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              first_name,
+              last_name,
+              role,
+              email,
+              category,
+              specialty,
+              institutionID,
+              level,
+              status,
+              phone_number: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.phone_number ?? value;
+          }
+          if (errors.phone_number?.hasError) {
+            runValidationTasks("phone_number", value);
+          }
+          setPhone_number(value);
+        }}
+        onBlur={() => runValidationTasks("phone_number", phone_number)}
+        errorMessage={errors.phone_number?.errorMessage}
+        hasError={errors.phone_number?.hasError}
+        {...getOverrideProps(overrides, "phone_number")}
       ></TextField>
       <Flex
         justifyContent="space-between"

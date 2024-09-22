@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -11,11 +12,47 @@ import { TabsContent } from "@radix-ui/react-tabs";
 import TableUserAccount from "../table/TableUserAccount";
 import ProfileInstitution from "./ProfileInstitution";
 
-const ManageInstituionData = () => {
+import { getInstitution } from "@/src/graphql/queries";
+
+import { Amplify } from "aws-amplify";
+import config from "@/src/amplifyconfiguration.json";
+
+import { generateClient } from "aws-amplify/api";
+import { Institution } from "@/utils/object";
+
+Amplify.configure(config);
+
+interface ManageInstituionDataProops {
+  id: string | null;
+}
+
+const ManageInstituionData: React.FC<ManageInstituionDataProops> = ({ id }) => {
+  const [institutionItem, setInstitutionItem] = useState<Institution>();
+  useEffect(() => {
+    const retrieveInst = async () => {
+      try {
+        const client = generateClient();
+        const result = await client.graphql({
+          query: getInstitution,
+          variables: { id: id ?? "" },
+        });
+        const newInstitutionItems = result.data.getInstitution as Institution;
+        setInstitutionItem(newInstitutionItems);
+        console.log("Sucessfull retrive Data");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (id) {
+      retrieveInst();
+    }
+  }, [id]);
+
   return (
     <Card className="w-full h-screen">
       <CardHeader>
-        <CardTitle>Medika Institution</CardTitle>
+        <CardTitle>{institutionItem?.name ?? "Ada"}</CardTitle>
         <CardDescription>Manage and Detail Account</CardDescription>
       </CardHeader>
       <CardContent>
@@ -32,7 +69,7 @@ const ManageInstituionData = () => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="Profile">
-            <ProfileInstitution></ProfileInstitution>
+            <ProfileInstitution id={id}></ProfileInstitution>
           </TabsContent>
           <TabsContent value="Account">
             <TableUserAccount></TableUserAccount>

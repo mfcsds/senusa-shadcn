@@ -1,0 +1,348 @@
+"use client";
+import React, { useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Variant } from "@/utils/object";
+import {
+  generateHGVS,
+  extractZygosity,
+  fetchVariantDetails,
+} from "@/utils/function";
+import { Button } from "../ui/button";
+import { Ellipsis, PlusCircle } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const SelectVariant = () => {
+  const tempColumns = [
+    { header: "Gene", width: "75px", dataKey: "gene_symbol" },
+    { header: "Variant Detail", width: "120px", dataKey: "hgvs" },
+    { header: "Zygosity", width: "70px", dataKey: "zygosity" },
+    { header: "Global Allele", width: "70px", dataKey: "globalallele" },
+    { header: "Clinical Sign", width: "150px", dataKey: "clinicalSign" },
+    {
+      header: "Most Severe Consequences",
+      width: "200px",
+      dataKey: "severeconsequence",
+    },
+    { header: "Sift Score", width: "100px", dataKey: "sift_score" },
+    { header: "Sift Prediction", width: "100px", dataKey: "sift_prediction" },
+    { header: "Phenotypes", width: "100px", dataKey: "phenotypes" },
+    { header: "Action", width: "100px", dataKey: "action" },
+  ];
+
+  const [columns, setColumns] = useState(tempColumns);
+  const [error, setError] = useState<string | null>(null);
+  const [variantItem, setVariantList] = useState<Variant[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // State variables for filtering and sorting
+  const [filterClinicalSign, setFilterClinicalSign] = useState("");
+  const [filterZygosity, setFilterZygosity] = useState("");
+  const [sortGlobalAlleleAsc, setSortGlobalAlleleAsc] = useState(false);
+
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+
+    // Reset state when a new file is uploaded
+    setColumns([]);
+    setVariantList([]);
+    setError(null);
+    setLoading(true);
+
+    if (file && file.name.endsWith(".vcf")) {
+      const reader = new FileReader();
+
+      reader.onload = async (e) => {
+        const vcfText = e.target?.result as string;
+
+        // If file is empty or unreadable, show error
+        if (!vcfText || vcfText.trim() === "") {
+          setError("The file appears to be empty or unreadable.");
+          setLoading(false);
+          return;
+        }
+
+        const lines = vcfText.split("\n");
+
+        const headerLine = lines.find((line: string) =>
+          line.startsWith("#CHROM")
+        );
+        if (headerLine) {
+          setColumns(tempColumns);
+        } else {
+          setError("Invalid VCF file: Missing header line (#CHROM)");
+          setLoading(false);
+          return;
+        }
+
+        const dataLines = lines.filter(
+          (line: string) => !line.startsWith("#") && line.trim() !== ""
+        );
+
+        const parsedVariants = dataLines.map((line: string, index: number) => {
+          const fields = line.split("\t");
+
+          const variant: Variant = {
+            id: `variant-${index}`,
+            id_patient: "",
+            id_vcf: "",
+            chrom: fields[0],
+            pos: fields[1],
+            id_var: fields[2],
+            ref: fields[3],
+            alt: fields[4],
+            qual: fields[5],
+            filter: fields[6],
+            info: fields[7],
+            hgvs: "",
+            variantReportID: "",
+            zygosity: extractZygosity(fields[7]),
+            globalallele: null, // Set to null to indicate loading state
+            functional_impact: "",
+            acmg: "",
+            clinicalSign: null, // Set to null to indicate loading state
+            gene_id: null,
+            gene_symbol: null,
+            severeconsequence: null,
+            sift_score: null,
+            sift_prediction: null,
+            phenotypes: null,
+          };
+          variant.hgvs = generateHGVS(variant);
+          return variant;
+        });
+
+        setVariantList(parsedVariants);
+
+        // Fetch additional details for each variant individually
+        parsedVariants.forEach((variant, index) => {
+          fetchVariantDetails(variant).then((details) => {
+            setVariantList((prevVariants) => {
+              const newVariants = [...prevVariants];
+              newVariants[index] = { ...newVariants[index], ...details };
+              return newVariants;
+            });
+          });
+        });
+
+        setLoading(false); // Set loading to false after parsing the file
+      };
+
+      reader.onerror = () => {
+        setError("Error reading the file. Please try again.");
+        setLoading(false);
+      };
+
+      reader.readAsText(file);
+    } else {
+      setError("Please upload a valid .vcf file.");
+      setLoading(false);
+    }
+  };
+
+  // Function to render cell content based on dataKey
+  const renderCellContent = (item: Variant, dataKey: string) => {
+    switch (dataKey) {
+      case "gene_symbol":
+        return item.gene_symbol !== null ? (
+          item.gene_symbol
+        ) : (
+          <Skeleton className="h-4 w-full" />
+        );
+      case "hgvs":
+        return <p className="text-wrap text-[11px] break-words">{item.hgvs}</p>;
+      case "zygosity":
+        return item.zygosity;
+      case "globalallele":
+        return item.globalallele !== null ? (
+          item.globalallele
+        ) : (
+          <Skeleton className="h-4 w-full" />
+        );
+      case "clinicalSign":
+        return item.clinicalSign !== null ? (
+          item.clinicalSign
+        ) : (
+          <Skeleton className="h-4 w-full" />
+        );
+      case "severeconsequence":
+        return item.severeconsequence !== null ? (
+          item.severeconsequence
+        ) : (
+          <Skeleton className="h-4 w-full" />
+        );
+
+      case "sift_score":
+        return item.sift_score !== null ? (
+          item.sift_score
+        ) : (
+          <Skeleton className="h-4 w-full" />
+        );
+      case "sift_prediction":
+        return item.sift_prediction !== null ? (
+          item.sift_prediction
+        ) : (
+          <Skeleton className="h-4 w-full" />
+        );
+      case "phenotypes":
+        return item.phenotypes !== null ? (
+          item.phenotypes
+        ) : (
+          <Skeleton className="h-4 w-full"></Skeleton>
+        );
+      case "action":
+        return (
+          <div className="flex flex-row">
+            <Button variant={"ghost"}>
+              <Ellipsis className="w-4 h-4 text-gray-600" />
+            </Button>
+            <Button variant={"ghost"}>
+              <PlusCircle className="w-4 h-4 text-gray-600" />
+            </Button>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="flex flex-col">
+      <h1 className="text-xl font-bold mb-4">VCF File Uploader</h1>
+      <input
+        type="file"
+        accept=".vcf"
+        onChange={handleFileUpload}
+        className="mb-4"
+      />
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        columns.length > 0 && (
+          <div className="w-full h-screen">
+            {/* Filter and Sort Controls */}
+            <div className="mb-4 flex items-center">
+              <label htmlFor="clinicalSignFilter" className="mr-2">
+                Filter by Clinical Sign:
+              </label>
+              <input
+                id="clinicalSignFilter"
+                type="text"
+                value={filterClinicalSign}
+                onChange={(e) => setFilterClinicalSign(e.target.value)}
+                className="border rounded p-1 mr-4"
+              />
+              <label htmlFor="zygosityFilter" className="mr-2">
+                Filter by Zygosity:
+              </label>
+              <select
+                id="zygosityFilter"
+                value={filterZygosity}
+                onChange={(e) => setFilterZygosity(e.target.value)}
+                className="border rounded p-1 mr-4"
+              >
+                <option value="">All</option>
+                <option value="Heterozygous">Heterozygous</option>
+                <option value="Homozygous">Homozygous</option>
+              </select>
+              <button
+                onClick={() => setSortGlobalAlleleAsc((prev) => !prev)}
+                className="border rounded p-1"
+              >
+                Sort Global Allele {sortGlobalAlleleAsc ? "▲" : "▼"}
+              </button>
+            </div>
+
+            <div className="overflow-x-auto">
+              <Table
+                className="table-auto border-collapse w-full"
+                style={{ tableLayout: "fixed" }}
+              >
+                <TableHeader className="sticky top-0 bg-gray-100 z-10">
+                  <TableRow className="text-xs text-black">
+                    {columns.map((col, index) => (
+                      <TableHead
+                        key={index}
+                        className="border py-2 text-left text-black font-semibold"
+                        style={{ width: col.width }}
+                      >
+                        {col.header}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                </TableHeader>
+              </Table>
+            </div>
+            <div
+              className="overflow-y-auto"
+              style={{ maxHeight: "calc(100vh - 8rem)" }} // Adjusted for filter controls
+            >
+              <Table
+                className="table-auto border-collapse w-full"
+                style={{ tableLayout: "fixed" }}
+              >
+                <TableBody>
+                  {variantItem
+                    .filter((item) => {
+                      // Filter by Clinical Sign
+                      if (filterClinicalSign) {
+                        if (!item.clinicalSign) return false;
+                        if (
+                          !item.clinicalSign
+                            .toLowerCase()
+                            .includes(filterClinicalSign.toLowerCase())
+                        )
+                          return false;
+                      }
+                      // Filter by Zygosity
+                      if (filterZygosity && item.zygosity !== filterZygosity) {
+                        return false;
+                      }
+                      return true;
+                    })
+                    .sort((a, b) => {
+                      const gaA = a.globalallele;
+                      const gaB = b.globalallele;
+                      if (gaA == null && gaB == null) return 0;
+                      if (gaA == null) return 1;
+                      if (gaB == null) return -1;
+                      return sortGlobalAlleleAsc ? gaA - gaB : gaB - gaA;
+                    })
+                    .map((item, index) => (
+                      <TableRow
+                        key={index}
+                        className="text-wrap text-[10px] break-words"
+                      >
+                        {columns.map((col, colIndex) => (
+                          <TableCell
+                            key={colIndex}
+                            className="border px-4 py-2 text-wrap break-words"
+                            style={{ width: col.width }}
+                          >
+                            {renderCellContent(item, col.dataKey)}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        )
+      )}
+    </div>
+  );
+};
+
+export default SelectVariant;

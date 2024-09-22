@@ -1,0 +1,43 @@
+const newVariantReport = await client.graphql({
+    query: createVariantReport,
+    variables: {
+        input: {
+		"status": 1020,
+		"isApproved": true,
+		"medical_history": "Lorem ipsum dolor sit amet",
+		"current_diagnosis": "Lorem ipsum dolor sit amet",
+		"userID": "a3f4095e-39de-43d2-baf4-f8c16f0f6f4d",
+		"institutionID": "a3f4095e-39de-43d2-baf4-f8c16f0f6f4d",
+		"Recommendations": [],
+		"GeneticsConselors": [],
+		"createAt": "1970-01-01Z",
+		"phenotype": [],
+		"Patient": /* Provide a Patient instance here */,
+		"sample_collection": "Lorem ipsum dolor sit amet"
+	}
+    }
+});
+
+
+
+import { generateClient } from "aws-amplify/api";
+import { createVariant } from './graphql/mutations';
+
+const client = generateClient()
+
+const newVariant = await client.graphql({
+    query: createVariant,
+    variables: {
+        input: {
+		"chrom": "Lorem ipsum dolor sit amet",
+		"pos": "Lorem ipsum dolor sit amet",
+		"ref": "Lorem ipsum dolor sit amet",
+		"alt": "Lorem ipsum dolor sit amet",
+		"qual": "Lorem ipsum dolor sit amet",
+		"filter": "Lorem ipsum dolor sit amet",
+		"info": "Lorem ipsum dolor sit amet",
+		"hgvs": "Lorem ipsum dolor sit amet",
+		"id_var": "Lorem ipsum dolor sit amet"
+		}
+    }
+});

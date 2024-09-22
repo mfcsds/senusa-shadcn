@@ -8,11 +8,106 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getVcfdata = /* GraphQL */ `query GetVcfdata($id: ID!) {
+  getVcfdata(id: $id) {
+    id
+    id_patient
+    sample_date
+    uploadAt
+    public_link
+    genome_reference
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetVcfdataQueryVariables,
+  APITypes.GetVcfdataQuery
+>;
+export const listVcfdata = /* GraphQL */ `query ListVcfdata(
+  $filter: ModelVcfdataFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listVcfdata(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      id_patient
+      sample_date
+      uploadAt
+      public_link
+      genome_reference
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListVcfdataQueryVariables,
+  APITypes.ListVcfdataQuery
+>;
+export const getVariant = /* GraphQL */ `query GetVariant($id: ID!) {
+  getVariant(id: $id) {
+    id
+    chrom
+    pos
+    ref
+    alt
+    qual
+    filter
+    info
+    hgvs
+    id_var
+    id_patient
+    id_vcf
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetVariantQueryVariables,
+  APITypes.GetVariantQuery
+>;
+export const listVariants = /* GraphQL */ `query ListVariants(
+  $filter: ModelVariantFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listVariants(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      chrom
+      pos
+      ref
+      alt
+      qual
+      filter
+      info
+      hgvs
+      id_var
+      id_patient
+      id_vcf
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListVariantsQueryVariables,
+  APITypes.ListVariantsQuery
+>;
 export const getGeneticsConselor = /* GraphQL */ `query GetGeneticsConselor($id: ID!) {
   getGeneticsConselor(id: $id) {
     id
     text
-    variantreportID
     createdAt
     updatedAt
     __typename
@@ -31,7 +126,6 @@ export const listGeneticsConselors = /* GraphQL */ `query ListGeneticsConselors(
     items {
       id
       text
-      variantreportID
       createdAt
       updatedAt
       __typename
@@ -43,36 +137,6 @@ export const listGeneticsConselors = /* GraphQL */ `query ListGeneticsConselors(
 ` as GeneratedQuery<
   APITypes.ListGeneticsConselorsQueryVariables,
   APITypes.ListGeneticsConselorsQuery
->;
-export const geneticsConselorsByVariantreportID = /* GraphQL */ `query GeneticsConselorsByVariantreportID(
-  $variantreportID: ID!
-  $sortDirection: ModelSortDirection
-  $filter: ModelGeneticsConselorFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  geneticsConselorsByVariantreportID(
-    variantreportID: $variantreportID
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      text
-      variantreportID
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.GeneticsConselorsByVariantreportIDQueryVariables,
-  APITypes.GeneticsConselorsByVariantreportIDQuery
 >;
 export const getPhenotype = /* GraphQL */ `query GetPhenotype($id: ID!) {
   getPhenotype(id: $id) {
@@ -180,55 +244,18 @@ export const listRecommendations = /* GraphQL */ `query ListRecommendations(
   APITypes.ListRecommendationsQueryVariables,
   APITypes.ListRecommendationsQuery
 >;
-export const recommendationsByVariantreportID = /* GraphQL */ `query RecommendationsByVariantreportID(
-  $variantreportID: ID!
-  $sortDirection: ModelSortDirection
-  $filter: ModelRecommendationFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  recommendationsByVariantreportID(
-    variantreportID: $variantreportID
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      text
-      variantreportID
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.RecommendationsByVariantreportIDQueryVariables,
-  APITypes.RecommendationsByVariantreportIDQuery
->;
 export const getVariantReport = /* GraphQL */ `query GetVariantReport($id: ID!) {
   getVariantReport(id: $id) {
     id
     status
-    create_at
     isApproved
     medical_history
     current_diagnosis
-    userID
-    download_link_report
     institutionID
-    Recommendations {
-      nextToken
-      __typename
-    }
-    GeneticsConselors {
-      nextToken
-      __typename
-    }
+    createAt
+    phenotype
+    sample_collection
+    idPatient
     createdAt
     updatedAt
     __typename
@@ -247,13 +274,14 @@ export const listVariantReports = /* GraphQL */ `query ListVariantReports(
     items {
       id
       status
-      create_at
       isApproved
       medical_history
       current_diagnosis
-      userID
-      download_link_report
       institutionID
+      createAt
+      phenotype
+      sample_collection
+      idPatient
       createdAt
       updatedAt
       __typename
@@ -265,78 +293,6 @@ export const listVariantReports = /* GraphQL */ `query ListVariantReports(
 ` as GeneratedQuery<
   APITypes.ListVariantReportsQueryVariables,
   APITypes.ListVariantReportsQuery
->;
-export const variantReportsByUserID = /* GraphQL */ `query VariantReportsByUserID(
-  $userID: ID!
-  $sortDirection: ModelSortDirection
-  $filter: ModelVariantReportFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  variantReportsByUserID(
-    userID: $userID
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      status
-      create_at
-      isApproved
-      medical_history
-      current_diagnosis
-      userID
-      download_link_report
-      institutionID
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.VariantReportsByUserIDQueryVariables,
-  APITypes.VariantReportsByUserIDQuery
->;
-export const variantReportsByInstitutionID = /* GraphQL */ `query VariantReportsByInstitutionID(
-  $institutionID: ID!
-  $sortDirection: ModelSortDirection
-  $filter: ModelVariantReportFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  variantReportsByInstitutionID(
-    institutionID: $institutionID
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      status
-      create_at
-      isApproved
-      medical_history
-      current_diagnosis
-      userID
-      download_link_report
-      institutionID
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.VariantReportsByInstitutionIDQueryVariables,
-  APITypes.VariantReportsByInstitutionIDQuery
 >;
 export const getPatientDocuments = /* GraphQL */ `query GetPatientDocuments($id: ID!) {
   getPatientDocuments(id: $id) {
@@ -377,38 +333,6 @@ export const listPatientDocuments = /* GraphQL */ `query ListPatientDocuments(
 ` as GeneratedQuery<
   APITypes.ListPatientDocumentsQueryVariables,
   APITypes.ListPatientDocumentsQuery
->;
-export const patientDocumentsByPatientID = /* GraphQL */ `query PatientDocumentsByPatientID(
-  $patientID: ID!
-  $sortDirection: ModelSortDirection
-  $filter: ModelPatientDocumentsFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  patientDocumentsByPatientID(
-    patientID: $patientID
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      name
-      patientID
-      size
-      link
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.PatientDocumentsByPatientIDQueryVariables,
-  APITypes.PatientDocumentsByPatientIDQuery
 >;
 export const getPatient = /* GraphQL */ `query GetPatient($id: ID!) {
   getPatient(id: $id) {
@@ -456,52 +380,19 @@ export const listPatients = /* GraphQL */ `query ListPatients(
   APITypes.ListPatientsQueryVariables,
   APITypes.ListPatientsQuery
 >;
-export const patientsByInstitutionID = /* GraphQL */ `query PatientsByInstitutionID(
-  $institutionID: ID!
-  $sortDirection: ModelSortDirection
-  $filter: ModelPatientFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  patientsByInstitutionID(
-    institutionID: $institutionID
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      name
-      sex
-      phone_number
-      dob
-      institutionID
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.PatientsByInstitutionIDQueryVariables,
-  APITypes.PatientsByInstitutionIDQuery
->;
 export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
   getUser(id: $id) {
     id
-    name
-    institutionID
-    role_type
+    first_name
+    last_name
+    role
     email
     category
     specialty
-    VariantReports {
-      nextToken
-      __typename
-    }
+    institutionID
+    level
+    status
+    phone_number
     createdAt
     updatedAt
     __typename
@@ -516,12 +407,16 @@ export const listUsers = /* GraphQL */ `query ListUsers(
   listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
-      name
-      institutionID
-      role_type
+      first_name
+      last_name
+      role
       email
       category
       specialty
+      institutionID
+      level
+      status
+      phone_number
       createdAt
       updatedAt
       __typename
@@ -531,45 +426,11 @@ export const listUsers = /* GraphQL */ `query ListUsers(
   }
 }
 ` as GeneratedQuery<APITypes.ListUsersQueryVariables, APITypes.ListUsersQuery>;
-export const usersByInstitutionID = /* GraphQL */ `query UsersByInstitutionID(
-  $institutionID: ID!
-  $sortDirection: ModelSortDirection
-  $filter: ModelUserFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  usersByInstitutionID(
-    institutionID: $institutionID
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      name
-      institutionID
-      role_type
-      email
-      category
-      specialty
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.UsersByInstitutionIDQueryVariables,
-  APITypes.UsersByInstitutionIDQuery
->;
 export const getInstitution = /* GraphQL */ `query GetInstitution($id: ID!) {
   getInstitution(id: $id) {
     id
     name
-    contact
+    contactname
     address
     subscription_type
     email
@@ -590,6 +451,9 @@ export const getInstitution = /* GraphQL */ `query GetInstitution($id: ID!) {
       nextToken
       __typename
     }
+    contactphone
+    dueDate
+    currentStorageQuota
     createdAt
     updatedAt
     __typename
@@ -608,7 +472,7 @@ export const listInstitutions = /* GraphQL */ `query ListInstitutions(
     items {
       id
       name
-      contact
+      contactname
       address
       subscription_type
       email
@@ -617,6 +481,9 @@ export const listInstitutions = /* GraphQL */ `query ListInstitutions(
       storageQuota
       registrationDate
       accountStatus
+      contactphone
+      dueDate
+      currentStorageQuota
       createdAt
       updatedAt
       __typename

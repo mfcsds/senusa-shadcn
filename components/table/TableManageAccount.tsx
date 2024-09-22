@@ -1,9 +1,22 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import graphqlOperation, { Amplify } from "aws-amplify";
+import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
 import { listInstitutions } from "@/src/graphql/queries";
+import { deleteInstitution } from "@/src/graphql/mutations";
 import { useRouter } from "next/navigation";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import {
   Table,
@@ -26,19 +39,21 @@ Amplify.configure(config);
 const TableManageAccount = () => {
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [loadings, setLoadings] = useState(true);
+  const [openDeleteModal, setDeleteModal] = useState(false);
+
+  const fetchInstitution = async () => {
+    try {
+      const result = await client.graphql({ query: listInstitutions });
+      setInstitutions(result.data.listInstitutions.items as Institution[]);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadings(false);
+    }
+  };
 
   const client = generateClient();
   useEffect(() => {
-    const fetchInstitution = async () => {
-      try {
-        const result = await client.graphql({ query: listInstitutions });
-        setInstitutions(result.data.listInstitutions.items as Institution[]);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoadings(false);
-      }
-    };
     fetchInstitution();
   }, []);
 
@@ -46,6 +61,22 @@ const TableManageAccount = () => {
   const handleEditInstitutionButton = (path: string) => {
     router.push(path);
     console.log("Click Edit");
+  };
+
+  const handleDeleteAccount = async (idInstitution: string) => {
+    const selectedID = {
+      id: idInstitution,
+    };
+
+    try {
+      const deleteID = await client.graphql({
+        query: deleteInstitution,
+        variables: { input: selectedID },
+      });
+      await fetchInstitution();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // console.log(institutions.at(0).);
@@ -75,10 +106,7 @@ const TableManageAccount = () => {
         </TableHeader>
         <TableBody className="text-xs">
           {institutions.map((institution) => (
-            <TableRow
-              key={institution.id}
-              className="hover:text-white hover:bg-violet-900"
-            >
+            <TableRow key={institution.id} className="hover:bg-violet-100">
               <TableCell>
                 <InstitutionItems
                   id={institution.id}
@@ -109,17 +137,42 @@ const TableManageAccount = () => {
               </TableCell>
               <TableCell className="text-center">
                 <div className="flex items-center">
-                  <Button variant="ghost" className="group hover:bg-violet-800">
-                    <span>
-                      <Trash className="group-hover:text-white w-3 h-3 " />
-                    </span>
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="outline" className="border-none">
+                        <Trash className="w-4 h-4"></Trash>
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your account and remove your data from our
+                          servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          className="group hover:bg-violet-800"
+                          onClick={() =>
+                            handleDeleteAccount(institution.id ?? "")
+                          }
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                   <Button
                     variant="ghost"
                     className="group hover:bg-violet-800"
                     onClick={(e) =>
                       handleEditInstitutionButton(
-                        "/dashboard/manageaccount/manageinstitution/"
+                        `/dashboard/manageaccount/manageinstitution/?id=${institution.id}`
                       )
                     }
                   >

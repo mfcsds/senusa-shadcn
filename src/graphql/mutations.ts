@@ -8,6 +8,144 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const createVcfdata = /* GraphQL */ `mutation CreateVcfdata(
+  $input: CreateVcfdataInput!
+  $condition: ModelVcfdataConditionInput
+) {
+  createVcfdata(input: $input, condition: $condition) {
+    id
+    id_patient
+    sample_date
+    uploadAt
+    public_link
+    genome_reference
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateVcfdataMutationVariables,
+  APITypes.CreateVcfdataMutation
+>;
+export const updateVcfdata = /* GraphQL */ `mutation UpdateVcfdata(
+  $input: UpdateVcfdataInput!
+  $condition: ModelVcfdataConditionInput
+) {
+  updateVcfdata(input: $input, condition: $condition) {
+    id
+    id_patient
+    sample_date
+    uploadAt
+    public_link
+    genome_reference
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateVcfdataMutationVariables,
+  APITypes.UpdateVcfdataMutation
+>;
+export const deleteVcfdata = /* GraphQL */ `mutation DeleteVcfdata(
+  $input: DeleteVcfdataInput!
+  $condition: ModelVcfdataConditionInput
+) {
+  deleteVcfdata(input: $input, condition: $condition) {
+    id
+    id_patient
+    sample_date
+    uploadAt
+    public_link
+    genome_reference
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteVcfdataMutationVariables,
+  APITypes.DeleteVcfdataMutation
+>;
+export const createVariant = /* GraphQL */ `mutation CreateVariant(
+  $input: CreateVariantInput!
+  $condition: ModelVariantConditionInput
+) {
+  createVariant(input: $input, condition: $condition) {
+    id
+    chrom
+    pos
+    ref
+    alt
+    qual
+    filter
+    info
+    hgvs
+    id_var
+    id_patient
+    id_vcf
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateVariantMutationVariables,
+  APITypes.CreateVariantMutation
+>;
+export const updateVariant = /* GraphQL */ `mutation UpdateVariant(
+  $input: UpdateVariantInput!
+  $condition: ModelVariantConditionInput
+) {
+  updateVariant(input: $input, condition: $condition) {
+    id
+    chrom
+    pos
+    ref
+    alt
+    qual
+    filter
+    info
+    hgvs
+    id_var
+    id_patient
+    id_vcf
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateVariantMutationVariables,
+  APITypes.UpdateVariantMutation
+>;
+export const deleteVariant = /* GraphQL */ `mutation DeleteVariant(
+  $input: DeleteVariantInput!
+  $condition: ModelVariantConditionInput
+) {
+  deleteVariant(input: $input, condition: $condition) {
+    id
+    chrom
+    pos
+    ref
+    alt
+    qual
+    filter
+    info
+    hgvs
+    id_var
+    id_patient
+    id_vcf
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteVariantMutationVariables,
+  APITypes.DeleteVariantMutation
+>;
 export const createGeneticsConselor = /* GraphQL */ `mutation CreateGeneticsConselor(
   $input: CreateGeneticsConselorInput!
   $condition: ModelGeneticsConselorConditionInput
@@ -15,7 +153,6 @@ export const createGeneticsConselor = /* GraphQL */ `mutation CreateGeneticsCons
   createGeneticsConselor(input: $input, condition: $condition) {
     id
     text
-    variantreportID
     createdAt
     updatedAt
     __typename
@@ -32,7 +169,6 @@ export const updateGeneticsConselor = /* GraphQL */ `mutation UpdateGeneticsCons
   updateGeneticsConselor(input: $input, condition: $condition) {
     id
     text
-    variantreportID
     createdAt
     updatedAt
     __typename
@@ -49,7 +185,6 @@ export const deleteGeneticsConselor = /* GraphQL */ `mutation DeleteGeneticsCons
   deleteGeneticsConselor(input: $input, condition: $condition) {
     id
     text
-    variantreportID
     createdAt
     updatedAt
     __typename
@@ -216,21 +351,14 @@ export const createVariantReport = /* GraphQL */ `mutation CreateVariantReport(
   createVariantReport(input: $input, condition: $condition) {
     id
     status
-    create_at
     isApproved
     medical_history
     current_diagnosis
-    userID
-    download_link_report
     institutionID
-    Recommendations {
-      nextToken
-      __typename
-    }
-    GeneticsConselors {
-      nextToken
-      __typename
-    }
+    createAt
+    phenotype
+    sample_collection
+    idPatient
     createdAt
     updatedAt
     __typename
@@ -247,21 +375,14 @@ export const updateVariantReport = /* GraphQL */ `mutation UpdateVariantReport(
   updateVariantReport(input: $input, condition: $condition) {
     id
     status
-    create_at
     isApproved
     medical_history
     current_diagnosis
-    userID
-    download_link_report
     institutionID
-    Recommendations {
-      nextToken
-      __typename
-    }
-    GeneticsConselors {
-      nextToken
-      __typename
-    }
+    createAt
+    phenotype
+    sample_collection
+    idPatient
     createdAt
     updatedAt
     __typename
@@ -278,21 +399,14 @@ export const deleteVariantReport = /* GraphQL */ `mutation DeleteVariantReport(
   deleteVariantReport(input: $input, condition: $condition) {
     id
     status
-    create_at
     isApproved
     medical_history
     current_diagnosis
-    userID
-    download_link_report
     institutionID
-    Recommendations {
-      nextToken
-      __typename
-    }
-    GeneticsConselors {
-      nextToken
-      __typename
-    }
+    createAt
+    phenotype
+    sample_collection
+    idPatient
     createdAt
     updatedAt
     __typename
@@ -437,16 +551,16 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
 ) {
   createUser(input: $input, condition: $condition) {
     id
-    name
-    institutionID
-    role_type
+    first_name
+    last_name
+    role
     email
     category
     specialty
-    VariantReports {
-      nextToken
-      __typename
-    }
+    institutionID
+    level
+    status
+    phone_number
     createdAt
     updatedAt
     __typename
@@ -462,16 +576,16 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
 ) {
   updateUser(input: $input, condition: $condition) {
     id
-    name
-    institutionID
-    role_type
+    first_name
+    last_name
+    role
     email
     category
     specialty
-    VariantReports {
-      nextToken
-      __typename
-    }
+    institutionID
+    level
+    status
+    phone_number
     createdAt
     updatedAt
     __typename
@@ -487,16 +601,16 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
 ) {
   deleteUser(input: $input, condition: $condition) {
     id
-    name
-    institutionID
-    role_type
+    first_name
+    last_name
+    role
     email
     category
     specialty
-    VariantReports {
-      nextToken
-      __typename
-    }
+    institutionID
+    level
+    status
+    phone_number
     createdAt
     updatedAt
     __typename
@@ -513,7 +627,7 @@ export const createInstitution = /* GraphQL */ `mutation CreateInstitution(
   createInstitution(input: $input, condition: $condition) {
     id
     name
-    contact
+    contactname
     address
     subscription_type
     email
@@ -534,6 +648,9 @@ export const createInstitution = /* GraphQL */ `mutation CreateInstitution(
       nextToken
       __typename
     }
+    contactphone
+    dueDate
+    currentStorageQuota
     createdAt
     updatedAt
     __typename
@@ -550,7 +667,7 @@ export const updateInstitution = /* GraphQL */ `mutation UpdateInstitution(
   updateInstitution(input: $input, condition: $condition) {
     id
     name
-    contact
+    contactname
     address
     subscription_type
     email
@@ -571,6 +688,9 @@ export const updateInstitution = /* GraphQL */ `mutation UpdateInstitution(
       nextToken
       __typename
     }
+    contactphone
+    dueDate
+    currentStorageQuota
     createdAt
     updatedAt
     __typename
@@ -587,7 +707,7 @@ export const deleteInstitution = /* GraphQL */ `mutation DeleteInstitution(
   deleteInstitution(input: $input, condition: $condition) {
     id
     name
-    contact
+    contactname
     address
     subscription_type
     email
@@ -608,6 +728,9 @@ export const deleteInstitution = /* GraphQL */ `mutation DeleteInstitution(
       nextToken
       __typename
     }
+    contactphone
+    dueDate
+    currentStorageQuota
     createdAt
     updatedAt
     __typename

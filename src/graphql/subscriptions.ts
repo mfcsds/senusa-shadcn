@@ -8,13 +8,132 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateVcfdata = /* GraphQL */ `subscription OnCreateVcfdata($filter: ModelSubscriptionVcfdataFilterInput) {
+  onCreateVcfdata(filter: $filter) {
+    id
+    id_patient
+    sample_date
+    uploadAt
+    public_link
+    genome_reference
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateVcfdataSubscriptionVariables,
+  APITypes.OnCreateVcfdataSubscription
+>;
+export const onUpdateVcfdata = /* GraphQL */ `subscription OnUpdateVcfdata($filter: ModelSubscriptionVcfdataFilterInput) {
+  onUpdateVcfdata(filter: $filter) {
+    id
+    id_patient
+    sample_date
+    uploadAt
+    public_link
+    genome_reference
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateVcfdataSubscriptionVariables,
+  APITypes.OnUpdateVcfdataSubscription
+>;
+export const onDeleteVcfdata = /* GraphQL */ `subscription OnDeleteVcfdata($filter: ModelSubscriptionVcfdataFilterInput) {
+  onDeleteVcfdata(filter: $filter) {
+    id
+    id_patient
+    sample_date
+    uploadAt
+    public_link
+    genome_reference
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteVcfdataSubscriptionVariables,
+  APITypes.OnDeleteVcfdataSubscription
+>;
+export const onCreateVariant = /* GraphQL */ `subscription OnCreateVariant($filter: ModelSubscriptionVariantFilterInput) {
+  onCreateVariant(filter: $filter) {
+    id
+    chrom
+    pos
+    ref
+    alt
+    qual
+    filter
+    info
+    hgvs
+    id_var
+    id_patient
+    id_vcf
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateVariantSubscriptionVariables,
+  APITypes.OnCreateVariantSubscription
+>;
+export const onUpdateVariant = /* GraphQL */ `subscription OnUpdateVariant($filter: ModelSubscriptionVariantFilterInput) {
+  onUpdateVariant(filter: $filter) {
+    id
+    chrom
+    pos
+    ref
+    alt
+    qual
+    filter
+    info
+    hgvs
+    id_var
+    id_patient
+    id_vcf
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateVariantSubscriptionVariables,
+  APITypes.OnUpdateVariantSubscription
+>;
+export const onDeleteVariant = /* GraphQL */ `subscription OnDeleteVariant($filter: ModelSubscriptionVariantFilterInput) {
+  onDeleteVariant(filter: $filter) {
+    id
+    chrom
+    pos
+    ref
+    alt
+    qual
+    filter
+    info
+    hgvs
+    id_var
+    id_patient
+    id_vcf
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteVariantSubscriptionVariables,
+  APITypes.OnDeleteVariantSubscription
+>;
 export const onCreateGeneticsConselor = /* GraphQL */ `subscription OnCreateGeneticsConselor(
   $filter: ModelSubscriptionGeneticsConselorFilterInput
 ) {
   onCreateGeneticsConselor(filter: $filter) {
     id
     text
-    variantreportID
     createdAt
     updatedAt
     __typename
@@ -30,7 +149,6 @@ export const onUpdateGeneticsConselor = /* GraphQL */ `subscription OnUpdateGene
   onUpdateGeneticsConselor(filter: $filter) {
     id
     text
-    variantreportID
     createdAt
     updatedAt
     __typename
@@ -46,7 +164,6 @@ export const onDeleteGeneticsConselor = /* GraphQL */ `subscription OnDeleteGene
   onDeleteGeneticsConselor(filter: $filter) {
     id
     text
-    variantreportID
     createdAt
     updatedAt
     __typename
@@ -197,21 +314,14 @@ export const onCreateVariantReport = /* GraphQL */ `subscription OnCreateVariant
   onCreateVariantReport(filter: $filter) {
     id
     status
-    create_at
     isApproved
     medical_history
     current_diagnosis
-    userID
-    download_link_report
     institutionID
-    Recommendations {
-      nextToken
-      __typename
-    }
-    GeneticsConselors {
-      nextToken
-      __typename
-    }
+    createAt
+    phenotype
+    sample_collection
+    idPatient
     createdAt
     updatedAt
     __typename
@@ -227,21 +337,14 @@ export const onUpdateVariantReport = /* GraphQL */ `subscription OnUpdateVariant
   onUpdateVariantReport(filter: $filter) {
     id
     status
-    create_at
     isApproved
     medical_history
     current_diagnosis
-    userID
-    download_link_report
     institutionID
-    Recommendations {
-      nextToken
-      __typename
-    }
-    GeneticsConselors {
-      nextToken
-      __typename
-    }
+    createAt
+    phenotype
+    sample_collection
+    idPatient
     createdAt
     updatedAt
     __typename
@@ -257,21 +360,14 @@ export const onDeleteVariantReport = /* GraphQL */ `subscription OnDeleteVariant
   onDeleteVariantReport(filter: $filter) {
     id
     status
-    create_at
     isApproved
     medical_history
     current_diagnosis
-    userID
-    download_link_report
     institutionID
-    Recommendations {
-      nextToken
-      __typename
-    }
-    GeneticsConselors {
-      nextToken
-      __typename
-    }
+    createAt
+    phenotype
+    sample_collection
+    idPatient
     createdAt
     updatedAt
     __typename
@@ -401,16 +497,16 @@ export const onDeletePatient = /* GraphQL */ `subscription OnDeletePatient($filt
 export const onCreateUser = /* GraphQL */ `subscription OnCreateUser($filter: ModelSubscriptionUserFilterInput) {
   onCreateUser(filter: $filter) {
     id
-    name
-    institutionID
-    role_type
+    first_name
+    last_name
+    role
     email
     category
     specialty
-    VariantReports {
-      nextToken
-      __typename
-    }
+    institutionID
+    level
+    status
+    phone_number
     createdAt
     updatedAt
     __typename
@@ -423,16 +519,16 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser($filter: Mo
 export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser($filter: ModelSubscriptionUserFilterInput) {
   onUpdateUser(filter: $filter) {
     id
-    name
-    institutionID
-    role_type
+    first_name
+    last_name
+    role
     email
     category
     specialty
-    VariantReports {
-      nextToken
-      __typename
-    }
+    institutionID
+    level
+    status
+    phone_number
     createdAt
     updatedAt
     __typename
@@ -445,16 +541,16 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser($filter: Mo
 export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser($filter: ModelSubscriptionUserFilterInput) {
   onDeleteUser(filter: $filter) {
     id
-    name
-    institutionID
-    role_type
+    first_name
+    last_name
+    role
     email
     category
     specialty
-    VariantReports {
-      nextToken
-      __typename
-    }
+    institutionID
+    level
+    status
+    phone_number
     createdAt
     updatedAt
     __typename
@@ -470,7 +566,7 @@ export const onCreateInstitution = /* GraphQL */ `subscription OnCreateInstituti
   onCreateInstitution(filter: $filter) {
     id
     name
-    contact
+    contactname
     address
     subscription_type
     email
@@ -491,6 +587,9 @@ export const onCreateInstitution = /* GraphQL */ `subscription OnCreateInstituti
       nextToken
       __typename
     }
+    contactphone
+    dueDate
+    currentStorageQuota
     createdAt
     updatedAt
     __typename
@@ -506,7 +605,7 @@ export const onUpdateInstitution = /* GraphQL */ `subscription OnUpdateInstituti
   onUpdateInstitution(filter: $filter) {
     id
     name
-    contact
+    contactname
     address
     subscription_type
     email
@@ -527,6 +626,9 @@ export const onUpdateInstitution = /* GraphQL */ `subscription OnUpdateInstituti
       nextToken
       __typename
     }
+    contactphone
+    dueDate
+    currentStorageQuota
     createdAt
     updatedAt
     __typename
@@ -542,7 +644,7 @@ export const onDeleteInstitution = /* GraphQL */ `subscription OnDeleteInstituti
   onDeleteInstitution(filter: $filter) {
     id
     name
-    contact
+    contactname
     address
     subscription_type
     email
@@ -563,6 +665,9 @@ export const onDeleteInstitution = /* GraphQL */ `subscription OnDeleteInstituti
       nextToken
       __typename
     }
+    contactphone
+    dueDate
+    currentStorageQuota
     createdAt
     updatedAt
     __typename
