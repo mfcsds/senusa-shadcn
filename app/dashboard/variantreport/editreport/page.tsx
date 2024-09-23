@@ -15,17 +15,25 @@ import RecommendationAndConclusion from "@/components/items/RecommendationAndCon
 const EditVariantReport = () => {
   const searchParams = useSearchParams();
   const reportID = searchParams.get("id");
+  const patientID = searchParams.get("patientid");
 
   const tabs = [
     {
       tab: "Patient Information",
       value: "Patient Information",
-      comp: <PatientInformation id={reportID ?? ""}></PatientInformation>,
+      comp: (
+        <PatientInformation
+          id={reportID ?? ""}
+          patientid={patientID ?? ""}
+        ></PatientInformation>
+      ),
     },
     {
       tab: "Testing Information",
       value: "Testing Information",
-      comp: <TestingInformation></TestingInformation>,
+      comp: (
+        <TestingInformation idpatient={patientID ?? ""}></TestingInformation>
+      ),
     },
     {
       tab: "Select Variant",

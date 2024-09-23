@@ -1,7 +1,19 @@
-import React from "react";
+"use client";
+
+import React, { FC } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
-const TestingInformation = () => {
+import { Amplify } from "aws-amplify";
+import config from "@/src/amplifyconfiguration.json";
+Amplify.configure(config);
+
+interface TestingInformationProops {
+  idpatient: string;
+}
+
+const TestingInformation: React.FC<TestingInformationProops> = ({
+  idpatient,
+}) => {
   return (
     <div className="flex">
       <Card className="w-full border-none">

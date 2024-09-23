@@ -119,8 +119,12 @@ export const fetchVariantDetails = async (
   if (data) {
     let gnomad = null;
     let clinicalSignificance = null;
+    let rsID = null;
 
     for (const variantData of data.colocated_variants || []) {
+      if (variantData.id && variantData.id.startsWith("rs") && !rsID) {
+        rsID = variantData.id;
+      }
       // Search for gnomad frequency across all colocated_variants
       for (const key in variantData.frequencies) {
         if (variantData.frequencies[key]?.gnomade) {
@@ -181,6 +185,142 @@ export const fetchVariantDetails = async (
       sift_prediction: siftPrediction,
       gene_symbol: geneSymbol,
       gene_id: geneId,
+      rsID: rsID,
+    };
+  }
+
+  return variant;
+};
+
+export const fetchVariantDetails2 = async (
+  variant: Variant
+): Promise<Variant> => {
+  const server = "https://rest.ensembl.org/";
+  const vep_ext = "vep/human/region/";
+  const contentType = "application/json";
+
+  const variantList = [
+    `${variant.chrom} ${variant.pos} . ${variant.ref} ${variant.alt}`,
+  ];
+
+  const response = await axios.post(
+    server + vep_ext,
+    JSON.stringify({ variants: variantList }),
+    {
+      headers: {
+        "Content-Type": contentType,
+        Accept: contentType,
+      },
+    }
+  );
+
+  const data = response.data[0];
+  if (data) {
+    let gnomad = null;
+    let clinicalSignificance = null;
+    let rsID = null;
+
+    for (const variantData of data.colocated_variants || []) {
+      if (variantData.id && variantData.id.startsWith("rs") && !rsID) {
+        rsID = variantData.id;
+      }
+      // Search for gnomad frequency across all colocated_variants
+      for (const key in variantData.frequencies) {
+        if (variantData.frequencies[key]?.gnomade) {
+          gnomad = variantData.frequencies[key].gnomade;
+          break;
+        }
+      }
+
+      // Collect clinical significance if available
+      if (variantData.clin_sig && variantData.clin_sig.length > 0) {
+        clinicalSignificance = variantData.clin_sig.join(", ");
+      }
+
+      // If both values are found, no need to continue searching
+      if (gnomad && clinicalSignificance) {
+        break;
+      }
+    }
+
+    // Extract additional fields
+    let severeConsequence = data.most_severe_consequence || null;
+    let siftScore = null;
+    let siftPrediction = null;
+    let geneSymbol = null;
+    let geneId = null;
+
+    for (const transcript of data.transcript_consequences || []) {
+      // Set sift_score and sift_prediction if available and not already set
+      if (transcript.sift_score != null && siftScore == null) {
+        siftScore = transcript.sift_score;
+      }
+      if (transcript.sift_prediction && siftPrediction == null) {
+        siftPrediction = transcript.sift_prediction;
+      }
+
+      // Set gene_symbol and gene_id if available and not already set
+      if (transcript.gene_symbol && geneSymbol == null) {
+        geneSymbol = transcript.gene_symbol;
+      }
+      if (transcript.gene_id && geneId == null) {
+        geneId = transcript.gene_id;
+      }
+
+      // If all values are found, we can break
+      if (siftScore != null && siftPrediction && geneSymbol && geneId) {
+        break;
+      }
+    }
+
+    console.log("sukses");
+
+    let phenotypes = null;
+    // If rsID is available, fetch phenotype data using the Variation endpoint
+    if (rsID) {
+      const phenotypeUrl = `${server}variation/human/${rsID}?phenotypes=1`;
+      try {
+        const phenotypeResponse = await axios.get(phenotypeUrl, {
+          headers: {
+            "Content-Type": contentType,
+            Accept: contentType,
+          },
+        });
+
+        if (phenotypeResponse.status === 200) {
+          const phenotypeData = phenotypeResponse.data;
+          if (
+            phenotypeData &&
+            phenotypeData.phenotypes &&
+            phenotypeData.phenotypes.length > 0
+          ) {
+            // Extract phenotype descriptions
+            phenotypes = phenotypeData.phenotypes
+              .map((p: any) => p.description || p.trait || "N/A")
+              .join("; ");
+          }
+        } else {
+          console.error(
+            "Error fetching phenotype data:",
+            phenotypeResponse.status
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching phenotype data:", error);
+      }
+    }
+
+    return {
+      ...variant,
+      globalallele: gnomad,
+      clinicalSign: clinicalSignificance,
+      severeconsequence: severeConsequence,
+      sift_score: siftScore,
+      sift_prediction: siftPrediction,
+      gene_symbol: geneSymbol,
+      gene_id: geneId,
+      rsID: rsID,
+      phenotypes: phenotypes,
     };
   }
 

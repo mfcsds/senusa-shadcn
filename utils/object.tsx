@@ -40,6 +40,7 @@ export interface Variant {
   gene_symbol: string | null;
   gene_id: string | null;
   phenotypes: string | null;
+  rsID: string | null;
 }
 
 export interface Recommendation {

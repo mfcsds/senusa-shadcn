@@ -48,8 +48,6 @@ const SelectVariant = () => {
   const [filterClinicalSign, setFilterClinicalSign] = useState("");
   const [filterZygosity, setFilterZygosity] = useState("");
   const [sortGlobalAlleleAsc, setSortGlobalAlleleAsc] = useState(false);
-  // **Added state variable for Phenotypes filter**
-  const [filterPhenotypes, setFilterPhenotypes] = useState("");
 
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -253,16 +251,6 @@ const SelectVariant = () => {
                 onChange={(e) => setFilterClinicalSign(e.target.value)}
                 className="border rounded p-1 mr-4"
               />
-              <label htmlFor="phenotypesFilter" className="mr-2">
-                Filter by Phenotypes:
-              </label>
-              <input
-                id="phenotypesFilter"
-                type="text"
-                value={filterPhenotypes}
-                onChange={(e) => setFilterPhenotypes(e.target.value)}
-                className="border rounded p-1 mr-4"
-              />
               <label htmlFor="zygosityFilter" className="mr-2">
                 Filter by Zygosity:
               </label>
@@ -322,16 +310,6 @@ const SelectVariant = () => {
                           !item.clinicalSign
                             .toLowerCase()
                             .includes(filterClinicalSign.toLowerCase())
-                        )
-                          return false;
-                      }
-                      // **Filter by Phenotypes**
-                      if (filterPhenotypes) {
-                        if (!item.phenotypes) return false;
-                        if (
-                          !item.phenotypes
-                            .toLowerCase()
-                            .includes(filterPhenotypes.toLowerCase())
                         )
                           return false;
                       }

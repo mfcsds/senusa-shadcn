@@ -296,7 +296,7 @@ const VariantReport = () => {
                                   variant={"ghost"}
                                   onClick={() =>
                                     navigateTo(
-                                      `variantreport/editreport?id=${varItem.id}`
+                                      `variantreport/editreport?id=${varItem.id}&patientid=${varItem.idPatient}`
                                     )
                                   }
                                 >

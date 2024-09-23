@@ -146,7 +146,6 @@ const TableUserAccount = () => {
     } finally {
       setShowModal(false);
     }
-
     // setAccounts([...dataAccount, newUser]);
   };
 

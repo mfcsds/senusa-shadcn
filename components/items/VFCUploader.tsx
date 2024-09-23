@@ -16,10 +16,19 @@ import {
   generateVCFDataID,
 } from "@/utils/function";
 import { Skeleton } from "@/components/ui/skeleton";
+import { generateClient } from "aws-amplify/api";
+import { createVariant } from "@/src/graphql/mutations";
+import { CreateVariantInput } from "@/src/API";
+import { Button } from "../ui/button";
 
 interface VCFUploaderProops {
   id_patient: string;
 }
+
+import { Amplify } from "aws-amplify";
+import config from "@/src/amplifyconfiguration.json";
+
+Amplify.configure(config);
 
 const VCFUploader: React.FC<VCFUploaderProops> = ({ id_patient }) => {
   const tempColumns = [
@@ -39,6 +48,7 @@ const VCFUploader: React.FC<VCFUploaderProops> = ({ id_patient }) => {
   const [variantItem, setVariantList] = useState<Variant[]>([]);
   const [loading, setLoading] = useState(false);
   const [vcfID, setVCFID] = useState("");
+  const [progress, setProgress] = useState(0); // New state to track progress
 
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -110,18 +120,6 @@ const VCFUploader: React.FC<VCFUploaderProops> = ({ id_patient }) => {
         });
 
         setVariantList(parsedVariants);
-
-        // // Fetch additional details for each variant individually
-        // parsedVariants.forEach((variant, index) => {
-        //   fetchVariantDetails(variant).then((details) => {
-        //     setVariantList((prevVariants) => {
-        //       const newVariants = [...prevVariants];
-        //       newVariants[index] = { ...newVariants[index], ...details };
-        //       return newVariants;
-        //     });
-        //   });
-        // });
-
         setLoading(false); // Set loading to false after parsing the file
       };
 
@@ -134,6 +132,49 @@ const VCFUploader: React.FC<VCFUploaderProops> = ({ id_patient }) => {
     } else {
       setError("Please upload a valid .vcf file.");
       setLoading(false);
+    }
+  };
+
+  const saveToDynamoDB = async () => {
+    if (variantItem.length === 0) {
+      alert("No variants to save. Please upload a VCF file first.");
+      return;
+    }
+
+    setProgress(0); // Reset progress bar
+    try {
+      const client = generateClient();
+      for (let i = 0; i < variantItem.length; i++) {
+        const variant = variantItem[i];
+
+        const input = {
+          id: variant.id,
+          id_vcf: variant.id_vcf,
+          id_patient: variant.id_patient,
+          filter: variant.filter,
+          pos: variant.pos,
+          id_var: variant.id_var,
+          ref: variant.ref,
+          alt: variant.alt,
+          qual: variant.qual,
+          info: variant.info,
+          chrom: variant.chrom,
+          hgvs: "",
+        };
+
+        await client.graphql({
+          query: createVariant,
+          variables: { input: input },
+        });
+
+        // Update progress after each successful save
+        setProgress(((i + 1) / variantItem.length) * 100);
+      }
+
+      alert("Data successfully saved to DynamoDB!");
+    } catch (error) {
+      console.error("Error saving data to DynamoDB: ", error);
+      alert("Failed to save data to DynamoDB.");
     }
   };
 
@@ -165,9 +206,21 @@ const VCFUploader: React.FC<VCFUploaderProops> = ({ id_patient }) => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col">
+      <div className="flex">
+        <input type="file" accept=".vcf" onChange={handleFileUpload} />
+        <Button variant={"secondary"} onClick={saveToDynamoDB}>
+          Save to Database
+        </Button>
+      </div>
+      {variantItem.length > 0 && (
+        <div className="mt-4">
+          <label>Progress:</label>
+          <progress value={progress} max="100" className="w-full"></progress>
+          <p>{Math.round(progress)}% completed</p>
+        </div>
+      )}
       <h1 className="text-xl font-bold mb-4">VCF File Uploader</h1>
-      <input type="file" accept=".vcf" onChange={handleFileUpload} />
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
@@ -177,7 +230,7 @@ const VCFUploader: React.FC<VCFUploaderProops> = ({ id_patient }) => {
         columns.length > 0 && (
           <div className="overflow-x-auto overflow-y-auto h-screen">
             <Table
-              className="table-auto border-collapse w-full "
+              className="table-auto border-collapse w-full"
               style={{ tableLayout: "fixed" }}
             >
               <TableHeader>
