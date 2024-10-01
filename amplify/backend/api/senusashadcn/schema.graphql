@@ -1,9 +1,36 @@
+type SelectedVariant @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  id_patient: String
+  id_vcf: String
+  id_report: String
+  gene_id: String
+  gene_symbol: String
+  chrom: String
+  pos: String
+  id_var: String
+  ref: String
+  alt: String
+  qual: String
+  zigosity: String
+  global_allele: Float
+  functional_impact: String
+  acmg: String
+  reviewer_class: String
+  clinical_sign: String
+  hgvs: String
+  severe_consequence: String
+  sift_score: Float
+  sift_prediction: String
+  phenotypes: String
+  rsID: String
+}
+
 type Vcfdata @model @auth(rules: [{allow: public}]) {
   id: ID!
   id_patient: String
   sample_date: String
   uploadAt: String
-  public_link: String
+  pathfile: String
   genome_reference: String
 }
 

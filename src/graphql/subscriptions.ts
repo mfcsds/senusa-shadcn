@@ -8,13 +8,124 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateSelectedVariant = /* GraphQL */ `subscription OnCreateSelectedVariant(
+  $filter: ModelSubscriptionSelectedVariantFilterInput
+) {
+  onCreateSelectedVariant(filter: $filter) {
+    id
+    id_patient
+    id_vcf
+    id_report
+    gene_id
+    gene_symbol
+    chrom
+    pos
+    id_var
+    ref
+    alt
+    qual
+    zigosity
+    global_allele
+    functional_impact
+    acmg
+    reviewer_class
+    clinical_sign
+    hgvs
+    severe_consequence
+    sift_score
+    sift_prediction
+    phenotypes
+    rsID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateSelectedVariantSubscriptionVariables,
+  APITypes.OnCreateSelectedVariantSubscription
+>;
+export const onUpdateSelectedVariant = /* GraphQL */ `subscription OnUpdateSelectedVariant(
+  $filter: ModelSubscriptionSelectedVariantFilterInput
+) {
+  onUpdateSelectedVariant(filter: $filter) {
+    id
+    id_patient
+    id_vcf
+    id_report
+    gene_id
+    gene_symbol
+    chrom
+    pos
+    id_var
+    ref
+    alt
+    qual
+    zigosity
+    global_allele
+    functional_impact
+    acmg
+    reviewer_class
+    clinical_sign
+    hgvs
+    severe_consequence
+    sift_score
+    sift_prediction
+    phenotypes
+    rsID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateSelectedVariantSubscriptionVariables,
+  APITypes.OnUpdateSelectedVariantSubscription
+>;
+export const onDeleteSelectedVariant = /* GraphQL */ `subscription OnDeleteSelectedVariant(
+  $filter: ModelSubscriptionSelectedVariantFilterInput
+) {
+  onDeleteSelectedVariant(filter: $filter) {
+    id
+    id_patient
+    id_vcf
+    id_report
+    gene_id
+    gene_symbol
+    chrom
+    pos
+    id_var
+    ref
+    alt
+    qual
+    zigosity
+    global_allele
+    functional_impact
+    acmg
+    reviewer_class
+    clinical_sign
+    hgvs
+    severe_consequence
+    sift_score
+    sift_prediction
+    phenotypes
+    rsID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteSelectedVariantSubscriptionVariables,
+  APITypes.OnDeleteSelectedVariantSubscription
+>;
 export const onCreateVcfdata = /* GraphQL */ `subscription OnCreateVcfdata($filter: ModelSubscriptionVcfdataFilterInput) {
   onCreateVcfdata(filter: $filter) {
     id
     id_patient
     sample_date
     uploadAt
-    public_link
+    pathfile
     genome_reference
     createdAt
     updatedAt
@@ -31,7 +142,7 @@ export const onUpdateVcfdata = /* GraphQL */ `subscription OnUpdateVcfdata($filt
     id_patient
     sample_date
     uploadAt
-    public_link
+    pathfile
     genome_reference
     createdAt
     updatedAt
@@ -48,7 +159,7 @@ export const onDeleteVcfdata = /* GraphQL */ `subscription OnDeleteVcfdata($filt
     id_patient
     sample_date
     uploadAt
-    public_link
+    pathfile
     genome_reference
     createdAt
     updatedAt

@@ -114,6 +114,7 @@ const VCFUploader: React.FC<VCFUploaderProops> = ({ id_patient }) => {
             sift_score: null,
             sift_prediction: null,
             phenotypes: null,
+            rsID: null,
           };
           variant.hgvs = generateHGVS(variant);
           return variant;

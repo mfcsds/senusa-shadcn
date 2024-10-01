@@ -8,6 +8,120 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const createSelectedVariant = /* GraphQL */ `mutation CreateSelectedVariant(
+  $input: CreateSelectedVariantInput!
+  $condition: ModelSelectedVariantConditionInput
+) {
+  createSelectedVariant(input: $input, condition: $condition) {
+    id
+    id_patient
+    id_vcf
+    id_report
+    gene_id
+    gene_symbol
+    chrom
+    pos
+    id_var
+    ref
+    alt
+    qual
+    zigosity
+    global_allele
+    functional_impact
+    acmg
+    reviewer_class
+    clinical_sign
+    hgvs
+    severe_consequence
+    sift_score
+    sift_prediction
+    phenotypes
+    rsID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateSelectedVariantMutationVariables,
+  APITypes.CreateSelectedVariantMutation
+>;
+export const updateSelectedVariant = /* GraphQL */ `mutation UpdateSelectedVariant(
+  $input: UpdateSelectedVariantInput!
+  $condition: ModelSelectedVariantConditionInput
+) {
+  updateSelectedVariant(input: $input, condition: $condition) {
+    id
+    id_patient
+    id_vcf
+    id_report
+    gene_id
+    gene_symbol
+    chrom
+    pos
+    id_var
+    ref
+    alt
+    qual
+    zigosity
+    global_allele
+    functional_impact
+    acmg
+    reviewer_class
+    clinical_sign
+    hgvs
+    severe_consequence
+    sift_score
+    sift_prediction
+    phenotypes
+    rsID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateSelectedVariantMutationVariables,
+  APITypes.UpdateSelectedVariantMutation
+>;
+export const deleteSelectedVariant = /* GraphQL */ `mutation DeleteSelectedVariant(
+  $input: DeleteSelectedVariantInput!
+  $condition: ModelSelectedVariantConditionInput
+) {
+  deleteSelectedVariant(input: $input, condition: $condition) {
+    id
+    id_patient
+    id_vcf
+    id_report
+    gene_id
+    gene_symbol
+    chrom
+    pos
+    id_var
+    ref
+    alt
+    qual
+    zigosity
+    global_allele
+    functional_impact
+    acmg
+    reviewer_class
+    clinical_sign
+    hgvs
+    severe_consequence
+    sift_score
+    sift_prediction
+    phenotypes
+    rsID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteSelectedVariantMutationVariables,
+  APITypes.DeleteSelectedVariantMutation
+>;
 export const createVcfdata = /* GraphQL */ `mutation CreateVcfdata(
   $input: CreateVcfdataInput!
   $condition: ModelVcfdataConditionInput
@@ -17,7 +131,7 @@ export const createVcfdata = /* GraphQL */ `mutation CreateVcfdata(
     id_patient
     sample_date
     uploadAt
-    public_link
+    pathfile
     genome_reference
     createdAt
     updatedAt
@@ -37,7 +151,7 @@ export const updateVcfdata = /* GraphQL */ `mutation UpdateVcfdata(
     id_patient
     sample_date
     uploadAt
-    public_link
+    pathfile
     genome_reference
     createdAt
     updatedAt
@@ -57,7 +171,7 @@ export const deleteVcfdata = /* GraphQL */ `mutation DeleteVcfdata(
     id_patient
     sample_date
     uploadAt
-    public_link
+    pathfile
     genome_reference
     createdAt
     updatedAt

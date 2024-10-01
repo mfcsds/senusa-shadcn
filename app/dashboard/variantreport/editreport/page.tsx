@@ -38,12 +38,22 @@ const EditVariantReport = () => {
     {
       tab: "Select Variant",
       value: "Select Variant",
-      comp: <SelectVariant></SelectVariant>,
+      comp: (
+        <SelectVariant
+          patientid={patientID}
+          id_report={reportID}
+        ></SelectVariant>
+      ),
     },
     {
       tab: "Result and Interpretation",
       value: "Result and Interpretation",
-      comp: <ResultAndInterpretation></ResultAndInterpretation>,
+      comp: (
+        <ResultAndInterpretation
+          patientid={patientID}
+          id_report={reportID}
+        ></ResultAndInterpretation>
+      ),
     },
     {
       tab: "Recommendation and Conclusion",

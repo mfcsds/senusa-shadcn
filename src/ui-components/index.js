@@ -14,6 +14,8 @@ export { default as PhenotypeCreateForm } from "./PhenotypeCreateForm";
 export { default as PhenotypeUpdateForm } from "./PhenotypeUpdateForm";
 export { default as RecommendationCreateForm } from "./RecommendationCreateForm";
 export { default as RecommendationUpdateForm } from "./RecommendationUpdateForm";
+export { default as SelectedVariantCreateForm } from "./SelectedVariantCreateForm";
+export { default as SelectedVariantUpdateForm } from "./SelectedVariantUpdateForm";
 export { default as UserCreateForm } from "./UserCreateForm";
 export { default as UserUpdateForm } from "./UserUpdateForm";
 export { default as VariantCreateForm } from "./VariantCreateForm";

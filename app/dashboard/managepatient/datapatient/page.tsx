@@ -17,11 +17,18 @@ import {
   TableHeader,
   TableBody,
 } from "@/components/ui/table";
-import { CalendarIcon, Plus } from "lucide-react";
+import {
+  CalendarIcon,
+  Icon,
+  Plus,
+  SidebarCloseIcon,
+  SquareX,
+  TableOfContents,
+  Trash2,
+} from "lucide-react";
 
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
-import graphqlOperation, { Amplify } from "aws-amplify";
 
 import config from "@/src/amplifyconfiguration.json";
 import { uploadData } from "aws-amplify/storage";
@@ -43,9 +50,25 @@ import { getDateToday } from "@/utils/DateHelperFunction";
 import { useSearchParams } from "next/navigation";
 
 import { getPatient } from "@/src/graphql/queries";
+import { listVcfdata } from "@/src/graphql/queries";
 import { generateClient } from "aws-amplify/api";
 import { CreatePatientInput } from "@/src/API";
 import VCFUploader from "@/components/items/VFCUploader";
+import { createVcfdata } from "@/src/graphql/mutations";
+import {
+  Select,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { SelectContent, SelectGroup } from "@radix-ui/react-select";
+import { Input } from "postcss";
+
+import { remove } from "aws-amplify/storage";
+import { deleteVcfdata } from "@/src/graphql/mutations";
+import { Amplify } from "aws-amplify";
+import VCFRawTable from "@/components/items/VCFRawTable";
 
 Amplify.configure(config);
 
@@ -56,15 +79,22 @@ const DataPatientPage = () => {
   const idPatient = useParams.get("idpatient");
 
   const [uploadModal, setUploadModal] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [files, setFiles] = useState<File[]>([]);
   const [date, setDate] = useState<Date>();
 
-  const [vcfID, setVCFID] = useState("");
+  const [vcfID, setVCFID] = useState(generateVCFDataID());
 
   const [vcfFiles, setVCFFiles] = useState<VcfData[]>([]);
   const [selectedReferencetType, setSelectedReferenceType] = useState("");
 
   const [patient, setPatient] = useState<CreatePatientInput>();
+
+  const [showModalVCFData, setShowModalVCFData] = useState(false);
+
+  const handleShowModalVCFData = () => {
+    setShowModalVCFData(!showModalVCFData);
+  };
 
   const obtainPatient = async () => {
     const onePatient = await client.graphql({
@@ -74,6 +104,34 @@ const DataPatientPage = () => {
     await setPatient(onePatient.data.getPatient as CreatePatientInput);
   };
   obtainPatient();
+
+  const listVCFData = async () => {
+    const getlist = await client.graphql({
+      query: listVcfdata,
+      variables: { filter: { id_patient: { eq: idPatient } } },
+    });
+    await setVCFFiles(getlist.data.listVcfdata.items as VcfData[]);
+  };
+  listVCFData();
+
+  const handleDeleteVCFData = async (vcfDataId: string, filePath: string) => {
+    try {
+      await remove({ path: filePath }).then(() => {
+        console.log("Delete File Successfully");
+      });
+
+      const deleteResult = client.graphql({
+        query: deleteVcfdata,
+        variables: { input: { id: vcfDataId } },
+      });
+
+      setVCFFiles((prevFiles) =>
+        prevFiles.filter((file) => file.id != vcfDataId)
+      );
+    } catch (error) {
+      console.log("Cannot Prosess this delete");
+    }
+  };
 
   // State for files
   const { getRootProps, getInputProps } = useDropzone({
@@ -92,7 +150,7 @@ const DataPatientPage = () => {
   const uploadFilesButton = async () => {
     console.log("Click Upload Button");
     setVCFID(generateVCFDataID());
-
+    setUploadProgress(0);
     try {
       const upload = await Promise.all(
         files.map(async (file) => {
@@ -103,34 +161,35 @@ const DataPatientPage = () => {
             options: {
               onProgress: ({ transferredBytes, totalBytes }) => {
                 if (totalBytes) {
-                  console.log(
-                    `Upload progress ${Math.round(
-                      (transferredBytes / totalBytes) * 100
-                    )} %`
+                  const tempPro = Math.round(
+                    (transferredBytes / totalBytes) * 100
                   );
+                  setUploadProgress(tempPro);
                 }
               },
             },
           }).result;
-          const urlFile = await getUrl({
-            path: filePath,
-            options: {
-              // ensure object exists before getting url
-              validateObjectExistence: false,
-              // url expiration time in seconds.
-              expiresIn: 30000,
-              // whether to use accelerate endpoint
-              useAccelerateEndpoint: false,
-            },
-          });
+
           const newVCFFile: VcfData = {
             id: vcfID,
             id_patient: idPatient,
             genome_reference: selectedReferencetType, // You'll need to add this to your state
-            sample_date: new Date().toLocaleDateString(),
+            sample_date: date?.toDateString() ?? "No Date Selected",
             uploadAt: getDateToday(), // Format the date as needed
-            public_link: urlFile.url.href,
+            pathfile: filePath,
           };
+
+          const saveData = async () => {
+            try {
+              const saveVCFData = await client.graphql({
+                query: createVcfdata,
+                variables: { input: newVCFFile },
+              });
+            } catch (error) {
+              console.log(error);
+            }
+          };
+          await saveData();
           setVCFFiles((vcfData) => [...vcfData, newVCFFile]);
         })
       );
@@ -156,6 +215,7 @@ const DataPatientPage = () => {
     } finally {
       setUploadModal(!uploadModal);
       setFiles([]);
+      setUploadProgress(0);
     }
   };
 
@@ -207,7 +267,11 @@ const DataPatientPage = () => {
         <Card className="border-none">
           <CardHeader>
             <CardTitle>Patient Variant Data</CardTitle>
-            <CardDescription></CardDescription>
+            <CardDescription className="text-gray-500 text-sm">
+              This table contains variant call data for each patient, including
+              genome reference, sample collection date, upload date, and
+              actions. Please ensure that the data is up-to-date and complete.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col w-full">
@@ -230,7 +294,6 @@ const DataPatientPage = () => {
                     <TableHead>Genome Reference</TableHead>
                     <TableHead>Sample Collection Date</TableHead>
                     <TableHead>Upload Date</TableHead>
-                    <TableHead>Download Link</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -241,20 +304,38 @@ const DataPatientPage = () => {
                       <TableCell>{file.genome_reference}</TableCell>
                       <TableCell>{file.sample_date}</TableCell>
                       <TableCell>{file.uploadAt}</TableCell>
-                      <TableCell>
-                        <Button variant={"ghost"}>Show Data</Button>
-                      </TableCell>
-                      <TableCell>
-                        <a
-                          href={file?.public_link ?? "#"}
-                          className="text-balance text-xs"
-                        >
-                          Link
-                        </a>
-                      </TableCell>
 
                       <TableCell>
-                        <Button>Delete</Button>
+                        <div className="flex flex-row items-center">
+                          <Button
+                            variant={"ghost"}
+                            className="flex"
+                            onClick={handleShowModalVCFData}
+                          >
+                            {/* <Icon className="w-4 h-4"></Icon> */}
+                            <small>
+                              <TableOfContents className="w-4 h-4"></TableOfContents>
+                            </small>
+                          </Button>
+
+                          <Separator
+                            orientation="vertical"
+                            className="h-8 w-px bg-gray-300"
+                          ></Separator>
+                          <Button
+                            variant={"ghost"}
+                            onClick={() =>
+                              handleDeleteVCFData(
+                                file.id ?? "",
+                                file.pathfile ?? ""
+                              )
+                            }
+                          >
+                            <small>
+                              <Trash2 className="h-4 w-4 text-red-700"></Trash2>
+                            </small>
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -263,8 +344,7 @@ const DataPatientPage = () => {
             </div>
           </CardContent>
         </Card>
-        <VCFUploader id_patient={patient?.id ?? ""}></VCFUploader>
-
+        {/* <VCFUploader id_patient={patient?.id ?? ""}></VCFUploader> */}
         {uploadModal && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65">
             <Card className="w-full max-w-screen-md p-5">
@@ -281,20 +361,43 @@ const DataPatientPage = () => {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col">
-                  <div className="flex flex-col  mb-5">
-                    <Label>Genome Reference</Label>
-                    <CardDescription className="mb-2">
-                      Please select the appropriate reference genome version for
+                  <div className="flex flex-col  mb-5 gap-3">
+                    <LabelAndDescription
+                      label="Genome Reference"
+                      desc="Please select the appropriate reference genome version for
                       your VCF file. Ensure that the selected version matches
                       the reference genome used during variant calling to avoid
-                      inconsistencies in analysis.
-                    </CardDescription>
-                    <select
+                      inconsistencies in analysis."
+                    ></LabelAndDescription>
+                    {/* <select
                       onChange={(e) => setSelectedReferenceType(e.target.value)}
                     >
+                      <option>Select</option>
                       <option>GrCH38</option>
                       <option>GrCH37</option>
-                    </select>
+                    </select> */}
+
+                    <Select
+                      onValueChange={(value) => setSelectedReferenceType(value)}
+                    >
+                      <SelectTrigger className="w-full border bg-white border-black">
+                        <SelectValue placeholder="Select the Genome Reference"></SelectValue>
+                      </SelectTrigger>
+                      <SelectContent className="p-4 mr-3 bg-white w-full border rounded-md">
+                        <SelectGroup className="w-full border-gray-300">
+                          <SelectLabel className="w-full">
+                            Genome Reference
+                          </SelectLabel>
+                          <Separator></Separator>
+                          <SelectItem className="w-full" value="GRCH38">
+                            GRCH38
+                          </SelectItem>
+                          <SelectItem className="w-full" value="GRCH37">
+                            GRCH37
+                          </SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className=" flex flex-col mb-2 gap-2 w-full">
                     <LabelAndDescription
@@ -331,6 +434,16 @@ const DataPatientPage = () => {
                     </div>
                   </div>
                   <Separator className="mt-5"></Separator>
+
+                  {uploadProgress > 0 && (
+                    <div className="w-full bg-gray-200 rounded-full h-4 mt-4">
+                      <div
+                        className="bg-blue-600 h-4 rounded-full"
+                        style={{ width: `${uploadProgress}%` }}
+                      ></div>
+                    </div>
+                  )}
+
                   <div className="mt-4 gap-3">
                     <LabelAndDescription
                       label="Upload VCF File"
@@ -369,6 +482,27 @@ const DataPatientPage = () => {
                 </div>
               </CardFooter>
             </Card>
+          </div>
+        )}
+        {showModalVCFData && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65">
+            <div className="bg-white rounded-lg shadow-lg p-5 w-[1000px] h-[700px] flex flex-col">
+              <div className="flex flex-row-reverse">
+                <Button
+                  variant="ghost"
+                  onClick={handleShowModalVCFData}
+                  className="bg-none hover:bg-none"
+                >
+                  <small>
+                    <SquareX className="w-6 h-6 text-gray-400"></SquareX>
+                  </small>
+                </Button>
+              </div>
+              {/* <VCFUploader id_patient="Sample Patient ID" /> */}
+              <VCFRawTable
+                filepath={vcfFiles.at(0)?.pathfile ?? ""}
+              ></VCFRawTable>
+            </div>
           </div>
         )}
       </div>

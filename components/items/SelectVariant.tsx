@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Variant } from "@/utils/object";
+import { Variant, VariantRawData, VcfData } from "@/utils/object";
 import {
   generateHGVS,
   extractZygosity,
@@ -16,11 +16,34 @@ import {
   fetchVariantDetails2,
 } from "@/utils/function";
 import { Button } from "../ui/button";
-import { Ellipsis, PlusCircle } from "lucide-react";
+import { Ellipsis, PlusCircle, TableOfContents } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { listVariants } from "@/src/graphql/queries";
+import { listVcfdata } from "@/src/graphql/queries";
+import LabelAndDescription from "./LabelAndDescription";
+import { downloadData } from "aws-amplify/storage";
+import { createSelectedVariant } from "@/src/graphql/mutations";
 
-const SelectVariant = () => {
+import { Select, SelectTrigger } from "../ui/select";
+import {
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectValue,
+} from "@radix-ui/react-select";
+
+import { generateClient } from "aws-amplify/api";
+import { CreateSelectedVariantInput, SelectedVariant } from "@/src/API";
+
+interface SelectVariantProops {
+  patientid: string | null;
+  id_report: string | null;
+}
+
+const SelectVariant: React.FC<SelectVariantProops> = ({
+  patientid,
+  id_report,
+}) => {
   const tempColumns = [
     { header: "Gene", width: "75px", dataKey: "gene_symbol" },
     { header: "Variant Detail", width: "120px", dataKey: "hgvs" },
@@ -39,6 +62,8 @@ const SelectVariant = () => {
     { header: "Action", width: "80px", dataKey: "action" },
   ];
 
+  const [vcfData, setVCFData] = useState<VcfData[]>([]);
+
   const [columns, setColumns] = useState(tempColumns);
   const [error, setError] = useState<string | null>(null);
   const [variantItem, setVariantList] = useState<Variant[]>([]);
@@ -50,107 +75,307 @@ const SelectVariant = () => {
   const [sortGlobalAlleleAsc, setSortGlobalAlleleAsc] = useState(false);
   // **Added state variable for Phenotypes filter**
   const [filterPhenotypes, setFilterPhenotypes] = useState("");
+  const client = generateClient();
 
-  const handleFileUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
+  const [selectedVariant, setSelectedVariant] = useState<Variant>();
 
-    // Reset state when a new file is uploaded
-    setColumns([]);
-    setVariantList([]);
+  const fetchVCFData = async () => {
+    try {
+      const result = await client.graphql({
+        query: listVcfdata,
+        variables: { filter: { id_patient: { eq: patientid } } },
+      });
+      setVCFData(result.data.listVcfdata.items as VcfData[]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchVCFData();
+  }, []);
+
+  const [selectedVCF, setSelectedVCF] = useState<VcfData | null>(null);
+
+  const [vcfContent, setVcfContent] = useState("");
+  // Handle VCF selection change
+  const handleVCFSelection = (vcfId: string) => {
+    // Find the selected VCF data based on the ID
+    const selected = vcfData.find((item) => item.id === vcfId);
+    setSelectedVCF(selected ?? null);
     setError(null);
+    readSelectedVCF();
+    // setVariantList([]); // Clear previous variant list
+    // setColumns(tempColumns); // Reset columns
+  };
+
+  const readSelectedVCF = async () => {
     setLoading(true);
+    try {
+      const downloadResult = await downloadData({
+        path: selectedVCF?.pathfile ?? "",
+      }).result;
 
-    if (file && file.name.endsWith(".vcf")) {
-      const reader = new FileReader();
+      if (!downloadResult || !downloadResult.body) {
+        throw new Error("Failed to download file from AWS.");
+      }
+      const blob = await downloadResult.body.blob();
+      const file = new File([blob], "downloaded.vcf", { type: blob.type });
 
-      reader.onload = async (e) => {
-        const vcfText = e.target?.result as string;
+      if (file && file.name.endsWith(".vcf")) {
+        const reader = new FileReader();
 
-        // If file is empty or unreadable, show error
-        if (!vcfText || vcfText.trim() === "") {
-          setError("The file appears to be empty or unreadable.");
-          setLoading(false);
-          return;
-        }
+        reader.onload = async (e) => {
+          const vcfText = e.target?.result as string;
 
-        const lines = vcfText.split("\n");
+          // Display the content of the file
+          console.log("VCF File Content:", vcfText);
 
-        const headerLine = lines.find((line: string) =>
-          line.startsWith("#CHROM")
-        );
-        if (headerLine) {
-          setColumns(tempColumns);
-        } else {
-          setError("Invalid VCF file: Missing header line (#CHROM)");
-          setLoading(false);
-          return;
-        }
+          // Handle empty or unreadable file
+          if (!vcfText || vcfText.trim() === "") {
+            setError("The file appears to be empty or unreadable.");
+            setLoading(false);
+            return;
+          }
 
-        const dataLines = lines.filter(
-          (line: string) => !line.startsWith("#") && line.trim() !== ""
-        );
+          // Store the content of the VCF file in state for display
+          setVcfContent(vcfText);
 
-        const parsedVariants = dataLines.map((line: string, index: number) => {
-          const fields = line.split("\t");
+          const lines = vcfText.split("\n");
+          const headerLine = lines.find((line: string) =>
+            line.startsWith("#CHROM")
+          );
 
-          const variant: Variant = {
-            id: `variant-${index}`,
-            id_patient: "",
-            id_vcf: "",
-            chrom: fields[0],
-            pos: fields[1],
-            id_var: fields[2],
-            ref: fields[3],
-            alt: fields[4],
-            qual: fields[5],
-            filter: fields[6],
-            info: fields[7],
-            hgvs: "",
-            variantReportID: "",
-            zygosity: extractZygosity(fields[7]),
-            globalallele: null, // Set to null to indicate loading state
-            functional_impact: "",
-            acmg: "",
-            clinicalSign: null, // Set to null to indicate loading state
-            gene_id: null,
-            gene_symbol: null,
-            severeconsequence: null,
-            sift_score: null,
-            sift_prediction: null,
-            phenotypes: null,
-            rsID: null,
-          };
-          variant.hgvs = generateHGVS(variant);
-          return variant;
-        });
+          if (!headerLine) {
+            setError("Invalid VCF file: Missing header line (#CHROM)");
+            setLoading(false);
+            return;
+          }
 
-        setVariantList(parsedVariants);
-        // Fetch additional details for each variant individually
-        parsedVariants.forEach((variant, index) => {
-          fetchVariantDetails2(variant).then((details) => {
-            setVariantList((prevVariants) => {
-              const newVariants = [...prevVariants];
-              newVariants[index] = { ...newVariants[index], ...details };
-              return newVariants;
+          const dataLines = lines.filter(
+            (line: string) => !line.startsWith("#") && line.trim() !== ""
+          );
+
+          const parsedVariants = dataLines.map(
+            (line: string, index: number) => {
+              const fields = line.split("\t");
+
+              const variant: Variant = {
+                id: `variant-${index}`,
+                id_patient: patientid ?? "",
+                id_vcf: selectedVCF?.id ?? "",
+                chrom: fields[0],
+                pos: fields[1],
+                id_var: fields[2],
+                ref: fields[3],
+                alt: fields[4],
+                qual: fields[5],
+                filter: fields[6],
+                info: fields[7],
+                hgvs: "",
+                variantReportID: id_report ?? "",
+                zygosity: extractZygosity(fields[7]),
+                globalallele: null, // Set to null to indicate loading state
+                functional_impact: "",
+                acmg: "",
+                clinicalSign: null, // Set to null to indicate loading state
+                gene_id: null,
+                gene_symbol: null,
+                severeconsequence: null,
+                sift_score: null,
+                sift_prediction: null,
+                phenotypes: null,
+                rsID: null,
+              };
+              variant.hgvs = generateHGVS(variant);
+              return variant;
+            }
+          );
+
+          setVariantList(parsedVariants);
+          parsedVariants.forEach((variant, index) => {
+            fetchVariantDetails2(variant).then((details) => {
+              setVariantList((prevVariants) => {
+                const newVariants = [...prevVariants];
+                newVariants[index] = { ...newVariants[index], ...details };
+                return newVariants;
+              });
             });
           });
-        });
-        setLoading(false); // Set loading to false after parsing the file
-      };
+          setLoading(false); // Set loading to false after parsing the file
+          // setLoading(false);
+        };
 
-      reader.onerror = () => {
-        setError("Error reading the file. Please try again.");
+        reader.onerror = () => {
+          setError("Error reading the file. Please try again.");
+          setLoading(false);
+        };
+
+        reader.readAsText(file);
+      } else {
+        setError("Please upload a valid .vcf file.");
         setLoading(false);
-      };
-
-      reader.readAsText(file);
-    } else {
-      setError("Please upload a valid .vcf file.");
+      }
+    } catch (error) {
+      setError(`Failed to download or parse the file: ${error}`);
       setLoading(false);
     }
   };
+
+  const handleAddSelectedVariant = async (idvar: string) => {
+    // Find the variant that matches the provided idvar
+    const variant = variantItem.find((varItem) => varItem.id === idvar);
+
+    // Check if variant is found before proceeding
+    if (!variant) {
+      console.error(`Variant with ID ${idvar} not found`);
+      return;
+    }
+
+    // Create the selected variant object based on the Variant object
+    // Create the selected variant object based on the Variant object
+    const selectedVarItem: CreateSelectedVariantInput = {
+      id: variant.id, // Generate or assign an ID if necessary
+      id_patient: variant.id_patient ?? "", // Use empty string if null or undefined
+      id_vcf: variant.id_vcf ?? "",
+      id_report: variant.variantReportID, // Set default empty string value
+      gene_id: variant.gene_id ?? "",
+      gene_symbol: variant.gene_symbol ?? "",
+      chrom: variant.chrom ?? "",
+      pos: variant.pos ?? "",
+      id_var: variant.id_var ?? "",
+      ref: variant.ref ?? "",
+      alt: variant.alt ?? "",
+      qual: variant.qual ?? "",
+      zigosity: variant.zygosity ?? "",
+      global_allele: variant.globalallele ?? 0, // Assuming 0 as a default for number fields
+      functional_impact: variant.functional_impact ?? "",
+      acmg: variant.acmg ?? "",
+      reviewer_class: "", // Default empty string value
+      clinical_sign: variant.clinicalSign ?? "",
+      hgvs: variant.hgvs ?? "",
+      severe_consequence: variant.severeconsequence ?? "",
+      sift_score: variant.sift_score ?? 0,
+      sift_prediction: variant.sift_prediction ?? "",
+      phenotypes: variant.phenotypes ?? "",
+      rsID: variant.rsID ?? "", // Default // Current timestamp as ISO string
+    };
+
+    const saveToAnalysisAndResult = async () => {
+      try {
+        const result = await client.graphql({
+          query: createSelectedVariant,
+          variables: { input: selectedVarItem },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    saveToAnalysisAndResult();
+
+    console.log("Selected Variant Item:", selectedVarItem);
+  };
+
+  // const handleFileUpload = async (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   const file = event.target.files?.[0];
+
+  //   // Reset state when a new file is uploaded
+  //   setColumns([]);
+  //   setVariantList([]);
+  //   setError(null);
+  //   setLoading(true);
+
+  //   if (file && file.name.endsWith(".vcf")) {
+  //     const reader = new FileReader();
+
+  //     reader.onload = async (e) => {
+  //       const vcfText = e.target?.result as string;
+
+  //       // If file is empty or unreadable, show error
+  //       if (!vcfText || vcfText.trim() === "") {
+  //         setError("The file appears to be empty or unreadable.");
+  //         setLoading(false);
+  //         return;
+  //       }
+
+  //       const lines = vcfText.split("\n");
+
+  //       const headerLine = lines.find((line: string) =>
+  //         line.startsWith("#CHROM")
+  //       );
+  //       if (headerLine) {
+  //         setColumns(tempColumns);
+  //       } else {
+  //         setError("Invalid VCF file: Missing header line (#CHROM)");
+  //         setLoading(false);
+  //         return;
+  //       }
+
+  //       const dataLines = lines.filter(
+  //         (line: string) => !line.startsWith("#") && line.trim() !== ""
+  //       );
+
+  //       const parsedVariants = dataLines.map((line: string, index: number) => {
+  //         const fields = line.split("\t");
+
+  //         const variant: Variant = {
+  //           id: `variant-${index}`,
+  //           id_patient: "",
+  //           id_vcf: "",
+  //           chrom: fields[0],
+  //           pos: fields[1],
+  //           id_var: fields[2],
+  //           ref: fields[3],
+  //           alt: fields[4],
+  //           qual: fields[5],
+  //           filter: fields[6],
+  //           info: fields[7],
+  //           hgvs: "",
+  //           variantReportID: "",
+  //           zygosity: extractZygosity(fields[7]),
+  //           globalallele: null, // Set to null to indicate loading state
+  //           functional_impact: "",
+  //           acmg: "",
+  //           clinicalSign: null, // Set to null to indicate loading state
+  //           gene_id: null,
+  //           gene_symbol: null,
+  //           severeconsequence: null,
+  //           sift_score: null,
+  //           sift_prediction: null,
+  //           phenotypes: null,
+  //           rsID: null,
+  //         };
+  //         variant.hgvs = generateHGVS(variant);
+  //         return variant;
+  //       });
+
+  //       setVariantList(parsedVariants);
+  //       // Fetch additional details for each variant individually
+  //       parsedVariants.forEach((variant, index) => {
+  //         fetchVariantDetails2(variant).then((details) => {
+  //           setVariantList((prevVariants) => {
+  //             const newVariants = [...prevVariants];
+  //             newVariants[index] = { ...newVariants[index], ...details };
+  //             return newVariants;
+  //           });
+  //         });
+  //       });
+  //       setLoading(false); // Set loading to false after parsing the file
+  //     };
+
+  //     reader.onerror = () => {
+  //       setError("Error reading the file. Please try again.");
+  //       setLoading(false);
+  //     };
+
+  //     reader.readAsText(file);
+  //   } else {
+  //     setError("Please upload a valid .vcf file.");
+  //     setLoading(false);
+  //   }
+  // };
 
   // Function to render cell content based on dataKey
   const renderCellContent = (item: Variant, dataKey: string) => {
@@ -212,9 +437,13 @@ const SelectVariant = () => {
         return (
           <div className="flex flex-row">
             <Button variant={"ghost"}>
-              <Ellipsis className="w-4 h-4 text-gray-600" />
+              <TableOfContents className="w-4 h-4 text-gray-600" />
             </Button>
-            <Button variant={"ghost"}>
+            <Button
+              onClick={(e) => handleAddSelectedVariant(item.id)}
+              variant={"ghost"}
+              className="hover:text-green-400"
+            >
               <PlusCircle className="w-4 h-4 text-gray-600" />
             </Button>
           </div>
@@ -226,13 +455,29 @@ const SelectVariant = () => {
 
   return (
     <div className="flex flex-col">
-      <h1 className="text-xl font-bold mb-4">VCF File Uploader</h1>
+      <div className="flex flex-col w-full border rounded-md py-4 px-5 gap-4">
+        <LabelAndDescription
+          label="Choose Variant Data"
+          desc="Select the Variant Call Files"
+        ></LabelAndDescription>
+        <select
+          onChange={(e) => handleVCFSelection(e.target.value)}
+          className="h-[70px] p-3 border rounded-md"
+        >
+          {vcfData.map((item, index) => (
+            <option key={index} value={`${item.id}`}>
+              {item.id}
+            </option>
+          ))}
+        </select>
+      </div>
+      {/* <h1 className="text-xl font-bold mb-4">VCF File Uploader</h1>
       <input
         type="file"
         accept=".vcf"
         onChange={handleFileUpload}
         className="mb-4"
-      />
+      /> */}
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 

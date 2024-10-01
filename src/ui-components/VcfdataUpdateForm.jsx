@@ -28,7 +28,7 @@ export default function VcfdataUpdateForm(props) {
     id_patient: "",
     sample_date: "",
     uploadAt: "",
-    public_link: "",
+    pathfile: "",
     genome_reference: "",
   };
   const [id_patient, setId_patient] = React.useState(initialValues.id_patient);
@@ -36,9 +36,7 @@ export default function VcfdataUpdateForm(props) {
     initialValues.sample_date
   );
   const [uploadAt, setUploadAt] = React.useState(initialValues.uploadAt);
-  const [public_link, setPublic_link] = React.useState(
-    initialValues.public_link
-  );
+  const [pathfile, setPathfile] = React.useState(initialValues.pathfile);
   const [genome_reference, setGenome_reference] = React.useState(
     initialValues.genome_reference
   );
@@ -50,7 +48,7 @@ export default function VcfdataUpdateForm(props) {
     setId_patient(cleanValues.id_patient);
     setSample_date(cleanValues.sample_date);
     setUploadAt(cleanValues.uploadAt);
-    setPublic_link(cleanValues.public_link);
+    setPathfile(cleanValues.pathfile);
     setGenome_reference(cleanValues.genome_reference);
     setErrors({});
   };
@@ -74,7 +72,7 @@ export default function VcfdataUpdateForm(props) {
     id_patient: [],
     sample_date: [],
     uploadAt: [],
-    public_link: [],
+    pathfile: [],
     genome_reference: [],
   };
   const runValidationTasks = async (
@@ -106,7 +104,7 @@ export default function VcfdataUpdateForm(props) {
           id_patient: id_patient ?? null,
           sample_date: sample_date ?? null,
           uploadAt: uploadAt ?? null,
-          public_link: public_link ?? null,
+          pathfile: pathfile ?? null,
           genome_reference: genome_reference ?? null,
         };
         const validationResponses = await Promise.all(
@@ -171,7 +169,7 @@ export default function VcfdataUpdateForm(props) {
               id_patient: value,
               sample_date,
               uploadAt,
-              public_link,
+              pathfile,
               genome_reference,
             };
             const result = onChange(modelFields);
@@ -199,7 +197,7 @@ export default function VcfdataUpdateForm(props) {
               id_patient,
               sample_date: value,
               uploadAt,
-              public_link,
+              pathfile,
               genome_reference,
             };
             const result = onChange(modelFields);
@@ -227,7 +225,7 @@ export default function VcfdataUpdateForm(props) {
               id_patient,
               sample_date,
               uploadAt: value,
-              public_link,
+              pathfile,
               genome_reference,
             };
             const result = onChange(modelFields);
@@ -244,10 +242,10 @@ export default function VcfdataUpdateForm(props) {
         {...getOverrideProps(overrides, "uploadAt")}
       ></TextField>
       <TextField
-        label="Public link"
+        label="Pathfile"
         isRequired={false}
         isReadOnly={false}
-        value={public_link}
+        value={pathfile}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -255,21 +253,21 @@ export default function VcfdataUpdateForm(props) {
               id_patient,
               sample_date,
               uploadAt,
-              public_link: value,
+              pathfile: value,
               genome_reference,
             };
             const result = onChange(modelFields);
-            value = result?.public_link ?? value;
+            value = result?.pathfile ?? value;
           }
-          if (errors.public_link?.hasError) {
-            runValidationTasks("public_link", value);
+          if (errors.pathfile?.hasError) {
+            runValidationTasks("pathfile", value);
           }
-          setPublic_link(value);
+          setPathfile(value);
         }}
-        onBlur={() => runValidationTasks("public_link", public_link)}
-        errorMessage={errors.public_link?.errorMessage}
-        hasError={errors.public_link?.hasError}
-        {...getOverrideProps(overrides, "public_link")}
+        onBlur={() => runValidationTasks("pathfile", pathfile)}
+        errorMessage={errors.pathfile?.errorMessage}
+        hasError={errors.pathfile?.hasError}
+        {...getOverrideProps(overrides, "pathfile")}
       ></TextField>
       <TextField
         label="Genome reference"
@@ -283,7 +281,7 @@ export default function VcfdataUpdateForm(props) {
               id_patient,
               sample_date,
               uploadAt,
-              public_link,
+              pathfile,
               genome_reference: value,
             };
             const result = onChange(modelFields);

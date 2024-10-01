@@ -2,24 +2,60 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateVcfdataInput = {
+export type CreateSelectedVariantInput = {
   id?: string | null,
   id_patient?: string | null,
-  sample_date?: string | null,
-  uploadAt?: string | null,
-  public_link?: string | null,
-  genome_reference?: string | null,
+  id_vcf?: string | null,
+  id_report?: string | null,
+  gene_id?: string | null,
+  gene_symbol?: string | null,
+  chrom?: string | null,
+  pos?: string | null,
+  id_var?: string | null,
+  ref?: string | null,
+  alt?: string | null,
+  qual?: string | null,
+  zigosity?: string | null,
+  global_allele?: number | null,
+  functional_impact?: string | null,
+  acmg?: string | null,
+  reviewer_class?: string | null,
+  clinical_sign?: string | null,
+  hgvs?: string | null,
+  severe_consequence?: string | null,
+  sift_score?: number | null,
+  sift_prediction?: string | null,
+  phenotypes?: string | null,
+  rsID?: string | null,
 };
 
-export type ModelVcfdataConditionInput = {
+export type ModelSelectedVariantConditionInput = {
   id_patient?: ModelStringInput | null,
-  sample_date?: ModelStringInput | null,
-  uploadAt?: ModelStringInput | null,
-  public_link?: ModelStringInput | null,
-  genome_reference?: ModelStringInput | null,
-  and?: Array< ModelVcfdataConditionInput | null > | null,
-  or?: Array< ModelVcfdataConditionInput | null > | null,
-  not?: ModelVcfdataConditionInput | null,
+  id_vcf?: ModelStringInput | null,
+  id_report?: ModelStringInput | null,
+  gene_id?: ModelStringInput | null,
+  gene_symbol?: ModelStringInput | null,
+  chrom?: ModelStringInput | null,
+  pos?: ModelStringInput | null,
+  id_var?: ModelStringInput | null,
+  ref?: ModelStringInput | null,
+  alt?: ModelStringInput | null,
+  qual?: ModelStringInput | null,
+  zigosity?: ModelStringInput | null,
+  global_allele?: ModelFloatInput | null,
+  functional_impact?: ModelStringInput | null,
+  acmg?: ModelStringInput | null,
+  reviewer_class?: ModelStringInput | null,
+  clinical_sign?: ModelStringInput | null,
+  hgvs?: ModelStringInput | null,
+  severe_consequence?: ModelStringInput | null,
+  sift_score?: ModelFloatInput | null,
+  sift_prediction?: ModelStringInput | null,
+  phenotypes?: ModelStringInput | null,
+  rsID?: ModelStringInput | null,
+  and?: Array< ModelSelectedVariantConditionInput | null > | null,
+  or?: Array< ModelSelectedVariantConditionInput | null > | null,
+  not?: ModelSelectedVariantConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
 };
@@ -64,13 +100,108 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
+export type ModelFloatInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
+export type SelectedVariant = {
+  __typename: "SelectedVariant",
+  id: string,
+  id_patient?: string | null,
+  id_vcf?: string | null,
+  id_report?: string | null,
+  gene_id?: string | null,
+  gene_symbol?: string | null,
+  chrom?: string | null,
+  pos?: string | null,
+  id_var?: string | null,
+  ref?: string | null,
+  alt?: string | null,
+  qual?: string | null,
+  zigosity?: string | null,
+  global_allele?: number | null,
+  functional_impact?: string | null,
+  acmg?: string | null,
+  reviewer_class?: string | null,
+  clinical_sign?: string | null,
+  hgvs?: string | null,
+  severe_consequence?: string | null,
+  sift_score?: number | null,
+  sift_prediction?: string | null,
+  phenotypes?: string | null,
+  rsID?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateSelectedVariantInput = {
+  id: string,
+  id_patient?: string | null,
+  id_vcf?: string | null,
+  id_report?: string | null,
+  gene_id?: string | null,
+  gene_symbol?: string | null,
+  chrom?: string | null,
+  pos?: string | null,
+  id_var?: string | null,
+  ref?: string | null,
+  alt?: string | null,
+  qual?: string | null,
+  zigosity?: string | null,
+  global_allele?: number | null,
+  functional_impact?: string | null,
+  acmg?: string | null,
+  reviewer_class?: string | null,
+  clinical_sign?: string | null,
+  hgvs?: string | null,
+  severe_consequence?: string | null,
+  sift_score?: number | null,
+  sift_prediction?: string | null,
+  phenotypes?: string | null,
+  rsID?: string | null,
+};
+
+export type DeleteSelectedVariantInput = {
+  id: string,
+};
+
+export type CreateVcfdataInput = {
+  id?: string | null,
+  id_patient?: string | null,
+  sample_date?: string | null,
+  uploadAt?: string | null,
+  pathfile?: string | null,
+  genome_reference?: string | null,
+};
+
+export type ModelVcfdataConditionInput = {
+  id_patient?: ModelStringInput | null,
+  sample_date?: ModelStringInput | null,
+  uploadAt?: ModelStringInput | null,
+  pathfile?: ModelStringInput | null,
+  genome_reference?: ModelStringInput | null,
+  and?: Array< ModelVcfdataConditionInput | null > | null,
+  or?: Array< ModelVcfdataConditionInput | null > | null,
+  not?: ModelVcfdataConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
 export type Vcfdata = {
   __typename: "Vcfdata",
   id: string,
   id_patient?: string | null,
   sample_date?: string | null,
   uploadAt?: string | null,
-  public_link?: string | null,
+  pathfile?: string | null,
   genome_reference?: string | null,
   createdAt: string,
   updatedAt: string,
@@ -81,7 +212,7 @@ export type UpdateVcfdataInput = {
   id_patient?: string | null,
   sample_date?: string | null,
   uploadAt?: string | null,
-  public_link?: string | null,
+  pathfile?: string | null,
   genome_reference?: string | null,
 };
 
@@ -592,18 +723,6 @@ export type ModelInstitutionConditionInput = {
   updatedAt?: ModelStringInput | null,
 };
 
-export type ModelFloatInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-};
-
 export type Institution = {
   __typename: "Institution",
   id: string,
@@ -654,12 +773,50 @@ export type DeleteInstitutionInput = {
   id: string,
 };
 
+export type ModelSelectedVariantFilterInput = {
+  id?: ModelIDInput | null,
+  id_patient?: ModelStringInput | null,
+  id_vcf?: ModelStringInput | null,
+  id_report?: ModelStringInput | null,
+  gene_id?: ModelStringInput | null,
+  gene_symbol?: ModelStringInput | null,
+  chrom?: ModelStringInput | null,
+  pos?: ModelStringInput | null,
+  id_var?: ModelStringInput | null,
+  ref?: ModelStringInput | null,
+  alt?: ModelStringInput | null,
+  qual?: ModelStringInput | null,
+  zigosity?: ModelStringInput | null,
+  global_allele?: ModelFloatInput | null,
+  functional_impact?: ModelStringInput | null,
+  acmg?: ModelStringInput | null,
+  reviewer_class?: ModelStringInput | null,
+  clinical_sign?: ModelStringInput | null,
+  hgvs?: ModelStringInput | null,
+  severe_consequence?: ModelStringInput | null,
+  sift_score?: ModelFloatInput | null,
+  sift_prediction?: ModelStringInput | null,
+  phenotypes?: ModelStringInput | null,
+  rsID?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelSelectedVariantFilterInput | null > | null,
+  or?: Array< ModelSelectedVariantFilterInput | null > | null,
+  not?: ModelSelectedVariantFilterInput | null,
+};
+
+export type ModelSelectedVariantConnection = {
+  __typename: "ModelSelectedVariantConnection",
+  items:  Array<SelectedVariant | null >,
+  nextToken?: string | null,
+};
+
 export type ModelVcfdataFilterInput = {
   id?: ModelIDInput | null,
   id_patient?: ModelStringInput | null,
   sample_date?: ModelStringInput | null,
   uploadAt?: ModelStringInput | null,
-  public_link?: ModelStringInput | null,
+  pathfile?: ModelStringInput | null,
   genome_reference?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
@@ -870,17 +1027,35 @@ export type ModelInstitutionConnection = {
   nextToken?: string | null,
 };
 
-export type ModelSubscriptionVcfdataFilterInput = {
+export type ModelSubscriptionSelectedVariantFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   id_patient?: ModelSubscriptionStringInput | null,
-  sample_date?: ModelSubscriptionStringInput | null,
-  uploadAt?: ModelSubscriptionStringInput | null,
-  public_link?: ModelSubscriptionStringInput | null,
-  genome_reference?: ModelSubscriptionStringInput | null,
+  id_vcf?: ModelSubscriptionStringInput | null,
+  id_report?: ModelSubscriptionStringInput | null,
+  gene_id?: ModelSubscriptionStringInput | null,
+  gene_symbol?: ModelSubscriptionStringInput | null,
+  chrom?: ModelSubscriptionStringInput | null,
+  pos?: ModelSubscriptionStringInput | null,
+  id_var?: ModelSubscriptionStringInput | null,
+  ref?: ModelSubscriptionStringInput | null,
+  alt?: ModelSubscriptionStringInput | null,
+  qual?: ModelSubscriptionStringInput | null,
+  zigosity?: ModelSubscriptionStringInput | null,
+  global_allele?: ModelSubscriptionFloatInput | null,
+  functional_impact?: ModelSubscriptionStringInput | null,
+  acmg?: ModelSubscriptionStringInput | null,
+  reviewer_class?: ModelSubscriptionStringInput | null,
+  clinical_sign?: ModelSubscriptionStringInput | null,
+  hgvs?: ModelSubscriptionStringInput | null,
+  severe_consequence?: ModelSubscriptionStringInput | null,
+  sift_score?: ModelSubscriptionFloatInput | null,
+  sift_prediction?: ModelSubscriptionStringInput | null,
+  phenotypes?: ModelSubscriptionStringInput | null,
+  rsID?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionVcfdataFilterInput | null > | null,
-  or?: Array< ModelSubscriptionVcfdataFilterInput | null > | null,
+  and?: Array< ModelSubscriptionSelectedVariantFilterInput | null > | null,
+  or?: Array< ModelSubscriptionSelectedVariantFilterInput | null > | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -911,6 +1086,31 @@ export type ModelSubscriptionStringInput = {
   beginsWith?: string | null,
   in?: Array< string | null > | null,
   notIn?: Array< string | null > | null,
+};
+
+export type ModelSubscriptionFloatInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  in?: Array< number | null > | null,
+  notIn?: Array< number | null > | null,
+};
+
+export type ModelSubscriptionVcfdataFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  id_patient?: ModelSubscriptionStringInput | null,
+  sample_date?: ModelSubscriptionStringInput | null,
+  uploadAt?: ModelSubscriptionStringInput | null,
+  pathfile?: ModelSubscriptionStringInput | null,
+  genome_reference?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionVcfdataFilterInput | null > | null,
+  or?: Array< ModelSubscriptionVcfdataFilterInput | null > | null,
 };
 
 export type ModelSubscriptionVariantFilterInput = {
@@ -1068,16 +1268,115 @@ export type ModelSubscriptionInstitutionFilterInput = {
   or?: Array< ModelSubscriptionInstitutionFilterInput | null > | null,
 };
 
-export type ModelSubscriptionFloatInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  in?: Array< number | null > | null,
-  notIn?: Array< number | null > | null,
+export type CreateSelectedVariantMutationVariables = {
+  input: CreateSelectedVariantInput,
+  condition?: ModelSelectedVariantConditionInput | null,
+};
+
+export type CreateSelectedVariantMutation = {
+  createSelectedVariant?:  {
+    __typename: "SelectedVariant",
+    id: string,
+    id_patient?: string | null,
+    id_vcf?: string | null,
+    id_report?: string | null,
+    gene_id?: string | null,
+    gene_symbol?: string | null,
+    chrom?: string | null,
+    pos?: string | null,
+    id_var?: string | null,
+    ref?: string | null,
+    alt?: string | null,
+    qual?: string | null,
+    zigosity?: string | null,
+    global_allele?: number | null,
+    functional_impact?: string | null,
+    acmg?: string | null,
+    reviewer_class?: string | null,
+    clinical_sign?: string | null,
+    hgvs?: string | null,
+    severe_consequence?: string | null,
+    sift_score?: number | null,
+    sift_prediction?: string | null,
+    phenotypes?: string | null,
+    rsID?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateSelectedVariantMutationVariables = {
+  input: UpdateSelectedVariantInput,
+  condition?: ModelSelectedVariantConditionInput | null,
+};
+
+export type UpdateSelectedVariantMutation = {
+  updateSelectedVariant?:  {
+    __typename: "SelectedVariant",
+    id: string,
+    id_patient?: string | null,
+    id_vcf?: string | null,
+    id_report?: string | null,
+    gene_id?: string | null,
+    gene_symbol?: string | null,
+    chrom?: string | null,
+    pos?: string | null,
+    id_var?: string | null,
+    ref?: string | null,
+    alt?: string | null,
+    qual?: string | null,
+    zigosity?: string | null,
+    global_allele?: number | null,
+    functional_impact?: string | null,
+    acmg?: string | null,
+    reviewer_class?: string | null,
+    clinical_sign?: string | null,
+    hgvs?: string | null,
+    severe_consequence?: string | null,
+    sift_score?: number | null,
+    sift_prediction?: string | null,
+    phenotypes?: string | null,
+    rsID?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteSelectedVariantMutationVariables = {
+  input: DeleteSelectedVariantInput,
+  condition?: ModelSelectedVariantConditionInput | null,
+};
+
+export type DeleteSelectedVariantMutation = {
+  deleteSelectedVariant?:  {
+    __typename: "SelectedVariant",
+    id: string,
+    id_patient?: string | null,
+    id_vcf?: string | null,
+    id_report?: string | null,
+    gene_id?: string | null,
+    gene_symbol?: string | null,
+    chrom?: string | null,
+    pos?: string | null,
+    id_var?: string | null,
+    ref?: string | null,
+    alt?: string | null,
+    qual?: string | null,
+    zigosity?: string | null,
+    global_allele?: number | null,
+    functional_impact?: string | null,
+    acmg?: string | null,
+    reviewer_class?: string | null,
+    clinical_sign?: string | null,
+    hgvs?: string | null,
+    severe_consequence?: string | null,
+    sift_score?: number | null,
+    sift_prediction?: string | null,
+    phenotypes?: string | null,
+    rsID?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
 };
 
 export type CreateVcfdataMutationVariables = {
@@ -1092,7 +1391,7 @@ export type CreateVcfdataMutation = {
     id_patient?: string | null,
     sample_date?: string | null,
     uploadAt?: string | null,
-    public_link?: string | null,
+    pathfile?: string | null,
     genome_reference?: string | null,
     createdAt: string,
     updatedAt: string,
@@ -1111,7 +1410,7 @@ export type UpdateVcfdataMutation = {
     id_patient?: string | null,
     sample_date?: string | null,
     uploadAt?: string | null,
-    public_link?: string | null,
+    pathfile?: string | null,
     genome_reference?: string | null,
     createdAt: string,
     updatedAt: string,
@@ -1130,7 +1429,7 @@ export type DeleteVcfdataMutation = {
     id_patient?: string | null,
     sample_date?: string | null,
     uploadAt?: string | null,
-    public_link?: string | null,
+    pathfile?: string | null,
     genome_reference?: string | null,
     createdAt: string,
     updatedAt: string,
@@ -1779,6 +2078,84 @@ export type DeleteInstitutionMutation = {
   } | null,
 };
 
+export type GetSelectedVariantQueryVariables = {
+  id: string,
+};
+
+export type GetSelectedVariantQuery = {
+  getSelectedVariant?:  {
+    __typename: "SelectedVariant",
+    id: string,
+    id_patient?: string | null,
+    id_vcf?: string | null,
+    id_report?: string | null,
+    gene_id?: string | null,
+    gene_symbol?: string | null,
+    chrom?: string | null,
+    pos?: string | null,
+    id_var?: string | null,
+    ref?: string | null,
+    alt?: string | null,
+    qual?: string | null,
+    zigosity?: string | null,
+    global_allele?: number | null,
+    functional_impact?: string | null,
+    acmg?: string | null,
+    reviewer_class?: string | null,
+    clinical_sign?: string | null,
+    hgvs?: string | null,
+    severe_consequence?: string | null,
+    sift_score?: number | null,
+    sift_prediction?: string | null,
+    phenotypes?: string | null,
+    rsID?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListSelectedVariantsQueryVariables = {
+  filter?: ModelSelectedVariantFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListSelectedVariantsQuery = {
+  listSelectedVariants?:  {
+    __typename: "ModelSelectedVariantConnection",
+    items:  Array< {
+      __typename: "SelectedVariant",
+      id: string,
+      id_patient?: string | null,
+      id_vcf?: string | null,
+      id_report?: string | null,
+      gene_id?: string | null,
+      gene_symbol?: string | null,
+      chrom?: string | null,
+      pos?: string | null,
+      id_var?: string | null,
+      ref?: string | null,
+      alt?: string | null,
+      qual?: string | null,
+      zigosity?: string | null,
+      global_allele?: number | null,
+      functional_impact?: string | null,
+      acmg?: string | null,
+      reviewer_class?: string | null,
+      clinical_sign?: string | null,
+      hgvs?: string | null,
+      severe_consequence?: string | null,
+      sift_score?: number | null,
+      sift_prediction?: string | null,
+      phenotypes?: string | null,
+      rsID?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetVcfdataQueryVariables = {
   id: string,
 };
@@ -1790,7 +2167,7 @@ export type GetVcfdataQuery = {
     id_patient?: string | null,
     sample_date?: string | null,
     uploadAt?: string | null,
-    public_link?: string | null,
+    pathfile?: string | null,
     genome_reference?: string | null,
     createdAt: string,
     updatedAt: string,
@@ -1812,7 +2189,7 @@ export type ListVcfdataQuery = {
       id_patient?: string | null,
       sample_date?: string | null,
       uploadAt?: string | null,
-      public_link?: string | null,
+      pathfile?: string | null,
       genome_reference?: string | null,
       createdAt: string,
       updatedAt: string,
@@ -2273,6 +2650,114 @@ export type ListInstitutionsQuery = {
   } | null,
 };
 
+export type OnCreateSelectedVariantSubscriptionVariables = {
+  filter?: ModelSubscriptionSelectedVariantFilterInput | null,
+};
+
+export type OnCreateSelectedVariantSubscription = {
+  onCreateSelectedVariant?:  {
+    __typename: "SelectedVariant",
+    id: string,
+    id_patient?: string | null,
+    id_vcf?: string | null,
+    id_report?: string | null,
+    gene_id?: string | null,
+    gene_symbol?: string | null,
+    chrom?: string | null,
+    pos?: string | null,
+    id_var?: string | null,
+    ref?: string | null,
+    alt?: string | null,
+    qual?: string | null,
+    zigosity?: string | null,
+    global_allele?: number | null,
+    functional_impact?: string | null,
+    acmg?: string | null,
+    reviewer_class?: string | null,
+    clinical_sign?: string | null,
+    hgvs?: string | null,
+    severe_consequence?: string | null,
+    sift_score?: number | null,
+    sift_prediction?: string | null,
+    phenotypes?: string | null,
+    rsID?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateSelectedVariantSubscriptionVariables = {
+  filter?: ModelSubscriptionSelectedVariantFilterInput | null,
+};
+
+export type OnUpdateSelectedVariantSubscription = {
+  onUpdateSelectedVariant?:  {
+    __typename: "SelectedVariant",
+    id: string,
+    id_patient?: string | null,
+    id_vcf?: string | null,
+    id_report?: string | null,
+    gene_id?: string | null,
+    gene_symbol?: string | null,
+    chrom?: string | null,
+    pos?: string | null,
+    id_var?: string | null,
+    ref?: string | null,
+    alt?: string | null,
+    qual?: string | null,
+    zigosity?: string | null,
+    global_allele?: number | null,
+    functional_impact?: string | null,
+    acmg?: string | null,
+    reviewer_class?: string | null,
+    clinical_sign?: string | null,
+    hgvs?: string | null,
+    severe_consequence?: string | null,
+    sift_score?: number | null,
+    sift_prediction?: string | null,
+    phenotypes?: string | null,
+    rsID?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteSelectedVariantSubscriptionVariables = {
+  filter?: ModelSubscriptionSelectedVariantFilterInput | null,
+};
+
+export type OnDeleteSelectedVariantSubscription = {
+  onDeleteSelectedVariant?:  {
+    __typename: "SelectedVariant",
+    id: string,
+    id_patient?: string | null,
+    id_vcf?: string | null,
+    id_report?: string | null,
+    gene_id?: string | null,
+    gene_symbol?: string | null,
+    chrom?: string | null,
+    pos?: string | null,
+    id_var?: string | null,
+    ref?: string | null,
+    alt?: string | null,
+    qual?: string | null,
+    zigosity?: string | null,
+    global_allele?: number | null,
+    functional_impact?: string | null,
+    acmg?: string | null,
+    reviewer_class?: string | null,
+    clinical_sign?: string | null,
+    hgvs?: string | null,
+    severe_consequence?: string | null,
+    sift_score?: number | null,
+    sift_prediction?: string | null,
+    phenotypes?: string | null,
+    rsID?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnCreateVcfdataSubscriptionVariables = {
   filter?: ModelSubscriptionVcfdataFilterInput | null,
 };
@@ -2284,7 +2769,7 @@ export type OnCreateVcfdataSubscription = {
     id_patient?: string | null,
     sample_date?: string | null,
     uploadAt?: string | null,
-    public_link?: string | null,
+    pathfile?: string | null,
     genome_reference?: string | null,
     createdAt: string,
     updatedAt: string,
@@ -2302,7 +2787,7 @@ export type OnUpdateVcfdataSubscription = {
     id_patient?: string | null,
     sample_date?: string | null,
     uploadAt?: string | null,
-    public_link?: string | null,
+    pathfile?: string | null,
     genome_reference?: string | null,
     createdAt: string,
     updatedAt: string,
@@ -2320,7 +2805,7 @@ export type OnDeleteVcfdataSubscription = {
     id_patient?: string | null,
     sample_date?: string | null,
     uploadAt?: string | null,
-    public_link?: string | null,
+    pathfile?: string | null,
     genome_reference?: string | null,
     createdAt: string,
     updatedAt: string,

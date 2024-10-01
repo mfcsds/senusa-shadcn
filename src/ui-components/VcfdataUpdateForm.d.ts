@@ -26,14 +26,14 @@ export declare type VcfdataUpdateFormInputValues = {
     id_patient?: string;
     sample_date?: string;
     uploadAt?: string;
-    public_link?: string;
+    pathfile?: string;
     genome_reference?: string;
 };
 export declare type VcfdataUpdateFormValidationValues = {
     id_patient?: ValidationFunction<string>;
     sample_date?: ValidationFunction<string>;
     uploadAt?: ValidationFunction<string>;
-    public_link?: ValidationFunction<string>;
+    pathfile?: ValidationFunction<string>;
     genome_reference?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
@@ -42,7 +42,7 @@ export declare type VcfdataUpdateFormOverridesProps = {
     id_patient?: PrimitiveOverrideProps<TextFieldProps>;
     sample_date?: PrimitiveOverrideProps<TextFieldProps>;
     uploadAt?: PrimitiveOverrideProps<TextFieldProps>;
-    public_link?: PrimitiveOverrideProps<TextFieldProps>;
+    pathfile?: PrimitiveOverrideProps<TextFieldProps>;
     genome_reference?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type VcfdataUpdateFormProps = React.PropsWithChildren<{

@@ -8,13 +8,91 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getSelectedVariant = /* GraphQL */ `query GetSelectedVariant($id: ID!) {
+  getSelectedVariant(id: $id) {
+    id
+    id_patient
+    id_vcf
+    id_report
+    gene_id
+    gene_symbol
+    chrom
+    pos
+    id_var
+    ref
+    alt
+    qual
+    zigosity
+    global_allele
+    functional_impact
+    acmg
+    reviewer_class
+    clinical_sign
+    hgvs
+    severe_consequence
+    sift_score
+    sift_prediction
+    phenotypes
+    rsID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetSelectedVariantQueryVariables,
+  APITypes.GetSelectedVariantQuery
+>;
+export const listSelectedVariants = /* GraphQL */ `query ListSelectedVariants(
+  $filter: ModelSelectedVariantFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listSelectedVariants(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      id_patient
+      id_vcf
+      id_report
+      gene_id
+      gene_symbol
+      chrom
+      pos
+      id_var
+      ref
+      alt
+      qual
+      zigosity
+      global_allele
+      functional_impact
+      acmg
+      reviewer_class
+      clinical_sign
+      hgvs
+      severe_consequence
+      sift_score
+      sift_prediction
+      phenotypes
+      rsID
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListSelectedVariantsQueryVariables,
+  APITypes.ListSelectedVariantsQuery
+>;
 export const getVcfdata = /* GraphQL */ `query GetVcfdata($id: ID!) {
   getVcfdata(id: $id) {
     id
     id_patient
     sample_date
     uploadAt
-    public_link
+    pathfile
     genome_reference
     createdAt
     updatedAt
@@ -36,7 +114,7 @@ export const listVcfdata = /* GraphQL */ `query ListVcfdata(
       id_patient
       sample_date
       uploadAt
-      public_link
+      pathfile
       genome_reference
       createdAt
       updatedAt

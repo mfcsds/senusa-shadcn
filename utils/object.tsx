@@ -100,6 +100,45 @@ export interface VcfData {
   id_patient: string | null;
   sample_date: string | null;
   uploadAt: string | null;
-  public_link: string | null;
+  pathfile: string | null;
   genome_reference: string | null;
+}
+
+export interface VariantRawData {
+  chrom: string | null;
+  pos: string | null;
+  id: string | null;
+  ref: string | null;
+  alt: string | null;
+  qual: string | null;
+  info: string | null;
+  filter: string | null;
+}
+
+// TypeScript Interface for SelectedVariant
+interface SelectedVariant {
+  id: string; // ID type is represented as string in TypeScript
+  id_patient: string | null; // Nullable String field
+  id_vcf: string | null;
+  id_report: string | null;
+  gene_id: string | null;
+  gene_symbol: string | null;
+  chrom: string | null;
+  pos: string | null;
+  id_var: string | null;
+  ref: string | null;
+  alt: string | null;
+  qual: string | null;
+  zigosity: string | null;
+  global_allele: number | null; // Float type in TypeScript is represented as number
+  functional_impact: string | null;
+  acmg: string | null;
+  reviewer_class: string | null;
+  clinical_sign: string | null;
+  hgvs: string | null;
+  severe_consequence: string | null;
+  sift_score: string | null;
+  sift_prediction: string | null;
+  phenotypes: string | null;
+  rsID: string | null;
 }
