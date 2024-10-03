@@ -24,17 +24,20 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type RecommendationUpdateFormInputValues = {
     text?: string;
-    variantreportID?: string;
+    id_patient?: string;
+    id_report?: string;
 };
 export declare type RecommendationUpdateFormValidationValues = {
     text?: ValidationFunction<string>;
-    variantreportID?: ValidationFunction<string>;
+    id_patient?: ValidationFunction<string>;
+    id_report?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type RecommendationUpdateFormOverridesProps = {
     RecommendationUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     text?: PrimitiveOverrideProps<TextFieldProps>;
-    variantreportID?: PrimitiveOverrideProps<TextFieldProps>;
+    id_patient?: PrimitiveOverrideProps<TextFieldProps>;
+    id_report?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type RecommendationUpdateFormProps = React.PropsWithChildren<{
     overrides?: RecommendationUpdateFormOverridesProps | undefined | null;

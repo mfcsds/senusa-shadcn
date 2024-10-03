@@ -26,19 +26,20 @@ export default function RecommendationUpdateForm(props) {
   } = props;
   const initialValues = {
     text: "",
-    variantreportID: "",
+    id_patient: "",
+    id_report: "",
   };
   const [text, setText] = React.useState(initialValues.text);
-  const [variantreportID, setVariantreportID] = React.useState(
-    initialValues.variantreportID
-  );
+  const [id_patient, setId_patient] = React.useState(initialValues.id_patient);
+  const [id_report, setId_report] = React.useState(initialValues.id_report);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = recommendationRecord
       ? { ...initialValues, ...recommendationRecord }
       : initialValues;
     setText(cleanValues.text);
-    setVariantreportID(cleanValues.variantreportID);
+    setId_patient(cleanValues.id_patient);
+    setId_report(cleanValues.id_report);
     setErrors({});
   };
   const [recommendationRecord, setRecommendationRecord] = React.useState(
@@ -61,7 +62,8 @@ export default function RecommendationUpdateForm(props) {
   React.useEffect(resetStateValues, [recommendationRecord]);
   const validations = {
     text: [],
-    variantreportID: [{ type: "Required" }],
+    id_patient: [{ type: "Required" }],
+    id_report: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -90,7 +92,8 @@ export default function RecommendationUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           text: text ?? null,
-          variantreportID,
+          id_patient,
+          id_report: id_report ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -152,7 +155,8 @@ export default function RecommendationUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               text: value,
-              variantreportID,
+              id_patient,
+              id_report,
             };
             const result = onChange(modelFields);
             value = result?.text ?? value;
@@ -168,29 +172,56 @@ export default function RecommendationUpdateForm(props) {
         {...getOverrideProps(overrides, "text")}
       ></TextField>
       <TextField
-        label="Variantreport id"
+        label="Id patient"
         isRequired={true}
         isReadOnly={false}
-        value={variantreportID}
+        value={id_patient}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               text,
-              variantreportID: value,
+              id_patient: value,
+              id_report,
             };
             const result = onChange(modelFields);
-            value = result?.variantreportID ?? value;
+            value = result?.id_patient ?? value;
           }
-          if (errors.variantreportID?.hasError) {
-            runValidationTasks("variantreportID", value);
+          if (errors.id_patient?.hasError) {
+            runValidationTasks("id_patient", value);
           }
-          setVariantreportID(value);
+          setId_patient(value);
         }}
-        onBlur={() => runValidationTasks("variantreportID", variantreportID)}
-        errorMessage={errors.variantreportID?.errorMessage}
-        hasError={errors.variantreportID?.hasError}
-        {...getOverrideProps(overrides, "variantreportID")}
+        onBlur={() => runValidationTasks("id_patient", id_patient)}
+        errorMessage={errors.id_patient?.errorMessage}
+        hasError={errors.id_patient?.hasError}
+        {...getOverrideProps(overrides, "id_patient")}
+      ></TextField>
+      <TextField
+        label="Id report"
+        isRequired={false}
+        isReadOnly={false}
+        value={id_report}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              text,
+              id_patient,
+              id_report: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.id_report ?? value;
+          }
+          if (errors.id_report?.hasError) {
+            runValidationTasks("id_report", value);
+          }
+          setId_report(value);
+        }}
+        onBlur={() => runValidationTasks("id_report", id_report)}
+        errorMessage={errors.id_report?.errorMessage}
+        hasError={errors.id_report?.hasError}
+        {...getOverrideProps(overrides, "id_report")}
       ></TextField>
       <Flex
         justifyContent="space-between"

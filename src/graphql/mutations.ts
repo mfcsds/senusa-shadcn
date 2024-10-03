@@ -8,6 +8,69 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const createVariantInterpretation = /* GraphQL */ `mutation CreateVariantInterpretation(
+  $input: CreateVariantInterpretationInput!
+  $condition: ModelVariantInterpretationConditionInput
+) {
+  createVariantInterpretation(input: $input, condition: $condition) {
+    id
+    hgvs
+    text
+    id_patient
+    id_report
+    id_varsample
+    gene
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateVariantInterpretationMutationVariables,
+  APITypes.CreateVariantInterpretationMutation
+>;
+export const updateVariantInterpretation = /* GraphQL */ `mutation UpdateVariantInterpretation(
+  $input: UpdateVariantInterpretationInput!
+  $condition: ModelVariantInterpretationConditionInput
+) {
+  updateVariantInterpretation(input: $input, condition: $condition) {
+    id
+    hgvs
+    text
+    id_patient
+    id_report
+    id_varsample
+    gene
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateVariantInterpretationMutationVariables,
+  APITypes.UpdateVariantInterpretationMutation
+>;
+export const deleteVariantInterpretation = /* GraphQL */ `mutation DeleteVariantInterpretation(
+  $input: DeleteVariantInterpretationInput!
+  $condition: ModelVariantInterpretationConditionInput
+) {
+  deleteVariantInterpretation(input: $input, condition: $condition) {
+    id
+    hgvs
+    text
+    id_patient
+    id_report
+    id_varsample
+    gene
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteVariantInterpretationMutationVariables,
+  APITypes.DeleteVariantInterpretationMutation
+>;
 export const createSelectedVariant = /* GraphQL */ `mutation CreateSelectedVariant(
   $input: CreateSelectedVariantInput!
   $condition: ModelSelectedVariantConditionInput
@@ -366,6 +429,8 @@ export const createConclusion = /* GraphQL */ `mutation CreateConclusion(
   createConclusion(input: $input, condition: $condition) {
     id
     text
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -382,6 +447,8 @@ export const updateConclusion = /* GraphQL */ `mutation UpdateConclusion(
   updateConclusion(input: $input, condition: $condition) {
     id
     text
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -398,6 +465,8 @@ export const deleteConclusion = /* GraphQL */ `mutation DeleteConclusion(
   deleteConclusion(input: $input, condition: $condition) {
     id
     text
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -414,7 +483,8 @@ export const createRecommendation = /* GraphQL */ `mutation CreateRecommendation
   createRecommendation(input: $input, condition: $condition) {
     id
     text
-    variantreportID
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -431,7 +501,8 @@ export const updateRecommendation = /* GraphQL */ `mutation UpdateRecommendation
   updateRecommendation(input: $input, condition: $condition) {
     id
     text
-    variantreportID
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -448,7 +519,8 @@ export const deleteRecommendation = /* GraphQL */ `mutation DeleteRecommendation
   deleteRecommendation(input: $input, condition: $condition) {
     id
     text
-    variantreportID
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -537,9 +609,10 @@ export const createPatientDocuments = /* GraphQL */ `mutation CreatePatientDocum
   createPatientDocuments(input: $input, condition: $condition) {
     id
     name
-    patientID
-    size
-    link
+    pathfile
+    doctype
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -556,9 +629,10 @@ export const updatePatientDocuments = /* GraphQL */ `mutation UpdatePatientDocum
   updatePatientDocuments(input: $input, condition: $condition) {
     id
     name
-    patientID
-    size
-    link
+    pathfile
+    doctype
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -575,9 +649,10 @@ export const deletePatientDocuments = /* GraphQL */ `mutation DeletePatientDocum
   deletePatientDocuments(input: $input, condition: $condition) {
     id
     name
-    patientID
-    size
-    link
+    pathfile
+    doctype
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename

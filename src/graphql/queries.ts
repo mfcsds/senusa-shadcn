@@ -8,6 +8,54 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getVariantInterpretation = /* GraphQL */ `query GetVariantInterpretation($id: ID!) {
+  getVariantInterpretation(id: $id) {
+    id
+    hgvs
+    text
+    id_patient
+    id_report
+    id_varsample
+    gene
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetVariantInterpretationQueryVariables,
+  APITypes.GetVariantInterpretationQuery
+>;
+export const listVariantInterpretations = /* GraphQL */ `query ListVariantInterpretations(
+  $filter: ModelVariantInterpretationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listVariantInterpretations(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      hgvs
+      text
+      id_patient
+      id_report
+      id_varsample
+      gene
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListVariantInterpretationsQueryVariables,
+  APITypes.ListVariantInterpretationsQuery
+>;
 export const getSelectedVariant = /* GraphQL */ `query GetSelectedVariant($id: ID!) {
   getSelectedVariant(id: $id) {
     id
@@ -256,6 +304,8 @@ export const getConclusion = /* GraphQL */ `query GetConclusion($id: ID!) {
   getConclusion(id: $id) {
     id
     text
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -274,6 +324,8 @@ export const listConclusions = /* GraphQL */ `query ListConclusions(
     items {
       id
       text
+      id_patient
+      id_report
       createdAt
       updatedAt
       __typename
@@ -290,7 +342,8 @@ export const getRecommendation = /* GraphQL */ `query GetRecommendation($id: ID!
   getRecommendation(id: $id) {
     id
     text
-    variantreportID
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -309,7 +362,8 @@ export const listRecommendations = /* GraphQL */ `query ListRecommendations(
     items {
       id
       text
-      variantreportID
+      id_patient
+      id_report
       createdAt
       updatedAt
       __typename
@@ -376,9 +430,10 @@ export const getPatientDocuments = /* GraphQL */ `query GetPatientDocuments($id:
   getPatientDocuments(id: $id) {
     id
     name
-    patientID
-    size
-    link
+    pathfile
+    doctype
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -397,9 +452,10 @@ export const listPatientDocuments = /* GraphQL */ `query ListPatientDocuments(
     items {
       id
       name
-      patientID
-      size
-      link
+      pathfile
+      doctype
+      id_patient
+      id_report
       createdAt
       updatedAt
       __typename

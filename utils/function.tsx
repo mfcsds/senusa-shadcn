@@ -54,6 +54,47 @@ export function generateInstutionID() {
   }
   return institutionID;
 }
+export function generateVariantInterpretation() {
+  const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let institutionID = "VI-";
+
+  for (let i = 0; i < 12; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    institutionID += characters[randomIndex];
+  }
+  return institutionID;
+}
+export function generateVariantSampleID() {
+  const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstu";
+  let institutionID = "vs-";
+
+  for (let i = 0; i < 12; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    institutionID += characters[randomIndex];
+  }
+  return institutionID;
+}
+export function generateRecommendationID() {
+  const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstu";
+  let recommendationID = "r-";
+
+  for (let i = 0; i < 12; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    recommendationID += characters[randomIndex];
+  }
+  return recommendationID;
+}
+
+export function generateConclusionID() {
+  const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstu";
+  let conclusionID = "c-";
+
+  for (let i = 0; i < 12; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    conclusionID += characters[randomIndex];
+  }
+  return conclusionID;
+}
 
 export function extractZygosity(info: string): string {
   const infoFields = info.split(";");

@@ -19,6 +19,8 @@ export { default as SelectedVariantUpdateForm } from "./SelectedVariantUpdateFor
 export { default as UserCreateForm } from "./UserCreateForm";
 export { default as UserUpdateForm } from "./UserUpdateForm";
 export { default as VariantCreateForm } from "./VariantCreateForm";
+export { default as VariantInterpretationCreateForm } from "./VariantInterpretationCreateForm";
+export { default as VariantInterpretationUpdateForm } from "./VariantInterpretationUpdateForm";
 export { default as VariantReportCreateForm } from "./VariantReportCreateForm";
 export { default as VariantReportUpdateForm } from "./VariantReportUpdateForm";
 export { default as VariantUpdateForm } from "./VariantUpdateForm";

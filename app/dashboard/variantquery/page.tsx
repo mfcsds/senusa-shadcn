@@ -18,9 +18,7 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -82,7 +80,7 @@ const VariantQuery = () => {
     <div className="flex flex-col w-full h-screen overflow-y-auto">
       <div className="flex flex-col">
         <div className="mb-10">
-          <p className="text-2xl">Type the Variant</p>
+          {/* <p className="text-2xl">Type the Variant</p>
           <p className="text-gray-400 text-sm">
             Please enter the variant using the following format:
             <br />
@@ -109,7 +107,7 @@ const VariantQuery = () => {
             <br />
             Ensure that the position and alleles correspond to the correct
             reference genome version used for your data.
-          </p>
+          </p> */}
         </div>
 
         <div className="grid grid-cols-4 gap-4 items-center">
@@ -208,7 +206,7 @@ const VariantQuery = () => {
                   <TableBody>
                     {variantData[0].colocated_variants.map(
                       (colocated: any, idx: number) => (
-                        <React.Fragment>
+                        <div key={idx}>
                           <TableRow>
                             <TableCell>Allele String</TableCell>
                             <TableCell>{colocated.allele_string}</TableCell>
@@ -233,7 +231,7 @@ const VariantQuery = () => {
                               {colocated.phenotype_or_disease}
                             </TableCell>
                           </TableRow>
-                        </React.Fragment>
+                        </div>
                       )
                     )}
                   </TableBody>
@@ -248,7 +246,7 @@ const VariantQuery = () => {
                 <Table className="w-[800px]">
                   {variantData[0].colocated_variants.map(
                     (colocated: any, idx: number) => (
-                      <div>
+                      <div key={idx}>
                         {colocated.frequencies && (
                           <div>
                             {Object.entries(colocated.frequencies).map(
@@ -274,7 +272,7 @@ const VariantQuery = () => {
                                           [population, value]: any,
                                           idx: number
                                         ) => (
-                                          <TableRow>
+                                          <TableRow key={idx}>
                                             <TableCell>{population}</TableCell>
                                             <TableCell>{value}</TableCell>
                                           </TableRow>

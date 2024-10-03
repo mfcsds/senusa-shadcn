@@ -8,6 +8,66 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateVariantInterpretation = /* GraphQL */ `subscription OnCreateVariantInterpretation(
+  $filter: ModelSubscriptionVariantInterpretationFilterInput
+) {
+  onCreateVariantInterpretation(filter: $filter) {
+    id
+    hgvs
+    text
+    id_patient
+    id_report
+    id_varsample
+    gene
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateVariantInterpretationSubscriptionVariables,
+  APITypes.OnCreateVariantInterpretationSubscription
+>;
+export const onUpdateVariantInterpretation = /* GraphQL */ `subscription OnUpdateVariantInterpretation(
+  $filter: ModelSubscriptionVariantInterpretationFilterInput
+) {
+  onUpdateVariantInterpretation(filter: $filter) {
+    id
+    hgvs
+    text
+    id_patient
+    id_report
+    id_varsample
+    gene
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateVariantInterpretationSubscriptionVariables,
+  APITypes.OnUpdateVariantInterpretationSubscription
+>;
+export const onDeleteVariantInterpretation = /* GraphQL */ `subscription OnDeleteVariantInterpretation(
+  $filter: ModelSubscriptionVariantInterpretationFilterInput
+) {
+  onDeleteVariantInterpretation(filter: $filter) {
+    id
+    hgvs
+    text
+    id_patient
+    id_report
+    id_varsample
+    gene
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteVariantInterpretationSubscriptionVariables,
+  APITypes.OnDeleteVariantInterpretationSubscription
+>;
 export const onCreateSelectedVariant = /* GraphQL */ `subscription OnCreateSelectedVariant(
   $filter: ModelSubscriptionSelectedVariantFilterInput
 ) {
@@ -332,6 +392,8 @@ export const onCreateConclusion = /* GraphQL */ `subscription OnCreateConclusion
   onCreateConclusion(filter: $filter) {
     id
     text
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -347,6 +409,8 @@ export const onUpdateConclusion = /* GraphQL */ `subscription OnUpdateConclusion
   onUpdateConclusion(filter: $filter) {
     id
     text
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -362,6 +426,8 @@ export const onDeleteConclusion = /* GraphQL */ `subscription OnDeleteConclusion
   onDeleteConclusion(filter: $filter) {
     id
     text
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -377,7 +443,8 @@ export const onCreateRecommendation = /* GraphQL */ `subscription OnCreateRecomm
   onCreateRecommendation(filter: $filter) {
     id
     text
-    variantreportID
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -393,7 +460,8 @@ export const onUpdateRecommendation = /* GraphQL */ `subscription OnUpdateRecomm
   onUpdateRecommendation(filter: $filter) {
     id
     text
-    variantreportID
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -409,7 +477,8 @@ export const onDeleteRecommendation = /* GraphQL */ `subscription OnDeleteRecomm
   onDeleteRecommendation(filter: $filter) {
     id
     text
-    variantreportID
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -494,9 +563,10 @@ export const onCreatePatientDocuments = /* GraphQL */ `subscription OnCreatePati
   onCreatePatientDocuments(filter: $filter) {
     id
     name
-    patientID
-    size
-    link
+    pathfile
+    doctype
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -512,9 +582,10 @@ export const onUpdatePatientDocuments = /* GraphQL */ `subscription OnUpdatePati
   onUpdatePatientDocuments(filter: $filter) {
     id
     name
-    patientID
-    size
-    link
+    pathfile
+    doctype
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename
@@ -530,9 +601,10 @@ export const onDeletePatientDocuments = /* GraphQL */ `subscription OnDeletePati
   onDeletePatientDocuments(filter: $filter) {
     id
     name
-    patientID
-    size
-    link
+    pathfile
+    doctype
+    id_patient
+    id_report
     createdAt
     updatedAt
     __typename

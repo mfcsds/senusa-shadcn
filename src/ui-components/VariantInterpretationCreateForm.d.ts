@@ -21,31 +21,40 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type RecommendationCreateFormInputValues = {
+export declare type VariantInterpretationCreateFormInputValues = {
+    hgvs?: string;
     text?: string;
     id_patient?: string;
     id_report?: string;
+    id_varsample?: string;
+    gene?: string;
 };
-export declare type RecommendationCreateFormValidationValues = {
+export declare type VariantInterpretationCreateFormValidationValues = {
+    hgvs?: ValidationFunction<string>;
     text?: ValidationFunction<string>;
     id_patient?: ValidationFunction<string>;
     id_report?: ValidationFunction<string>;
+    id_varsample?: ValidationFunction<string>;
+    gene?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type RecommendationCreateFormOverridesProps = {
-    RecommendationCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+export declare type VariantInterpretationCreateFormOverridesProps = {
+    VariantInterpretationCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    hgvs?: PrimitiveOverrideProps<TextFieldProps>;
     text?: PrimitiveOverrideProps<TextFieldProps>;
     id_patient?: PrimitiveOverrideProps<TextFieldProps>;
     id_report?: PrimitiveOverrideProps<TextFieldProps>;
+    id_varsample?: PrimitiveOverrideProps<TextFieldProps>;
+    gene?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type RecommendationCreateFormProps = React.PropsWithChildren<{
-    overrides?: RecommendationCreateFormOverridesProps | undefined | null;
+export declare type VariantInterpretationCreateFormProps = React.PropsWithChildren<{
+    overrides?: VariantInterpretationCreateFormOverridesProps | undefined | null;
 } & {
     clearOnSuccess?: boolean;
-    onSubmit?: (fields: RecommendationCreateFormInputValues) => RecommendationCreateFormInputValues;
-    onSuccess?: (fields: RecommendationCreateFormInputValues) => void;
-    onError?: (fields: RecommendationCreateFormInputValues, errorMessage: string) => void;
-    onChange?: (fields: RecommendationCreateFormInputValues) => RecommendationCreateFormInputValues;
-    onValidate?: RecommendationCreateFormValidationValues;
+    onSubmit?: (fields: VariantInterpretationCreateFormInputValues) => VariantInterpretationCreateFormInputValues;
+    onSuccess?: (fields: VariantInterpretationCreateFormInputValues) => void;
+    onError?: (fields: VariantInterpretationCreateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: VariantInterpretationCreateFormInputValues) => VariantInterpretationCreateFormInputValues;
+    onValidate?: VariantInterpretationCreateFormValidationValues;
 } & React.CSSProperties>;
-export default function RecommendationCreateForm(props: RecommendationCreateFormProps): React.ReactElement;
+export default function VariantInterpretationCreateForm(props: VariantInterpretationCreateFormProps): React.ReactElement;

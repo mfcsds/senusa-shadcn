@@ -1,0 +1,149 @@
+// components/VariantInfo.js
+
+import React, { useState, useEffect } from "react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@shadcn/ui"; // Adjust import based on your setup
+import axios from "axios";
+
+const VariantInfo = ({ hgvsNotation }) => {
+  const [variantData, setVariantData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Function to fetch variant data
+    const fetchVariantData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `https://rest.ensembl.org/vep/human/hgvs/${encodeURIComponent(
+            hgvsNotation
+          )}?content-type=application/json`,
+          {
+            params: {
+              AncestralAllele: 1,
+              Blosum62: 1,
+              CADD: 1,
+              Conservation: 1,
+              dbNSFP:
+                "SIFT_pred,Polyphen2_HDIV_pred,MutationTaster_pred,LRT_pred",
+              dbscSNV: 1,
+              MaxEntScan: 1,
+              GeneSplicer: 1,
+              NMD: 1,
+              mirna: 1,
+              appris: 1,
+              canonical: 1,
+              ccds: 1,
+              domains: 1,
+              hgvs: 1,
+              mane: 1,
+              numbers: 1,
+              protein: 1,
+              tsl: 1,
+              uniprot: 1,
+              variant_class: 1,
+              shift_3prime: 1,
+              shift_genomic: 1,
+              sift: "b",
+              polyphen: "b",
+              gene_phenotype: 1,
+              pubmed: 1,
+              xref_refseq: 1,
+            },
+          }
+        );
+        setVariantData(response.data[0]); // Assuming we get an array with one element
+      } catch (error) {
+        console.error("Error fetching variant data:", error);
+        setVariantData(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (hgvsNotation) {
+      fetchVariantData();
+    }
+  }, [hgvsNotation]);
+
+  if (loading) {
+    return <div className="text-center py-10">Loading...</div>;
+  }
+
+  if (!variantData) {
+    return (
+      <div className="text-center py-10">
+        No data available for {hgvsNotation}
+      </div>
+    );
+  }
+
+  // Destructure the data for easier access
+  const {
+    id,
+    input,
+    assembly_name,
+    seq_region_name,
+    start,
+    end,
+    allele_string,
+    variant_class,
+    most_severe_consequence,
+    colocated_variants,
+    transcript_consequences,
+  } = variantData;
+
+  return (
+    <div className="p-4">
+      <Tabs defaultValue="general">
+        <TabsList className="mb-4">
+          <TabsTrigger value="general">General Information</TabsTrigger>
+          <TabsTrigger value="allele">Allele Frequency</TabsTrigger>
+          <TabsTrigger value="computational">
+            Computational Predictions
+          </TabsTrigger>
+          <TabsTrigger value="functional">Functional Annotations</TabsTrigger>
+          <TabsTrigger value="transcripts">Transcripts</TabsTrigger>
+          <TabsTrigger value="conservation">Conservation Scores</TabsTrigger>
+          <TabsTrigger value="literature">Literature</TabsTrigger>
+        </TabsList>
+
+        {/* General Information Tab */}
+        <TabsContent value="general">
+          <GeneralInfo data={variantData} />
+        </TabsContent>
+
+        {/* Allele Frequency Tab */}
+        <TabsContent value="allele">
+          <AlleleFrequency data={colocated_variants} />
+        </TabsContent>
+
+        {/* Computational Predictions Tab */}
+        <TabsContent value="computational">
+          <ComputationalPredictions data={transcript_consequences} />
+        </TabsContent>
+
+        {/* Functional Annotations Tab */}
+        <TabsContent value="functional">
+          <FunctionalAnnotations data={transcript_consequences} />
+        </TabsContent>
+
+        {/* Transcripts Tab */}
+        <TabsContent value="transcripts">
+          <Transcripts data={transcript_consequences} />
+        </TabsContent>
+
+        {/* Conservation Scores Tab */}
+        <TabsContent value="conservation">
+          <ConservationScores data={transcript_consequences} />
+        </TabsContent>
+
+        {/* Literature Tab */}
+        <TabsContent value="literature">
+          <Literature data={variantData} />
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
+export default VariantInfo;

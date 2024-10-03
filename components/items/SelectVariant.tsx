@@ -8,12 +8,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Variant, VariantRawData, VcfData } from "@/utils/object";
+import {
+  Variant,
+  VariantInterpretation,
+  VariantRawData,
+  VcfData,
+} from "@/utils/object";
 import {
   generateHGVS,
   extractZygosity,
   fetchVariantDetails,
   fetchVariantDetails2,
+  generateVariantInterpretation,
+  generateVariantSampleID,
 } from "@/utils/function";
 import { Button } from "../ui/button";
 import { Ellipsis, PlusCircle, TableOfContents } from "lucide-react";
@@ -21,7 +28,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { listVcfdata } from "@/src/graphql/queries";
 import LabelAndDescription from "./LabelAndDescription";
 import { downloadData } from "aws-amplify/storage";
-import { createSelectedVariant } from "@/src/graphql/mutations";
+import {
+  createSelectedVariant,
+  createVariantInterpretation,
+} from "@/src/graphql/mutations";
 
 import { Select, SelectTrigger } from "../ui/select";
 import {
@@ -34,6 +44,13 @@ import {
 
 import { generateClient } from "aws-amplify/api";
 import { CreateSelectedVariantInput, SelectedVariant } from "@/src/API";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "../ui/dialog";
+import VariantInformationModal from "./VariantInformationModal";
 
 interface SelectVariantProops {
   patientid: string | null;
@@ -96,6 +113,8 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
   }, []);
 
   const [selectedVCF, setSelectedVCF] = useState<VcfData | null>(null);
+  const [isOpenDetailVariantDialog, setIsOpenDetailVariantDialog] =
+    useState(false);
 
   const [vcfContent, setVcfContent] = useState("");
   // Handle VCF selection change
@@ -161,7 +180,7 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
               const fields = line.split("\t");
 
               const variant: Variant = {
-                id: `variant-${index}`,
+                id: generateVariantSampleID(),
                 id_patient: patientid ?? "",
                 id_vcf: selectedVCF?.id ?? "",
                 chrom: fields[0],
@@ -271,111 +290,37 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
         console.log(error);
       }
     };
-    saveToAnalysisAndResult();
+    await saveToAnalysisAndResult();
+
+    const newVarInter: VariantInterpretation = {
+      id: selectedVarItem.id ?? "",
+      text: "No Interpretation",
+      hgvs: selectedVarItem.hgvs ?? "",
+      id_patient: selectedVarItem.id_patient ?? "",
+      id_report: selectedVarItem.id_report ?? "",
+      id_varsample: selectedVarItem.id ?? "",
+      gene: selectedVarItem.gene_symbol ?? "",
+    };
+    const saveInterpretation = async () => {
+      try {
+        const result = await client.graphql({
+          query: createVariantInterpretation,
+          variables: { input: newVarInter },
+        });
+      } catch (error) {
+        console.log("Error Add Selected Variant Interpretation");
+      }
+    };
+
+    await saveInterpretation();
 
     console.log("Selected Variant Item:", selectedVarItem);
   };
 
-  // const handleFileUpload = async (
-  //   event: React.ChangeEvent<HTMLInputElement>
-  // ) => {
-  //   const file = event.target.files?.[0];
-
-  //   // Reset state when a new file is uploaded
-  //   setColumns([]);
-  //   setVariantList([]);
-  //   setError(null);
-  //   setLoading(true);
-
-  //   if (file && file.name.endsWith(".vcf")) {
-  //     const reader = new FileReader();
-
-  //     reader.onload = async (e) => {
-  //       const vcfText = e.target?.result as string;
-
-  //       // If file is empty or unreadable, show error
-  //       if (!vcfText || vcfText.trim() === "") {
-  //         setError("The file appears to be empty or unreadable.");
-  //         setLoading(false);
-  //         return;
-  //       }
-
-  //       const lines = vcfText.split("\n");
-
-  //       const headerLine = lines.find((line: string) =>
-  //         line.startsWith("#CHROM")
-  //       );
-  //       if (headerLine) {
-  //         setColumns(tempColumns);
-  //       } else {
-  //         setError("Invalid VCF file: Missing header line (#CHROM)");
-  //         setLoading(false);
-  //         return;
-  //       }
-
-  //       const dataLines = lines.filter(
-  //         (line: string) => !line.startsWith("#") && line.trim() !== ""
-  //       );
-
-  //       const parsedVariants = dataLines.map((line: string, index: number) => {
-  //         const fields = line.split("\t");
-
-  //         const variant: Variant = {
-  //           id: `variant-${index}`,
-  //           id_patient: "",
-  //           id_vcf: "",
-  //           chrom: fields[0],
-  //           pos: fields[1],
-  //           id_var: fields[2],
-  //           ref: fields[3],
-  //           alt: fields[4],
-  //           qual: fields[5],
-  //           filter: fields[6],
-  //           info: fields[7],
-  //           hgvs: "",
-  //           variantReportID: "",
-  //           zygosity: extractZygosity(fields[7]),
-  //           globalallele: null, // Set to null to indicate loading state
-  //           functional_impact: "",
-  //           acmg: "",
-  //           clinicalSign: null, // Set to null to indicate loading state
-  //           gene_id: null,
-  //           gene_symbol: null,
-  //           severeconsequence: null,
-  //           sift_score: null,
-  //           sift_prediction: null,
-  //           phenotypes: null,
-  //           rsID: null,
-  //         };
-  //         variant.hgvs = generateHGVS(variant);
-  //         return variant;
-  //       });
-
-  //       setVariantList(parsedVariants);
-  //       // Fetch additional details for each variant individually
-  //       parsedVariants.forEach((variant, index) => {
-  //         fetchVariantDetails2(variant).then((details) => {
-  //           setVariantList((prevVariants) => {
-  //             const newVariants = [...prevVariants];
-  //             newVariants[index] = { ...newVariants[index], ...details };
-  //             return newVariants;
-  //           });
-  //         });
-  //       });
-  //       setLoading(false); // Set loading to false after parsing the file
-  //     };
-
-  //     reader.onerror = () => {
-  //       setError("Error reading the file. Please try again.");
-  //       setLoading(false);
-  //     };
-
-  //     reader.readAsText(file);
-  //   } else {
-  //     setError("Please upload a valid .vcf file.");
-  //     setLoading(false);
-  //   }
-  // };
+  const isOpenVarDetail = async (idvar: string) => {
+    await setSelectedVariant(variantItem.find((item) => item.id === idvar));
+    await setIsOpenDetailVariantDialog(!isOpenDetailVariantDialog);
+  };
 
   // Function to render cell content based on dataKey
   const renderCellContent = (item: Variant, dataKey: string) => {
@@ -429,14 +374,14 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
         );
       case "phenotypes":
         return item.phenotypes !== null ? (
-          item.phenotypes
+          <p className="text-balance">{item.phenotypes}</p>
         ) : (
           <Skeleton className="h-4 w-full"></Skeleton>
         );
       case "action":
         return (
           <div className="flex flex-row">
-            <Button variant={"ghost"}>
+            <Button variant={"ghost"} onClick={(e) => isOpenVarDetail(item.id)}>
               <TableOfContents className="w-4 h-4 text-gray-600" />
             </Button>
             <Button
@@ -616,6 +561,22 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
           </div>
         )
       )}
+
+      {/* Variant Interpretation Modal */}
+      <Dialog
+        open={isOpenDetailVariantDialog}
+        onOpenChange={() => setIsOpenDetailVariantDialog(false)}
+      >
+        {/* <div className="fixed inset-0 bg-black bg-opacity-0 pointer-events-none"></div> */}
+        <DialogContent className="max-w-7xl max-h-4xl ">
+          <DialogTitle>Variant Information</DialogTitle>
+          <DialogDescription>
+            Here is the detailed information about the variant.
+          </DialogDescription>
+          {/* Pass the hgvsNotation as a prop to the VariantInformationModal */}
+          <VariantInformationModal hgvsNotation={`${selectedVariant?.hgvs}`} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

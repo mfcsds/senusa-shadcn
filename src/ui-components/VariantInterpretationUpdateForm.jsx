@@ -9,11 +9,13 @@ import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
-import { createRecommendation } from "../graphql/mutations";
+import { getVariantInterpretation } from "../graphql/queries";
+import { updateVariantInterpretation } from "../graphql/mutations";
 const client = generateClient();
-export default function RecommendationCreateForm(props) {
+export default function VariantInterpretationUpdateForm(props) {
   const {
-    clearOnSuccess = true,
+    id: idProp,
+    variantInterpretation: variantInterpretationModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -23,24 +25,58 @@ export default function RecommendationCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
+    hgvs: "",
     text: "",
     id_patient: "",
     id_report: "",
+    id_varsample: "",
+    gene: "",
   };
+  const [hgvs, setHgvs] = React.useState(initialValues.hgvs);
   const [text, setText] = React.useState(initialValues.text);
   const [id_patient, setId_patient] = React.useState(initialValues.id_patient);
   const [id_report, setId_report] = React.useState(initialValues.id_report);
+  const [id_varsample, setId_varsample] = React.useState(
+    initialValues.id_varsample
+  );
+  const [gene, setGene] = React.useState(initialValues.gene);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setText(initialValues.text);
-    setId_patient(initialValues.id_patient);
-    setId_report(initialValues.id_report);
+    const cleanValues = variantInterpretationRecord
+      ? { ...initialValues, ...variantInterpretationRecord }
+      : initialValues;
+    setHgvs(cleanValues.hgvs);
+    setText(cleanValues.text);
+    setId_patient(cleanValues.id_patient);
+    setId_report(cleanValues.id_report);
+    setId_varsample(cleanValues.id_varsample);
+    setGene(cleanValues.gene);
     setErrors({});
   };
+  const [variantInterpretationRecord, setVariantInterpretationRecord] =
+    React.useState(variantInterpretationModelProp);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp
+        ? (
+            await client.graphql({
+              query: getVariantInterpretation.replaceAll("__typename", ""),
+              variables: { id: idProp },
+            })
+          )?.data?.getVariantInterpretation
+        : variantInterpretationModelProp;
+      setVariantInterpretationRecord(record);
+    };
+    queryData();
+  }, [idProp, variantInterpretationModelProp]);
+  React.useEffect(resetStateValues, [variantInterpretationRecord]);
   const validations = {
+    hgvs: [],
     text: [],
-    id_patient: [{ type: "Required" }],
+    id_patient: [],
     id_report: [],
+    id_varsample: [],
+    gene: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -68,9 +104,12 @@ export default function RecommendationCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          text,
-          id_patient,
-          id_report,
+          hgvs: hgvs ?? null,
+          text: text ?? null,
+          id_patient: id_patient ?? null,
+          id_report: id_report ?? null,
+          id_varsample: id_varsample ?? null,
+          gene: gene ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -101,18 +140,16 @@ export default function RecommendationCreateForm(props) {
             }
           });
           await client.graphql({
-            query: createRecommendation.replaceAll("__typename", ""),
+            query: updateVariantInterpretation.replaceAll("__typename", ""),
             variables: {
               input: {
+                id: variantInterpretationRecord.id,
                 ...modelFields,
               },
             },
           });
           if (onSuccess) {
             onSuccess(modelFields);
-          }
-          if (clearOnSuccess) {
-            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -121,9 +158,38 @@ export default function RecommendationCreateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "RecommendationCreateForm")}
+      {...getOverrideProps(overrides, "VariantInterpretationUpdateForm")}
       {...rest}
     >
+      <TextField
+        label="Hgvs"
+        isRequired={false}
+        isReadOnly={false}
+        value={hgvs}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              hgvs: value,
+              text,
+              id_patient,
+              id_report,
+              id_varsample,
+              gene,
+            };
+            const result = onChange(modelFields);
+            value = result?.hgvs ?? value;
+          }
+          if (errors.hgvs?.hasError) {
+            runValidationTasks("hgvs", value);
+          }
+          setHgvs(value);
+        }}
+        onBlur={() => runValidationTasks("hgvs", hgvs)}
+        errorMessage={errors.hgvs?.errorMessage}
+        hasError={errors.hgvs?.hasError}
+        {...getOverrideProps(overrides, "hgvs")}
+      ></TextField>
       <TextField
         label="Text"
         isRequired={false}
@@ -133,9 +199,12 @@ export default function RecommendationCreateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              hgvs,
               text: value,
               id_patient,
               id_report,
+              id_varsample,
+              gene,
             };
             const result = onChange(modelFields);
             value = result?.text ?? value;
@@ -152,16 +221,19 @@ export default function RecommendationCreateForm(props) {
       ></TextField>
       <TextField
         label="Id patient"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={id_patient}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              hgvs,
               text,
               id_patient: value,
               id_report,
+              id_varsample,
+              gene,
             };
             const result = onChange(modelFields);
             value = result?.id_patient ?? value;
@@ -185,9 +257,12 @@ export default function RecommendationCreateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              hgvs,
               text,
               id_patient,
               id_report: value,
+              id_varsample,
+              gene,
             };
             const result = onChange(modelFields);
             value = result?.id_report ?? value;
@@ -202,18 +277,77 @@ export default function RecommendationCreateForm(props) {
         hasError={errors.id_report?.hasError}
         {...getOverrideProps(overrides, "id_report")}
       ></TextField>
+      <TextField
+        label="Id varsample"
+        isRequired={false}
+        isReadOnly={false}
+        value={id_varsample}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              hgvs,
+              text,
+              id_patient,
+              id_report,
+              id_varsample: value,
+              gene,
+            };
+            const result = onChange(modelFields);
+            value = result?.id_varsample ?? value;
+          }
+          if (errors.id_varsample?.hasError) {
+            runValidationTasks("id_varsample", value);
+          }
+          setId_varsample(value);
+        }}
+        onBlur={() => runValidationTasks("id_varsample", id_varsample)}
+        errorMessage={errors.id_varsample?.errorMessage}
+        hasError={errors.id_varsample?.hasError}
+        {...getOverrideProps(overrides, "id_varsample")}
+      ></TextField>
+      <TextField
+        label="Gene"
+        isRequired={false}
+        isReadOnly={false}
+        value={gene}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              hgvs,
+              text,
+              id_patient,
+              id_report,
+              id_varsample,
+              gene: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.gene ?? value;
+          }
+          if (errors.gene?.hasError) {
+            runValidationTasks("gene", value);
+          }
+          setGene(value);
+        }}
+        onBlur={() => runValidationTasks("gene", gene)}
+        errorMessage={errors.gene?.errorMessage}
+        hasError={errors.gene?.hasError}
+        {...getOverrideProps(overrides, "gene")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
       >
         <Button
-          children="Clear"
+          children="Reset"
           type="reset"
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-          {...getOverrideProps(overrides, "ClearButton")}
+          isDisabled={!(idProp || variantInterpretationModelProp)}
+          {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
           gap="15px"
@@ -223,7 +357,10 @@ export default function RecommendationCreateForm(props) {
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(idProp || variantInterpretationModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>

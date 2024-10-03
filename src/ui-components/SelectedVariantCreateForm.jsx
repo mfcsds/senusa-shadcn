@@ -1124,9 +1124,13 @@ export default function SelectedVariantCreateForm(props) {
         label="Sift score"
         isRequired={false}
         isReadOnly={false}
+        type="number"
+        step="any"
         value={sift_score}
         onChange={(e) => {
-          let { value } = e.target;
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
           if (onChange) {
             const modelFields = {
               id_patient,

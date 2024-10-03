@@ -354,3 +354,108 @@ const SelectVariant = () => {
 };
 
 export default SelectVariant;
+
+
+
+```````
+
+  // const handleFileUpload = async (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   const file = event.target.files?.[0];
+
+  //   // Reset state when a new file is uploaded
+  //   setColumns([]);
+  //   setVariantList([]);
+  //   setError(null);
+  //   setLoading(true);
+
+  //   if (file && file.name.endsWith(".vcf")) {
+  //     const reader = new FileReader();
+
+  //     reader.onload = async (e) => {
+  //       const vcfText = e.target?.result as string;
+
+  //       // If file is empty or unreadable, show error
+  //       if (!vcfText || vcfText.trim() === "") {
+  //         setError("The file appears to be empty or unreadable.");
+  //         setLoading(false);
+  //         return;
+  //       }
+
+  //       const lines = vcfText.split("\n");
+
+  //       const headerLine = lines.find((line: string) =>
+  //         line.startsWith("#CHROM")
+  //       );
+  //       if (headerLine) {
+  //         setColumns(tempColumns);
+  //       } else {
+  //         setError("Invalid VCF file: Missing header line (#CHROM)");
+  //         setLoading(false);
+  //         return;
+  //       }
+
+  //       const dataLines = lines.filter(
+  //         (line: string) => !line.startsWith("#") && line.trim() !== ""
+  //       );
+
+  //       const parsedVariants = dataLines.map((line: string, index: number) => {
+  //         const fields = line.split("\t");
+
+  //         const variant: Variant = {
+  //           id: `variant-${index}`,
+  //           id_patient: "",
+  //           id_vcf: "",
+  //           chrom: fields[0],
+  //           pos: fields[1],
+  //           id_var: fields[2],
+  //           ref: fields[3],
+  //           alt: fields[4],
+  //           qual: fields[5],
+  //           filter: fields[6],
+  //           info: fields[7],
+  //           hgvs: "",
+  //           variantReportID: "",
+  //           zygosity: extractZygosity(fields[7]),
+  //           globalallele: null, // Set to null to indicate loading state
+  //           functional_impact: "",
+  //           acmg: "",
+  //           clinicalSign: null, // Set to null to indicate loading state
+  //           gene_id: null,
+  //           gene_symbol: null,
+  //           severeconsequence: null,
+  //           sift_score: null,
+  //           sift_prediction: null,
+  //           phenotypes: null,
+  //           rsID: null,
+  //         };
+  //         variant.hgvs = generateHGVS(variant);
+  //         return variant;
+  //       });
+
+  //       setVariantList(parsedVariants);
+  //       // Fetch additional details for each variant individually
+  //       parsedVariants.forEach((variant, index) => {
+  //         fetchVariantDetails2(variant).then((details) => {
+  //           setVariantList((prevVariants) => {
+  //             const newVariants = [...prevVariants];
+  //             newVariants[index] = { ...newVariants[index], ...details };
+  //             return newVariants;
+  //           });
+  //         });
+  //       });
+  //       setLoading(false); // Set loading to false after parsing the file
+  //     };
+
+  //     reader.onerror = () => {
+  //       setError("Error reading the file. Please try again.");
+  //       setLoading(false);
+  //     };
+
+  //     reader.readAsText(file);
+  //   } else {
+  //     setError("Please upload a valid .vcf file.");
+  //     setLoading(false);
+  //   }
+  // };

@@ -46,7 +46,15 @@ export interface Variant {
 export interface Recommendation {
   id: string;
   text: string;
-  variantReportID: string;
+  id_patient: string;
+  id_report: string;
+}
+
+export interface Conclusion {
+  id: string;
+  text: string;
+  id_patient: string;
+  id_report: string;
 }
 
 export interface GeneticsConselor {
@@ -116,7 +124,7 @@ export interface VariantRawData {
 }
 
 // TypeScript Interface for SelectedVariant
-interface SelectedVariant {
+export interface SelectedVariant {
   id: string; // ID type is represented as string in TypeScript
   id_patient: string | null; // Nullable String field
   id_vcf: string | null;
@@ -141,4 +149,123 @@ interface SelectedVariant {
   sift_prediction: string | null;
   phenotypes: string | null;
   rsID: string | null;
+}
+
+export interface VariantInterpretation {
+  id: string | null;
+  hgvs: string | "No Data";
+  text: string | "No Interpretation";
+  id_patient: string | "";
+  id_report: string | "";
+  id_varsample: string | "";
+  gene: string | "";
+}
+
+// types.ts
+
+export interface ColocatedVariant {
+  id?: string;
+  allele_string?: string;
+  start?: number;
+  end?: number;
+  strand?: number;
+  seq_region_name?: string;
+  phenotype_or_disease?: number;
+  somatic?: number;
+  clin_sig?: string[];
+  clin_sig_allele?: string;
+  frequencies?: {
+    [allele: string]: {
+      [population: string]: number;
+    };
+  };
+  pubmed?: number[];
+  var_synonyms?: {
+    [source: string]: string[];
+  };
+}
+
+export interface TranscriptConsequence {
+  transcript_id?: string;
+  gene_symbol?: string;
+  gene_id?: string;
+  consequence_terms?: string[];
+  biotype?: string;
+  hgvsc?: string;
+  hgvsp?: string;
+  impact?: string;
+  cadd_phred?: number;
+  cadd_raw?: number;
+  conservation?: number;
+  aa?: string;
+  appris?: string;
+  canonical?: number;
+  ccds?: string;
+  cdna_start?: number;
+  cdna_end?: number;
+  distance?: number;
+  exon?: string;
+  strand?: number;
+  protein_id?: string;
+  gene_symbol_source?: string;
+  hgnc_id?: string;
+  location?: string;
+  mane_select?: string;
+  refseq_transcript_ids?: string[];
+  swissprot?: string[];
+  trembl?: string[];
+  tsl?: number | string;
+  uniparc?: string[];
+  uniprot_isoform?: string[];
+  variant_allele?: string;
+  polyphen_prediction?: string;
+  polyphen_score?: number;
+  sift_prediction?: string;
+  sift_score?: number;
+  // Add more fields as needed
+}
+
+export interface VariantData {
+  id?: string;
+  input?: string;
+  allele_string?: string;
+  most_severe_consequence?: string;
+  assembly_name?: string;
+  seq_region_name?: string;
+  start?: number;
+  end?: number;
+  strand?: number;
+  variant_class?: string;
+  colocated_variants?: ColocatedVariant[];
+  transcript_consequences?: TranscriptConsequence[];
+
+  // Add more fields as needed
+  // Additional fields based on common Ensembl VEP response
+  hgvsc?: string; // HGVS coding DNA reference
+  hgvsp?: string; // HGVS protein reference
+  consequence_terms?: string[]; // List of consequence terms
+  gene_id?: string; // Stable Ensembl gene ID
+  gene_symbol?: string; // Gene symbol
+  canonical?: number; // Indicates if the transcript is canonical (0 or 1)
+  impact?: string; // Impact of the variant (e.g., HIGH, MODERATE)
+  cadd_phred?: number; // CADD phred score
+  cadd_raw?: number; // CADD raw score
+  polyphen_score?: number; // PolyPhen score
+  polyphen_prediction?: string; // PolyPhen prediction (e.g., benign)
+  sift_score?: number; // SIFT score
+  sift_prediction?: string; // SIFT prediction (e.g., tolerated)
+  appris?: string; // APPRIS annotation
+  domains?: Domain[]; // Protein domains affected
+  hgvs_offset?: number; // HGVS offset for the variant
+  gene_phenotype?: string; // Information about gene phenotype
+  pubmed?: number[]; // List of PubMed references
+  variant_allele?: string; // Alternate allele of the variant
+}
+
+// Supporting interface for `domains`
+export interface Domain {
+  db?: string; // Database name, e.g., Pfam
+  name?: string; // Domain name
+  start?: number; // Start position of the domain
+  end?: number; // End position of the domain
 }

@@ -41,7 +41,7 @@ export declare type SelectedVariantCreateFormInputValues = {
     clinical_sign?: string;
     hgvs?: string;
     severe_consequence?: string;
-    sift_score?: string;
+    sift_score?: number;
     sift_prediction?: string;
     phenotypes?: string;
     rsID?: string;
@@ -66,7 +66,7 @@ export declare type SelectedVariantCreateFormValidationValues = {
     clinical_sign?: ValidationFunction<string>;
     hgvs?: ValidationFunction<string>;
     severe_consequence?: ValidationFunction<string>;
-    sift_score?: ValidationFunction<string>;
+    sift_score?: ValidationFunction<number>;
     sift_prediction?: ValidationFunction<string>;
     phenotypes?: ValidationFunction<string>;
     rsID?: ValidationFunction<string>;

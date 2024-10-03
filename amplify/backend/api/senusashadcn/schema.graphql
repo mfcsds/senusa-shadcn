@@ -1,3 +1,13 @@
+type VariantInterpretation @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  hgvs: String
+  text: String
+  id_patient: String
+  id_report: String
+  id_varsample: String
+  gene: String
+}
+
 type SelectedVariant @model @auth(rules: [{allow: public}]) {
   id: ID!
   id_patient: String
@@ -63,12 +73,15 @@ type Phenotype @model @auth(rules: [{allow: public}]) {
 type Conclusion @model @auth(rules: [{allow: public}]) {
   id: ID!
   text: String
+  id_patient: String
+  id_report: String
 }
 
 type Recommendation @model @auth(rules: [{allow: public}]) {
   id: ID!
   text: String
-  variantreportID: ID!
+  id_patient: ID!
+  id_report: String
 }
 
 type VariantReport @model @auth(rules: [{allow: public}]) {
@@ -87,9 +100,10 @@ type VariantReport @model @auth(rules: [{allow: public}]) {
 type PatientDocuments @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String
-  patientID: ID!
-  size: Int
-  link: AWSURL
+  pathfile: String
+  doctype: String
+  id_patient: String
+  id_report: String
 }
 
 type Patient @model @auth(rules: [{allow: public}]) {

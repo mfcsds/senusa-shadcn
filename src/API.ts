@@ -2,78 +2,44 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateSelectedVariantInput = {
-  id?: string | null,
-  id_patient?: string | null,
-  id_vcf?: string | null,
-  id_report?: string | null,
-  gene_id?: string | null,
-  gene_symbol?: string | null,
-  chrom?: string | null,
-  pos?: string | null,
-  id_var?: string | null,
-  ref?: string | null,
-  alt?: string | null,
-  qual?: string | null,
-  zigosity?: string | null,
-  global_allele?: number | null,
-  functional_impact?: string | null,
-  acmg?: string | null,
-  reviewer_class?: string | null,
-  clinical_sign?: string | null,
-  hgvs?: string | null,
-  severe_consequence?: string | null,
-  sift_score?: number | null,
-  sift_prediction?: string | null,
-  phenotypes?: string | null,
-  rsID?: string | null,
+export type CreateVariantInterpretationInput = {
+  id?: string | null;
+  hgvs?: string | null;
+  text?: string | null;
+  id_patient?: string | null;
+  id_report?: string | null;
+  id_varsample?: string | null;
+  gene?: string | null;
 };
 
-export type ModelSelectedVariantConditionInput = {
-  id_patient?: ModelStringInput | null,
-  id_vcf?: ModelStringInput | null,
-  id_report?: ModelStringInput | null,
-  gene_id?: ModelStringInput | null,
-  gene_symbol?: ModelStringInput | null,
-  chrom?: ModelStringInput | null,
-  pos?: ModelStringInput | null,
-  id_var?: ModelStringInput | null,
-  ref?: ModelStringInput | null,
-  alt?: ModelStringInput | null,
-  qual?: ModelStringInput | null,
-  zigosity?: ModelStringInput | null,
-  global_allele?: ModelFloatInput | null,
-  functional_impact?: ModelStringInput | null,
-  acmg?: ModelStringInput | null,
-  reviewer_class?: ModelStringInput | null,
-  clinical_sign?: ModelStringInput | null,
-  hgvs?: ModelStringInput | null,
-  severe_consequence?: ModelStringInput | null,
-  sift_score?: ModelFloatInput | null,
-  sift_prediction?: ModelStringInput | null,
-  phenotypes?: ModelStringInput | null,
-  rsID?: ModelStringInput | null,
-  and?: Array< ModelSelectedVariantConditionInput | null > | null,
-  or?: Array< ModelSelectedVariantConditionInput | null > | null,
-  not?: ModelSelectedVariantConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
+export type ModelVariantInterpretationConditionInput = {
+  hgvs?: ModelStringInput | null;
+  text?: ModelStringInput | null;
+  id_patient?: ModelStringInput | null;
+  id_report?: ModelStringInput | null;
+  id_varsample?: ModelStringInput | null;
+  gene?: ModelStringInput | null;
+  and?: Array<ModelVariantInterpretationConditionInput | null> | null;
+  or?: Array<ModelVariantInterpretationConditionInput | null> | null;
+  not?: ModelVariantInterpretationConditionInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
 };
 
 export type ModelStringInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
+  ne?: string | null;
+  eq?: string | null;
+  le?: string | null;
+  lt?: string | null;
+  ge?: string | null;
+  gt?: string | null;
+  contains?: string | null;
+  notContains?: string | null;
+  between?: Array<string | null> | null;
+  beginsWith?: string | null;
+  attributeExists?: boolean | null;
+  attributeType?: ModelAttributeTypes | null;
+  size?: ModelSizeInput | null;
 };
 
 export enum ModelAttributeTypes {
@@ -89,3337 +55,3673 @@ export enum ModelAttributeTypes {
   _null = "_null",
 }
 
-
 export type ModelSizeInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
+  ne?: number | null;
+  eq?: number | null;
+  le?: number | null;
+  lt?: number | null;
+  ge?: number | null;
+  gt?: number | null;
+  between?: Array<number | null> | null;
+};
+
+export type VariantInterpretation = {
+  __typename: "VariantInterpretation";
+  id: string;
+  hgvs?: string | null;
+  text?: string | null;
+  id_patient?: string | null;
+  id_report?: string | null;
+  id_varsample?: string | null;
+  gene?: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type UpdateVariantInterpretationInput = {
+  id: string;
+  hgvs?: string | null;
+  text?: string | null;
+  id_patient?: string | null;
+  id_report?: string | null;
+  id_varsample?: string | null;
+  gene?: string | null;
+};
+
+export type DeleteVariantInterpretationInput = {
+  id: string;
+};
+
+export type CreateSelectedVariantInput = {
+  id?: string | null;
+  id_patient?: string | null;
+  id_vcf?: string | null;
+  id_report?: string | null;
+  gene_id?: string | null;
+  gene_symbol?: string | null;
+  chrom?: string | null;
+  pos?: string | null;
+  id_var?: string | null;
+  ref?: string | null;
+  alt?: string | null;
+  qual?: string | null;
+  zigosity?: string | null;
+  global_allele?: number | null;
+  functional_impact?: string | null;
+  acmg?: string | null;
+  reviewer_class?: string | null;
+  clinical_sign?: string | null;
+  hgvs?: string | null;
+  severe_consequence?: string | null;
+  sift_score?: number | null;
+  sift_prediction?: string | null;
+  phenotypes?: string | null;
+  rsID?: string | null;
+};
+
+export type ModelSelectedVariantConditionInput = {
+  id_patient?: ModelStringInput | null;
+  id_vcf?: ModelStringInput | null;
+  id_report?: ModelStringInput | null;
+  gene_id?: ModelStringInput | null;
+  gene_symbol?: ModelStringInput | null;
+  chrom?: ModelStringInput | null;
+  pos?: ModelStringInput | null;
+  id_var?: ModelStringInput | null;
+  ref?: ModelStringInput | null;
+  alt?: ModelStringInput | null;
+  qual?: ModelStringInput | null;
+  zigosity?: ModelStringInput | null;
+  global_allele?: ModelFloatInput | null;
+  functional_impact?: ModelStringInput | null;
+  acmg?: ModelStringInput | null;
+  reviewer_class?: ModelStringInput | null;
+  clinical_sign?: ModelStringInput | null;
+  hgvs?: ModelStringInput | null;
+  severe_consequence?: ModelStringInput | null;
+  sift_score?: ModelFloatInput | null;
+  sift_prediction?: ModelStringInput | null;
+  phenotypes?: ModelStringInput | null;
+  rsID?: ModelStringInput | null;
+  and?: Array<ModelSelectedVariantConditionInput | null> | null;
+  or?: Array<ModelSelectedVariantConditionInput | null> | null;
+  not?: ModelSelectedVariantConditionInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
 };
 
 export type ModelFloatInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
+  ne?: number | null;
+  eq?: number | null;
+  le?: number | null;
+  lt?: number | null;
+  ge?: number | null;
+  gt?: number | null;
+  between?: Array<number | null> | null;
+  attributeExists?: boolean | null;
+  attributeType?: ModelAttributeTypes | null;
 };
 
 export type SelectedVariant = {
-  __typename: "SelectedVariant",
-  id: string,
-  id_patient?: string | null,
-  id_vcf?: string | null,
-  id_report?: string | null,
-  gene_id?: string | null,
-  gene_symbol?: string | null,
-  chrom?: string | null,
-  pos?: string | null,
-  id_var?: string | null,
-  ref?: string | null,
-  alt?: string | null,
-  qual?: string | null,
-  zigosity?: string | null,
-  global_allele?: number | null,
-  functional_impact?: string | null,
-  acmg?: string | null,
-  reviewer_class?: string | null,
-  clinical_sign?: string | null,
-  hgvs?: string | null,
-  severe_consequence?: string | null,
-  sift_score?: number | null,
-  sift_prediction?: string | null,
-  phenotypes?: string | null,
-  rsID?: string | null,
-  createdAt: string,
-  updatedAt: string,
+  __typename: "SelectedVariant";
+  id: string;
+  id_patient?: string | null;
+  id_vcf?: string | null;
+  id_report?: string | null;
+  gene_id?: string | null;
+  gene_symbol?: string | null;
+  chrom?: string | null;
+  pos?: string | null;
+  id_var?: string | null;
+  ref?: string | null;
+  alt?: string | null;
+  qual?: string | null;
+  zigosity?: string | null;
+  global_allele?: number | null;
+  functional_impact?: string | null;
+  acmg?: string | null;
+  reviewer_class?: string | null;
+  clinical_sign?: string | null;
+  hgvs?: string | null;
+  severe_consequence?: string | null;
+  sift_score?: number | null;
+  sift_prediction?: string | null;
+  phenotypes?: string | null;
+  rsID?: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UpdateSelectedVariantInput = {
-  id: string,
-  id_patient?: string | null,
-  id_vcf?: string | null,
-  id_report?: string | null,
-  gene_id?: string | null,
-  gene_symbol?: string | null,
-  chrom?: string | null,
-  pos?: string | null,
-  id_var?: string | null,
-  ref?: string | null,
-  alt?: string | null,
-  qual?: string | null,
-  zigosity?: string | null,
-  global_allele?: number | null,
-  functional_impact?: string | null,
-  acmg?: string | null,
-  reviewer_class?: string | null,
-  clinical_sign?: string | null,
-  hgvs?: string | null,
-  severe_consequence?: string | null,
-  sift_score?: number | null,
-  sift_prediction?: string | null,
-  phenotypes?: string | null,
-  rsID?: string | null,
+  id: string;
+  id_patient?: string | null;
+  id_vcf?: string | null;
+  id_report?: string | null;
+  gene_id?: string | null;
+  gene_symbol?: string | null;
+  chrom?: string | null;
+  pos?: string | null;
+  id_var?: string | null;
+  ref?: string | null;
+  alt?: string | null;
+  qual?: string | null;
+  zigosity?: string | null;
+  global_allele?: number | null;
+  functional_impact?: string | null;
+  acmg?: string | null;
+  reviewer_class?: string | null;
+  clinical_sign?: string | null;
+  hgvs?: string | null;
+  severe_consequence?: string | null;
+  sift_score?: number | null;
+  sift_prediction?: string | null;
+  phenotypes?: string | null;
+  rsID?: string | null;
 };
 
 export type DeleteSelectedVariantInput = {
-  id: string,
+  id: string;
 };
 
 export type CreateVcfdataInput = {
-  id?: string | null,
-  id_patient?: string | null,
-  sample_date?: string | null,
-  uploadAt?: string | null,
-  pathfile?: string | null,
-  genome_reference?: string | null,
+  id?: string | null;
+  id_patient?: string | null;
+  sample_date?: string | null;
+  uploadAt?: string | null;
+  pathfile?: string | null;
+  genome_reference?: string | null;
 };
 
 export type ModelVcfdataConditionInput = {
-  id_patient?: ModelStringInput | null,
-  sample_date?: ModelStringInput | null,
-  uploadAt?: ModelStringInput | null,
-  pathfile?: ModelStringInput | null,
-  genome_reference?: ModelStringInput | null,
-  and?: Array< ModelVcfdataConditionInput | null > | null,
-  or?: Array< ModelVcfdataConditionInput | null > | null,
-  not?: ModelVcfdataConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
+  id_patient?: ModelStringInput | null;
+  sample_date?: ModelStringInput | null;
+  uploadAt?: ModelStringInput | null;
+  pathfile?: ModelStringInput | null;
+  genome_reference?: ModelStringInput | null;
+  and?: Array<ModelVcfdataConditionInput | null> | null;
+  or?: Array<ModelVcfdataConditionInput | null> | null;
+  not?: ModelVcfdataConditionInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
 };
 
 export type Vcfdata = {
-  __typename: "Vcfdata",
-  id: string,
-  id_patient?: string | null,
-  sample_date?: string | null,
-  uploadAt?: string | null,
-  pathfile?: string | null,
-  genome_reference?: string | null,
-  createdAt: string,
-  updatedAt: string,
+  __typename: "Vcfdata";
+  id: string;
+  id_patient?: string | null;
+  sample_date?: string | null;
+  uploadAt?: string | null;
+  pathfile?: string | null;
+  genome_reference?: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UpdateVcfdataInput = {
-  id: string,
-  id_patient?: string | null,
-  sample_date?: string | null,
-  uploadAt?: string | null,
-  pathfile?: string | null,
-  genome_reference?: string | null,
+  id: string;
+  id_patient?: string | null;
+  sample_date?: string | null;
+  uploadAt?: string | null;
+  pathfile?: string | null;
+  genome_reference?: string | null;
 };
 
 export type DeleteVcfdataInput = {
-  id: string,
+  id: string;
 };
 
 export type CreateVariantInput = {
-  id?: string | null,
-  chrom?: string | null,
-  pos?: string | null,
-  ref?: string | null,
-  alt?: string | null,
-  qual?: string | null,
-  filter?: string | null,
-  info?: string | null,
-  hgvs?: string | null,
-  id_var?: string | null,
-  id_patient?: string | null,
-  id_vcf?: string | null,
+  id?: string | null;
+  chrom?: string | null;
+  pos?: string | null;
+  ref?: string | null;
+  alt?: string | null;
+  qual?: string | null;
+  filter?: string | null;
+  info?: string | null;
+  hgvs?: string | null;
+  id_var?: string | null;
+  id_patient?: string | null;
+  id_vcf?: string | null;
 };
 
 export type ModelVariantConditionInput = {
-  chrom?: ModelStringInput | null,
-  pos?: ModelStringInput | null,
-  ref?: ModelStringInput | null,
-  alt?: ModelStringInput | null,
-  qual?: ModelStringInput | null,
-  filter?: ModelStringInput | null,
-  info?: ModelStringInput | null,
-  hgvs?: ModelStringInput | null,
-  id_var?: ModelStringInput | null,
-  id_patient?: ModelStringInput | null,
-  id_vcf?: ModelStringInput | null,
-  and?: Array< ModelVariantConditionInput | null > | null,
-  or?: Array< ModelVariantConditionInput | null > | null,
-  not?: ModelVariantConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
+  chrom?: ModelStringInput | null;
+  pos?: ModelStringInput | null;
+  ref?: ModelStringInput | null;
+  alt?: ModelStringInput | null;
+  qual?: ModelStringInput | null;
+  filter?: ModelStringInput | null;
+  info?: ModelStringInput | null;
+  hgvs?: ModelStringInput | null;
+  id_var?: ModelStringInput | null;
+  id_patient?: ModelStringInput | null;
+  id_vcf?: ModelStringInput | null;
+  and?: Array<ModelVariantConditionInput | null> | null;
+  or?: Array<ModelVariantConditionInput | null> | null;
+  not?: ModelVariantConditionInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
 };
 
 export type Variant = {
-  __typename: "Variant",
-  id: string,
-  chrom?: string | null,
-  pos?: string | null,
-  ref?: string | null,
-  alt?: string | null,
-  qual?: string | null,
-  filter?: string | null,
-  info?: string | null,
-  hgvs?: string | null,
-  id_var?: string | null,
-  id_patient?: string | null,
-  id_vcf?: string | null,
-  createdAt: string,
-  updatedAt: string,
+  __typename: "Variant";
+  id: string;
+  chrom?: string | null;
+  pos?: string | null;
+  ref?: string | null;
+  alt?: string | null;
+  qual?: string | null;
+  filter?: string | null;
+  info?: string | null;
+  hgvs?: string | null;
+  id_var?: string | null;
+  id_patient?: string | null;
+  id_vcf?: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UpdateVariantInput = {
-  id: string,
-  chrom?: string | null,
-  pos?: string | null,
-  ref?: string | null,
-  alt?: string | null,
-  qual?: string | null,
-  filter?: string | null,
-  info?: string | null,
-  hgvs?: string | null,
-  id_var?: string | null,
-  id_patient?: string | null,
-  id_vcf?: string | null,
+  id: string;
+  chrom?: string | null;
+  pos?: string | null;
+  ref?: string | null;
+  alt?: string | null;
+  qual?: string | null;
+  filter?: string | null;
+  info?: string | null;
+  hgvs?: string | null;
+  id_var?: string | null;
+  id_patient?: string | null;
+  id_vcf?: string | null;
 };
 
 export type DeleteVariantInput = {
-  id: string,
+  id: string;
 };
 
 export type CreateGeneticsConselorInput = {
-  id?: string | null,
-  text?: string | null,
+  id?: string | null;
+  text?: string | null;
 };
 
 export type ModelGeneticsConselorConditionInput = {
-  text?: ModelStringInput | null,
-  and?: Array< ModelGeneticsConselorConditionInput | null > | null,
-  or?: Array< ModelGeneticsConselorConditionInput | null > | null,
-  not?: ModelGeneticsConselorConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
+  text?: ModelStringInput | null;
+  and?: Array<ModelGeneticsConselorConditionInput | null> | null;
+  or?: Array<ModelGeneticsConselorConditionInput | null> | null;
+  not?: ModelGeneticsConselorConditionInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
 };
 
 export type GeneticsConselor = {
-  __typename: "GeneticsConselor",
-  id: string,
-  text?: string | null,
-  createdAt: string,
-  updatedAt: string,
+  __typename: "GeneticsConselor";
+  id: string;
+  text?: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UpdateGeneticsConselorInput = {
-  id: string,
-  text?: string | null,
+  id: string;
+  text?: string | null;
 };
 
 export type DeleteGeneticsConselorInput = {
-  id: string,
+  id: string;
 };
 
 export type CreatePhenotypeInput = {
-  id?: string | null,
-  PhenotypeCode?: string | null,
-  Description?: string | null,
+  id?: string | null;
+  PhenotypeCode?: string | null;
+  Description?: string | null;
 };
 
 export type ModelPhenotypeConditionInput = {
-  PhenotypeCode?: ModelStringInput | null,
-  Description?: ModelStringInput | null,
-  and?: Array< ModelPhenotypeConditionInput | null > | null,
-  or?: Array< ModelPhenotypeConditionInput | null > | null,
-  not?: ModelPhenotypeConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
+  PhenotypeCode?: ModelStringInput | null;
+  Description?: ModelStringInput | null;
+  and?: Array<ModelPhenotypeConditionInput | null> | null;
+  or?: Array<ModelPhenotypeConditionInput | null> | null;
+  not?: ModelPhenotypeConditionInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
 };
 
 export type Phenotype = {
-  __typename: "Phenotype",
-  id: string,
-  PhenotypeCode?: string | null,
-  Description?: string | null,
-  createdAt: string,
-  updatedAt: string,
+  __typename: "Phenotype";
+  id: string;
+  PhenotypeCode?: string | null;
+  Description?: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UpdatePhenotypeInput = {
-  id: string,
-  PhenotypeCode?: string | null,
-  Description?: string | null,
+  id: string;
+  PhenotypeCode?: string | null;
+  Description?: string | null;
 };
 
 export type DeletePhenotypeInput = {
-  id: string,
+  id: string;
 };
 
 export type CreateConclusionInput = {
-  id?: string | null,
-  text?: string | null,
+  id?: string | null;
+  text?: string | null;
+  id_patient?: string | null;
+  id_report?: string | null;
 };
 
 export type ModelConclusionConditionInput = {
-  text?: ModelStringInput | null,
-  and?: Array< ModelConclusionConditionInput | null > | null,
-  or?: Array< ModelConclusionConditionInput | null > | null,
-  not?: ModelConclusionConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
+  text?: ModelStringInput | null;
+  id_patient?: ModelStringInput | null;
+  id_report?: ModelStringInput | null;
+  and?: Array<ModelConclusionConditionInput | null> | null;
+  or?: Array<ModelConclusionConditionInput | null> | null;
+  not?: ModelConclusionConditionInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
 };
 
 export type Conclusion = {
-  __typename: "Conclusion",
-  id: string,
-  text?: string | null,
-  createdAt: string,
-  updatedAt: string,
+  __typename: "Conclusion";
+  id: string;
+  text?: string | null;
+  id_patient?: string | null;
+  id_report?: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UpdateConclusionInput = {
-  id: string,
-  text?: string | null,
+  id: string;
+  text?: string | null;
+  id_patient?: string | null;
+  id_report?: string | null;
 };
 
 export type DeleteConclusionInput = {
-  id: string,
+  id: string;
 };
 
 export type CreateRecommendationInput = {
-  id?: string | null,
-  text?: string | null,
-  variantreportID: string,
+  id?: string | null;
+  text?: string | null;
+  id_patient: string;
+  id_report?: string | null;
 };
 
 export type ModelRecommendationConditionInput = {
-  text?: ModelStringInput | null,
-  variantreportID?: ModelIDInput | null,
-  and?: Array< ModelRecommendationConditionInput | null > | null,
-  or?: Array< ModelRecommendationConditionInput | null > | null,
-  not?: ModelRecommendationConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
+  text?: ModelStringInput | null;
+  id_patient?: ModelIDInput | null;
+  id_report?: ModelStringInput | null;
+  and?: Array<ModelRecommendationConditionInput | null> | null;
+  or?: Array<ModelRecommendationConditionInput | null> | null;
+  not?: ModelRecommendationConditionInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
 };
 
 export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
+  ne?: string | null;
+  eq?: string | null;
+  le?: string | null;
+  lt?: string | null;
+  ge?: string | null;
+  gt?: string | null;
+  contains?: string | null;
+  notContains?: string | null;
+  between?: Array<string | null> | null;
+  beginsWith?: string | null;
+  attributeExists?: boolean | null;
+  attributeType?: ModelAttributeTypes | null;
+  size?: ModelSizeInput | null;
 };
 
 export type Recommendation = {
-  __typename: "Recommendation",
-  id: string,
-  text?: string | null,
-  variantreportID: string,
-  createdAt: string,
-  updatedAt: string,
+  __typename: "Recommendation";
+  id: string;
+  text?: string | null;
+  id_patient: string;
+  id_report?: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UpdateRecommendationInput = {
-  id: string,
-  text?: string | null,
-  variantreportID?: string | null,
+  id: string;
+  text?: string | null;
+  id_patient?: string | null;
+  id_report?: string | null;
 };
 
 export type DeleteRecommendationInput = {
-  id: string,
+  id: string;
 };
 
 export type CreateVariantReportInput = {
-  id?: string | null,
-  status?: number | null,
-  isApproved?: boolean | null,
-  medical_history?: string | null,
-  current_diagnosis?: string | null,
-  institutionID?: string | null,
-  createAt?: string | null,
-  phenotype?: Array< string | null > | null,
-  sample_collection?: string | null,
-  idPatient?: string | null,
+  id?: string | null;
+  status?: number | null;
+  isApproved?: boolean | null;
+  medical_history?: string | null;
+  current_diagnosis?: string | null;
+  institutionID?: string | null;
+  createAt?: string | null;
+  phenotype?: Array<string | null> | null;
+  sample_collection?: string | null;
+  idPatient?: string | null;
 };
 
 export type ModelVariantReportConditionInput = {
-  status?: ModelIntInput | null,
-  isApproved?: ModelBooleanInput | null,
-  medical_history?: ModelStringInput | null,
-  current_diagnosis?: ModelStringInput | null,
-  institutionID?: ModelIDInput | null,
-  createAt?: ModelStringInput | null,
-  phenotype?: ModelStringInput | null,
-  sample_collection?: ModelStringInput | null,
-  idPatient?: ModelStringInput | null,
-  and?: Array< ModelVariantReportConditionInput | null > | null,
-  or?: Array< ModelVariantReportConditionInput | null > | null,
-  not?: ModelVariantReportConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
+  status?: ModelIntInput | null;
+  isApproved?: ModelBooleanInput | null;
+  medical_history?: ModelStringInput | null;
+  current_diagnosis?: ModelStringInput | null;
+  institutionID?: ModelIDInput | null;
+  createAt?: ModelStringInput | null;
+  phenotype?: ModelStringInput | null;
+  sample_collection?: ModelStringInput | null;
+  idPatient?: ModelStringInput | null;
+  and?: Array<ModelVariantReportConditionInput | null> | null;
+  or?: Array<ModelVariantReportConditionInput | null> | null;
+  not?: ModelVariantReportConditionInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
 };
 
 export type ModelIntInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
+  ne?: number | null;
+  eq?: number | null;
+  le?: number | null;
+  lt?: number | null;
+  ge?: number | null;
+  gt?: number | null;
+  between?: Array<number | null> | null;
+  attributeExists?: boolean | null;
+  attributeType?: ModelAttributeTypes | null;
 };
 
 export type ModelBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
+  ne?: boolean | null;
+  eq?: boolean | null;
+  attributeExists?: boolean | null;
+  attributeType?: ModelAttributeTypes | null;
 };
 
 export type VariantReport = {
-  __typename: "VariantReport",
-  id: string,
-  status?: number | null,
-  isApproved?: boolean | null,
-  medical_history?: string | null,
-  current_diagnosis?: string | null,
-  institutionID?: string | null,
-  createAt?: string | null,
-  phenotype?: Array< string | null > | null,
-  sample_collection?: string | null,
-  idPatient?: string | null,
-  createdAt: string,
-  updatedAt: string,
+  __typename: "VariantReport";
+  id: string;
+  status?: number | null;
+  isApproved?: boolean | null;
+  medical_history?: string | null;
+  current_diagnosis?: string | null;
+  institutionID?: string | null;
+  createAt?: string | null;
+  phenotype?: Array<string | null> | null;
+  sample_collection?: string | null;
+  idPatient?: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UpdateVariantReportInput = {
-  id: string,
-  status?: number | null,
-  isApproved?: boolean | null,
-  medical_history?: string | null,
-  current_diagnosis?: string | null,
-  institutionID?: string | null,
-  createAt?: string | null,
-  phenotype?: Array< string | null > | null,
-  sample_collection?: string | null,
-  idPatient?: string | null,
+  id: string;
+  status?: number | null;
+  isApproved?: boolean | null;
+  medical_history?: string | null;
+  current_diagnosis?: string | null;
+  institutionID?: string | null;
+  createAt?: string | null;
+  phenotype?: Array<string | null> | null;
+  sample_collection?: string | null;
+  idPatient?: string | null;
 };
 
 export type DeleteVariantReportInput = {
-  id: string,
+  id: string;
 };
 
 export type CreatePatientDocumentsInput = {
-  id?: string | null,
-  name?: string | null,
-  patientID: string,
-  size?: number | null,
-  link?: string | null,
+  id?: string | null;
+  name?: string | null;
+  pathfile?: string | null;
+  doctype?: string | null;
+  id_patient?: string | null;
+  id_report?: string | null;
 };
 
 export type ModelPatientDocumentsConditionInput = {
-  name?: ModelStringInput | null,
-  patientID?: ModelIDInput | null,
-  size?: ModelIntInput | null,
-  link?: ModelStringInput | null,
-  and?: Array< ModelPatientDocumentsConditionInput | null > | null,
-  or?: Array< ModelPatientDocumentsConditionInput | null > | null,
-  not?: ModelPatientDocumentsConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
+  name?: ModelStringInput | null;
+  pathfile?: ModelStringInput | null;
+  doctype?: ModelStringInput | null;
+  id_patient?: ModelStringInput | null;
+  id_report?: ModelStringInput | null;
+  and?: Array<ModelPatientDocumentsConditionInput | null> | null;
+  or?: Array<ModelPatientDocumentsConditionInput | null> | null;
+  not?: ModelPatientDocumentsConditionInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
 };
 
 export type PatientDocuments = {
-  __typename: "PatientDocuments",
-  id: string,
-  name?: string | null,
-  patientID: string,
-  size?: number | null,
-  link?: string | null,
-  createdAt: string,
-  updatedAt: string,
+  __typename: "PatientDocuments";
+  id: string;
+  name?: string | null;
+  pathfile?: string | null;
+  doctype?: string | null;
+  id_patient?: string | null;
+  id_report?: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UpdatePatientDocumentsInput = {
-  id: string,
-  name?: string | null,
-  patientID?: string | null,
-  size?: number | null,
-  link?: string | null,
+  id: string;
+  name?: string | null;
+  pathfile?: string | null;
+  doctype?: string | null;
+  id_patient?: string | null;
+  id_report?: string | null;
 };
 
 export type DeletePatientDocumentsInput = {
-  id: string,
+  id: string;
 };
 
 export type CreatePatientInput = {
-  id?: string | null,
-  name?: string | null,
-  sex?: string | null,
-  phone_number?: string | null,
-  dob?: string | null,
-  institutionID: string,
+  id?: string | null;
+  name?: string | null;
+  sex?: string | null;
+  phone_number?: string | null;
+  dob?: string | null;
+  institutionID: string;
 };
 
 export type ModelPatientConditionInput = {
-  name?: ModelStringInput | null,
-  sex?: ModelStringInput | null,
-  phone_number?: ModelStringInput | null,
-  dob?: ModelStringInput | null,
-  institutionID?: ModelIDInput | null,
-  and?: Array< ModelPatientConditionInput | null > | null,
-  or?: Array< ModelPatientConditionInput | null > | null,
-  not?: ModelPatientConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
+  name?: ModelStringInput | null;
+  sex?: ModelStringInput | null;
+  phone_number?: ModelStringInput | null;
+  dob?: ModelStringInput | null;
+  institutionID?: ModelIDInput | null;
+  and?: Array<ModelPatientConditionInput | null> | null;
+  or?: Array<ModelPatientConditionInput | null> | null;
+  not?: ModelPatientConditionInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
 };
 
 export type Patient = {
-  __typename: "Patient",
-  id: string,
-  name?: string | null,
-  sex?: string | null,
-  phone_number?: string | null,
-  dob?: string | null,
-  institutionID: string,
-  PatientDokuments?: ModelPatientDocumentsConnection | null,
-  createdAt: string,
-  updatedAt: string,
+  __typename: "Patient";
+  id: string;
+  name?: string | null;
+  sex?: string | null;
+  phone_number?: string | null;
+  dob?: string | null;
+  institutionID: string;
+  PatientDokuments?: ModelPatientDocumentsConnection | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type ModelPatientDocumentsConnection = {
-  __typename: "ModelPatientDocumentsConnection",
-  items:  Array<PatientDocuments | null >,
-  nextToken?: string | null,
+  __typename: "ModelPatientDocumentsConnection";
+  items: Array<PatientDocuments | null>;
+  nextToken?: string | null;
 };
 
 export type UpdatePatientInput = {
-  id: string,
-  name?: string | null,
-  sex?: string | null,
-  phone_number?: string | null,
-  dob?: string | null,
-  institutionID?: string | null,
+  id: string;
+  name?: string | null;
+  sex?: string | null;
+  phone_number?: string | null;
+  dob?: string | null;
+  institutionID?: string | null;
 };
 
 export type DeletePatientInput = {
-  id: string,
+  id: string;
 };
 
 export type CreateUserInput = {
-  id?: string | null,
-  first_name?: string | null,
-  last_name?: string | null,
-  role?: string | null,
-  email?: string | null,
-  category?: string | null,
-  specialty?: string | null,
-  institutionID: string,
-  level?: number | null,
-  status?: number | null,
-  phone_number?: string | null,
+  id?: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
+  role?: string | null;
+  email?: string | null;
+  category?: string | null;
+  specialty?: string | null;
+  institutionID: string;
+  level?: number | null;
+  status?: number | null;
+  phone_number?: string | null;
 };
 
 export type ModelUserConditionInput = {
-  first_name?: ModelStringInput | null,
-  last_name?: ModelStringInput | null,
-  role?: ModelStringInput | null,
-  email?: ModelStringInput | null,
-  category?: ModelStringInput | null,
-  specialty?: ModelStringInput | null,
-  institutionID?: ModelIDInput | null,
-  level?: ModelIntInput | null,
-  status?: ModelIntInput | null,
-  phone_number?: ModelStringInput | null,
-  and?: Array< ModelUserConditionInput | null > | null,
-  or?: Array< ModelUserConditionInput | null > | null,
-  not?: ModelUserConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
+  first_name?: ModelStringInput | null;
+  last_name?: ModelStringInput | null;
+  role?: ModelStringInput | null;
+  email?: ModelStringInput | null;
+  category?: ModelStringInput | null;
+  specialty?: ModelStringInput | null;
+  institutionID?: ModelIDInput | null;
+  level?: ModelIntInput | null;
+  status?: ModelIntInput | null;
+  phone_number?: ModelStringInput | null;
+  and?: Array<ModelUserConditionInput | null> | null;
+  or?: Array<ModelUserConditionInput | null> | null;
+  not?: ModelUserConditionInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
 };
 
 export type User = {
-  __typename: "User",
-  id: string,
-  first_name?: string | null,
-  last_name?: string | null,
-  role?: string | null,
-  email?: string | null,
-  category?: string | null,
-  specialty?: string | null,
-  institutionID: string,
-  level?: number | null,
-  status?: number | null,
-  phone_number?: string | null,
-  createdAt: string,
-  updatedAt: string,
+  __typename: "User";
+  id: string;
+  first_name?: string | null;
+  last_name?: string | null;
+  role?: string | null;
+  email?: string | null;
+  category?: string | null;
+  specialty?: string | null;
+  institutionID: string;
+  level?: number | null;
+  status?: number | null;
+  phone_number?: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UpdateUserInput = {
-  id: string,
-  first_name?: string | null,
-  last_name?: string | null,
-  role?: string | null,
-  email?: string | null,
-  category?: string | null,
-  specialty?: string | null,
-  institutionID?: string | null,
-  level?: number | null,
-  status?: number | null,
-  phone_number?: string | null,
+  id: string;
+  first_name?: string | null;
+  last_name?: string | null;
+  role?: string | null;
+  email?: string | null;
+  category?: string | null;
+  specialty?: string | null;
+  institutionID?: string | null;
+  level?: number | null;
+  status?: number | null;
+  phone_number?: string | null;
 };
 
 export type DeleteUserInput = {
-  id: string,
+  id: string;
 };
 
 export type CreateInstitutionInput = {
-  id?: string | null,
-  name?: string | null,
-  contactname?: string | null,
-  address?: string | null,
-  subscription_type?: string | null,
-  email?: string | null,
-  userQuotas?: number | null,
-  currentUserQuota?: number | null,
-  storageQuota?: number | null,
-  registrationDate?: string | null,
-  accountStatus?: boolean | null,
-  contactphone?: string | null,
-  dueDate?: string | null,
-  currentStorageQuota?: number | null,
+  id?: string | null;
+  name?: string | null;
+  contactname?: string | null;
+  address?: string | null;
+  subscription_type?: string | null;
+  email?: string | null;
+  userQuotas?: number | null;
+  currentUserQuota?: number | null;
+  storageQuota?: number | null;
+  registrationDate?: string | null;
+  accountStatus?: boolean | null;
+  contactphone?: string | null;
+  dueDate?: string | null;
+  currentStorageQuota?: number | null;
 };
 
 export type ModelInstitutionConditionInput = {
-  name?: ModelStringInput | null,
-  contactname?: ModelStringInput | null,
-  address?: ModelStringInput | null,
-  subscription_type?: ModelStringInput | null,
-  email?: ModelStringInput | null,
-  userQuotas?: ModelIntInput | null,
-  currentUserQuota?: ModelIntInput | null,
-  storageQuota?: ModelFloatInput | null,
-  registrationDate?: ModelStringInput | null,
-  accountStatus?: ModelBooleanInput | null,
-  contactphone?: ModelStringInput | null,
-  dueDate?: ModelStringInput | null,
-  currentStorageQuota?: ModelFloatInput | null,
-  and?: Array< ModelInstitutionConditionInput | null > | null,
-  or?: Array< ModelInstitutionConditionInput | null > | null,
-  not?: ModelInstitutionConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
+  name?: ModelStringInput | null;
+  contactname?: ModelStringInput | null;
+  address?: ModelStringInput | null;
+  subscription_type?: ModelStringInput | null;
+  email?: ModelStringInput | null;
+  userQuotas?: ModelIntInput | null;
+  currentUserQuota?: ModelIntInput | null;
+  storageQuota?: ModelFloatInput | null;
+  registrationDate?: ModelStringInput | null;
+  accountStatus?: ModelBooleanInput | null;
+  contactphone?: ModelStringInput | null;
+  dueDate?: ModelStringInput | null;
+  currentStorageQuota?: ModelFloatInput | null;
+  and?: Array<ModelInstitutionConditionInput | null> | null;
+  or?: Array<ModelInstitutionConditionInput | null> | null;
+  not?: ModelInstitutionConditionInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
 };
 
 export type Institution = {
-  __typename: "Institution",
-  id: string,
-  name?: string | null,
-  contactname?: string | null,
-  address?: string | null,
-  subscription_type?: string | null,
-  email?: string | null,
-  Users?: ModelPatientConnection | null,
-  Patients?: ModelPatientConnection | null,
-  userQuotas?: number | null,
-  currentUserQuota?: number | null,
-  storageQuota?: number | null,
-  registrationDate?: string | null,
-  accountStatus?: boolean | null,
-  VariantReports?: ModelPatientConnection | null,
-  contactphone?: string | null,
-  dueDate?: string | null,
-  currentStorageQuota?: number | null,
-  createdAt: string,
-  updatedAt: string,
+  __typename: "Institution";
+  id: string;
+  name?: string | null;
+  contactname?: string | null;
+  address?: string | null;
+  subscription_type?: string | null;
+  email?: string | null;
+  Users?: ModelPatientConnection | null;
+  Patients?: ModelPatientConnection | null;
+  userQuotas?: number | null;
+  currentUserQuota?: number | null;
+  storageQuota?: number | null;
+  registrationDate?: string | null;
+  accountStatus?: boolean | null;
+  VariantReports?: ModelPatientConnection | null;
+  contactphone?: string | null;
+  dueDate?: string | null;
+  currentStorageQuota?: number | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type ModelPatientConnection = {
-  __typename: "ModelPatientConnection",
-  items:  Array<Patient | null >,
-  nextToken?: string | null,
+  __typename: "ModelPatientConnection";
+  items: Array<Patient | null>;
+  nextToken?: string | null;
 };
 
 export type UpdateInstitutionInput = {
-  id: string,
-  name?: string | null,
-  contactname?: string | null,
-  address?: string | null,
-  subscription_type?: string | null,
-  email?: string | null,
-  userQuotas?: number | null,
-  currentUserQuota?: number | null,
-  storageQuota?: number | null,
-  registrationDate?: string | null,
-  accountStatus?: boolean | null,
-  contactphone?: string | null,
-  dueDate?: string | null,
-  currentStorageQuota?: number | null,
+  id: string;
+  name?: string | null;
+  contactname?: string | null;
+  address?: string | null;
+  subscription_type?: string | null;
+  email?: string | null;
+  userQuotas?: number | null;
+  currentUserQuota?: number | null;
+  storageQuota?: number | null;
+  registrationDate?: string | null;
+  accountStatus?: boolean | null;
+  contactphone?: string | null;
+  dueDate?: string | null;
+  currentStorageQuota?: number | null;
 };
 
 export type DeleteInstitutionInput = {
-  id: string,
+  id: string;
+};
+
+export type ModelVariantInterpretationFilterInput = {
+  id?: ModelIDInput | null;
+  hgvs?: ModelStringInput | null;
+  text?: ModelStringInput | null;
+  id_patient?: ModelStringInput | null;
+  id_report?: ModelStringInput | null;
+  id_varsample?: ModelStringInput | null;
+  gene?: ModelStringInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+  and?: Array<ModelVariantInterpretationFilterInput | null> | null;
+  or?: Array<ModelVariantInterpretationFilterInput | null> | null;
+  not?: ModelVariantInterpretationFilterInput | null;
+};
+
+export type ModelVariantInterpretationConnection = {
+  __typename: "ModelVariantInterpretationConnection";
+  items: Array<VariantInterpretation | null>;
+  nextToken?: string | null;
 };
 
 export type ModelSelectedVariantFilterInput = {
-  id?: ModelIDInput | null,
-  id_patient?: ModelStringInput | null,
-  id_vcf?: ModelStringInput | null,
-  id_report?: ModelStringInput | null,
-  gene_id?: ModelStringInput | null,
-  gene_symbol?: ModelStringInput | null,
-  chrom?: ModelStringInput | null,
-  pos?: ModelStringInput | null,
-  id_var?: ModelStringInput | null,
-  ref?: ModelStringInput | null,
-  alt?: ModelStringInput | null,
-  qual?: ModelStringInput | null,
-  zigosity?: ModelStringInput | null,
-  global_allele?: ModelFloatInput | null,
-  functional_impact?: ModelStringInput | null,
-  acmg?: ModelStringInput | null,
-  reviewer_class?: ModelStringInput | null,
-  clinical_sign?: ModelStringInput | null,
-  hgvs?: ModelStringInput | null,
-  severe_consequence?: ModelStringInput | null,
-  sift_score?: ModelFloatInput | null,
-  sift_prediction?: ModelStringInput | null,
-  phenotypes?: ModelStringInput | null,
-  rsID?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelSelectedVariantFilterInput | null > | null,
-  or?: Array< ModelSelectedVariantFilterInput | null > | null,
-  not?: ModelSelectedVariantFilterInput | null,
+  id?: ModelIDInput | null;
+  id_patient?: ModelStringInput | null;
+  id_vcf?: ModelStringInput | null;
+  id_report?: ModelStringInput | null;
+  gene_id?: ModelStringInput | null;
+  gene_symbol?: ModelStringInput | null;
+  chrom?: ModelStringInput | null;
+  pos?: ModelStringInput | null;
+  id_var?: ModelStringInput | null;
+  ref?: ModelStringInput | null;
+  alt?: ModelStringInput | null;
+  qual?: ModelStringInput | null;
+  zigosity?: ModelStringInput | null;
+  global_allele?: ModelFloatInput | null;
+  functional_impact?: ModelStringInput | null;
+  acmg?: ModelStringInput | null;
+  reviewer_class?: ModelStringInput | null;
+  clinical_sign?: ModelStringInput | null;
+  hgvs?: ModelStringInput | null;
+  severe_consequence?: ModelStringInput | null;
+  sift_score?: ModelFloatInput | null;
+  sift_prediction?: ModelStringInput | null;
+  phenotypes?: ModelStringInput | null;
+  rsID?: ModelStringInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+  and?: Array<ModelSelectedVariantFilterInput | null> | null;
+  or?: Array<ModelSelectedVariantFilterInput | null> | null;
+  not?: ModelSelectedVariantFilterInput | null;
 };
 
 export type ModelSelectedVariantConnection = {
-  __typename: "ModelSelectedVariantConnection",
-  items:  Array<SelectedVariant | null >,
-  nextToken?: string | null,
+  __typename: "ModelSelectedVariantConnection";
+  items: Array<SelectedVariant | null>;
+  nextToken?: string | null;
 };
 
 export type ModelVcfdataFilterInput = {
-  id?: ModelIDInput | null,
-  id_patient?: ModelStringInput | null,
-  sample_date?: ModelStringInput | null,
-  uploadAt?: ModelStringInput | null,
-  pathfile?: ModelStringInput | null,
-  genome_reference?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelVcfdataFilterInput | null > | null,
-  or?: Array< ModelVcfdataFilterInput | null > | null,
-  not?: ModelVcfdataFilterInput | null,
+  id?: ModelIDInput | null;
+  id_patient?: ModelStringInput | null;
+  sample_date?: ModelStringInput | null;
+  uploadAt?: ModelStringInput | null;
+  pathfile?: ModelStringInput | null;
+  genome_reference?: ModelStringInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+  and?: Array<ModelVcfdataFilterInput | null> | null;
+  or?: Array<ModelVcfdataFilterInput | null> | null;
+  not?: ModelVcfdataFilterInput | null;
 };
 
 export type ModelVcfdataConnection = {
-  __typename: "ModelVcfdataConnection",
-  items:  Array<Vcfdata | null >,
-  nextToken?: string | null,
+  __typename: "ModelVcfdataConnection";
+  items: Array<Vcfdata | null>;
+  nextToken?: string | null;
 };
 
 export type ModelVariantFilterInput = {
-  id?: ModelIDInput | null,
-  chrom?: ModelStringInput | null,
-  pos?: ModelStringInput | null,
-  ref?: ModelStringInput | null,
-  alt?: ModelStringInput | null,
-  qual?: ModelStringInput | null,
-  filter?: ModelStringInput | null,
-  info?: ModelStringInput | null,
-  hgvs?: ModelStringInput | null,
-  id_var?: ModelStringInput | null,
-  id_patient?: ModelStringInput | null,
-  id_vcf?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelVariantFilterInput | null > | null,
-  or?: Array< ModelVariantFilterInput | null > | null,
-  not?: ModelVariantFilterInput | null,
+  id?: ModelIDInput | null;
+  chrom?: ModelStringInput | null;
+  pos?: ModelStringInput | null;
+  ref?: ModelStringInput | null;
+  alt?: ModelStringInput | null;
+  qual?: ModelStringInput | null;
+  filter?: ModelStringInput | null;
+  info?: ModelStringInput | null;
+  hgvs?: ModelStringInput | null;
+  id_var?: ModelStringInput | null;
+  id_patient?: ModelStringInput | null;
+  id_vcf?: ModelStringInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+  and?: Array<ModelVariantFilterInput | null> | null;
+  or?: Array<ModelVariantFilterInput | null> | null;
+  not?: ModelVariantFilterInput | null;
 };
 
 export type ModelVariantConnection = {
-  __typename: "ModelVariantConnection",
-  items:  Array<Variant | null >,
-  nextToken?: string | null,
+  __typename: "ModelVariantConnection";
+  items: Array<Variant | null>;
+  nextToken?: string | null;
 };
 
 export type ModelGeneticsConselorFilterInput = {
-  id?: ModelIDInput | null,
-  text?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelGeneticsConselorFilterInput | null > | null,
-  or?: Array< ModelGeneticsConselorFilterInput | null > | null,
-  not?: ModelGeneticsConselorFilterInput | null,
+  id?: ModelIDInput | null;
+  text?: ModelStringInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+  and?: Array<ModelGeneticsConselorFilterInput | null> | null;
+  or?: Array<ModelGeneticsConselorFilterInput | null> | null;
+  not?: ModelGeneticsConselorFilterInput | null;
 };
 
 export type ModelGeneticsConselorConnection = {
-  __typename: "ModelGeneticsConselorConnection",
-  items:  Array<GeneticsConselor | null >,
-  nextToken?: string | null,
+  __typename: "ModelGeneticsConselorConnection";
+  items: Array<GeneticsConselor | null>;
+  nextToken?: string | null;
 };
 
 export type ModelPhenotypeFilterInput = {
-  id?: ModelIDInput | null,
-  PhenotypeCode?: ModelStringInput | null,
-  Description?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelPhenotypeFilterInput | null > | null,
-  or?: Array< ModelPhenotypeFilterInput | null > | null,
-  not?: ModelPhenotypeFilterInput | null,
+  id?: ModelIDInput | null;
+  PhenotypeCode?: ModelStringInput | null;
+  Description?: ModelStringInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+  and?: Array<ModelPhenotypeFilterInput | null> | null;
+  or?: Array<ModelPhenotypeFilterInput | null> | null;
+  not?: ModelPhenotypeFilterInput | null;
 };
 
 export type ModelPhenotypeConnection = {
-  __typename: "ModelPhenotypeConnection",
-  items:  Array<Phenotype | null >,
-  nextToken?: string | null,
+  __typename: "ModelPhenotypeConnection";
+  items: Array<Phenotype | null>;
+  nextToken?: string | null;
 };
 
 export type ModelConclusionFilterInput = {
-  id?: ModelIDInput | null,
-  text?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelConclusionFilterInput | null > | null,
-  or?: Array< ModelConclusionFilterInput | null > | null,
-  not?: ModelConclusionFilterInput | null,
+  id?: ModelIDInput | null;
+  text?: ModelStringInput | null;
+  id_patient?: ModelStringInput | null;
+  id_report?: ModelStringInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+  and?: Array<ModelConclusionFilterInput | null> | null;
+  or?: Array<ModelConclusionFilterInput | null> | null;
+  not?: ModelConclusionFilterInput | null;
 };
 
 export type ModelConclusionConnection = {
-  __typename: "ModelConclusionConnection",
-  items:  Array<Conclusion | null >,
-  nextToken?: string | null,
+  __typename: "ModelConclusionConnection";
+  items: Array<Conclusion | null>;
+  nextToken?: string | null;
 };
 
 export type ModelRecommendationFilterInput = {
-  id?: ModelIDInput | null,
-  text?: ModelStringInput | null,
-  variantreportID?: ModelIDInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelRecommendationFilterInput | null > | null,
-  or?: Array< ModelRecommendationFilterInput | null > | null,
-  not?: ModelRecommendationFilterInput | null,
+  id?: ModelIDInput | null;
+  text?: ModelStringInput | null;
+  id_patient?: ModelIDInput | null;
+  id_report?: ModelStringInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+  and?: Array<ModelRecommendationFilterInput | null> | null;
+  or?: Array<ModelRecommendationFilterInput | null> | null;
+  not?: ModelRecommendationFilterInput | null;
 };
 
 export type ModelRecommendationConnection = {
-  __typename: "ModelRecommendationConnection",
-  items:  Array<Recommendation | null >,
-  nextToken?: string | null,
+  __typename: "ModelRecommendationConnection";
+  items: Array<Recommendation | null>;
+  nextToken?: string | null;
 };
 
 export type ModelVariantReportFilterInput = {
-  id?: ModelIDInput | null,
-  status?: ModelIntInput | null,
-  isApproved?: ModelBooleanInput | null,
-  medical_history?: ModelStringInput | null,
-  current_diagnosis?: ModelStringInput | null,
-  institutionID?: ModelIDInput | null,
-  createAt?: ModelStringInput | null,
-  phenotype?: ModelStringInput | null,
-  sample_collection?: ModelStringInput | null,
-  idPatient?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelVariantReportFilterInput | null > | null,
-  or?: Array< ModelVariantReportFilterInput | null > | null,
-  not?: ModelVariantReportFilterInput | null,
+  id?: ModelIDInput | null;
+  status?: ModelIntInput | null;
+  isApproved?: ModelBooleanInput | null;
+  medical_history?: ModelStringInput | null;
+  current_diagnosis?: ModelStringInput | null;
+  institutionID?: ModelIDInput | null;
+  createAt?: ModelStringInput | null;
+  phenotype?: ModelStringInput | null;
+  sample_collection?: ModelStringInput | null;
+  idPatient?: ModelStringInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+  and?: Array<ModelVariantReportFilterInput | null> | null;
+  or?: Array<ModelVariantReportFilterInput | null> | null;
+  not?: ModelVariantReportFilterInput | null;
 };
 
 export type ModelVariantReportConnection = {
-  __typename: "ModelVariantReportConnection",
-  items:  Array<VariantReport | null >,
-  nextToken?: string | null,
+  __typename: "ModelVariantReportConnection";
+  items: Array<VariantReport | null>;
+  nextToken?: string | null;
 };
 
 export type ModelPatientDocumentsFilterInput = {
-  id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  patientID?: ModelIDInput | null,
-  size?: ModelIntInput | null,
-  link?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelPatientDocumentsFilterInput | null > | null,
-  or?: Array< ModelPatientDocumentsFilterInput | null > | null,
-  not?: ModelPatientDocumentsFilterInput | null,
+  id?: ModelIDInput | null;
+  name?: ModelStringInput | null;
+  pathfile?: ModelStringInput | null;
+  doctype?: ModelStringInput | null;
+  id_patient?: ModelStringInput | null;
+  id_report?: ModelStringInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+  and?: Array<ModelPatientDocumentsFilterInput | null> | null;
+  or?: Array<ModelPatientDocumentsFilterInput | null> | null;
+  not?: ModelPatientDocumentsFilterInput | null;
 };
 
 export type ModelPatientFilterInput = {
-  id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  sex?: ModelStringInput | null,
-  phone_number?: ModelStringInput | null,
-  dob?: ModelStringInput | null,
-  institutionID?: ModelIDInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelPatientFilterInput | null > | null,
-  or?: Array< ModelPatientFilterInput | null > | null,
-  not?: ModelPatientFilterInput | null,
+  id?: ModelIDInput | null;
+  name?: ModelStringInput | null;
+  sex?: ModelStringInput | null;
+  phone_number?: ModelStringInput | null;
+  dob?: ModelStringInput | null;
+  institutionID?: ModelIDInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+  and?: Array<ModelPatientFilterInput | null> | null;
+  or?: Array<ModelPatientFilterInput | null> | null;
+  not?: ModelPatientFilterInput | null;
 };
 
 export type ModelUserFilterInput = {
-  id?: ModelIDInput | null,
-  first_name?: ModelStringInput | null,
-  last_name?: ModelStringInput | null,
-  role?: ModelStringInput | null,
-  email?: ModelStringInput | null,
-  category?: ModelStringInput | null,
-  specialty?: ModelStringInput | null,
-  institutionID?: ModelIDInput | null,
-  level?: ModelIntInput | null,
-  status?: ModelIntInput | null,
-  phone_number?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelUserFilterInput | null > | null,
-  or?: Array< ModelUserFilterInput | null > | null,
-  not?: ModelUserFilterInput | null,
+  id?: ModelIDInput | null;
+  first_name?: ModelStringInput | null;
+  last_name?: ModelStringInput | null;
+  role?: ModelStringInput | null;
+  email?: ModelStringInput | null;
+  category?: ModelStringInput | null;
+  specialty?: ModelStringInput | null;
+  institutionID?: ModelIDInput | null;
+  level?: ModelIntInput | null;
+  status?: ModelIntInput | null;
+  phone_number?: ModelStringInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+  and?: Array<ModelUserFilterInput | null> | null;
+  or?: Array<ModelUserFilterInput | null> | null;
+  not?: ModelUserFilterInput | null;
 };
 
 export type ModelUserConnection = {
-  __typename: "ModelUserConnection",
-  items:  Array<User | null >,
-  nextToken?: string | null,
+  __typename: "ModelUserConnection";
+  items: Array<User | null>;
+  nextToken?: string | null;
 };
 
 export type ModelInstitutionFilterInput = {
-  id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  contactname?: ModelStringInput | null,
-  address?: ModelStringInput | null,
-  subscription_type?: ModelStringInput | null,
-  email?: ModelStringInput | null,
-  userQuotas?: ModelIntInput | null,
-  currentUserQuota?: ModelIntInput | null,
-  storageQuota?: ModelFloatInput | null,
-  registrationDate?: ModelStringInput | null,
-  accountStatus?: ModelBooleanInput | null,
-  contactphone?: ModelStringInput | null,
-  dueDate?: ModelStringInput | null,
-  currentStorageQuota?: ModelFloatInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelInstitutionFilterInput | null > | null,
-  or?: Array< ModelInstitutionFilterInput | null > | null,
-  not?: ModelInstitutionFilterInput | null,
+  id?: ModelIDInput | null;
+  name?: ModelStringInput | null;
+  contactname?: ModelStringInput | null;
+  address?: ModelStringInput | null;
+  subscription_type?: ModelStringInput | null;
+  email?: ModelStringInput | null;
+  userQuotas?: ModelIntInput | null;
+  currentUserQuota?: ModelIntInput | null;
+  storageQuota?: ModelFloatInput | null;
+  registrationDate?: ModelStringInput | null;
+  accountStatus?: ModelBooleanInput | null;
+  contactphone?: ModelStringInput | null;
+  dueDate?: ModelStringInput | null;
+  currentStorageQuota?: ModelFloatInput | null;
+  createdAt?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+  and?: Array<ModelInstitutionFilterInput | null> | null;
+  or?: Array<ModelInstitutionFilterInput | null> | null;
+  not?: ModelInstitutionFilterInput | null;
 };
 
 export type ModelInstitutionConnection = {
-  __typename: "ModelInstitutionConnection",
-  items:  Array<Institution | null >,
-  nextToken?: string | null,
+  __typename: "ModelInstitutionConnection";
+  items: Array<Institution | null>;
+  nextToken?: string | null;
 };
 
-export type ModelSubscriptionSelectedVariantFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  id_patient?: ModelSubscriptionStringInput | null,
-  id_vcf?: ModelSubscriptionStringInput | null,
-  id_report?: ModelSubscriptionStringInput | null,
-  gene_id?: ModelSubscriptionStringInput | null,
-  gene_symbol?: ModelSubscriptionStringInput | null,
-  chrom?: ModelSubscriptionStringInput | null,
-  pos?: ModelSubscriptionStringInput | null,
-  id_var?: ModelSubscriptionStringInput | null,
-  ref?: ModelSubscriptionStringInput | null,
-  alt?: ModelSubscriptionStringInput | null,
-  qual?: ModelSubscriptionStringInput | null,
-  zigosity?: ModelSubscriptionStringInput | null,
-  global_allele?: ModelSubscriptionFloatInput | null,
-  functional_impact?: ModelSubscriptionStringInput | null,
-  acmg?: ModelSubscriptionStringInput | null,
-  reviewer_class?: ModelSubscriptionStringInput | null,
-  clinical_sign?: ModelSubscriptionStringInput | null,
-  hgvs?: ModelSubscriptionStringInput | null,
-  severe_consequence?: ModelSubscriptionStringInput | null,
-  sift_score?: ModelSubscriptionFloatInput | null,
-  sift_prediction?: ModelSubscriptionStringInput | null,
-  phenotypes?: ModelSubscriptionStringInput | null,
-  rsID?: ModelSubscriptionStringInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionSelectedVariantFilterInput | null > | null,
-  or?: Array< ModelSubscriptionSelectedVariantFilterInput | null > | null,
+export type ModelSubscriptionVariantInterpretationFilterInput = {
+  id?: ModelSubscriptionIDInput | null;
+  hgvs?: ModelSubscriptionStringInput | null;
+  text?: ModelSubscriptionStringInput | null;
+  id_patient?: ModelSubscriptionStringInput | null;
+  id_report?: ModelSubscriptionStringInput | null;
+  id_varsample?: ModelSubscriptionStringInput | null;
+  gene?: ModelSubscriptionStringInput | null;
+  createdAt?: ModelSubscriptionStringInput | null;
+  updatedAt?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionVariantInterpretationFilterInput | null> | null;
+  or?: Array<ModelSubscriptionVariantInterpretationFilterInput | null> | null;
 };
 
 export type ModelSubscriptionIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  in?: Array< string | null > | null,
-  notIn?: Array< string | null > | null,
+  ne?: string | null;
+  eq?: string | null;
+  le?: string | null;
+  lt?: string | null;
+  ge?: string | null;
+  gt?: string | null;
+  contains?: string | null;
+  notContains?: string | null;
+  between?: Array<string | null> | null;
+  beginsWith?: string | null;
+  in?: Array<string | null> | null;
+  notIn?: Array<string | null> | null;
 };
 
 export type ModelSubscriptionStringInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  in?: Array< string | null > | null,
-  notIn?: Array< string | null > | null,
+  ne?: string | null;
+  eq?: string | null;
+  le?: string | null;
+  lt?: string | null;
+  ge?: string | null;
+  gt?: string | null;
+  contains?: string | null;
+  notContains?: string | null;
+  between?: Array<string | null> | null;
+  beginsWith?: string | null;
+  in?: Array<string | null> | null;
+  notIn?: Array<string | null> | null;
+};
+
+export type ModelSubscriptionSelectedVariantFilterInput = {
+  id?: ModelSubscriptionIDInput | null;
+  id_patient?: ModelSubscriptionStringInput | null;
+  id_vcf?: ModelSubscriptionStringInput | null;
+  id_report?: ModelSubscriptionStringInput | null;
+  gene_id?: ModelSubscriptionStringInput | null;
+  gene_symbol?: ModelSubscriptionStringInput | null;
+  chrom?: ModelSubscriptionStringInput | null;
+  pos?: ModelSubscriptionStringInput | null;
+  id_var?: ModelSubscriptionStringInput | null;
+  ref?: ModelSubscriptionStringInput | null;
+  alt?: ModelSubscriptionStringInput | null;
+  qual?: ModelSubscriptionStringInput | null;
+  zigosity?: ModelSubscriptionStringInput | null;
+  global_allele?: ModelSubscriptionFloatInput | null;
+  functional_impact?: ModelSubscriptionStringInput | null;
+  acmg?: ModelSubscriptionStringInput | null;
+  reviewer_class?: ModelSubscriptionStringInput | null;
+  clinical_sign?: ModelSubscriptionStringInput | null;
+  hgvs?: ModelSubscriptionStringInput | null;
+  severe_consequence?: ModelSubscriptionStringInput | null;
+  sift_score?: ModelSubscriptionFloatInput | null;
+  sift_prediction?: ModelSubscriptionStringInput | null;
+  phenotypes?: ModelSubscriptionStringInput | null;
+  rsID?: ModelSubscriptionStringInput | null;
+  createdAt?: ModelSubscriptionStringInput | null;
+  updatedAt?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionSelectedVariantFilterInput | null> | null;
+  or?: Array<ModelSubscriptionSelectedVariantFilterInput | null> | null;
 };
 
 export type ModelSubscriptionFloatInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  in?: Array< number | null > | null,
-  notIn?: Array< number | null > | null,
+  ne?: number | null;
+  eq?: number | null;
+  le?: number | null;
+  lt?: number | null;
+  ge?: number | null;
+  gt?: number | null;
+  between?: Array<number | null> | null;
+  in?: Array<number | null> | null;
+  notIn?: Array<number | null> | null;
 };
 
 export type ModelSubscriptionVcfdataFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  id_patient?: ModelSubscriptionStringInput | null,
-  sample_date?: ModelSubscriptionStringInput | null,
-  uploadAt?: ModelSubscriptionStringInput | null,
-  pathfile?: ModelSubscriptionStringInput | null,
-  genome_reference?: ModelSubscriptionStringInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionVcfdataFilterInput | null > | null,
-  or?: Array< ModelSubscriptionVcfdataFilterInput | null > | null,
+  id?: ModelSubscriptionIDInput | null;
+  id_patient?: ModelSubscriptionStringInput | null;
+  sample_date?: ModelSubscriptionStringInput | null;
+  uploadAt?: ModelSubscriptionStringInput | null;
+  pathfile?: ModelSubscriptionStringInput | null;
+  genome_reference?: ModelSubscriptionStringInput | null;
+  createdAt?: ModelSubscriptionStringInput | null;
+  updatedAt?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionVcfdataFilterInput | null> | null;
+  or?: Array<ModelSubscriptionVcfdataFilterInput | null> | null;
 };
 
 export type ModelSubscriptionVariantFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  chrom?: ModelSubscriptionStringInput | null,
-  pos?: ModelSubscriptionStringInput | null,
-  ref?: ModelSubscriptionStringInput | null,
-  alt?: ModelSubscriptionStringInput | null,
-  qual?: ModelSubscriptionStringInput | null,
-  filter?: ModelSubscriptionStringInput | null,
-  info?: ModelSubscriptionStringInput | null,
-  hgvs?: ModelSubscriptionStringInput | null,
-  id_var?: ModelSubscriptionStringInput | null,
-  id_patient?: ModelSubscriptionStringInput | null,
-  id_vcf?: ModelSubscriptionStringInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionVariantFilterInput | null > | null,
-  or?: Array< ModelSubscriptionVariantFilterInput | null > | null,
+  id?: ModelSubscriptionIDInput | null;
+  chrom?: ModelSubscriptionStringInput | null;
+  pos?: ModelSubscriptionStringInput | null;
+  ref?: ModelSubscriptionStringInput | null;
+  alt?: ModelSubscriptionStringInput | null;
+  qual?: ModelSubscriptionStringInput | null;
+  filter?: ModelSubscriptionStringInput | null;
+  info?: ModelSubscriptionStringInput | null;
+  hgvs?: ModelSubscriptionStringInput | null;
+  id_var?: ModelSubscriptionStringInput | null;
+  id_patient?: ModelSubscriptionStringInput | null;
+  id_vcf?: ModelSubscriptionStringInput | null;
+  createdAt?: ModelSubscriptionStringInput | null;
+  updatedAt?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionVariantFilterInput | null> | null;
+  or?: Array<ModelSubscriptionVariantFilterInput | null> | null;
 };
 
 export type ModelSubscriptionGeneticsConselorFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  text?: ModelSubscriptionStringInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionGeneticsConselorFilterInput | null > | null,
-  or?: Array< ModelSubscriptionGeneticsConselorFilterInput | null > | null,
+  id?: ModelSubscriptionIDInput | null;
+  text?: ModelSubscriptionStringInput | null;
+  createdAt?: ModelSubscriptionStringInput | null;
+  updatedAt?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionGeneticsConselorFilterInput | null> | null;
+  or?: Array<ModelSubscriptionGeneticsConselorFilterInput | null> | null;
 };
 
 export type ModelSubscriptionPhenotypeFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  PhenotypeCode?: ModelSubscriptionStringInput | null,
-  Description?: ModelSubscriptionStringInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionPhenotypeFilterInput | null > | null,
-  or?: Array< ModelSubscriptionPhenotypeFilterInput | null > | null,
+  id?: ModelSubscriptionIDInput | null;
+  PhenotypeCode?: ModelSubscriptionStringInput | null;
+  Description?: ModelSubscriptionStringInput | null;
+  createdAt?: ModelSubscriptionStringInput | null;
+  updatedAt?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionPhenotypeFilterInput | null> | null;
+  or?: Array<ModelSubscriptionPhenotypeFilterInput | null> | null;
 };
 
 export type ModelSubscriptionConclusionFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  text?: ModelSubscriptionStringInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionConclusionFilterInput | null > | null,
-  or?: Array< ModelSubscriptionConclusionFilterInput | null > | null,
+  id?: ModelSubscriptionIDInput | null;
+  text?: ModelSubscriptionStringInput | null;
+  id_patient?: ModelSubscriptionStringInput | null;
+  id_report?: ModelSubscriptionStringInput | null;
+  createdAt?: ModelSubscriptionStringInput | null;
+  updatedAt?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionConclusionFilterInput | null> | null;
+  or?: Array<ModelSubscriptionConclusionFilterInput | null> | null;
 };
 
 export type ModelSubscriptionRecommendationFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  text?: ModelSubscriptionStringInput | null,
-  variantreportID?: ModelSubscriptionIDInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionRecommendationFilterInput | null > | null,
-  or?: Array< ModelSubscriptionRecommendationFilterInput | null > | null,
+  id?: ModelSubscriptionIDInput | null;
+  text?: ModelSubscriptionStringInput | null;
+  id_patient?: ModelSubscriptionIDInput | null;
+  id_report?: ModelSubscriptionStringInput | null;
+  createdAt?: ModelSubscriptionStringInput | null;
+  updatedAt?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionRecommendationFilterInput | null> | null;
+  or?: Array<ModelSubscriptionRecommendationFilterInput | null> | null;
 };
 
 export type ModelSubscriptionVariantReportFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  status?: ModelSubscriptionIntInput | null,
-  isApproved?: ModelSubscriptionBooleanInput | null,
-  medical_history?: ModelSubscriptionStringInput | null,
-  current_diagnosis?: ModelSubscriptionStringInput | null,
-  institutionID?: ModelSubscriptionIDInput | null,
-  createAt?: ModelSubscriptionStringInput | null,
-  phenotype?: ModelSubscriptionStringInput | null,
-  sample_collection?: ModelSubscriptionStringInput | null,
-  idPatient?: ModelSubscriptionStringInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionVariantReportFilterInput | null > | null,
-  or?: Array< ModelSubscriptionVariantReportFilterInput | null > | null,
+  id?: ModelSubscriptionIDInput | null;
+  status?: ModelSubscriptionIntInput | null;
+  isApproved?: ModelSubscriptionBooleanInput | null;
+  medical_history?: ModelSubscriptionStringInput | null;
+  current_diagnosis?: ModelSubscriptionStringInput | null;
+  institutionID?: ModelSubscriptionIDInput | null;
+  createAt?: ModelSubscriptionStringInput | null;
+  phenotype?: ModelSubscriptionStringInput | null;
+  sample_collection?: ModelSubscriptionStringInput | null;
+  idPatient?: ModelSubscriptionStringInput | null;
+  createdAt?: ModelSubscriptionStringInput | null;
+  updatedAt?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionVariantReportFilterInput | null> | null;
+  or?: Array<ModelSubscriptionVariantReportFilterInput | null> | null;
 };
 
 export type ModelSubscriptionIntInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  in?: Array< number | null > | null,
-  notIn?: Array< number | null > | null,
+  ne?: number | null;
+  eq?: number | null;
+  le?: number | null;
+  lt?: number | null;
+  ge?: number | null;
+  gt?: number | null;
+  between?: Array<number | null> | null;
+  in?: Array<number | null> | null;
+  notIn?: Array<number | null> | null;
 };
 
 export type ModelSubscriptionBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
+  ne?: boolean | null;
+  eq?: boolean | null;
 };
 
 export type ModelSubscriptionPatientDocumentsFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  name?: ModelSubscriptionStringInput | null,
-  patientID?: ModelSubscriptionIDInput | null,
-  size?: ModelSubscriptionIntInput | null,
-  link?: ModelSubscriptionStringInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionPatientDocumentsFilterInput | null > | null,
-  or?: Array< ModelSubscriptionPatientDocumentsFilterInput | null > | null,
+  id?: ModelSubscriptionIDInput | null;
+  name?: ModelSubscriptionStringInput | null;
+  pathfile?: ModelSubscriptionStringInput | null;
+  doctype?: ModelSubscriptionStringInput | null;
+  id_patient?: ModelSubscriptionStringInput | null;
+  id_report?: ModelSubscriptionStringInput | null;
+  createdAt?: ModelSubscriptionStringInput | null;
+  updatedAt?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionPatientDocumentsFilterInput | null> | null;
+  or?: Array<ModelSubscriptionPatientDocumentsFilterInput | null> | null;
 };
 
 export type ModelSubscriptionPatientFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  name?: ModelSubscriptionStringInput | null,
-  sex?: ModelSubscriptionStringInput | null,
-  phone_number?: ModelSubscriptionStringInput | null,
-  dob?: ModelSubscriptionStringInput | null,
-  institutionID?: ModelSubscriptionIDInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionPatientFilterInput | null > | null,
-  or?: Array< ModelSubscriptionPatientFilterInput | null > | null,
+  id?: ModelSubscriptionIDInput | null;
+  name?: ModelSubscriptionStringInput | null;
+  sex?: ModelSubscriptionStringInput | null;
+  phone_number?: ModelSubscriptionStringInput | null;
+  dob?: ModelSubscriptionStringInput | null;
+  institutionID?: ModelSubscriptionIDInput | null;
+  createdAt?: ModelSubscriptionStringInput | null;
+  updatedAt?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionPatientFilterInput | null> | null;
+  or?: Array<ModelSubscriptionPatientFilterInput | null> | null;
 };
 
 export type ModelSubscriptionUserFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  first_name?: ModelSubscriptionStringInput | null,
-  last_name?: ModelSubscriptionStringInput | null,
-  role?: ModelSubscriptionStringInput | null,
-  email?: ModelSubscriptionStringInput | null,
-  category?: ModelSubscriptionStringInput | null,
-  specialty?: ModelSubscriptionStringInput | null,
-  institutionID?: ModelSubscriptionIDInput | null,
-  level?: ModelSubscriptionIntInput | null,
-  status?: ModelSubscriptionIntInput | null,
-  phone_number?: ModelSubscriptionStringInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionUserFilterInput | null > | null,
-  or?: Array< ModelSubscriptionUserFilterInput | null > | null,
+  id?: ModelSubscriptionIDInput | null;
+  first_name?: ModelSubscriptionStringInput | null;
+  last_name?: ModelSubscriptionStringInput | null;
+  role?: ModelSubscriptionStringInput | null;
+  email?: ModelSubscriptionStringInput | null;
+  category?: ModelSubscriptionStringInput | null;
+  specialty?: ModelSubscriptionStringInput | null;
+  institutionID?: ModelSubscriptionIDInput | null;
+  level?: ModelSubscriptionIntInput | null;
+  status?: ModelSubscriptionIntInput | null;
+  phone_number?: ModelSubscriptionStringInput | null;
+  createdAt?: ModelSubscriptionStringInput | null;
+  updatedAt?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionUserFilterInput | null> | null;
+  or?: Array<ModelSubscriptionUserFilterInput | null> | null;
 };
 
 export type ModelSubscriptionInstitutionFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  name?: ModelSubscriptionStringInput | null,
-  contactname?: ModelSubscriptionStringInput | null,
-  address?: ModelSubscriptionStringInput | null,
-  subscription_type?: ModelSubscriptionStringInput | null,
-  email?: ModelSubscriptionStringInput | null,
-  userQuotas?: ModelSubscriptionIntInput | null,
-  currentUserQuota?: ModelSubscriptionIntInput | null,
-  storageQuota?: ModelSubscriptionFloatInput | null,
-  registrationDate?: ModelSubscriptionStringInput | null,
-  accountStatus?: ModelSubscriptionBooleanInput | null,
-  contactphone?: ModelSubscriptionStringInput | null,
-  dueDate?: ModelSubscriptionStringInput | null,
-  currentStorageQuota?: ModelSubscriptionFloatInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionInstitutionFilterInput | null > | null,
-  or?: Array< ModelSubscriptionInstitutionFilterInput | null > | null,
+  id?: ModelSubscriptionIDInput | null;
+  name?: ModelSubscriptionStringInput | null;
+  contactname?: ModelSubscriptionStringInput | null;
+  address?: ModelSubscriptionStringInput | null;
+  subscription_type?: ModelSubscriptionStringInput | null;
+  email?: ModelSubscriptionStringInput | null;
+  userQuotas?: ModelSubscriptionIntInput | null;
+  currentUserQuota?: ModelSubscriptionIntInput | null;
+  storageQuota?: ModelSubscriptionFloatInput | null;
+  registrationDate?: ModelSubscriptionStringInput | null;
+  accountStatus?: ModelSubscriptionBooleanInput | null;
+  contactphone?: ModelSubscriptionStringInput | null;
+  dueDate?: ModelSubscriptionStringInput | null;
+  currentStorageQuota?: ModelSubscriptionFloatInput | null;
+  createdAt?: ModelSubscriptionStringInput | null;
+  updatedAt?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionInstitutionFilterInput | null> | null;
+  or?: Array<ModelSubscriptionInstitutionFilterInput | null> | null;
+};
+
+export type CreateVariantInterpretationMutationVariables = {
+  input: CreateVariantInterpretationInput;
+  condition?: ModelVariantInterpretationConditionInput | null;
+};
+
+export type CreateVariantInterpretationMutation = {
+  createVariantInterpretation?: {
+    __typename: "VariantInterpretation";
+    id: string;
+    hgvs?: string | null;
+    text?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    id_varsample?: string | null;
+    gene?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+};
+
+export type UpdateVariantInterpretationMutationVariables = {
+  input: UpdateVariantInterpretationInput;
+  condition?: ModelVariantInterpretationConditionInput | null;
+};
+
+export type UpdateVariantInterpretationMutation = {
+  updateVariantInterpretation?: {
+    __typename: "VariantInterpretation";
+    id: string;
+    hgvs?: string | null;
+    text?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    id_varsample?: string | null;
+    gene?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+};
+
+export type DeleteVariantInterpretationMutationVariables = {
+  input: DeleteVariantInterpretationInput;
+  condition?: ModelVariantInterpretationConditionInput | null;
+};
+
+export type DeleteVariantInterpretationMutation = {
+  deleteVariantInterpretation?: {
+    __typename: "VariantInterpretation";
+    id: string;
+    hgvs?: string | null;
+    text?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    id_varsample?: string | null;
+    gene?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type CreateSelectedVariantMutationVariables = {
-  input: CreateSelectedVariantInput,
-  condition?: ModelSelectedVariantConditionInput | null,
+  input: CreateSelectedVariantInput;
+  condition?: ModelSelectedVariantConditionInput | null;
 };
 
 export type CreateSelectedVariantMutation = {
-  createSelectedVariant?:  {
-    __typename: "SelectedVariant",
-    id: string,
-    id_patient?: string | null,
-    id_vcf?: string | null,
-    id_report?: string | null,
-    gene_id?: string | null,
-    gene_symbol?: string | null,
-    chrom?: string | null,
-    pos?: string | null,
-    id_var?: string | null,
-    ref?: string | null,
-    alt?: string | null,
-    qual?: string | null,
-    zigosity?: string | null,
-    global_allele?: number | null,
-    functional_impact?: string | null,
-    acmg?: string | null,
-    reviewer_class?: string | null,
-    clinical_sign?: string | null,
-    hgvs?: string | null,
-    severe_consequence?: string | null,
-    sift_score?: number | null,
-    sift_prediction?: string | null,
-    phenotypes?: string | null,
-    rsID?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  createSelectedVariant?: {
+    __typename: "SelectedVariant";
+    id: string;
+    id_patient?: string | null;
+    id_vcf?: string | null;
+    id_report?: string | null;
+    gene_id?: string | null;
+    gene_symbol?: string | null;
+    chrom?: string | null;
+    pos?: string | null;
+    id_var?: string | null;
+    ref?: string | null;
+    alt?: string | null;
+    qual?: string | null;
+    zigosity?: string | null;
+    global_allele?: number | null;
+    functional_impact?: string | null;
+    acmg?: string | null;
+    reviewer_class?: string | null;
+    clinical_sign?: string | null;
+    hgvs?: string | null;
+    severe_consequence?: string | null;
+    sift_score?: number | null;
+    sift_prediction?: string | null;
+    phenotypes?: string | null;
+    rsID?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type UpdateSelectedVariantMutationVariables = {
-  input: UpdateSelectedVariantInput,
-  condition?: ModelSelectedVariantConditionInput | null,
+  input: UpdateSelectedVariantInput;
+  condition?: ModelSelectedVariantConditionInput | null;
 };
 
 export type UpdateSelectedVariantMutation = {
-  updateSelectedVariant?:  {
-    __typename: "SelectedVariant",
-    id: string,
-    id_patient?: string | null,
-    id_vcf?: string | null,
-    id_report?: string | null,
-    gene_id?: string | null,
-    gene_symbol?: string | null,
-    chrom?: string | null,
-    pos?: string | null,
-    id_var?: string | null,
-    ref?: string | null,
-    alt?: string | null,
-    qual?: string | null,
-    zigosity?: string | null,
-    global_allele?: number | null,
-    functional_impact?: string | null,
-    acmg?: string | null,
-    reviewer_class?: string | null,
-    clinical_sign?: string | null,
-    hgvs?: string | null,
-    severe_consequence?: string | null,
-    sift_score?: number | null,
-    sift_prediction?: string | null,
-    phenotypes?: string | null,
-    rsID?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  updateSelectedVariant?: {
+    __typename: "SelectedVariant";
+    id: string;
+    id_patient?: string | null;
+    id_vcf?: string | null;
+    id_report?: string | null;
+    gene_id?: string | null;
+    gene_symbol?: string | null;
+    chrom?: string | null;
+    pos?: string | null;
+    id_var?: string | null;
+    ref?: string | null;
+    alt?: string | null;
+    qual?: string | null;
+    zigosity?: string | null;
+    global_allele?: number | null;
+    functional_impact?: string | null;
+    acmg?: string | null;
+    reviewer_class?: string | null;
+    clinical_sign?: string | null;
+    hgvs?: string | null;
+    severe_consequence?: string | null;
+    sift_score?: number | null;
+    sift_prediction?: string | null;
+    phenotypes?: string | null;
+    rsID?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type DeleteSelectedVariantMutationVariables = {
-  input: DeleteSelectedVariantInput,
-  condition?: ModelSelectedVariantConditionInput | null,
+  input: DeleteSelectedVariantInput;
+  condition?: ModelSelectedVariantConditionInput | null;
 };
 
 export type DeleteSelectedVariantMutation = {
-  deleteSelectedVariant?:  {
-    __typename: "SelectedVariant",
-    id: string,
-    id_patient?: string | null,
-    id_vcf?: string | null,
-    id_report?: string | null,
-    gene_id?: string | null,
-    gene_symbol?: string | null,
-    chrom?: string | null,
-    pos?: string | null,
-    id_var?: string | null,
-    ref?: string | null,
-    alt?: string | null,
-    qual?: string | null,
-    zigosity?: string | null,
-    global_allele?: number | null,
-    functional_impact?: string | null,
-    acmg?: string | null,
-    reviewer_class?: string | null,
-    clinical_sign?: string | null,
-    hgvs?: string | null,
-    severe_consequence?: string | null,
-    sift_score?: number | null,
-    sift_prediction?: string | null,
-    phenotypes?: string | null,
-    rsID?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  deleteSelectedVariant?: {
+    __typename: "SelectedVariant";
+    id: string;
+    id_patient?: string | null;
+    id_vcf?: string | null;
+    id_report?: string | null;
+    gene_id?: string | null;
+    gene_symbol?: string | null;
+    chrom?: string | null;
+    pos?: string | null;
+    id_var?: string | null;
+    ref?: string | null;
+    alt?: string | null;
+    qual?: string | null;
+    zigosity?: string | null;
+    global_allele?: number | null;
+    functional_impact?: string | null;
+    acmg?: string | null;
+    reviewer_class?: string | null;
+    clinical_sign?: string | null;
+    hgvs?: string | null;
+    severe_consequence?: string | null;
+    sift_score?: number | null;
+    sift_prediction?: string | null;
+    phenotypes?: string | null;
+    rsID?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type CreateVcfdataMutationVariables = {
-  input: CreateVcfdataInput,
-  condition?: ModelVcfdataConditionInput | null,
+  input: CreateVcfdataInput;
+  condition?: ModelVcfdataConditionInput | null;
 };
 
 export type CreateVcfdataMutation = {
-  createVcfdata?:  {
-    __typename: "Vcfdata",
-    id: string,
-    id_patient?: string | null,
-    sample_date?: string | null,
-    uploadAt?: string | null,
-    pathfile?: string | null,
-    genome_reference?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  createVcfdata?: {
+    __typename: "Vcfdata";
+    id: string;
+    id_patient?: string | null;
+    sample_date?: string | null;
+    uploadAt?: string | null;
+    pathfile?: string | null;
+    genome_reference?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type UpdateVcfdataMutationVariables = {
-  input: UpdateVcfdataInput,
-  condition?: ModelVcfdataConditionInput | null,
+  input: UpdateVcfdataInput;
+  condition?: ModelVcfdataConditionInput | null;
 };
 
 export type UpdateVcfdataMutation = {
-  updateVcfdata?:  {
-    __typename: "Vcfdata",
-    id: string,
-    id_patient?: string | null,
-    sample_date?: string | null,
-    uploadAt?: string | null,
-    pathfile?: string | null,
-    genome_reference?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  updateVcfdata?: {
+    __typename: "Vcfdata";
+    id: string;
+    id_patient?: string | null;
+    sample_date?: string | null;
+    uploadAt?: string | null;
+    pathfile?: string | null;
+    genome_reference?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type DeleteVcfdataMutationVariables = {
-  input: DeleteVcfdataInput,
-  condition?: ModelVcfdataConditionInput | null,
+  input: DeleteVcfdataInput;
+  condition?: ModelVcfdataConditionInput | null;
 };
 
 export type DeleteVcfdataMutation = {
-  deleteVcfdata?:  {
-    __typename: "Vcfdata",
-    id: string,
-    id_patient?: string | null,
-    sample_date?: string | null,
-    uploadAt?: string | null,
-    pathfile?: string | null,
-    genome_reference?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  deleteVcfdata?: {
+    __typename: "Vcfdata";
+    id: string;
+    id_patient?: string | null;
+    sample_date?: string | null;
+    uploadAt?: string | null;
+    pathfile?: string | null;
+    genome_reference?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type CreateVariantMutationVariables = {
-  input: CreateVariantInput,
-  condition?: ModelVariantConditionInput | null,
+  input: CreateVariantInput;
+  condition?: ModelVariantConditionInput | null;
 };
 
 export type CreateVariantMutation = {
-  createVariant?:  {
-    __typename: "Variant",
-    id: string,
-    chrom?: string | null,
-    pos?: string | null,
-    ref?: string | null,
-    alt?: string | null,
-    qual?: string | null,
-    filter?: string | null,
-    info?: string | null,
-    hgvs?: string | null,
-    id_var?: string | null,
-    id_patient?: string | null,
-    id_vcf?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  createVariant?: {
+    __typename: "Variant";
+    id: string;
+    chrom?: string | null;
+    pos?: string | null;
+    ref?: string | null;
+    alt?: string | null;
+    qual?: string | null;
+    filter?: string | null;
+    info?: string | null;
+    hgvs?: string | null;
+    id_var?: string | null;
+    id_patient?: string | null;
+    id_vcf?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type UpdateVariantMutationVariables = {
-  input: UpdateVariantInput,
-  condition?: ModelVariantConditionInput | null,
+  input: UpdateVariantInput;
+  condition?: ModelVariantConditionInput | null;
 };
 
 export type UpdateVariantMutation = {
-  updateVariant?:  {
-    __typename: "Variant",
-    id: string,
-    chrom?: string | null,
-    pos?: string | null,
-    ref?: string | null,
-    alt?: string | null,
-    qual?: string | null,
-    filter?: string | null,
-    info?: string | null,
-    hgvs?: string | null,
-    id_var?: string | null,
-    id_patient?: string | null,
-    id_vcf?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  updateVariant?: {
+    __typename: "Variant";
+    id: string;
+    chrom?: string | null;
+    pos?: string | null;
+    ref?: string | null;
+    alt?: string | null;
+    qual?: string | null;
+    filter?: string | null;
+    info?: string | null;
+    hgvs?: string | null;
+    id_var?: string | null;
+    id_patient?: string | null;
+    id_vcf?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type DeleteVariantMutationVariables = {
-  input: DeleteVariantInput,
-  condition?: ModelVariantConditionInput | null,
+  input: DeleteVariantInput;
+  condition?: ModelVariantConditionInput | null;
 };
 
 export type DeleteVariantMutation = {
-  deleteVariant?:  {
-    __typename: "Variant",
-    id: string,
-    chrom?: string | null,
-    pos?: string | null,
-    ref?: string | null,
-    alt?: string | null,
-    qual?: string | null,
-    filter?: string | null,
-    info?: string | null,
-    hgvs?: string | null,
-    id_var?: string | null,
-    id_patient?: string | null,
-    id_vcf?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  deleteVariant?: {
+    __typename: "Variant";
+    id: string;
+    chrom?: string | null;
+    pos?: string | null;
+    ref?: string | null;
+    alt?: string | null;
+    qual?: string | null;
+    filter?: string | null;
+    info?: string | null;
+    hgvs?: string | null;
+    id_var?: string | null;
+    id_patient?: string | null;
+    id_vcf?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type CreateGeneticsConselorMutationVariables = {
-  input: CreateGeneticsConselorInput,
-  condition?: ModelGeneticsConselorConditionInput | null,
+  input: CreateGeneticsConselorInput;
+  condition?: ModelGeneticsConselorConditionInput | null;
 };
 
 export type CreateGeneticsConselorMutation = {
-  createGeneticsConselor?:  {
-    __typename: "GeneticsConselor",
-    id: string,
-    text?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  createGeneticsConselor?: {
+    __typename: "GeneticsConselor";
+    id: string;
+    text?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type UpdateGeneticsConselorMutationVariables = {
-  input: UpdateGeneticsConselorInput,
-  condition?: ModelGeneticsConselorConditionInput | null,
+  input: UpdateGeneticsConselorInput;
+  condition?: ModelGeneticsConselorConditionInput | null;
 };
 
 export type UpdateGeneticsConselorMutation = {
-  updateGeneticsConselor?:  {
-    __typename: "GeneticsConselor",
-    id: string,
-    text?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  updateGeneticsConselor?: {
+    __typename: "GeneticsConselor";
+    id: string;
+    text?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type DeleteGeneticsConselorMutationVariables = {
-  input: DeleteGeneticsConselorInput,
-  condition?: ModelGeneticsConselorConditionInput | null,
+  input: DeleteGeneticsConselorInput;
+  condition?: ModelGeneticsConselorConditionInput | null;
 };
 
 export type DeleteGeneticsConselorMutation = {
-  deleteGeneticsConselor?:  {
-    __typename: "GeneticsConselor",
-    id: string,
-    text?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  deleteGeneticsConselor?: {
+    __typename: "GeneticsConselor";
+    id: string;
+    text?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type CreatePhenotypeMutationVariables = {
-  input: CreatePhenotypeInput,
-  condition?: ModelPhenotypeConditionInput | null,
+  input: CreatePhenotypeInput;
+  condition?: ModelPhenotypeConditionInput | null;
 };
 
 export type CreatePhenotypeMutation = {
-  createPhenotype?:  {
-    __typename: "Phenotype",
-    id: string,
-    PhenotypeCode?: string | null,
-    Description?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  createPhenotype?: {
+    __typename: "Phenotype";
+    id: string;
+    PhenotypeCode?: string | null;
+    Description?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type UpdatePhenotypeMutationVariables = {
-  input: UpdatePhenotypeInput,
-  condition?: ModelPhenotypeConditionInput | null,
+  input: UpdatePhenotypeInput;
+  condition?: ModelPhenotypeConditionInput | null;
 };
 
 export type UpdatePhenotypeMutation = {
-  updatePhenotype?:  {
-    __typename: "Phenotype",
-    id: string,
-    PhenotypeCode?: string | null,
-    Description?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  updatePhenotype?: {
+    __typename: "Phenotype";
+    id: string;
+    PhenotypeCode?: string | null;
+    Description?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type DeletePhenotypeMutationVariables = {
-  input: DeletePhenotypeInput,
-  condition?: ModelPhenotypeConditionInput | null,
+  input: DeletePhenotypeInput;
+  condition?: ModelPhenotypeConditionInput | null;
 };
 
 export type DeletePhenotypeMutation = {
-  deletePhenotype?:  {
-    __typename: "Phenotype",
-    id: string,
-    PhenotypeCode?: string | null,
-    Description?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  deletePhenotype?: {
+    __typename: "Phenotype";
+    id: string;
+    PhenotypeCode?: string | null;
+    Description?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type CreateConclusionMutationVariables = {
-  input: CreateConclusionInput,
-  condition?: ModelConclusionConditionInput | null,
+  input: CreateConclusionInput;
+  condition?: ModelConclusionConditionInput | null;
 };
 
 export type CreateConclusionMutation = {
-  createConclusion?:  {
-    __typename: "Conclusion",
-    id: string,
-    text?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  createConclusion?: {
+    __typename: "Conclusion";
+    id: string;
+    text?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type UpdateConclusionMutationVariables = {
-  input: UpdateConclusionInput,
-  condition?: ModelConclusionConditionInput | null,
+  input: UpdateConclusionInput;
+  condition?: ModelConclusionConditionInput | null;
 };
 
 export type UpdateConclusionMutation = {
-  updateConclusion?:  {
-    __typename: "Conclusion",
-    id: string,
-    text?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  updateConclusion?: {
+    __typename: "Conclusion";
+    id: string;
+    text?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type DeleteConclusionMutationVariables = {
-  input: DeleteConclusionInput,
-  condition?: ModelConclusionConditionInput | null,
+  input: DeleteConclusionInput;
+  condition?: ModelConclusionConditionInput | null;
 };
 
 export type DeleteConclusionMutation = {
-  deleteConclusion?:  {
-    __typename: "Conclusion",
-    id: string,
-    text?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  deleteConclusion?: {
+    __typename: "Conclusion";
+    id: string;
+    text?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type CreateRecommendationMutationVariables = {
-  input: CreateRecommendationInput,
-  condition?: ModelRecommendationConditionInput | null,
+  input: CreateRecommendationInput;
+  condition?: ModelRecommendationConditionInput | null;
 };
 
 export type CreateRecommendationMutation = {
-  createRecommendation?:  {
-    __typename: "Recommendation",
-    id: string,
-    text?: string | null,
-    variantreportID: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  createRecommendation?: {
+    __typename: "Recommendation";
+    id: string;
+    text?: string | null;
+    id_patient: string;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type UpdateRecommendationMutationVariables = {
-  input: UpdateRecommendationInput,
-  condition?: ModelRecommendationConditionInput | null,
+  input: UpdateRecommendationInput;
+  condition?: ModelRecommendationConditionInput | null;
 };
 
 export type UpdateRecommendationMutation = {
-  updateRecommendation?:  {
-    __typename: "Recommendation",
-    id: string,
-    text?: string | null,
-    variantreportID: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  updateRecommendation?: {
+    __typename: "Recommendation";
+    id: string;
+    text?: string | null;
+    id_patient: string;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type DeleteRecommendationMutationVariables = {
-  input: DeleteRecommendationInput,
-  condition?: ModelRecommendationConditionInput | null,
+  input: DeleteRecommendationInput;
+  condition?: ModelRecommendationConditionInput | null;
 };
 
 export type DeleteRecommendationMutation = {
-  deleteRecommendation?:  {
-    __typename: "Recommendation",
-    id: string,
-    text?: string | null,
-    variantreportID: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  deleteRecommendation?: {
+    __typename: "Recommendation";
+    id: string;
+    text?: string | null;
+    id_patient: string;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type CreateVariantReportMutationVariables = {
-  input: CreateVariantReportInput,
-  condition?: ModelVariantReportConditionInput | null,
+  input: CreateVariantReportInput;
+  condition?: ModelVariantReportConditionInput | null;
 };
 
 export type CreateVariantReportMutation = {
-  createVariantReport?:  {
-    __typename: "VariantReport",
-    id: string,
-    status?: number | null,
-    isApproved?: boolean | null,
-    medical_history?: string | null,
-    current_diagnosis?: string | null,
-    institutionID?: string | null,
-    createAt?: string | null,
-    phenotype?: Array< string | null > | null,
-    sample_collection?: string | null,
-    idPatient?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  createVariantReport?: {
+    __typename: "VariantReport";
+    id: string;
+    status?: number | null;
+    isApproved?: boolean | null;
+    medical_history?: string | null;
+    current_diagnosis?: string | null;
+    institutionID?: string | null;
+    createAt?: string | null;
+    phenotype?: Array<string | null> | null;
+    sample_collection?: string | null;
+    idPatient?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type UpdateVariantReportMutationVariables = {
-  input: UpdateVariantReportInput,
-  condition?: ModelVariantReportConditionInput | null,
+  input: UpdateVariantReportInput;
+  condition?: ModelVariantReportConditionInput | null;
 };
 
 export type UpdateVariantReportMutation = {
-  updateVariantReport?:  {
-    __typename: "VariantReport",
-    id: string,
-    status?: number | null,
-    isApproved?: boolean | null,
-    medical_history?: string | null,
-    current_diagnosis?: string | null,
-    institutionID?: string | null,
-    createAt?: string | null,
-    phenotype?: Array< string | null > | null,
-    sample_collection?: string | null,
-    idPatient?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  updateVariantReport?: {
+    __typename: "VariantReport";
+    id: string;
+    status?: number | null;
+    isApproved?: boolean | null;
+    medical_history?: string | null;
+    current_diagnosis?: string | null;
+    institutionID?: string | null;
+    createAt?: string | null;
+    phenotype?: Array<string | null> | null;
+    sample_collection?: string | null;
+    idPatient?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type DeleteVariantReportMutationVariables = {
-  input: DeleteVariantReportInput,
-  condition?: ModelVariantReportConditionInput | null,
+  input: DeleteVariantReportInput;
+  condition?: ModelVariantReportConditionInput | null;
 };
 
 export type DeleteVariantReportMutation = {
-  deleteVariantReport?:  {
-    __typename: "VariantReport",
-    id: string,
-    status?: number | null,
-    isApproved?: boolean | null,
-    medical_history?: string | null,
-    current_diagnosis?: string | null,
-    institutionID?: string | null,
-    createAt?: string | null,
-    phenotype?: Array< string | null > | null,
-    sample_collection?: string | null,
-    idPatient?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  deleteVariantReport?: {
+    __typename: "VariantReport";
+    id: string;
+    status?: number | null;
+    isApproved?: boolean | null;
+    medical_history?: string | null;
+    current_diagnosis?: string | null;
+    institutionID?: string | null;
+    createAt?: string | null;
+    phenotype?: Array<string | null> | null;
+    sample_collection?: string | null;
+    idPatient?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type CreatePatientDocumentsMutationVariables = {
-  input: CreatePatientDocumentsInput,
-  condition?: ModelPatientDocumentsConditionInput | null,
+  input: CreatePatientDocumentsInput;
+  condition?: ModelPatientDocumentsConditionInput | null;
 };
 
 export type CreatePatientDocumentsMutation = {
-  createPatientDocuments?:  {
-    __typename: "PatientDocuments",
-    id: string,
-    name?: string | null,
-    patientID: string,
-    size?: number | null,
-    link?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  createPatientDocuments?: {
+    __typename: "PatientDocuments";
+    id: string;
+    name?: string | null;
+    pathfile?: string | null;
+    doctype?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type UpdatePatientDocumentsMutationVariables = {
-  input: UpdatePatientDocumentsInput,
-  condition?: ModelPatientDocumentsConditionInput | null,
+  input: UpdatePatientDocumentsInput;
+  condition?: ModelPatientDocumentsConditionInput | null;
 };
 
 export type UpdatePatientDocumentsMutation = {
-  updatePatientDocuments?:  {
-    __typename: "PatientDocuments",
-    id: string,
-    name?: string | null,
-    patientID: string,
-    size?: number | null,
-    link?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  updatePatientDocuments?: {
+    __typename: "PatientDocuments";
+    id: string;
+    name?: string | null;
+    pathfile?: string | null;
+    doctype?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type DeletePatientDocumentsMutationVariables = {
-  input: DeletePatientDocumentsInput,
-  condition?: ModelPatientDocumentsConditionInput | null,
+  input: DeletePatientDocumentsInput;
+  condition?: ModelPatientDocumentsConditionInput | null;
 };
 
 export type DeletePatientDocumentsMutation = {
-  deletePatientDocuments?:  {
-    __typename: "PatientDocuments",
-    id: string,
-    name?: string | null,
-    patientID: string,
-    size?: number | null,
-    link?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  deletePatientDocuments?: {
+    __typename: "PatientDocuments";
+    id: string;
+    name?: string | null;
+    pathfile?: string | null;
+    doctype?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type CreatePatientMutationVariables = {
-  input: CreatePatientInput,
-  condition?: ModelPatientConditionInput | null,
+  input: CreatePatientInput;
+  condition?: ModelPatientConditionInput | null;
 };
 
 export type CreatePatientMutation = {
-  createPatient?:  {
-    __typename: "Patient",
-    id: string,
-    name?: string | null,
-    sex?: string | null,
-    phone_number?: string | null,
-    dob?: string | null,
-    institutionID: string,
-    PatientDokuments?:  {
-      __typename: "ModelPatientDocumentsConnection",
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  createPatient?: {
+    __typename: "Patient";
+    id: string;
+    name?: string | null;
+    sex?: string | null;
+    phone_number?: string | null;
+    dob?: string | null;
+    institutionID: string;
+    PatientDokuments?: {
+      __typename: "ModelPatientDocumentsConnection";
+      nextToken?: string | null;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type UpdatePatientMutationVariables = {
-  input: UpdatePatientInput,
-  condition?: ModelPatientConditionInput | null,
+  input: UpdatePatientInput;
+  condition?: ModelPatientConditionInput | null;
 };
 
 export type UpdatePatientMutation = {
-  updatePatient?:  {
-    __typename: "Patient",
-    id: string,
-    name?: string | null,
-    sex?: string | null,
-    phone_number?: string | null,
-    dob?: string | null,
-    institutionID: string,
-    PatientDokuments?:  {
-      __typename: "ModelPatientDocumentsConnection",
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  updatePatient?: {
+    __typename: "Patient";
+    id: string;
+    name?: string | null;
+    sex?: string | null;
+    phone_number?: string | null;
+    dob?: string | null;
+    institutionID: string;
+    PatientDokuments?: {
+      __typename: "ModelPatientDocumentsConnection";
+      nextToken?: string | null;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type DeletePatientMutationVariables = {
-  input: DeletePatientInput,
-  condition?: ModelPatientConditionInput | null,
+  input: DeletePatientInput;
+  condition?: ModelPatientConditionInput | null;
 };
 
 export type DeletePatientMutation = {
-  deletePatient?:  {
-    __typename: "Patient",
-    id: string,
-    name?: string | null,
-    sex?: string | null,
-    phone_number?: string | null,
-    dob?: string | null,
-    institutionID: string,
-    PatientDokuments?:  {
-      __typename: "ModelPatientDocumentsConnection",
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  deletePatient?: {
+    __typename: "Patient";
+    id: string;
+    name?: string | null;
+    sex?: string | null;
+    phone_number?: string | null;
+    dob?: string | null;
+    institutionID: string;
+    PatientDokuments?: {
+      __typename: "ModelPatientDocumentsConnection";
+      nextToken?: string | null;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type CreateUserMutationVariables = {
-  input: CreateUserInput,
-  condition?: ModelUserConditionInput | null,
+  input: CreateUserInput;
+  condition?: ModelUserConditionInput | null;
 };
 
 export type CreateUserMutation = {
-  createUser?:  {
-    __typename: "User",
-    id: string,
-    first_name?: string | null,
-    last_name?: string | null,
-    role?: string | null,
-    email?: string | null,
-    category?: string | null,
-    specialty?: string | null,
-    institutionID: string,
-    level?: number | null,
-    status?: number | null,
-    phone_number?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  createUser?: {
+    __typename: "User";
+    id: string;
+    first_name?: string | null;
+    last_name?: string | null;
+    role?: string | null;
+    email?: string | null;
+    category?: string | null;
+    specialty?: string | null;
+    institutionID: string;
+    level?: number | null;
+    status?: number | null;
+    phone_number?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type UpdateUserMutationVariables = {
-  input: UpdateUserInput,
-  condition?: ModelUserConditionInput | null,
+  input: UpdateUserInput;
+  condition?: ModelUserConditionInput | null;
 };
 
 export type UpdateUserMutation = {
-  updateUser?:  {
-    __typename: "User",
-    id: string,
-    first_name?: string | null,
-    last_name?: string | null,
-    role?: string | null,
-    email?: string | null,
-    category?: string | null,
-    specialty?: string | null,
-    institutionID: string,
-    level?: number | null,
-    status?: number | null,
-    phone_number?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  updateUser?: {
+    __typename: "User";
+    id: string;
+    first_name?: string | null;
+    last_name?: string | null;
+    role?: string | null;
+    email?: string | null;
+    category?: string | null;
+    specialty?: string | null;
+    institutionID: string;
+    level?: number | null;
+    status?: number | null;
+    phone_number?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type DeleteUserMutationVariables = {
-  input: DeleteUserInput,
-  condition?: ModelUserConditionInput | null,
+  input: DeleteUserInput;
+  condition?: ModelUserConditionInput | null;
 };
 
 export type DeleteUserMutation = {
-  deleteUser?:  {
-    __typename: "User",
-    id: string,
-    first_name?: string | null,
-    last_name?: string | null,
-    role?: string | null,
-    email?: string | null,
-    category?: string | null,
-    specialty?: string | null,
-    institutionID: string,
-    level?: number | null,
-    status?: number | null,
-    phone_number?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  deleteUser?: {
+    __typename: "User";
+    id: string;
+    first_name?: string | null;
+    last_name?: string | null;
+    role?: string | null;
+    email?: string | null;
+    category?: string | null;
+    specialty?: string | null;
+    institutionID: string;
+    level?: number | null;
+    status?: number | null;
+    phone_number?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type CreateInstitutionMutationVariables = {
-  input: CreateInstitutionInput,
-  condition?: ModelInstitutionConditionInput | null,
+  input: CreateInstitutionInput;
+  condition?: ModelInstitutionConditionInput | null;
 };
 
 export type CreateInstitutionMutation = {
-  createInstitution?:  {
-    __typename: "Institution",
-    id: string,
-    name?: string | null,
-    contactname?: string | null,
-    address?: string | null,
-    subscription_type?: string | null,
-    email?: string | null,
-    Users?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    Patients?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    userQuotas?: number | null,
-    currentUserQuota?: number | null,
-    storageQuota?: number | null,
-    registrationDate?: string | null,
-    accountStatus?: boolean | null,
-    VariantReports?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    contactphone?: string | null,
-    dueDate?: string | null,
-    currentStorageQuota?: number | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  createInstitution?: {
+    __typename: "Institution";
+    id: string;
+    name?: string | null;
+    contactname?: string | null;
+    address?: string | null;
+    subscription_type?: string | null;
+    email?: string | null;
+    Users?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    Patients?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    userQuotas?: number | null;
+    currentUserQuota?: number | null;
+    storageQuota?: number | null;
+    registrationDate?: string | null;
+    accountStatus?: boolean | null;
+    VariantReports?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    contactphone?: string | null;
+    dueDate?: string | null;
+    currentStorageQuota?: number | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type UpdateInstitutionMutationVariables = {
-  input: UpdateInstitutionInput,
-  condition?: ModelInstitutionConditionInput | null,
+  input: UpdateInstitutionInput;
+  condition?: ModelInstitutionConditionInput | null;
 };
 
 export type UpdateInstitutionMutation = {
-  updateInstitution?:  {
-    __typename: "Institution",
-    id: string,
-    name?: string | null,
-    contactname?: string | null,
-    address?: string | null,
-    subscription_type?: string | null,
-    email?: string | null,
-    Users?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    Patients?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    userQuotas?: number | null,
-    currentUserQuota?: number | null,
-    storageQuota?: number | null,
-    registrationDate?: string | null,
-    accountStatus?: boolean | null,
-    VariantReports?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    contactphone?: string | null,
-    dueDate?: string | null,
-    currentStorageQuota?: number | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  updateInstitution?: {
+    __typename: "Institution";
+    id: string;
+    name?: string | null;
+    contactname?: string | null;
+    address?: string | null;
+    subscription_type?: string | null;
+    email?: string | null;
+    Users?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    Patients?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    userQuotas?: number | null;
+    currentUserQuota?: number | null;
+    storageQuota?: number | null;
+    registrationDate?: string | null;
+    accountStatus?: boolean | null;
+    VariantReports?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    contactphone?: string | null;
+    dueDate?: string | null;
+    currentStorageQuota?: number | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type DeleteInstitutionMutationVariables = {
-  input: DeleteInstitutionInput,
-  condition?: ModelInstitutionConditionInput | null,
+  input: DeleteInstitutionInput;
+  condition?: ModelInstitutionConditionInput | null;
 };
 
 export type DeleteInstitutionMutation = {
-  deleteInstitution?:  {
-    __typename: "Institution",
-    id: string,
-    name?: string | null,
-    contactname?: string | null,
-    address?: string | null,
-    subscription_type?: string | null,
-    email?: string | null,
-    Users?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    Patients?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    userQuotas?: number | null,
-    currentUserQuota?: number | null,
-    storageQuota?: number | null,
-    registrationDate?: string | null,
-    accountStatus?: boolean | null,
-    VariantReports?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    contactphone?: string | null,
-    dueDate?: string | null,
-    currentStorageQuota?: number | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  deleteInstitution?: {
+    __typename: "Institution";
+    id: string;
+    name?: string | null;
+    contactname?: string | null;
+    address?: string | null;
+    subscription_type?: string | null;
+    email?: string | null;
+    Users?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    Patients?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    userQuotas?: number | null;
+    currentUserQuota?: number | null;
+    storageQuota?: number | null;
+    registrationDate?: string | null;
+    accountStatus?: boolean | null;
+    VariantReports?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    contactphone?: string | null;
+    dueDate?: string | null;
+    currentStorageQuota?: number | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+};
+
+export type GetVariantInterpretationQueryVariables = {
+  id: string;
+};
+
+export type GetVariantInterpretationQuery = {
+  getVariantInterpretation?: {
+    __typename: "VariantInterpretation";
+    id: string;
+    hgvs?: string | null;
+    text?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    id_varsample?: string | null;
+    gene?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+};
+
+export type ListVariantInterpretationsQueryVariables = {
+  filter?: ModelVariantInterpretationFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
+};
+
+export type ListVariantInterpretationsQuery = {
+  listVariantInterpretations?: {
+    __typename: "ModelVariantInterpretationConnection";
+    items: Array<{
+      __typename: "VariantInterpretation";
+      id: string;
+      hgvs?: string | null;
+      text?: string | null;
+      id_patient?: string | null;
+      id_report?: string | null;
+      id_varsample?: string | null;
+      gene?: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
 };
 
 export type GetSelectedVariantQueryVariables = {
-  id: string,
+  id: string;
 };
 
 export type GetSelectedVariantQuery = {
-  getSelectedVariant?:  {
-    __typename: "SelectedVariant",
-    id: string,
-    id_patient?: string | null,
-    id_vcf?: string | null,
-    id_report?: string | null,
-    gene_id?: string | null,
-    gene_symbol?: string | null,
-    chrom?: string | null,
-    pos?: string | null,
-    id_var?: string | null,
-    ref?: string | null,
-    alt?: string | null,
-    qual?: string | null,
-    zigosity?: string | null,
-    global_allele?: number | null,
-    functional_impact?: string | null,
-    acmg?: string | null,
-    reviewer_class?: string | null,
-    clinical_sign?: string | null,
-    hgvs?: string | null,
-    severe_consequence?: string | null,
-    sift_score?: number | null,
-    sift_prediction?: string | null,
-    phenotypes?: string | null,
-    rsID?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  getSelectedVariant?: {
+    __typename: "SelectedVariant";
+    id: string;
+    id_patient?: string | null;
+    id_vcf?: string | null;
+    id_report?: string | null;
+    gene_id?: string | null;
+    gene_symbol?: string | null;
+    chrom?: string | null;
+    pos?: string | null;
+    id_var?: string | null;
+    ref?: string | null;
+    alt?: string | null;
+    qual?: string | null;
+    zigosity?: string | null;
+    global_allele?: number | null;
+    functional_impact?: string | null;
+    acmg?: string | null;
+    reviewer_class?: string | null;
+    clinical_sign?: string | null;
+    hgvs?: string | null;
+    severe_consequence?: string | null;
+    sift_score?: number | null;
+    sift_prediction?: string | null;
+    phenotypes?: string | null;
+    rsID?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type ListSelectedVariantsQueryVariables = {
-  filter?: ModelSelectedVariantFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+  filter?: ModelSelectedVariantFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
 };
 
 export type ListSelectedVariantsQuery = {
-  listSelectedVariants?:  {
-    __typename: "ModelSelectedVariantConnection",
-    items:  Array< {
-      __typename: "SelectedVariant",
-      id: string,
-      id_patient?: string | null,
-      id_vcf?: string | null,
-      id_report?: string | null,
-      gene_id?: string | null,
-      gene_symbol?: string | null,
-      chrom?: string | null,
-      pos?: string | null,
-      id_var?: string | null,
-      ref?: string | null,
-      alt?: string | null,
-      qual?: string | null,
-      zigosity?: string | null,
-      global_allele?: number | null,
-      functional_impact?: string | null,
-      acmg?: string | null,
-      reviewer_class?: string | null,
-      clinical_sign?: string | null,
-      hgvs?: string | null,
-      severe_consequence?: string | null,
-      sift_score?: number | null,
-      sift_prediction?: string | null,
-      phenotypes?: string | null,
-      rsID?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
+  listSelectedVariants?: {
+    __typename: "ModelSelectedVariantConnection";
+    items: Array<{
+      __typename: "SelectedVariant";
+      id: string;
+      id_patient?: string | null;
+      id_vcf?: string | null;
+      id_report?: string | null;
+      gene_id?: string | null;
+      gene_symbol?: string | null;
+      chrom?: string | null;
+      pos?: string | null;
+      id_var?: string | null;
+      ref?: string | null;
+      alt?: string | null;
+      qual?: string | null;
+      zigosity?: string | null;
+      global_allele?: number | null;
+      functional_impact?: string | null;
+      acmg?: string | null;
+      reviewer_class?: string | null;
+      clinical_sign?: string | null;
+      hgvs?: string | null;
+      severe_consequence?: string | null;
+      sift_score?: number | null;
+      sift_prediction?: string | null;
+      phenotypes?: string | null;
+      rsID?: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
 };
 
 export type GetVcfdataQueryVariables = {
-  id: string,
+  id: string;
 };
 
 export type GetVcfdataQuery = {
-  getVcfdata?:  {
-    __typename: "Vcfdata",
-    id: string,
-    id_patient?: string | null,
-    sample_date?: string | null,
-    uploadAt?: string | null,
-    pathfile?: string | null,
-    genome_reference?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  getVcfdata?: {
+    __typename: "Vcfdata";
+    id: string;
+    id_patient?: string | null;
+    sample_date?: string | null;
+    uploadAt?: string | null;
+    pathfile?: string | null;
+    genome_reference?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type ListVcfdataQueryVariables = {
-  filter?: ModelVcfdataFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+  filter?: ModelVcfdataFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
 };
 
 export type ListVcfdataQuery = {
-  listVcfdata?:  {
-    __typename: "ModelVcfdataConnection",
-    items:  Array< {
-      __typename: "Vcfdata",
-      id: string,
-      id_patient?: string | null,
-      sample_date?: string | null,
-      uploadAt?: string | null,
-      pathfile?: string | null,
-      genome_reference?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
+  listVcfdata?: {
+    __typename: "ModelVcfdataConnection";
+    items: Array<{
+      __typename: "Vcfdata";
+      id: string;
+      id_patient?: string | null;
+      sample_date?: string | null;
+      uploadAt?: string | null;
+      pathfile?: string | null;
+      genome_reference?: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
 };
 
 export type GetVariantQueryVariables = {
-  id: string,
+  id: string;
 };
 
 export type GetVariantQuery = {
-  getVariant?:  {
-    __typename: "Variant",
-    id: string,
-    chrom?: string | null,
-    pos?: string | null,
-    ref?: string | null,
-    alt?: string | null,
-    qual?: string | null,
-    filter?: string | null,
-    info?: string | null,
-    hgvs?: string | null,
-    id_var?: string | null,
-    id_patient?: string | null,
-    id_vcf?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  getVariant?: {
+    __typename: "Variant";
+    id: string;
+    chrom?: string | null;
+    pos?: string | null;
+    ref?: string | null;
+    alt?: string | null;
+    qual?: string | null;
+    filter?: string | null;
+    info?: string | null;
+    hgvs?: string | null;
+    id_var?: string | null;
+    id_patient?: string | null;
+    id_vcf?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type ListVariantsQueryVariables = {
-  filter?: ModelVariantFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+  filter?: ModelVariantFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
 };
 
 export type ListVariantsQuery = {
-  listVariants?:  {
-    __typename: "ModelVariantConnection",
-    items:  Array< {
-      __typename: "Variant",
-      id: string,
-      chrom?: string | null,
-      pos?: string | null,
-      ref?: string | null,
-      alt?: string | null,
-      qual?: string | null,
-      filter?: string | null,
-      info?: string | null,
-      hgvs?: string | null,
-      id_var?: string | null,
-      id_patient?: string | null,
-      id_vcf?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
+  listVariants?: {
+    __typename: "ModelVariantConnection";
+    items: Array<{
+      __typename: "Variant";
+      id: string;
+      chrom?: string | null;
+      pos?: string | null;
+      ref?: string | null;
+      alt?: string | null;
+      qual?: string | null;
+      filter?: string | null;
+      info?: string | null;
+      hgvs?: string | null;
+      id_var?: string | null;
+      id_patient?: string | null;
+      id_vcf?: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
 };
 
 export type GetGeneticsConselorQueryVariables = {
-  id: string,
+  id: string;
 };
 
 export type GetGeneticsConselorQuery = {
-  getGeneticsConselor?:  {
-    __typename: "GeneticsConselor",
-    id: string,
-    text?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  getGeneticsConselor?: {
+    __typename: "GeneticsConselor";
+    id: string;
+    text?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type ListGeneticsConselorsQueryVariables = {
-  filter?: ModelGeneticsConselorFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+  filter?: ModelGeneticsConselorFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
 };
 
 export type ListGeneticsConselorsQuery = {
-  listGeneticsConselors?:  {
-    __typename: "ModelGeneticsConselorConnection",
-    items:  Array< {
-      __typename: "GeneticsConselor",
-      id: string,
-      text?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
+  listGeneticsConselors?: {
+    __typename: "ModelGeneticsConselorConnection";
+    items: Array<{
+      __typename: "GeneticsConselor";
+      id: string;
+      text?: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
 };
 
 export type GetPhenotypeQueryVariables = {
-  id: string,
+  id: string;
 };
 
 export type GetPhenotypeQuery = {
-  getPhenotype?:  {
-    __typename: "Phenotype",
-    id: string,
-    PhenotypeCode?: string | null,
-    Description?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  getPhenotype?: {
+    __typename: "Phenotype";
+    id: string;
+    PhenotypeCode?: string | null;
+    Description?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type ListPhenotypesQueryVariables = {
-  filter?: ModelPhenotypeFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+  filter?: ModelPhenotypeFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
 };
 
 export type ListPhenotypesQuery = {
-  listPhenotypes?:  {
-    __typename: "ModelPhenotypeConnection",
-    items:  Array< {
-      __typename: "Phenotype",
-      id: string,
-      PhenotypeCode?: string | null,
-      Description?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
+  listPhenotypes?: {
+    __typename: "ModelPhenotypeConnection";
+    items: Array<{
+      __typename: "Phenotype";
+      id: string;
+      PhenotypeCode?: string | null;
+      Description?: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
 };
 
 export type GetConclusionQueryVariables = {
-  id: string,
+  id: string;
 };
 
 export type GetConclusionQuery = {
-  getConclusion?:  {
-    __typename: "Conclusion",
-    id: string,
-    text?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  getConclusion?: {
+    __typename: "Conclusion";
+    id: string;
+    text?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type ListConclusionsQueryVariables = {
-  filter?: ModelConclusionFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+  filter?: ModelConclusionFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
 };
 
 export type ListConclusionsQuery = {
-  listConclusions?:  {
-    __typename: "ModelConclusionConnection",
-    items:  Array< {
-      __typename: "Conclusion",
-      id: string,
-      text?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
+  listConclusions?: {
+    __typename: "ModelConclusionConnection";
+    items: Array<{
+      __typename: "Conclusion";
+      id: string;
+      text?: string | null;
+      id_patient?: string | null;
+      id_report?: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
 };
 
 export type GetRecommendationQueryVariables = {
-  id: string,
+  id: string;
 };
 
 export type GetRecommendationQuery = {
-  getRecommendation?:  {
-    __typename: "Recommendation",
-    id: string,
-    text?: string | null,
-    variantreportID: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  getRecommendation?: {
+    __typename: "Recommendation";
+    id: string;
+    text?: string | null;
+    id_patient: string;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type ListRecommendationsQueryVariables = {
-  filter?: ModelRecommendationFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+  filter?: ModelRecommendationFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
 };
 
 export type ListRecommendationsQuery = {
-  listRecommendations?:  {
-    __typename: "ModelRecommendationConnection",
-    items:  Array< {
-      __typename: "Recommendation",
-      id: string,
-      text?: string | null,
-      variantreportID: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
+  listRecommendations?: {
+    __typename: "ModelRecommendationConnection";
+    items: Array<{
+      __typename: "Recommendation";
+      id: string;
+      text?: string | null;
+      id_patient: string;
+      id_report?: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
 };
 
 export type GetVariantReportQueryVariables = {
-  id: string,
+  id: string;
 };
 
 export type GetVariantReportQuery = {
-  getVariantReport?:  {
-    __typename: "VariantReport",
-    id: string,
-    status?: number | null,
-    isApproved?: boolean | null,
-    medical_history?: string | null,
-    current_diagnosis?: string | null,
-    institutionID?: string | null,
-    createAt?: string | null,
-    phenotype?: Array< string | null > | null,
-    sample_collection?: string | null,
-    idPatient?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  getVariantReport?: {
+    __typename: "VariantReport";
+    id: string;
+    status?: number | null;
+    isApproved?: boolean | null;
+    medical_history?: string | null;
+    current_diagnosis?: string | null;
+    institutionID?: string | null;
+    createAt?: string | null;
+    phenotype?: Array<string | null> | null;
+    sample_collection?: string | null;
+    idPatient?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type ListVariantReportsQueryVariables = {
-  filter?: ModelVariantReportFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+  filter?: ModelVariantReportFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
 };
 
 export type ListVariantReportsQuery = {
-  listVariantReports?:  {
-    __typename: "ModelVariantReportConnection",
-    items:  Array< {
-      __typename: "VariantReport",
-      id: string,
-      status?: number | null,
-      isApproved?: boolean | null,
-      medical_history?: string | null,
-      current_diagnosis?: string | null,
-      institutionID?: string | null,
-      createAt?: string | null,
-      phenotype?: Array< string | null > | null,
-      sample_collection?: string | null,
-      idPatient?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
+  listVariantReports?: {
+    __typename: "ModelVariantReportConnection";
+    items: Array<{
+      __typename: "VariantReport";
+      id: string;
+      status?: number | null;
+      isApproved?: boolean | null;
+      medical_history?: string | null;
+      current_diagnosis?: string | null;
+      institutionID?: string | null;
+      createAt?: string | null;
+      phenotype?: Array<string | null> | null;
+      sample_collection?: string | null;
+      idPatient?: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
 };
 
 export type GetPatientDocumentsQueryVariables = {
-  id: string,
+  id: string;
 };
 
 export type GetPatientDocumentsQuery = {
-  getPatientDocuments?:  {
-    __typename: "PatientDocuments",
-    id: string,
-    name?: string | null,
-    patientID: string,
-    size?: number | null,
-    link?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  getPatientDocuments?: {
+    __typename: "PatientDocuments";
+    id: string;
+    name?: string | null;
+    pathfile?: string | null;
+    doctype?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type ListPatientDocumentsQueryVariables = {
-  filter?: ModelPatientDocumentsFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+  filter?: ModelPatientDocumentsFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
 };
 
 export type ListPatientDocumentsQuery = {
-  listPatientDocuments?:  {
-    __typename: "ModelPatientDocumentsConnection",
-    items:  Array< {
-      __typename: "PatientDocuments",
-      id: string,
-      name?: string | null,
-      patientID: string,
-      size?: number | null,
-      link?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
+  listPatientDocuments?: {
+    __typename: "ModelPatientDocumentsConnection";
+    items: Array<{
+      __typename: "PatientDocuments";
+      id: string;
+      name?: string | null;
+      pathfile?: string | null;
+      doctype?: string | null;
+      id_patient?: string | null;
+      id_report?: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
 };
 
 export type GetPatientQueryVariables = {
-  id: string,
+  id: string;
 };
 
 export type GetPatientQuery = {
-  getPatient?:  {
-    __typename: "Patient",
-    id: string,
-    name?: string | null,
-    sex?: string | null,
-    phone_number?: string | null,
-    dob?: string | null,
-    institutionID: string,
-    PatientDokuments?:  {
-      __typename: "ModelPatientDocumentsConnection",
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  getPatient?: {
+    __typename: "Patient";
+    id: string;
+    name?: string | null;
+    sex?: string | null;
+    phone_number?: string | null;
+    dob?: string | null;
+    institutionID: string;
+    PatientDokuments?: {
+      __typename: "ModelPatientDocumentsConnection";
+      nextToken?: string | null;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type ListPatientsQueryVariables = {
-  filter?: ModelPatientFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+  filter?: ModelPatientFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
 };
 
 export type ListPatientsQuery = {
-  listPatients?:  {
-    __typename: "ModelPatientConnection",
-    items:  Array< {
-      __typename: "Patient",
-      id: string,
-      name?: string | null,
-      sex?: string | null,
-      phone_number?: string | null,
-      dob?: string | null,
-      institutionID: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
+  listPatients?: {
+    __typename: "ModelPatientConnection";
+    items: Array<{
+      __typename: "Patient";
+      id: string;
+      name?: string | null;
+      sex?: string | null;
+      phone_number?: string | null;
+      dob?: string | null;
+      institutionID: string;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
 };
 
 export type GetUserQueryVariables = {
-  id: string,
+  id: string;
 };
 
 export type GetUserQuery = {
-  getUser?:  {
-    __typename: "User",
-    id: string,
-    first_name?: string | null,
-    last_name?: string | null,
-    role?: string | null,
-    email?: string | null,
-    category?: string | null,
-    specialty?: string | null,
-    institutionID: string,
-    level?: number | null,
-    status?: number | null,
-    phone_number?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  getUser?: {
+    __typename: "User";
+    id: string;
+    first_name?: string | null;
+    last_name?: string | null;
+    role?: string | null;
+    email?: string | null;
+    category?: string | null;
+    specialty?: string | null;
+    institutionID: string;
+    level?: number | null;
+    status?: number | null;
+    phone_number?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type ListUsersQueryVariables = {
-  filter?: ModelUserFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+  filter?: ModelUserFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
 };
 
 export type ListUsersQuery = {
-  listUsers?:  {
-    __typename: "ModelUserConnection",
-    items:  Array< {
-      __typename: "User",
-      id: string,
-      first_name?: string | null,
-      last_name?: string | null,
-      role?: string | null,
-      email?: string | null,
-      category?: string | null,
-      specialty?: string | null,
-      institutionID: string,
-      level?: number | null,
-      status?: number | null,
-      phone_number?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
+  listUsers?: {
+    __typename: "ModelUserConnection";
+    items: Array<{
+      __typename: "User";
+      id: string;
+      first_name?: string | null;
+      last_name?: string | null;
+      role?: string | null;
+      email?: string | null;
+      category?: string | null;
+      specialty?: string | null;
+      institutionID: string;
+      level?: number | null;
+      status?: number | null;
+      phone_number?: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
 };
 
 export type GetInstitutionQueryVariables = {
-  id: string,
+  id: string;
 };
 
 export type GetInstitutionQuery = {
-  getInstitution?:  {
-    __typename: "Institution",
-    id: string,
-    name?: string | null,
-    contactname?: string | null,
-    address?: string | null,
-    subscription_type?: string | null,
-    email?: string | null,
-    Users?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    Patients?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    userQuotas?: number | null,
-    currentUserQuota?: number | null,
-    storageQuota?: number | null,
-    registrationDate?: string | null,
-    accountStatus?: boolean | null,
-    VariantReports?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    contactphone?: string | null,
-    dueDate?: string | null,
-    currentStorageQuota?: number | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  getInstitution?: {
+    __typename: "Institution";
+    id: string;
+    name?: string | null;
+    contactname?: string | null;
+    address?: string | null;
+    subscription_type?: string | null;
+    email?: string | null;
+    Users?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    Patients?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    userQuotas?: number | null;
+    currentUserQuota?: number | null;
+    storageQuota?: number | null;
+    registrationDate?: string | null;
+    accountStatus?: boolean | null;
+    VariantReports?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    contactphone?: string | null;
+    dueDate?: string | null;
+    currentStorageQuota?: number | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type ListInstitutionsQueryVariables = {
-  filter?: ModelInstitutionFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+  filter?: ModelInstitutionFilterInput | null;
+  limit?: number | null;
+  nextToken?: string | null;
 };
 
 export type ListInstitutionsQuery = {
-  listInstitutions?:  {
-    __typename: "ModelInstitutionConnection",
-    items:  Array< {
-      __typename: "Institution",
-      id: string,
-      name?: string | null,
-      contactname?: string | null,
-      address?: string | null,
-      subscription_type?: string | null,
-      email?: string | null,
-      userQuotas?: number | null,
-      currentUserQuota?: number | null,
-      storageQuota?: number | null,
-      registrationDate?: string | null,
-      accountStatus?: boolean | null,
-      contactphone?: string | null,
-      dueDate?: string | null,
-      currentStorageQuota?: number | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
+  listInstitutions?: {
+    __typename: "ModelInstitutionConnection";
+    items: Array<{
+      __typename: "Institution";
+      id: string;
+      name?: string | null;
+      contactname?: string | null;
+      address?: string | null;
+      subscription_type?: string | null;
+      email?: string | null;
+      userQuotas?: number | null;
+      currentUserQuota?: number | null;
+      storageQuota?: number | null;
+      registrationDate?: string | null;
+      accountStatus?: boolean | null;
+      contactphone?: string | null;
+      dueDate?: string | null;
+      currentStorageQuota?: number | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
+};
+
+export type OnCreateVariantInterpretationSubscriptionVariables = {
+  filter?: ModelSubscriptionVariantInterpretationFilterInput | null;
+};
+
+export type OnCreateVariantInterpretationSubscription = {
+  onCreateVariantInterpretation?: {
+    __typename: "VariantInterpretation";
+    id: string;
+    hgvs?: string | null;
+    text?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    id_varsample?: string | null;
+    gene?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+};
+
+export type OnUpdateVariantInterpretationSubscriptionVariables = {
+  filter?: ModelSubscriptionVariantInterpretationFilterInput | null;
+};
+
+export type OnUpdateVariantInterpretationSubscription = {
+  onUpdateVariantInterpretation?: {
+    __typename: "VariantInterpretation";
+    id: string;
+    hgvs?: string | null;
+    text?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    id_varsample?: string | null;
+    gene?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+};
+
+export type OnDeleteVariantInterpretationSubscriptionVariables = {
+  filter?: ModelSubscriptionVariantInterpretationFilterInput | null;
+};
+
+export type OnDeleteVariantInterpretationSubscription = {
+  onDeleteVariantInterpretation?: {
+    __typename: "VariantInterpretation";
+    id: string;
+    hgvs?: string | null;
+    text?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    id_varsample?: string | null;
+    gene?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnCreateSelectedVariantSubscriptionVariables = {
-  filter?: ModelSubscriptionSelectedVariantFilterInput | null,
+  filter?: ModelSubscriptionSelectedVariantFilterInput | null;
 };
 
 export type OnCreateSelectedVariantSubscription = {
-  onCreateSelectedVariant?:  {
-    __typename: "SelectedVariant",
-    id: string,
-    id_patient?: string | null,
-    id_vcf?: string | null,
-    id_report?: string | null,
-    gene_id?: string | null,
-    gene_symbol?: string | null,
-    chrom?: string | null,
-    pos?: string | null,
-    id_var?: string | null,
-    ref?: string | null,
-    alt?: string | null,
-    qual?: string | null,
-    zigosity?: string | null,
-    global_allele?: number | null,
-    functional_impact?: string | null,
-    acmg?: string | null,
-    reviewer_class?: string | null,
-    clinical_sign?: string | null,
-    hgvs?: string | null,
-    severe_consequence?: string | null,
-    sift_score?: number | null,
-    sift_prediction?: string | null,
-    phenotypes?: string | null,
-    rsID?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onCreateSelectedVariant?: {
+    __typename: "SelectedVariant";
+    id: string;
+    id_patient?: string | null;
+    id_vcf?: string | null;
+    id_report?: string | null;
+    gene_id?: string | null;
+    gene_symbol?: string | null;
+    chrom?: string | null;
+    pos?: string | null;
+    id_var?: string | null;
+    ref?: string | null;
+    alt?: string | null;
+    qual?: string | null;
+    zigosity?: string | null;
+    global_allele?: number | null;
+    functional_impact?: string | null;
+    acmg?: string | null;
+    reviewer_class?: string | null;
+    clinical_sign?: string | null;
+    hgvs?: string | null;
+    severe_consequence?: string | null;
+    sift_score?: number | null;
+    sift_prediction?: string | null;
+    phenotypes?: string | null;
+    rsID?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnUpdateSelectedVariantSubscriptionVariables = {
-  filter?: ModelSubscriptionSelectedVariantFilterInput | null,
+  filter?: ModelSubscriptionSelectedVariantFilterInput | null;
 };
 
 export type OnUpdateSelectedVariantSubscription = {
-  onUpdateSelectedVariant?:  {
-    __typename: "SelectedVariant",
-    id: string,
-    id_patient?: string | null,
-    id_vcf?: string | null,
-    id_report?: string | null,
-    gene_id?: string | null,
-    gene_symbol?: string | null,
-    chrom?: string | null,
-    pos?: string | null,
-    id_var?: string | null,
-    ref?: string | null,
-    alt?: string | null,
-    qual?: string | null,
-    zigosity?: string | null,
-    global_allele?: number | null,
-    functional_impact?: string | null,
-    acmg?: string | null,
-    reviewer_class?: string | null,
-    clinical_sign?: string | null,
-    hgvs?: string | null,
-    severe_consequence?: string | null,
-    sift_score?: number | null,
-    sift_prediction?: string | null,
-    phenotypes?: string | null,
-    rsID?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onUpdateSelectedVariant?: {
+    __typename: "SelectedVariant";
+    id: string;
+    id_patient?: string | null;
+    id_vcf?: string | null;
+    id_report?: string | null;
+    gene_id?: string | null;
+    gene_symbol?: string | null;
+    chrom?: string | null;
+    pos?: string | null;
+    id_var?: string | null;
+    ref?: string | null;
+    alt?: string | null;
+    qual?: string | null;
+    zigosity?: string | null;
+    global_allele?: number | null;
+    functional_impact?: string | null;
+    acmg?: string | null;
+    reviewer_class?: string | null;
+    clinical_sign?: string | null;
+    hgvs?: string | null;
+    severe_consequence?: string | null;
+    sift_score?: number | null;
+    sift_prediction?: string | null;
+    phenotypes?: string | null;
+    rsID?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnDeleteSelectedVariantSubscriptionVariables = {
-  filter?: ModelSubscriptionSelectedVariantFilterInput | null,
+  filter?: ModelSubscriptionSelectedVariantFilterInput | null;
 };
 
 export type OnDeleteSelectedVariantSubscription = {
-  onDeleteSelectedVariant?:  {
-    __typename: "SelectedVariant",
-    id: string,
-    id_patient?: string | null,
-    id_vcf?: string | null,
-    id_report?: string | null,
-    gene_id?: string | null,
-    gene_symbol?: string | null,
-    chrom?: string | null,
-    pos?: string | null,
-    id_var?: string | null,
-    ref?: string | null,
-    alt?: string | null,
-    qual?: string | null,
-    zigosity?: string | null,
-    global_allele?: number | null,
-    functional_impact?: string | null,
-    acmg?: string | null,
-    reviewer_class?: string | null,
-    clinical_sign?: string | null,
-    hgvs?: string | null,
-    severe_consequence?: string | null,
-    sift_score?: number | null,
-    sift_prediction?: string | null,
-    phenotypes?: string | null,
-    rsID?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onDeleteSelectedVariant?: {
+    __typename: "SelectedVariant";
+    id: string;
+    id_patient?: string | null;
+    id_vcf?: string | null;
+    id_report?: string | null;
+    gene_id?: string | null;
+    gene_symbol?: string | null;
+    chrom?: string | null;
+    pos?: string | null;
+    id_var?: string | null;
+    ref?: string | null;
+    alt?: string | null;
+    qual?: string | null;
+    zigosity?: string | null;
+    global_allele?: number | null;
+    functional_impact?: string | null;
+    acmg?: string | null;
+    reviewer_class?: string | null;
+    clinical_sign?: string | null;
+    hgvs?: string | null;
+    severe_consequence?: string | null;
+    sift_score?: number | null;
+    sift_prediction?: string | null;
+    phenotypes?: string | null;
+    rsID?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnCreateVcfdataSubscriptionVariables = {
-  filter?: ModelSubscriptionVcfdataFilterInput | null,
+  filter?: ModelSubscriptionVcfdataFilterInput | null;
 };
 
 export type OnCreateVcfdataSubscription = {
-  onCreateVcfdata?:  {
-    __typename: "Vcfdata",
-    id: string,
-    id_patient?: string | null,
-    sample_date?: string | null,
-    uploadAt?: string | null,
-    pathfile?: string | null,
-    genome_reference?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onCreateVcfdata?: {
+    __typename: "Vcfdata";
+    id: string;
+    id_patient?: string | null;
+    sample_date?: string | null;
+    uploadAt?: string | null;
+    pathfile?: string | null;
+    genome_reference?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnUpdateVcfdataSubscriptionVariables = {
-  filter?: ModelSubscriptionVcfdataFilterInput | null,
+  filter?: ModelSubscriptionVcfdataFilterInput | null;
 };
 
 export type OnUpdateVcfdataSubscription = {
-  onUpdateVcfdata?:  {
-    __typename: "Vcfdata",
-    id: string,
-    id_patient?: string | null,
-    sample_date?: string | null,
-    uploadAt?: string | null,
-    pathfile?: string | null,
-    genome_reference?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onUpdateVcfdata?: {
+    __typename: "Vcfdata";
+    id: string;
+    id_patient?: string | null;
+    sample_date?: string | null;
+    uploadAt?: string | null;
+    pathfile?: string | null;
+    genome_reference?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnDeleteVcfdataSubscriptionVariables = {
-  filter?: ModelSubscriptionVcfdataFilterInput | null,
+  filter?: ModelSubscriptionVcfdataFilterInput | null;
 };
 
 export type OnDeleteVcfdataSubscription = {
-  onDeleteVcfdata?:  {
-    __typename: "Vcfdata",
-    id: string,
-    id_patient?: string | null,
-    sample_date?: string | null,
-    uploadAt?: string | null,
-    pathfile?: string | null,
-    genome_reference?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onDeleteVcfdata?: {
+    __typename: "Vcfdata";
+    id: string;
+    id_patient?: string | null;
+    sample_date?: string | null;
+    uploadAt?: string | null;
+    pathfile?: string | null;
+    genome_reference?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnCreateVariantSubscriptionVariables = {
-  filter?: ModelSubscriptionVariantFilterInput | null,
+  filter?: ModelSubscriptionVariantFilterInput | null;
 };
 
 export type OnCreateVariantSubscription = {
-  onCreateVariant?:  {
-    __typename: "Variant",
-    id: string,
-    chrom?: string | null,
-    pos?: string | null,
-    ref?: string | null,
-    alt?: string | null,
-    qual?: string | null,
-    filter?: string | null,
-    info?: string | null,
-    hgvs?: string | null,
-    id_var?: string | null,
-    id_patient?: string | null,
-    id_vcf?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onCreateVariant?: {
+    __typename: "Variant";
+    id: string;
+    chrom?: string | null;
+    pos?: string | null;
+    ref?: string | null;
+    alt?: string | null;
+    qual?: string | null;
+    filter?: string | null;
+    info?: string | null;
+    hgvs?: string | null;
+    id_var?: string | null;
+    id_patient?: string | null;
+    id_vcf?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnUpdateVariantSubscriptionVariables = {
-  filter?: ModelSubscriptionVariantFilterInput | null,
+  filter?: ModelSubscriptionVariantFilterInput | null;
 };
 
 export type OnUpdateVariantSubscription = {
-  onUpdateVariant?:  {
-    __typename: "Variant",
-    id: string,
-    chrom?: string | null,
-    pos?: string | null,
-    ref?: string | null,
-    alt?: string | null,
-    qual?: string | null,
-    filter?: string | null,
-    info?: string | null,
-    hgvs?: string | null,
-    id_var?: string | null,
-    id_patient?: string | null,
-    id_vcf?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onUpdateVariant?: {
+    __typename: "Variant";
+    id: string;
+    chrom?: string | null;
+    pos?: string | null;
+    ref?: string | null;
+    alt?: string | null;
+    qual?: string | null;
+    filter?: string | null;
+    info?: string | null;
+    hgvs?: string | null;
+    id_var?: string | null;
+    id_patient?: string | null;
+    id_vcf?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnDeleteVariantSubscriptionVariables = {
-  filter?: ModelSubscriptionVariantFilterInput | null,
+  filter?: ModelSubscriptionVariantFilterInput | null;
 };
 
 export type OnDeleteVariantSubscription = {
-  onDeleteVariant?:  {
-    __typename: "Variant",
-    id: string,
-    chrom?: string | null,
-    pos?: string | null,
-    ref?: string | null,
-    alt?: string | null,
-    qual?: string | null,
-    filter?: string | null,
-    info?: string | null,
-    hgvs?: string | null,
-    id_var?: string | null,
-    id_patient?: string | null,
-    id_vcf?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onDeleteVariant?: {
+    __typename: "Variant";
+    id: string;
+    chrom?: string | null;
+    pos?: string | null;
+    ref?: string | null;
+    alt?: string | null;
+    qual?: string | null;
+    filter?: string | null;
+    info?: string | null;
+    hgvs?: string | null;
+    id_var?: string | null;
+    id_patient?: string | null;
+    id_vcf?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnCreateGeneticsConselorSubscriptionVariables = {
-  filter?: ModelSubscriptionGeneticsConselorFilterInput | null,
+  filter?: ModelSubscriptionGeneticsConselorFilterInput | null;
 };
 
 export type OnCreateGeneticsConselorSubscription = {
-  onCreateGeneticsConselor?:  {
-    __typename: "GeneticsConselor",
-    id: string,
-    text?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onCreateGeneticsConselor?: {
+    __typename: "GeneticsConselor";
+    id: string;
+    text?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnUpdateGeneticsConselorSubscriptionVariables = {
-  filter?: ModelSubscriptionGeneticsConselorFilterInput | null,
+  filter?: ModelSubscriptionGeneticsConselorFilterInput | null;
 };
 
 export type OnUpdateGeneticsConselorSubscription = {
-  onUpdateGeneticsConselor?:  {
-    __typename: "GeneticsConselor",
-    id: string,
-    text?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onUpdateGeneticsConselor?: {
+    __typename: "GeneticsConselor";
+    id: string;
+    text?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnDeleteGeneticsConselorSubscriptionVariables = {
-  filter?: ModelSubscriptionGeneticsConselorFilterInput | null,
+  filter?: ModelSubscriptionGeneticsConselorFilterInput | null;
 };
 
 export type OnDeleteGeneticsConselorSubscription = {
-  onDeleteGeneticsConselor?:  {
-    __typename: "GeneticsConselor",
-    id: string,
-    text?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onDeleteGeneticsConselor?: {
+    __typename: "GeneticsConselor";
+    id: string;
+    text?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnCreatePhenotypeSubscriptionVariables = {
-  filter?: ModelSubscriptionPhenotypeFilterInput | null,
+  filter?: ModelSubscriptionPhenotypeFilterInput | null;
 };
 
 export type OnCreatePhenotypeSubscription = {
-  onCreatePhenotype?:  {
-    __typename: "Phenotype",
-    id: string,
-    PhenotypeCode?: string | null,
-    Description?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onCreatePhenotype?: {
+    __typename: "Phenotype";
+    id: string;
+    PhenotypeCode?: string | null;
+    Description?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnUpdatePhenotypeSubscriptionVariables = {
-  filter?: ModelSubscriptionPhenotypeFilterInput | null,
+  filter?: ModelSubscriptionPhenotypeFilterInput | null;
 };
 
 export type OnUpdatePhenotypeSubscription = {
-  onUpdatePhenotype?:  {
-    __typename: "Phenotype",
-    id: string,
-    PhenotypeCode?: string | null,
-    Description?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onUpdatePhenotype?: {
+    __typename: "Phenotype";
+    id: string;
+    PhenotypeCode?: string | null;
+    Description?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnDeletePhenotypeSubscriptionVariables = {
-  filter?: ModelSubscriptionPhenotypeFilterInput | null,
+  filter?: ModelSubscriptionPhenotypeFilterInput | null;
 };
 
 export type OnDeletePhenotypeSubscription = {
-  onDeletePhenotype?:  {
-    __typename: "Phenotype",
-    id: string,
-    PhenotypeCode?: string | null,
-    Description?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onDeletePhenotype?: {
+    __typename: "Phenotype";
+    id: string;
+    PhenotypeCode?: string | null;
+    Description?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnCreateConclusionSubscriptionVariables = {
-  filter?: ModelSubscriptionConclusionFilterInput | null,
+  filter?: ModelSubscriptionConclusionFilterInput | null;
 };
 
 export type OnCreateConclusionSubscription = {
-  onCreateConclusion?:  {
-    __typename: "Conclusion",
-    id: string,
-    text?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onCreateConclusion?: {
+    __typename: "Conclusion";
+    id: string;
+    text?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnUpdateConclusionSubscriptionVariables = {
-  filter?: ModelSubscriptionConclusionFilterInput | null,
+  filter?: ModelSubscriptionConclusionFilterInput | null;
 };
 
 export type OnUpdateConclusionSubscription = {
-  onUpdateConclusion?:  {
-    __typename: "Conclusion",
-    id: string,
-    text?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onUpdateConclusion?: {
+    __typename: "Conclusion";
+    id: string;
+    text?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnDeleteConclusionSubscriptionVariables = {
-  filter?: ModelSubscriptionConclusionFilterInput | null,
+  filter?: ModelSubscriptionConclusionFilterInput | null;
 };
 
 export type OnDeleteConclusionSubscription = {
-  onDeleteConclusion?:  {
-    __typename: "Conclusion",
-    id: string,
-    text?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onDeleteConclusion?: {
+    __typename: "Conclusion";
+    id: string;
+    text?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnCreateRecommendationSubscriptionVariables = {
-  filter?: ModelSubscriptionRecommendationFilterInput | null,
+  filter?: ModelSubscriptionRecommendationFilterInput | null;
 };
 
 export type OnCreateRecommendationSubscription = {
-  onCreateRecommendation?:  {
-    __typename: "Recommendation",
-    id: string,
-    text?: string | null,
-    variantreportID: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onCreateRecommendation?: {
+    __typename: "Recommendation";
+    id: string;
+    text?: string | null;
+    id_patient: string;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnUpdateRecommendationSubscriptionVariables = {
-  filter?: ModelSubscriptionRecommendationFilterInput | null,
+  filter?: ModelSubscriptionRecommendationFilterInput | null;
 };
 
 export type OnUpdateRecommendationSubscription = {
-  onUpdateRecommendation?:  {
-    __typename: "Recommendation",
-    id: string,
-    text?: string | null,
-    variantreportID: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onUpdateRecommendation?: {
+    __typename: "Recommendation";
+    id: string;
+    text?: string | null;
+    id_patient: string;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnDeleteRecommendationSubscriptionVariables = {
-  filter?: ModelSubscriptionRecommendationFilterInput | null,
+  filter?: ModelSubscriptionRecommendationFilterInput | null;
 };
 
 export type OnDeleteRecommendationSubscription = {
-  onDeleteRecommendation?:  {
-    __typename: "Recommendation",
-    id: string,
-    text?: string | null,
-    variantreportID: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onDeleteRecommendation?: {
+    __typename: "Recommendation";
+    id: string;
+    text?: string | null;
+    id_patient: string;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnCreateVariantReportSubscriptionVariables = {
-  filter?: ModelSubscriptionVariantReportFilterInput | null,
+  filter?: ModelSubscriptionVariantReportFilterInput | null;
 };
 
 export type OnCreateVariantReportSubscription = {
-  onCreateVariantReport?:  {
-    __typename: "VariantReport",
-    id: string,
-    status?: number | null,
-    isApproved?: boolean | null,
-    medical_history?: string | null,
-    current_diagnosis?: string | null,
-    institutionID?: string | null,
-    createAt?: string | null,
-    phenotype?: Array< string | null > | null,
-    sample_collection?: string | null,
-    idPatient?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onCreateVariantReport?: {
+    __typename: "VariantReport";
+    id: string;
+    status?: number | null;
+    isApproved?: boolean | null;
+    medical_history?: string | null;
+    current_diagnosis?: string | null;
+    institutionID?: string | null;
+    createAt?: string | null;
+    phenotype?: Array<string | null> | null;
+    sample_collection?: string | null;
+    idPatient?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnUpdateVariantReportSubscriptionVariables = {
-  filter?: ModelSubscriptionVariantReportFilterInput | null,
+  filter?: ModelSubscriptionVariantReportFilterInput | null;
 };
 
 export type OnUpdateVariantReportSubscription = {
-  onUpdateVariantReport?:  {
-    __typename: "VariantReport",
-    id: string,
-    status?: number | null,
-    isApproved?: boolean | null,
-    medical_history?: string | null,
-    current_diagnosis?: string | null,
-    institutionID?: string | null,
-    createAt?: string | null,
-    phenotype?: Array< string | null > | null,
-    sample_collection?: string | null,
-    idPatient?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onUpdateVariantReport?: {
+    __typename: "VariantReport";
+    id: string;
+    status?: number | null;
+    isApproved?: boolean | null;
+    medical_history?: string | null;
+    current_diagnosis?: string | null;
+    institutionID?: string | null;
+    createAt?: string | null;
+    phenotype?: Array<string | null> | null;
+    sample_collection?: string | null;
+    idPatient?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnDeleteVariantReportSubscriptionVariables = {
-  filter?: ModelSubscriptionVariantReportFilterInput | null,
+  filter?: ModelSubscriptionVariantReportFilterInput | null;
 };
 
 export type OnDeleteVariantReportSubscription = {
-  onDeleteVariantReport?:  {
-    __typename: "VariantReport",
-    id: string,
-    status?: number | null,
-    isApproved?: boolean | null,
-    medical_history?: string | null,
-    current_diagnosis?: string | null,
-    institutionID?: string | null,
-    createAt?: string | null,
-    phenotype?: Array< string | null > | null,
-    sample_collection?: string | null,
-    idPatient?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onDeleteVariantReport?: {
+    __typename: "VariantReport";
+    id: string;
+    status?: number | null;
+    isApproved?: boolean | null;
+    medical_history?: string | null;
+    current_diagnosis?: string | null;
+    institutionID?: string | null;
+    createAt?: string | null;
+    phenotype?: Array<string | null> | null;
+    sample_collection?: string | null;
+    idPatient?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnCreatePatientDocumentsSubscriptionVariables = {
-  filter?: ModelSubscriptionPatientDocumentsFilterInput | null,
+  filter?: ModelSubscriptionPatientDocumentsFilterInput | null;
 };
 
 export type OnCreatePatientDocumentsSubscription = {
-  onCreatePatientDocuments?:  {
-    __typename: "PatientDocuments",
-    id: string,
-    name?: string | null,
-    patientID: string,
-    size?: number | null,
-    link?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onCreatePatientDocuments?: {
+    __typename: "PatientDocuments";
+    id: string;
+    name?: string | null;
+    pathfile?: string | null;
+    doctype?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnUpdatePatientDocumentsSubscriptionVariables = {
-  filter?: ModelSubscriptionPatientDocumentsFilterInput | null,
+  filter?: ModelSubscriptionPatientDocumentsFilterInput | null;
 };
 
 export type OnUpdatePatientDocumentsSubscription = {
-  onUpdatePatientDocuments?:  {
-    __typename: "PatientDocuments",
-    id: string,
-    name?: string | null,
-    patientID: string,
-    size?: number | null,
-    link?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onUpdatePatientDocuments?: {
+    __typename: "PatientDocuments";
+    id: string;
+    name?: string | null;
+    pathfile?: string | null;
+    doctype?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnDeletePatientDocumentsSubscriptionVariables = {
-  filter?: ModelSubscriptionPatientDocumentsFilterInput | null,
+  filter?: ModelSubscriptionPatientDocumentsFilterInput | null;
 };
 
 export type OnDeletePatientDocumentsSubscription = {
-  onDeletePatientDocuments?:  {
-    __typename: "PatientDocuments",
-    id: string,
-    name?: string | null,
-    patientID: string,
-    size?: number | null,
-    link?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onDeletePatientDocuments?: {
+    __typename: "PatientDocuments";
+    id: string;
+    name?: string | null;
+    pathfile?: string | null;
+    doctype?: string | null;
+    id_patient?: string | null;
+    id_report?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnCreatePatientSubscriptionVariables = {
-  filter?: ModelSubscriptionPatientFilterInput | null,
+  filter?: ModelSubscriptionPatientFilterInput | null;
 };
 
 export type OnCreatePatientSubscription = {
-  onCreatePatient?:  {
-    __typename: "Patient",
-    id: string,
-    name?: string | null,
-    sex?: string | null,
-    phone_number?: string | null,
-    dob?: string | null,
-    institutionID: string,
-    PatientDokuments?:  {
-      __typename: "ModelPatientDocumentsConnection",
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onCreatePatient?: {
+    __typename: "Patient";
+    id: string;
+    name?: string | null;
+    sex?: string | null;
+    phone_number?: string | null;
+    dob?: string | null;
+    institutionID: string;
+    PatientDokuments?: {
+      __typename: "ModelPatientDocumentsConnection";
+      nextToken?: string | null;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnUpdatePatientSubscriptionVariables = {
-  filter?: ModelSubscriptionPatientFilterInput | null,
+  filter?: ModelSubscriptionPatientFilterInput | null;
 };
 
 export type OnUpdatePatientSubscription = {
-  onUpdatePatient?:  {
-    __typename: "Patient",
-    id: string,
-    name?: string | null,
-    sex?: string | null,
-    phone_number?: string | null,
-    dob?: string | null,
-    institutionID: string,
-    PatientDokuments?:  {
-      __typename: "ModelPatientDocumentsConnection",
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onUpdatePatient?: {
+    __typename: "Patient";
+    id: string;
+    name?: string | null;
+    sex?: string | null;
+    phone_number?: string | null;
+    dob?: string | null;
+    institutionID: string;
+    PatientDokuments?: {
+      __typename: "ModelPatientDocumentsConnection";
+      nextToken?: string | null;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnDeletePatientSubscriptionVariables = {
-  filter?: ModelSubscriptionPatientFilterInput | null,
+  filter?: ModelSubscriptionPatientFilterInput | null;
 };
 
 export type OnDeletePatientSubscription = {
-  onDeletePatient?:  {
-    __typename: "Patient",
-    id: string,
-    name?: string | null,
-    sex?: string | null,
-    phone_number?: string | null,
-    dob?: string | null,
-    institutionID: string,
-    PatientDokuments?:  {
-      __typename: "ModelPatientDocumentsConnection",
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onDeletePatient?: {
+    __typename: "Patient";
+    id: string;
+    name?: string | null;
+    sex?: string | null;
+    phone_number?: string | null;
+    dob?: string | null;
+    institutionID: string;
+    PatientDokuments?: {
+      __typename: "ModelPatientDocumentsConnection";
+      nextToken?: string | null;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnCreateUserSubscriptionVariables = {
-  filter?: ModelSubscriptionUserFilterInput | null,
+  filter?: ModelSubscriptionUserFilterInput | null;
 };
 
 export type OnCreateUserSubscription = {
-  onCreateUser?:  {
-    __typename: "User",
-    id: string,
-    first_name?: string | null,
-    last_name?: string | null,
-    role?: string | null,
-    email?: string | null,
-    category?: string | null,
-    specialty?: string | null,
-    institutionID: string,
-    level?: number | null,
-    status?: number | null,
-    phone_number?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onCreateUser?: {
+    __typename: "User";
+    id: string;
+    first_name?: string | null;
+    last_name?: string | null;
+    role?: string | null;
+    email?: string | null;
+    category?: string | null;
+    specialty?: string | null;
+    institutionID: string;
+    level?: number | null;
+    status?: number | null;
+    phone_number?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnUpdateUserSubscriptionVariables = {
-  filter?: ModelSubscriptionUserFilterInput | null,
+  filter?: ModelSubscriptionUserFilterInput | null;
 };
 
 export type OnUpdateUserSubscription = {
-  onUpdateUser?:  {
-    __typename: "User",
-    id: string,
-    first_name?: string | null,
-    last_name?: string | null,
-    role?: string | null,
-    email?: string | null,
-    category?: string | null,
-    specialty?: string | null,
-    institutionID: string,
-    level?: number | null,
-    status?: number | null,
-    phone_number?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onUpdateUser?: {
+    __typename: "User";
+    id: string;
+    first_name?: string | null;
+    last_name?: string | null;
+    role?: string | null;
+    email?: string | null;
+    category?: string | null;
+    specialty?: string | null;
+    institutionID: string;
+    level?: number | null;
+    status?: number | null;
+    phone_number?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnDeleteUserSubscriptionVariables = {
-  filter?: ModelSubscriptionUserFilterInput | null,
+  filter?: ModelSubscriptionUserFilterInput | null;
 };
 
 export type OnDeleteUserSubscription = {
-  onDeleteUser?:  {
-    __typename: "User",
-    id: string,
-    first_name?: string | null,
-    last_name?: string | null,
-    role?: string | null,
-    email?: string | null,
-    category?: string | null,
-    specialty?: string | null,
-    institutionID: string,
-    level?: number | null,
-    status?: number | null,
-    phone_number?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onDeleteUser?: {
+    __typename: "User";
+    id: string;
+    first_name?: string | null;
+    last_name?: string | null;
+    role?: string | null;
+    email?: string | null;
+    category?: string | null;
+    specialty?: string | null;
+    institutionID: string;
+    level?: number | null;
+    status?: number | null;
+    phone_number?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnCreateInstitutionSubscriptionVariables = {
-  filter?: ModelSubscriptionInstitutionFilterInput | null,
+  filter?: ModelSubscriptionInstitutionFilterInput | null;
 };
 
 export type OnCreateInstitutionSubscription = {
-  onCreateInstitution?:  {
-    __typename: "Institution",
-    id: string,
-    name?: string | null,
-    contactname?: string | null,
-    address?: string | null,
-    subscription_type?: string | null,
-    email?: string | null,
-    Users?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    Patients?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    userQuotas?: number | null,
-    currentUserQuota?: number | null,
-    storageQuota?: number | null,
-    registrationDate?: string | null,
-    accountStatus?: boolean | null,
-    VariantReports?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    contactphone?: string | null,
-    dueDate?: string | null,
-    currentStorageQuota?: number | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onCreateInstitution?: {
+    __typename: "Institution";
+    id: string;
+    name?: string | null;
+    contactname?: string | null;
+    address?: string | null;
+    subscription_type?: string | null;
+    email?: string | null;
+    Users?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    Patients?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    userQuotas?: number | null;
+    currentUserQuota?: number | null;
+    storageQuota?: number | null;
+    registrationDate?: string | null;
+    accountStatus?: boolean | null;
+    VariantReports?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    contactphone?: string | null;
+    dueDate?: string | null;
+    currentStorageQuota?: number | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnUpdateInstitutionSubscriptionVariables = {
-  filter?: ModelSubscriptionInstitutionFilterInput | null,
+  filter?: ModelSubscriptionInstitutionFilterInput | null;
 };
 
 export type OnUpdateInstitutionSubscription = {
-  onUpdateInstitution?:  {
-    __typename: "Institution",
-    id: string,
-    name?: string | null,
-    contactname?: string | null,
-    address?: string | null,
-    subscription_type?: string | null,
-    email?: string | null,
-    Users?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    Patients?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    userQuotas?: number | null,
-    currentUserQuota?: number | null,
-    storageQuota?: number | null,
-    registrationDate?: string | null,
-    accountStatus?: boolean | null,
-    VariantReports?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    contactphone?: string | null,
-    dueDate?: string | null,
-    currentStorageQuota?: number | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onUpdateInstitution?: {
+    __typename: "Institution";
+    id: string;
+    name?: string | null;
+    contactname?: string | null;
+    address?: string | null;
+    subscription_type?: string | null;
+    email?: string | null;
+    Users?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    Patients?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    userQuotas?: number | null;
+    currentUserQuota?: number | null;
+    storageQuota?: number | null;
+    registrationDate?: string | null;
+    accountStatus?: boolean | null;
+    VariantReports?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    contactphone?: string | null;
+    dueDate?: string | null;
+    currentStorageQuota?: number | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
 
 export type OnDeleteInstitutionSubscriptionVariables = {
-  filter?: ModelSubscriptionInstitutionFilterInput | null,
+  filter?: ModelSubscriptionInstitutionFilterInput | null;
 };
 
 export type OnDeleteInstitutionSubscription = {
-  onDeleteInstitution?:  {
-    __typename: "Institution",
-    id: string,
-    name?: string | null,
-    contactname?: string | null,
-    address?: string | null,
-    subscription_type?: string | null,
-    email?: string | null,
-    Users?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    Patients?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    userQuotas?: number | null,
-    currentUserQuota?: number | null,
-    storageQuota?: number | null,
-    registrationDate?: string | null,
-    accountStatus?: boolean | null,
-    VariantReports?:  {
-      __typename: "ModelPatientConnection",
-      nextToken?: string | null,
-    } | null,
-    contactphone?: string | null,
-    dueDate?: string | null,
-    currentStorageQuota?: number | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
+  onDeleteInstitution?: {
+    __typename: "Institution";
+    id: string;
+    name?: string | null;
+    contactname?: string | null;
+    address?: string | null;
+    subscription_type?: string | null;
+    email?: string | null;
+    Users?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    Patients?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    userQuotas?: number | null;
+    currentUserQuota?: number | null;
+    storageQuota?: number | null;
+    registrationDate?: string | null;
+    accountStatus?: boolean | null;
+    VariantReports?: {
+      __typename: "ModelPatientConnection";
+      nextToken?: string | null;
+    } | null;
+    contactphone?: string | null;
+    dueDate?: string | null;
+    currentStorageQuota?: number | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 };
