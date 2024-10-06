@@ -8,6 +8,7 @@ import { listSelectedVariants } from "@/src/graphql/queries";
 import { listVariantInterpretations } from "@/src/graphql/queries";
 import { listRecommendations, listConclusions } from "@/src/graphql/queries";
 import { getPatient } from "@/src/graphql/queries";
+import { getVariantReport } from "@/src/graphql/queries";
 import { Building2, Save } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
@@ -41,7 +42,14 @@ import {
   Recommendation,
   SelectedVariant,
   VariantInterpretation,
+  VariantReportData,
 } from "@/utils/object";
+import LabelAndDescription from "./LabelAndDescription";
+import {
+  ReportStatus,
+  ReportStatusStringToNumber,
+} from "@/utils/DateHelperFunction";
+import { updateVariantReport } from "@/src/graphql/mutations";
 
 interface PreviewReportProops {
   id_report: string;
@@ -62,8 +70,40 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
   );
 
   const [variantInter, setVariantInter] = useState<VariantInterpretation[]>([]);
+  const [variantReport, setVariantReport] = useState<VariantReportData>();
 
   const [isPreviewReport, setIsPreviewReport] = useState(false);
+  const [newStatus, setNewStatus] = useState("");
+
+  const handleUpdateReportStatus = async () => {
+    const temp: VariantReportData = {
+      id: variantReport?.id ?? "",
+      status: ReportStatusStringToNumber(newStatus) ?? 0,
+    };
+    try {
+      const result = await client.graphql({
+        query: updateVariantReport,
+        variables: { input: temp },
+      });
+      if (result.data.updateVariantReport) {
+        fetchVariantReport();
+      }
+    } catch (error) {
+      console.log("error update status report");
+    }
+  };
+
+  const fetchVariantReport = async () => {
+    try {
+      const result = await client.graphql({
+        query: getVariantReport,
+        variables: { id: id_report },
+      });
+      setVariantReport(result.data.getVariantReport as VariantReportData);
+    } catch (error) {
+      console.log("Error fetch variant report");
+    }
+  };
 
   const fetchVariantInterpretation = async () => {
     try {
@@ -137,6 +177,7 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
     fecthSelectedVariant();
     fetchPatient();
     fetchVariantInterpretation();
+    fetchVariantReport();
   });
 
   return (
@@ -159,14 +200,22 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                 <TableBody>
                   <TableRow>
                     <TableCell>
+                      <div className="flex flex-col gap-4">
+                        <LabelAndDescription
+                          label="Current Report Status"
+                          desc={`${ReportStatus(variantReport?.status ?? 0)}`}
+                        ></LabelAndDescription>
+                        <Separator></Separator>
+                      </div>
                       <div className="flex flex-row gap-2 items-center">
-                        <Select>
+                        <Select onValueChange={setNewStatus}>
                           <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Select Report Status" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
                               <SelectLabel>Report Status</SelectLabel>
+                              <SelectItem value="draft">Draft</SelectItem>
                               <SelectItem value="process">
                                 In Process
                               </SelectItem>
@@ -190,6 +239,7 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                               <Button
                                 variant={"ghost"}
                                 className="hover:bg-green-500 hover:text-white"
+                                onClick={(e) => handleUpdateReportStatus()}
                               >
                                 <small>
                                   <Save className="w-5 h-5"></Save>
@@ -325,27 +375,28 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                 Result & Interpretations
               </h2>
               <Table className="min-w-full bg-white text-sm mb-4">
-                <TableHeader>
-                  <TableRow className="border-b">
-                    <TableHead className="px-6 py-4 text-left font-medium text-gray-900">
+                <TableHeader className="bg-gray-900 ">
+                  <TableRow className="border-b text-white">
+                    <TableHead className="px-6 py-4 text-left font-medium text-white-900">
                       Gene
                     </TableHead>
-                    <TableHead className="px-6 py-4 text-left font-medium text-gray-900">
+                    <TableHead className="px-6 py-4 text-left font-medium text-white-900">
                       Variant Detail
                     </TableHead>
-                    <TableHead className="px-6 py-4 text-left font-medium text-gray-900">
+                    <TableHead className="px-6 py-4 text-left font-medium text-white-900">
                       Zygosity
                     </TableHead>
-                    <TableHead className="px-6 py-4 text-left font-medium text-gray-900">
-                      AMGC Classification
+                    <TableHead className="px-6 py-4 text-left font-medium text-white-900">
+                      Clinvar ( Clinical Sign)
                     </TableHead>
-                    <TableHead className="px-6 py-4 text-left font-medium text-gray-900">
+
+                    <TableHead className="px-6 py-4 text-left font-medium text-white-900">
                       Gnomade Allele Frequency
                     </TableHead>
-                    <TableHead className="px-6 py-4 text-left font-medium text-gray-900">
+                    <TableHead className="px-6 py-4 text-left font-medium text-white-900">
                       Gnomadg Allele Frequency
                     </TableHead>
-                    <TableHead className="px-6 py-4 text-left font-medium text-gray-900">
+                    <TableHead className="px-6 py-4 text-left font-medium text-white-900">
                       Reviewer is Classification
                     </TableHead>
                   </TableRow>
@@ -356,10 +407,10 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                       <TableCell>{item.gene_symbol}</TableCell>
                       <TableCell>{item.hgvs}</TableCell>
                       <TableCell>{item.zigosity}</TableCell>
-                      <TableCell>{item.acmg}</TableCell>
+                      <TableCell>{item.clinical_sign}</TableCell>
                       <TableCell>{item.gnomade}</TableCell>
-                      <TableCell>{item.gnomadg}</TableCell>
-                      <TableCell>{item.reviewer_class}</TableCell>
+                      <TableCell>{item.gnomadg ?? "-"}</TableCell>
+                      <TableCell>{item.reviewer_class ?? "-"}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -369,9 +420,9 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                 {variantInter.map((item, idx) => (
                   <li
                     key={idx}
-                    className="text-balance font-sans font-light text-justify my-2 mx-2 text-xm "
+                    className="text-balance font-sans font-light text-justify my-3 mx-2 text-xm "
                   >
-                    <strong>{item.hgvs}: </strong>
+                    <strong className="font-extrabold">{item.hgvs}: </strong>
                     {item.text}
                   </li>
                 ))}
@@ -383,19 +434,15 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                 Recommendation
               </h2>
               <ul className="list-disc pl-5 text-gray-600">
-                <li>
-                  Follow-up genetic counseling is recommended to discuss the
-                  implications of the detected pathogenic and uncertain
-                  variants.
-                </li>
-                <li>
-                  Family screening may be advised for the pathogenic variant
-                  identified in TNNT2.
-                </li>
+                {listRec.map((item, idx) => (
+                  <li key={idx} className="text-justify font-light">
+                    {item.text}
+                  </li>
+                ))}
               </ul>
             </div>
 
-            <div className="bg-gray-200 p-4 rounded-md mb-6">
+            {/* <div className="bg-gray-200 p-4 rounded-md mb-6">
               <h2 className="text-lg font-semibold text-gray-800 mb-2">
                 Counselor is Notes
               </h2>
@@ -422,7 +469,7 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                   significance as new data emerge.
                 </li>
               </ul>
-            </div>
+            </div> */}
 
             <div className="bg-gray-200 p-4 rounded-md mb-6">
               <h2 className="text-lg font-semibold text-gray-800 mb-2">
@@ -444,18 +491,15 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
               </ul>
             </div>
 
-            <div className="bg-gray-200 p-4 rounded-md">
+            <div className="bg-gray-50 p-4 rounded-md">
               <h2 className="text-lg font-semibold text-gray-800 mb-2">
                 Conclusions
               </h2>
-              <p className="text-sm text-gray-600">
-                This report reflects the findings based on the genetic testing
-                performed with the current known scientific literature and
-                available databases. Variants are classified according to the
-                American College of Medical Genetics and Genomics (ACMG)
-                guidelines. Changes in the classification of these variants may
-                occur as new information becomes available.
-              </p>
+              {listConc.map((item, idx) => (
+                <p key={idx} className="text-sm text-gray-600 text-justify">
+                  {item.text}
+                </p>
+              ))}
             </div>
 
             <div className="flex justify-between items-center mt-8">

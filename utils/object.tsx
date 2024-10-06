@@ -148,7 +148,7 @@ export interface SelectedVariant {
   clinical_sign: string | null;
   hgvs: string | null;
   severe_consequence: string | null;
-  sift_score: string | null;
+  sift_score: number | null;
   sift_prediction: string | null;
   phenotypes: string | null;
   rsID: string | null;

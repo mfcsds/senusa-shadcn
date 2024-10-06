@@ -30,7 +30,6 @@ import {
 } from "@/components/ui/tooltip";
 
 import VariantAnalysisResult from "./VariantAnalysisResult";
-import { CreateSelectedVariantInput } from "@/src/API";
 import {
   listSelectedVariants,
   listVariantInterpretations,
@@ -39,16 +38,26 @@ import {
 import {
   deleteSelectedVariant,
   deleteVariantInterpretation,
+  updateSelectedVariant,
 } from "@/src/graphql/mutations";
 
 import config from "@/src/amplifyconfiguration.json";
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
 import { Button } from "../ui/button";
-import { MessageCircle, TableOfContents, X } from "lucide-react";
+import { MessageCircle, Save, TableOfContents, X } from "lucide-react";
 import { Separator } from "../ui/separator";
 import LabelAndDescription from "./LabelAndDescription";
-import { VariantInterpretation } from "@/utils/object";
+import { SelectedVariant, VariantInterpretation } from "@/utils/object";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 Amplify.configure(config);
 
@@ -62,7 +71,7 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
   id_report,
 }) => {
   const [selectedVariantItemList, setSelectedVariant] = useState<
-    CreateSelectedVariantInput[]
+    SelectedVariant[]
   >([]);
 
   const [variantInterpretations, setVariantInterpretationResults] = useState<
@@ -73,10 +82,11 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
     useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [selectedItemVar, setSelectedItemVar] =
-    useState<CreateSelectedVariantInput>();
+  const [selectedItemVar, setSelectedItemVar] = useState<SelectedVariant>();
 
   const client = generateClient();
+
+  const [chooseClass, setChooseClass] = useState("");
 
   const fecthSelectedVariant = async () => {
     const result = await client.graphql({
@@ -85,7 +95,7 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
     });
 
     await setSelectedVariant(
-      result.data.listSelectedVariants.items as CreateSelectedVariantInput[]
+      result.data.listSelectedVariants.items as SelectedVariant[]
     );
   };
 
@@ -106,6 +116,55 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
     await setVariantInterpretationResults(
       result.data.listVariantInterpretations.items as VariantInterpretation[]
     );
+  };
+
+  const handleUpdateClassVariant = async (id: string) => {
+    let sel = selectedVariantItemList.find((item) => item.id === id);
+
+    sel = {
+      id: sel?.id ?? "", // Generate or assign an ID if necessary
+      id_patient: sel?.id_patient ?? "", // Use empty string if null or undefined
+      id_vcf: sel?.id_vcf ?? "",
+      id_report: sel?.id_report ?? "", // Set default empty string value
+      gene_id: sel?.gene_id ?? "",
+      gene_symbol: sel?.gene_symbol ?? "",
+      chrom: sel?.chrom ?? "",
+      pos: sel?.pos ?? "",
+      id_var: sel?.id_var ?? "",
+      ref: sel?.ref ?? "",
+      alt: sel?.alt ?? "",
+      qual: sel?.qual ?? "",
+      zigosity: sel?.zigosity ?? "",
+      global_allele: sel?.global_allele ?? 0, // Assuming 0 as a default for number fields
+      functional_impact: sel?.functional_impact ?? "",
+      acmg: sel?.acmg ?? "",
+      reviewer_class: chooseClass, // Default empty string value
+      clinical_sign: sel?.clinical_sign ?? "",
+      hgvs: sel?.hgvs ?? "",
+      severe_consequence: sel?.severe_consequence ?? "",
+      sift_score: sel?.sift_score ?? 0,
+      sift_prediction: sel?.sift_prediction ?? "",
+      phenotypes: sel?.phenotypes ?? "",
+      rsID: sel?.rsID ?? "", // Default // Current timestamp as ISO string
+      gnomade: sel?.gnomade ?? 0,
+      gnomadg: sel?.gnomadg ?? 0,
+      alldesc: sel?.alldesc ?? "",
+    };
+    try {
+      const result = client.graphql({
+        query: updateSelectedVariant,
+        variables: { input: sel },
+      });
+      if ((await result).data) {
+        console.log("Sukses Update Data Variant");
+
+        setSelectedVariant((prev) =>
+          prev.map((item) =>
+            item.id === sel.id ? { ...item, reviewer_class: chooseClass } : item
+          )
+        );
+      }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -164,13 +223,16 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
                       <TableHead className="font-semibold">Zigosity</TableHead>
 
                       <TableHead className="font-semibold">
-                        Global Allele Frequency
+                        Gnomade Allele Frequency
+                      </TableHead>
+                      <TableHead className="font-semibold">
+                        Gnomadg Allele Frequency
                       </TableHead>
                       <TableHead className="font-semibold">
                         Phenotypes
                       </TableHead>
                       <TableHead className="font-semibold">
-                        ACMG Classification
+                        Clinvar (Clinical Sign)
                       </TableHead>
                       <TableHead className="font-semibold">
                         Reviewer-Classification
@@ -185,12 +247,63 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
                         <TableCell>{item.gene_symbol}</TableCell>
                         <TableCell>{item.hgvs}</TableCell>
                         <TableCell>{item.zigosity}</TableCell>
-                        <TableCell>{item.global_allele}</TableCell>
+                        <TableCell>{item.gnomade}</TableCell>
+                        <TableCell>{item.gnomadg}</TableCell>
                         <TableCell className="text-xs">
                           {item.phenotypes}
                         </TableCell>
-                        <TableCell>{item?.acmg ?? "-"}</TableCell>
-                        <TableCell>{item.reviewer_class}</TableCell>
+                        <TableCell>{item?.clinical_sign ?? "-"}</TableCell>
+                        <TableCell>
+                          <div className="flex flex-col gap-3">
+                            <LabelAndDescription
+                              label="Current Classification"
+                              desc={item?.reviewer_class ?? "-"}
+                            ></LabelAndDescription>
+                            <Separator></Separator>
+                            <div className="flex flex-row gap-1 items-center">
+                              <Select onValueChange={setChooseClass}>
+                                <SelectTrigger className="w-[180px]">
+                                  <SelectValue placeholder="Select Variant Classification" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    <SelectLabel>Variant Class</SelectLabel>
+                                    <SelectItem value="Benign">
+                                      Benign
+                                    </SelectItem>
+                                    <SelectItem value="Likely Benign">
+                                      Likely Benign
+                                    </SelectItem>
+                                    <SelectItem value="Variant Uncertain Significance">
+                                      Variant Uncertain Significance
+                                    </SelectItem>
+                                    <SelectItem value="Likely Pathogenic">
+                                      Likely Pathogenic
+                                    </SelectItem>
+                                    <SelectItem value="Pathogenic">
+                                      Pathogenic
+                                    </SelectItem>
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                              <Separator
+                                className="h-5"
+                                orientation="vertical"
+                              ></Separator>
+                              <Button
+                                variant={"ghost"}
+                                className=" hover:bg-green-300"
+                                onClick={(e) =>
+                                  handleUpdateClassVariant(item.id)
+                                }
+                              >
+                                <small>
+                                  <Save className="w-4 h-4"></Save>
+                                </small>
+                              </Button>
+                            </div>
+                          </div>
+                        </TableCell>
                         <TableCell>
                           <div className="flex flex-row items-center">
                             <TooltipProvider>

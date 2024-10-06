@@ -66,10 +66,9 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
     { header: "Gene", width: "75px", dataKey: "gene_symbol" },
     { header: "Variant Detail", width: "120px", dataKey: "hgvs" },
     { header: "Zygosity", width: "80px", dataKey: "zygosity" },
-    { header: "Global Allele", width: "70px", dataKey: "globalallele" },
 
-    { header: "Gnomade", width: "50px", dataKey: "gnomade" },
-    { header: "Gnomadg", width: "50px", dataKey: "gnomadg" },
+    { header: "Gnomade", width: "65px", dataKey: "gnomade" },
+    { header: "Gnomadg", width: "65px", dataKey: "gnomadg" },
     { header: "Clinical Sign", width: "140px", dataKey: "clinicalSign" },
     {
       header: "Most Severe Consequences",
@@ -346,12 +345,7 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
         );
       case "zygosity":
         return item.zygosity;
-      case "globalallele":
-        return item.globalallele !== null ? (
-          item.globalallele
-        ) : (
-          <Skeleton className="h-4 w-full" />
-        );
+
       case "clinicalSign":
         return item.clinicalSign !== null ? (
           item.clinicalSign
@@ -549,8 +543,8 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
                       return true;
                     })
                     .sort((a, b) => {
-                      const gaA = a.globalallele;
-                      const gaB = b.globalallele;
+                      const gaA = a.gnomadg;
+                      const gaB = b.gnomadg;
                       if (gaA == null && gaB == null) return 0;
                       if (gaA == null) return 1;
                       if (gaB == null) return -1;

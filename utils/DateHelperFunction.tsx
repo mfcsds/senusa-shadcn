@@ -22,9 +22,22 @@ export function ReportStatus(counter: number) {
   if (counter == 1) {
     return "Draft";
   } else if (counter == 2) {
-    return "In Process";
+    return "process";
   } else if (counter == 3) {
-    return "Approved";
+    return "Waiting for Approval";
+  } else if (counter == 4) {
+    return "Completed";
+  }
+}
+export function ReportStatusStringToNumber(NewStatus: string) {
+  if (NewStatus === "Draft") {
+    return 1;
+  } else if (NewStatus === "process") {
+    return 2;
+  } else if (NewStatus === "wait") {
+    return 3;
+  } else if (NewStatus === "complete") {
+    return 4;
   }
 }
 
