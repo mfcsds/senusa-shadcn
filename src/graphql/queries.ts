@@ -17,6 +17,7 @@ export const getVariantInterpretation = /* GraphQL */ `query GetVariantInterpret
     id_report
     id_varsample
     gene
+    alldesc
     createdAt
     updatedAt
     __typename
@@ -44,6 +45,7 @@ export const listVariantInterpretations = /* GraphQL */ `query ListVariantInterp
       id_report
       id_varsample
       gene
+      alldesc
       createdAt
       updatedAt
       __typename
@@ -82,6 +84,9 @@ export const getSelectedVariant = /* GraphQL */ `query GetSelectedVariant($id: I
     sift_prediction
     phenotypes
     rsID
+    gnomade
+    gnomadg
+    alldesc
     createdAt
     updatedAt
     __typename
@@ -122,6 +127,9 @@ export const listSelectedVariants = /* GraphQL */ `query ListSelectedVariants(
       sift_prediction
       phenotypes
       rsID
+      gnomade
+      gnomadg
+      alldesc
       createdAt
       updatedAt
       __typename

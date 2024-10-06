@@ -46,6 +46,9 @@ export default function SelectedVariantCreateForm(props) {
     sift_prediction: "",
     phenotypes: "",
     rsID: "",
+    gnomade: "",
+    gnomadg: "",
+    alldesc: "",
   };
   const [id_patient, setId_patient] = React.useState(initialValues.id_patient);
   const [id_vcf, setId_vcf] = React.useState(initialValues.id_vcf);
@@ -84,6 +87,9 @@ export default function SelectedVariantCreateForm(props) {
   );
   const [phenotypes, setPhenotypes] = React.useState(initialValues.phenotypes);
   const [rsID, setRsID] = React.useState(initialValues.rsID);
+  const [gnomade, setGnomade] = React.useState(initialValues.gnomade);
+  const [gnomadg, setGnomadg] = React.useState(initialValues.gnomadg);
+  const [alldesc, setAlldesc] = React.useState(initialValues.alldesc);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setId_patient(initialValues.id_patient);
@@ -109,6 +115,9 @@ export default function SelectedVariantCreateForm(props) {
     setSift_prediction(initialValues.sift_prediction);
     setPhenotypes(initialValues.phenotypes);
     setRsID(initialValues.rsID);
+    setGnomade(initialValues.gnomade);
+    setGnomadg(initialValues.gnomadg);
+    setAlldesc(initialValues.alldesc);
     setErrors({});
   };
   const validations = {
@@ -135,6 +144,9 @@ export default function SelectedVariantCreateForm(props) {
     sift_prediction: [],
     phenotypes: [],
     rsID: [],
+    gnomade: [],
+    gnomadg: [],
+    alldesc: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -185,6 +197,9 @@ export default function SelectedVariantCreateForm(props) {
           sift_prediction,
           phenotypes,
           rsID,
+          gnomade,
+          gnomadg,
+          alldesc,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -270,6 +285,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.id_patient ?? value;
@@ -316,6 +334,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.id_vcf ?? value;
@@ -362,6 +383,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.id_report ?? value;
@@ -408,6 +432,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.gene_id ?? value;
@@ -454,6 +481,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.gene_symbol ?? value;
@@ -500,6 +530,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.chrom ?? value;
@@ -546,6 +579,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.pos ?? value;
@@ -592,6 +628,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.id_var ?? value;
@@ -638,6 +677,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.ref ?? value;
@@ -684,6 +726,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.alt ?? value;
@@ -730,6 +775,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.qual ?? value;
@@ -776,6 +824,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.zigosity ?? value;
@@ -826,6 +877,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.global_allele ?? value;
@@ -872,6 +926,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.functional_impact ?? value;
@@ -920,6 +977,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.acmg ?? value;
@@ -966,6 +1026,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.reviewer_class ?? value;
@@ -1012,6 +1075,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.clinical_sign ?? value;
@@ -1058,6 +1124,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.hgvs ?? value;
@@ -1104,6 +1173,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.severe_consequence ?? value;
@@ -1156,6 +1228,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.sift_score ?? value;
@@ -1202,6 +1277,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction: value,
               phenotypes,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.sift_prediction ?? value;
@@ -1248,6 +1326,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes: value,
               rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.phenotypes ?? value;
@@ -1294,6 +1375,9 @@ export default function SelectedVariantCreateForm(props) {
               sift_prediction,
               phenotypes,
               rsID: value,
+              gnomade,
+              gnomadg,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.rsID ?? value;
@@ -1307,6 +1391,161 @@ export default function SelectedVariantCreateForm(props) {
         errorMessage={errors.rsID?.errorMessage}
         hasError={errors.rsID?.hasError}
         {...getOverrideProps(overrides, "rsID")}
+      ></TextField>
+      <TextField
+        label="Gnomade"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={gnomade}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              zigosity,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade: value,
+              gnomadg,
+              alldesc,
+            };
+            const result = onChange(modelFields);
+            value = result?.gnomade ?? value;
+          }
+          if (errors.gnomade?.hasError) {
+            runValidationTasks("gnomade", value);
+          }
+          setGnomade(value);
+        }}
+        onBlur={() => runValidationTasks("gnomade", gnomade)}
+        errorMessage={errors.gnomade?.errorMessage}
+        hasError={errors.gnomade?.hasError}
+        {...getOverrideProps(overrides, "gnomade")}
+      ></TextField>
+      <TextField
+        label="Gnomadg"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={gnomadg}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              zigosity,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg: value,
+              alldesc,
+            };
+            const result = onChange(modelFields);
+            value = result?.gnomadg ?? value;
+          }
+          if (errors.gnomadg?.hasError) {
+            runValidationTasks("gnomadg", value);
+          }
+          setGnomadg(value);
+        }}
+        onBlur={() => runValidationTasks("gnomadg", gnomadg)}
+        errorMessage={errors.gnomadg?.errorMessage}
+        hasError={errors.gnomadg?.hasError}
+        {...getOverrideProps(overrides, "gnomadg")}
+      ></TextField>
+      <TextField
+        label="Alldesc"
+        isRequired={false}
+        isReadOnly={false}
+        value={alldesc}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              zigosity,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.alldesc ?? value;
+          }
+          if (errors.alldesc?.hasError) {
+            runValidationTasks("alldesc", value);
+          }
+          setAlldesc(value);
+        }}
+        onBlur={() => runValidationTasks("alldesc", alldesc)}
+        errorMessage={errors.alldesc?.errorMessage}
+        hasError={errors.alldesc?.hasError}
+        {...getOverrideProps(overrides, "alldesc")}
       ></TextField>
       <Flex
         justifyContent="space-between"

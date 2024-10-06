@@ -29,6 +29,7 @@ export declare type VariantInterpretationUpdateFormInputValues = {
     id_report?: string;
     id_varsample?: string;
     gene?: string;
+    alldesc?: string;
 };
 export declare type VariantInterpretationUpdateFormValidationValues = {
     hgvs?: ValidationFunction<string>;
@@ -37,6 +38,7 @@ export declare type VariantInterpretationUpdateFormValidationValues = {
     id_report?: ValidationFunction<string>;
     id_varsample?: ValidationFunction<string>;
     gene?: ValidationFunction<string>;
+    alldesc?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type VariantInterpretationUpdateFormOverridesProps = {
@@ -47,6 +49,7 @@ export declare type VariantInterpretationUpdateFormOverridesProps = {
     id_report?: PrimitiveOverrideProps<TextFieldProps>;
     id_varsample?: PrimitiveOverrideProps<TextFieldProps>;
     gene?: PrimitiveOverrideProps<TextFieldProps>;
+    alldesc?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type VariantInterpretationUpdateFormProps = React.PropsWithChildren<{
     overrides?: VariantInterpretationUpdateFormOverridesProps | undefined | null;

@@ -21,6 +21,7 @@ import {
   fetchVariantDetails2,
   generateVariantInterpretation,
   generateVariantSampleID,
+  fetchVariantDetails3,
 } from "@/utils/function";
 import { Button } from "../ui/button";
 import { Ellipsis, PlusCircle, TableOfContents } from "lucide-react";
@@ -66,6 +67,9 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
     { header: "Variant Detail", width: "120px", dataKey: "hgvs" },
     { header: "Zygosity", width: "80px", dataKey: "zygosity" },
     { header: "Global Allele", width: "70px", dataKey: "globalallele" },
+
+    { header: "Gnomade", width: "50px", dataKey: "gnomade" },
+    { header: "Gnomadg", width: "50px", dataKey: "gnomadg" },
     { header: "Clinical Sign", width: "140px", dataKey: "clinicalSign" },
     {
       header: "Most Severe Consequences",
@@ -147,9 +151,6 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
         reader.onload = async (e) => {
           const vcfText = e.target?.result as string;
 
-          // Display the content of the file
-          console.log("VCF File Content:", vcfText);
-
           // Handle empty or unreadable file
           if (!vcfText || vcfText.trim() === "") {
             setError("The file appears to be empty or unreadable.");
@@ -205,6 +206,9 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
                 sift_prediction: null,
                 phenotypes: null,
                 rsID: null,
+                gnomade: null,
+                gnomadg: null,
+                alldesc: null,
               };
               variant.hgvs = generateHGVS(variant);
               return variant;
@@ -278,6 +282,9 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
       sift_prediction: variant.sift_prediction ?? "",
       phenotypes: variant.phenotypes ?? "",
       rsID: variant.rsID ?? "", // Default // Current timestamp as ISO string
+      gnomade: variant.gnomade,
+      gnomadg: variant.gnomadg,
+      alldesc: variant.alldesc,
     };
 
     const saveToAnalysisAndResult = async () => {
@@ -300,6 +307,7 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
       id_report: selectedVarItem.id_report ?? "",
       id_varsample: selectedVarItem.id ?? "",
       gene: selectedVarItem.gene_symbol ?? "",
+      alldesc: selectedVarItem.alldesc ?? "",
     };
     const saveInterpretation = async () => {
       try {
@@ -311,10 +319,7 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
         console.log("Error Add Selected Variant Interpretation");
       }
     };
-
     await saveInterpretation();
-
-    console.log("Selected Variant Item:", selectedVarItem);
   };
 
   const isOpenVarDetail = async (idvar: string) => {
@@ -356,6 +361,18 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
       case "severeconsequence":
         return item.severeconsequence !== null ? (
           item.severeconsequence
+        ) : (
+          <Skeleton className="h-4 w-full" />
+        );
+      case "gnomade":
+        return item.gnomade !== null ? (
+          item.gnomade
+        ) : (
+          <Skeleton className="h-4 w-full" />
+        );
+      case "gnomadg":
+        return item.gnomadg !== null ? (
+          item.gnomadg
         ) : (
           <Skeleton className="h-4 w-full" />
         );

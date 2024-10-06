@@ -6,6 +6,7 @@ type VariantInterpretation @model @auth(rules: [{allow: public}]) {
   id_report: String
   id_varsample: String
   gene: String
+  alldesc: String
 }
 
 type SelectedVariant @model @auth(rules: [{allow: public}]) {
@@ -33,6 +34,9 @@ type SelectedVariant @model @auth(rules: [{allow: public}]) {
   sift_prediction: String
   phenotypes: String
   rsID: String
+  gnomade: Float
+  gnomadg: Float
+  alldesc: String
 }
 
 type Vcfdata @model @auth(rules: [{allow: public}]) {

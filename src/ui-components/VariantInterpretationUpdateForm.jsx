@@ -31,6 +31,7 @@ export default function VariantInterpretationUpdateForm(props) {
     id_report: "",
     id_varsample: "",
     gene: "",
+    alldesc: "",
   };
   const [hgvs, setHgvs] = React.useState(initialValues.hgvs);
   const [text, setText] = React.useState(initialValues.text);
@@ -40,6 +41,7 @@ export default function VariantInterpretationUpdateForm(props) {
     initialValues.id_varsample
   );
   const [gene, setGene] = React.useState(initialValues.gene);
+  const [alldesc, setAlldesc] = React.useState(initialValues.alldesc);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = variantInterpretationRecord
@@ -51,6 +53,7 @@ export default function VariantInterpretationUpdateForm(props) {
     setId_report(cleanValues.id_report);
     setId_varsample(cleanValues.id_varsample);
     setGene(cleanValues.gene);
+    setAlldesc(cleanValues.alldesc);
     setErrors({});
   };
   const [variantInterpretationRecord, setVariantInterpretationRecord] =
@@ -77,6 +80,7 @@ export default function VariantInterpretationUpdateForm(props) {
     id_report: [],
     id_varsample: [],
     gene: [],
+    alldesc: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -110,6 +114,7 @@ export default function VariantInterpretationUpdateForm(props) {
           id_report: id_report ?? null,
           id_varsample: id_varsample ?? null,
           gene: gene ?? null,
+          alldesc: alldesc ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -176,6 +181,7 @@ export default function VariantInterpretationUpdateForm(props) {
               id_report,
               id_varsample,
               gene,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.hgvs ?? value;
@@ -205,6 +211,7 @@ export default function VariantInterpretationUpdateForm(props) {
               id_report,
               id_varsample,
               gene,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.text ?? value;
@@ -234,6 +241,7 @@ export default function VariantInterpretationUpdateForm(props) {
               id_report,
               id_varsample,
               gene,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.id_patient ?? value;
@@ -263,6 +271,7 @@ export default function VariantInterpretationUpdateForm(props) {
               id_report: value,
               id_varsample,
               gene,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.id_report ?? value;
@@ -292,6 +301,7 @@ export default function VariantInterpretationUpdateForm(props) {
               id_report,
               id_varsample: value,
               gene,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.id_varsample ?? value;
@@ -321,6 +331,7 @@ export default function VariantInterpretationUpdateForm(props) {
               id_report,
               id_varsample,
               gene: value,
+              alldesc,
             };
             const result = onChange(modelFields);
             value = result?.gene ?? value;
@@ -334,6 +345,36 @@ export default function VariantInterpretationUpdateForm(props) {
         errorMessage={errors.gene?.errorMessage}
         hasError={errors.gene?.hasError}
         {...getOverrideProps(overrides, "gene")}
+      ></TextField>
+      <TextField
+        label="Alldesc"
+        isRequired={false}
+        isReadOnly={false}
+        value={alldesc}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              hgvs,
+              text,
+              id_patient,
+              id_report,
+              id_varsample,
+              gene,
+              alldesc: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.alldesc ?? value;
+          }
+          if (errors.alldesc?.hasError) {
+            runValidationTasks("alldesc", value);
+          }
+          setAlldesc(value);
+        }}
+        onBlur={() => runValidationTasks("alldesc", alldesc)}
+        errorMessage={errors.alldesc?.errorMessage}
+        hasError={errors.alldesc?.hasError}
+        {...getOverrideProps(overrides, "alldesc")}
       ></TextField>
       <Flex
         justifyContent="space-between"

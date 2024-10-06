@@ -24,14 +24,20 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type ConclusionUpdateFormInputValues = {
     text?: string;
+    id_patient?: string;
+    id_report?: string;
 };
 export declare type ConclusionUpdateFormValidationValues = {
     text?: ValidationFunction<string>;
+    id_patient?: ValidationFunction<string>;
+    id_report?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ConclusionUpdateFormOverridesProps = {
     ConclusionUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     text?: PrimitiveOverrideProps<TextFieldProps>;
+    id_patient?: PrimitiveOverrideProps<TextFieldProps>;
+    id_report?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type ConclusionUpdateFormProps = React.PropsWithChildren<{
     overrides?: ConclusionUpdateFormOverridesProps | undefined | null;

@@ -117,7 +117,6 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
     try {
       const item = selectedVariantItemList.find((item) => item.id == idvar);
       const itemInter = variantInterpretations.find((item) => item.id == idvar);
-
       if (item) {
         const result = await client.graphql({
           query: deleteSelectedVariant,
@@ -190,9 +189,7 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
                         <TableCell className="text-xs">
                           {item.phenotypes}
                         </TableCell>
-
                         <TableCell>{item?.acmg ?? "-"}</TableCell>
-
                         <TableCell>{item.reviewer_class}</TableCell>
                         <TableCell>
                           <div className="flex flex-row items-center">

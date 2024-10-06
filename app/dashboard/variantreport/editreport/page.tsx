@@ -11,6 +11,7 @@ import TestingInformation from "@/components/items/TestingInformation";
 import SelectVariant from "@/components/items/SelectVariant";
 import ResultAndInterpretation from "@/components/items/ResultAndInterpretation";
 import RecommendationAndConclusion from "@/components/items/RecommendationAndConclusion";
+import PreviewReport from "@/components/items/PreviewReport";
 
 const EditVariantReport = () => {
   const searchParams = useSearchParams();
@@ -58,7 +59,22 @@ const EditVariantReport = () => {
     {
       tab: "Recommendation and Conclusion",
       value: "Recommendation and Conclusion",
-      comp: <RecommendationAndConclusion></RecommendationAndConclusion>,
+      comp: (
+        <RecommendationAndConclusion
+          id_patient={patientID ?? ""}
+          id_report={reportID ?? ""}
+        ></RecommendationAndConclusion>
+      ),
+    },
+    {
+      tab: "Approval and Preview Report",
+      value: "Approval and Preview Report",
+      comp: (
+        <PreviewReport
+          id_report={reportID ?? ""}
+          id_patient={patientID ?? ""}
+        ></PreviewReport>
+      ),
     },
   ];
 

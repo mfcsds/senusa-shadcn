@@ -258,6 +258,8 @@ export const fetchVariantDetails2 = async (
   const data = response.data[0];
   if (data) {
     let gnomad = null;
+    let gnomade = null;
+    let gnomadg = null;
     let clinicalSignificance = null;
     let rsID = null;
 
@@ -269,18 +271,18 @@ export const fetchVariantDetails2 = async (
       for (const key in variantData.frequencies) {
         if (variantData.frequencies[key]?.gnomade) {
           gnomad = variantData.frequencies[key].gnomade;
-          break;
+        }
+        if (variantData.frequencies[key]?.gnomadg) {
+          gnomadg = variantData.frequencies[key].gnomadg;
+        }
+        if (variantData.frequencies[key]?.gnomade) {
+          gnomade = variantData.frequencies[key].gnomade;
         }
       }
 
       // Collect clinical significance if available
       if (variantData.clin_sig && variantData.clin_sig.length > 0) {
         clinicalSignificance = variantData.clin_sig.join(", ");
-      }
-
-      // If both values are found, no need to continue searching
-      if (gnomad && clinicalSignificance) {
-        break;
       }
     }
 
@@ -314,10 +316,11 @@ export const fetchVariantDetails2 = async (
       }
     }
 
-    console.log("sukses");
-
     let phenotypes = null;
     // If rsID is available, fetch phenotype data using the Variation endpoint
+
+    let desc = null;
+    // alldesc contain all the infomarmation with the string format such as gnomade: value, ... phenotypes: value
     if (rsID) {
       const phenotypeUrl = `${server}variation/human/${rsID}?phenotypes=1`;
       try {
@@ -351,9 +354,45 @@ export const fetchVariantDetails2 = async (
       }
     }
 
+    // Construct the 'desc' string with separators
+    const descParts = [];
+
+    descParts.push(`Chromosome: ${variant.chrom}`);
+    descParts.push(`Position: ${variant.pos}`);
+    descParts.push(`Reference Allele: ${variant.ref}`);
+    descParts.push(`Alternate Allele: ${variant.alt}`);
+    descParts.push(
+      `Global Allele Frequency (gnomad): ${gnomad !== null ? gnomad : "N/A"}`
+    );
+    descParts.push(`gnomade: ${gnomade !== null ? gnomade : "N/A"}`);
+    descParts.push(`gnomadg: ${gnomadg !== null ? gnomadg : "N/A"}`);
+    descParts.push(
+      `Clinical Significance: ${
+        clinicalSignificance !== null ? clinicalSignificance : "N/A"
+      }`
+    );
+    descParts.push(
+      `Most Severe Consequence: ${
+        severeConsequence !== null ? severeConsequence : "N/A"
+      }`
+    );
+    descParts.push(`SIFT Score: ${siftScore !== null ? siftScore : "N/A"}`);
+    descParts.push(
+      `SIFT Prediction: ${siftPrediction !== null ? siftPrediction : "N/A"}`
+    );
+    descParts.push(`Gene Symbol: ${geneSymbol !== null ? geneSymbol : "N/A"}`);
+    descParts.push(`Gene ID: ${geneId !== null ? geneId : "N/A"}`);
+    descParts.push(`rsID: ${rsID !== null ? rsID : "N/A"}`);
+    descParts.push(`Phenotypes: ${phenotypes !== null ? phenotypes : "N/A"}`);
+
+    // Join all parts into a single string with newline separators
+    let descAll = descParts.join("\n");
+
     return {
       ...variant,
       globalallele: gnomad,
+      gnomade: gnomade,
+      gnomadg: gnomadg,
       clinicalSign: clinicalSignificance,
       severeconsequence: severeConsequence,
       sift_score: siftScore,
@@ -362,6 +401,180 @@ export const fetchVariantDetails2 = async (
       gene_id: geneId,
       rsID: rsID,
       phenotypes: phenotypes,
+      alldesc: descAll,
+    };
+  }
+
+  return variant;
+};
+
+export const fetchVariantDetails3 = async (
+  variant: Variant
+): Promise<Variant> => {
+  const server = "https://rest.ensembl.org/";
+  const vep_ext = "vep/human/region/";
+  const contentType = "application/json";
+
+  const variantList = [
+    `${variant.chrom} ${variant.pos} . ${variant.ref} ${variant.alt}`,
+  ];
+
+  const response = await axios.post(
+    server + vep_ext,
+    JSON.stringify({ variants: variantList }),
+    {
+      headers: {
+        "Content-Type": contentType,
+        Accept: contentType,
+      },
+    }
+  );
+
+  const data = response.data[0];
+  if (data) {
+    let gnomad = null;
+    let gnomade = null;
+    let gnomadg = null;
+    let clinicalSignificance = null;
+    let rsID = null;
+
+    for (const variantData of data.colocated_variants || []) {
+      if (variantData.id && variantData.id.startsWith("rs") && !rsID) {
+        rsID = variantData.id;
+      }
+      // Search for gnomad frequency across all colocated_variants
+      for (const key in variantData.frequencies) {
+        if (variantData.frequencies[key]?.gnomad) {
+          gnomad = variantData.frequencies[key].gnomad;
+        }
+        if (variantData.frequencies[key]?.gnomade) {
+          gnomade = variantData.frequencies[key].gnomade;
+        }
+        if (variantData.frequencies[key]?.gnomadg) {
+          gnomadg = variantData.frequencies[key].gnomadg;
+        }
+      }
+
+      // Collect clinical significance if available
+      if (variantData.clin_sig && variantData.clin_sig.length > 0) {
+        clinicalSignificance = variantData.clin_sig.join(", ");
+      }
+    }
+
+    // Extract additional fields
+    let severeConsequence = data.most_severe_consequence || null;
+    let siftScore = null;
+    let siftPrediction = null;
+    let geneSymbol = null;
+    let geneId = null;
+
+    for (const transcript of data.transcript_consequences || []) {
+      // Set sift_score and sift_prediction if available and not already set
+      if (transcript.sift_score != null && siftScore == null) {
+        siftScore = transcript.sift_score;
+      }
+      if (transcript.sift_prediction && siftPrediction == null) {
+        siftPrediction = transcript.sift_prediction;
+      }
+
+      // Set gene_symbol and gene_id if available and not already set
+      if (transcript.gene_symbol && geneSymbol == null) {
+        geneSymbol = transcript.gene_symbol;
+      }
+      if (transcript.gene_id && geneId == null) {
+        geneId = transcript.gene_id;
+      }
+
+      // If all values are found, we can break
+      if (siftScore != null && siftPrediction && geneSymbol && geneId) {
+        break;
+      }
+    }
+
+    let phenotypes = null;
+    // If rsID is available, fetch phenotype data using the Variation endpoint
+    let desc = null;
+    if (rsID) {
+      const phenotypeUrl = `${server}variation/human/${rsID}?phenotypes=1`;
+      try {
+        const phenotypeResponse = await axios.get(phenotypeUrl, {
+          headers: {
+            "Content-Type": contentType,
+            Accept: contentType,
+          },
+        });
+
+        if (phenotypeResponse.status === 200) {
+          const phenotypeData = phenotypeResponse.data;
+          if (
+            phenotypeData &&
+            phenotypeData.phenotypes &&
+            phenotypeData.phenotypes.length > 0
+          ) {
+            // Extract phenotype descriptions
+            phenotypes = phenotypeData.phenotypes
+              .map((p: any) => p.description || p.trait || "N/A")
+              .join("; ");
+          }
+        } else {
+          console.error(
+            "Error fetching phenotype data:",
+            phenotypeResponse.status
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching phenotype data:", error);
+      }
+    }
+
+    // Construct the 'desc' string with separators
+    const descParts = [];
+
+    descParts.push(`Chromosome: ${variant.chrom}`);
+    descParts.push(`Position: ${variant.pos}`);
+    descParts.push(`Reference Allele: ${variant.ref}`);
+    descParts.push(`Alternate Allele: ${variant.alt}`);
+    descParts.push(
+      `Global Allele Frequency (gnomad): ${gnomad !== null ? gnomad : "N/A"}`
+    );
+    descParts.push(`gnomade: ${gnomade !== null ? gnomade : "N/A"}`);
+    descParts.push(`gnomadg: ${gnomadg !== null ? gnomadg : "N/A"}`);
+    descParts.push(
+      `Clinical Significance: ${
+        clinicalSignificance !== null ? clinicalSignificance : "N/A"
+      }`
+    );
+    descParts.push(
+      `Most Severe Consequence: ${
+        severeConsequence !== null ? severeConsequence : "N/A"
+      }`
+    );
+    descParts.push(`SIFT Score: ${siftScore !== null ? siftScore : "N/A"}`);
+    descParts.push(
+      `SIFT Prediction: ${siftPrediction !== null ? siftPrediction : "N/A"}`
+    );
+    descParts.push(`Gene Symbol: ${geneSymbol !== null ? geneSymbol : "N/A"}`);
+    descParts.push(`Gene ID: ${geneId !== null ? geneId : "N/A"}`);
+    descParts.push(`rsID: ${rsID !== null ? rsID : "N/A"}`);
+    descParts.push(`Phenotypes: ${phenotypes !== null ? phenotypes : "N/A"}`);
+
+    // Join all parts into a single string with newline separators
+    desc = descParts.join("\n");
+
+    return {
+      ...variant,
+      globalallele: gnomad,
+      gnomade: gnomade,
+      gnomadg: gnomadg,
+      clinicalSign: clinicalSignificance,
+      severeconsequence: severeConsequence,
+      sift_score: siftScore,
+      sift_prediction: siftPrediction,
+      gene_symbol: geneSymbol,
+      gene_id: geneId,
+      rsID: rsID,
+      phenotypes: phenotypes,
+      alldesc: desc,
     };
   }
 

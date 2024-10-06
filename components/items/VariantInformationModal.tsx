@@ -123,7 +123,8 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
   } = variantData || {};
 
   console.log("Print");
-  console.log(Object.keys(variantData));
+  console.log(sift_prediction, sift_score);
+  // console.log(Object.keys(variantData));
 
   return (
     <div className="p-4">

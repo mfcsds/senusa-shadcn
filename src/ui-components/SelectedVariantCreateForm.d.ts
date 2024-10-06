@@ -45,6 +45,9 @@ export declare type SelectedVariantCreateFormInputValues = {
     sift_prediction?: string;
     phenotypes?: string;
     rsID?: string;
+    gnomade?: number;
+    gnomadg?: number;
+    alldesc?: string;
 };
 export declare type SelectedVariantCreateFormValidationValues = {
     id_patient?: ValidationFunction<string>;
@@ -70,6 +73,9 @@ export declare type SelectedVariantCreateFormValidationValues = {
     sift_prediction?: ValidationFunction<string>;
     phenotypes?: ValidationFunction<string>;
     rsID?: ValidationFunction<string>;
+    gnomade?: ValidationFunction<number>;
+    gnomadg?: ValidationFunction<number>;
+    alldesc?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type SelectedVariantCreateFormOverridesProps = {
@@ -97,6 +103,9 @@ export declare type SelectedVariantCreateFormOverridesProps = {
     sift_prediction?: PrimitiveOverrideProps<TextFieldProps>;
     phenotypes?: PrimitiveOverrideProps<TextFieldProps>;
     rsID?: PrimitiveOverrideProps<TextFieldProps>;
+    gnomade?: PrimitiveOverrideProps<TextFieldProps>;
+    gnomadg?: PrimitiveOverrideProps<TextFieldProps>;
+    alldesc?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type SelectedVariantCreateFormProps = React.PropsWithChildren<{
     overrides?: SelectedVariantCreateFormOverridesProps | undefined | null;

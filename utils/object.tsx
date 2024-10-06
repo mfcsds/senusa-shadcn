@@ -41,6 +41,9 @@ export interface Variant {
   gene_id: string | null;
   phenotypes: string | null;
   rsID: string | null;
+  gnomadg: number | null;
+  gnomade: number | null;
+  alldesc: string | null;
 }
 
 export interface Recommendation {
@@ -149,6 +152,9 @@ export interface SelectedVariant {
   sift_prediction: string | null;
   phenotypes: string | null;
   rsID: string | null;
+  gnomade: number | null;
+  gnomadg: number | null;
+  alldesc: string | null;
 }
 
 export interface VariantInterpretation {
@@ -159,6 +165,7 @@ export interface VariantInterpretation {
   id_report: string | "";
   id_varsample: string | "";
   gene: string | "";
+  alldesc: string | "";
 }
 
 // types.ts

@@ -24,15 +24,23 @@ export default function ConclusionCreateForm(props) {
   } = props;
   const initialValues = {
     text: "",
+    id_patient: "",
+    id_report: "",
   };
   const [text, setText] = React.useState(initialValues.text);
+  const [id_patient, setId_patient] = React.useState(initialValues.id_patient);
+  const [id_report, setId_report] = React.useState(initialValues.id_report);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setText(initialValues.text);
+    setId_patient(initialValues.id_patient);
+    setId_report(initialValues.id_report);
     setErrors({});
   };
   const validations = {
     text: [],
+    id_patient: [],
+    id_report: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -61,6 +69,8 @@ export default function ConclusionCreateForm(props) {
         event.preventDefault();
         let modelFields = {
           text,
+          id_patient,
+          id_report,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -124,6 +134,8 @@ export default function ConclusionCreateForm(props) {
           if (onChange) {
             const modelFields = {
               text: value,
+              id_patient,
+              id_report,
             };
             const result = onChange(modelFields);
             value = result?.text ?? value;
@@ -137,6 +149,58 @@ export default function ConclusionCreateForm(props) {
         errorMessage={errors.text?.errorMessage}
         hasError={errors.text?.hasError}
         {...getOverrideProps(overrides, "text")}
+      ></TextField>
+      <TextField
+        label="Id patient"
+        isRequired={false}
+        isReadOnly={false}
+        value={id_patient}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              text,
+              id_patient: value,
+              id_report,
+            };
+            const result = onChange(modelFields);
+            value = result?.id_patient ?? value;
+          }
+          if (errors.id_patient?.hasError) {
+            runValidationTasks("id_patient", value);
+          }
+          setId_patient(value);
+        }}
+        onBlur={() => runValidationTasks("id_patient", id_patient)}
+        errorMessage={errors.id_patient?.errorMessage}
+        hasError={errors.id_patient?.hasError}
+        {...getOverrideProps(overrides, "id_patient")}
+      ></TextField>
+      <TextField
+        label="Id report"
+        isRequired={false}
+        isReadOnly={false}
+        value={id_report}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              text,
+              id_patient,
+              id_report: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.id_report ?? value;
+          }
+          if (errors.id_report?.hasError) {
+            runValidationTasks("id_report", value);
+          }
+          setId_report(value);
+        }}
+        onBlur={() => runValidationTasks("id_report", id_report)}
+        errorMessage={errors.id_report?.errorMessage}
+        hasError={errors.id_report?.hasError}
+        {...getOverrideProps(overrides, "id_report")}
       ></TextField>
       <Flex
         justifyContent="space-between"

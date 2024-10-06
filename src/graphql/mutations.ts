@@ -20,6 +20,7 @@ export const createVariantInterpretation = /* GraphQL */ `mutation CreateVariant
     id_report
     id_varsample
     gene
+    alldesc
     createdAt
     updatedAt
     __typename
@@ -41,6 +42,7 @@ export const updateVariantInterpretation = /* GraphQL */ `mutation UpdateVariant
     id_report
     id_varsample
     gene
+    alldesc
     createdAt
     updatedAt
     __typename
@@ -62,6 +64,7 @@ export const deleteVariantInterpretation = /* GraphQL */ `mutation DeleteVariant
     id_report
     id_varsample
     gene
+    alldesc
     createdAt
     updatedAt
     __typename
@@ -100,6 +103,9 @@ export const createSelectedVariant = /* GraphQL */ `mutation CreateSelectedVaria
     sift_prediction
     phenotypes
     rsID
+    gnomade
+    gnomadg
+    alldesc
     createdAt
     updatedAt
     __typename
@@ -138,6 +144,9 @@ export const updateSelectedVariant = /* GraphQL */ `mutation UpdateSelectedVaria
     sift_prediction
     phenotypes
     rsID
+    gnomade
+    gnomadg
+    alldesc
     createdAt
     updatedAt
     __typename
@@ -176,6 +185,9 @@ export const deleteSelectedVariant = /* GraphQL */ `mutation DeleteSelectedVaria
     sift_prediction
     phenotypes
     rsID
+    gnomade
+    gnomadg
+    alldesc
     createdAt
     updatedAt
     __typename
