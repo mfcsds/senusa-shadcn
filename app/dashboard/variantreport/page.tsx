@@ -212,6 +212,8 @@ const VariantReport = () => {
       ) {
         // setVarReports([...varReports, newReport]);
         console.log("Hore Finish Create Report");
+        await fetchVariantReport();
+        setOpen(!open);
       }
     } catch (error) {
       console.log(error);
