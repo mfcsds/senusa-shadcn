@@ -91,10 +91,12 @@ const Verification = () => {
           <CardContent>
             <div className="flex flex-col w-full gap-5">
               <div className="flex flex-col gap-3">
-                <LabelAndDescription
-                  label="Your Email"
-                  desc={email}
-                ></LabelAndDescription>
+                <Suspense fallback={<p>Loading..</p>}>
+                  <LabelAndDescription
+                    label="Your Email"
+                    desc={email}
+                  ></LabelAndDescription>
+                </Suspense>
               </div>
               <div className="flex flex-col gap-3">
                 <LabelAndDescription
@@ -121,7 +123,10 @@ const Verification = () => {
           <CardFooter className="flex justify-between">
             <Button
               onClick={() =>
-                handleConfirmSignUp({ username: email, confirmationCode: code })
+                handleConfirmSignUp({
+                  username: email,
+                  confirmationCode: code,
+                })
               }
             >
               Verify Email
@@ -140,7 +145,6 @@ const Verification = () => {
           </Alert>
         )}
       </div>
-      <Suspense></Suspense>
     </div>
   );
 };

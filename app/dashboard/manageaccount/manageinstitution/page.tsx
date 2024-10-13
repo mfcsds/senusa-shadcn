@@ -11,8 +11,9 @@ const EditProfileInstitution = () => {
 
   return (
     <div className="flex flex-col w-full">
-      <ManageInstituionData id={institutionID}></ManageInstituionData>
-      <Suspense></Suspense>
+      <Suspense fallback={<p className="text-gray-300 text-xs">Loading...</p>}>
+        <ManageInstituionData id={institutionID}></ManageInstituionData>
+      </Suspense>
     </div>
   );
 };
