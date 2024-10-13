@@ -29,7 +29,7 @@ type signUpParameters = {
   institution_id: string;
   institution_address: string;
   subscription: string;
-  storageQuota: string;
+  storageQuota: number;
 };
 
 async function handleSignUp({
@@ -79,10 +79,9 @@ async function handleSignUp({
         input: {
           id: institution_id,
           name: institution_name,
-          contact: email,
+          email: email,
           address: institution_address,
           subscription_type: subscription,
-          email: email,
           currentUserQuota: 0,
           userQuotas: 5,
           registrationDate: date.toDateString(),
@@ -108,7 +107,7 @@ const RegisterForm = () => {
   const [institution_address, setInstitutionAddress] = useState("");
   const [subscription, setSubscription] = useState("Monthly Subscription");
   const [dateRegister, setDateRegister] = useState("");
-  const [storageQuota, setStorageQuota] = useState("");
+  const [storageQuota, setStorageQuota] = useState<number>(5);
 
   const nowDate = new Date();
 
@@ -251,7 +250,7 @@ const RegisterForm = () => {
               <div className="relative inline-block w-full text-gray-700">
                 <select
                   value={storageQuota}
-                  onChange={(e) => setStorageQuota(e.target.value)}
+                  onChange={(e) => setStorageQuota(Number(e.target.value))}
                   className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline focus:border-indigo-500"
                 >
                   <option>5 GB</option>

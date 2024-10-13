@@ -53,7 +53,6 @@ import { getPatient } from "@/src/graphql/queries";
 import { listVcfdata } from "@/src/graphql/queries";
 import { generateClient } from "aws-amplify/api";
 import { CreatePatientInput } from "@/src/API";
-import VCFUploader from "@/components/items/VFCUploader";
 import { createVcfdata } from "@/src/graphql/mutations";
 import {
   Select,
