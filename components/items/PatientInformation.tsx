@@ -5,20 +5,26 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 
 import { Amplify } from "aws-amplify";
-import config from "@/src/amplifyconfiguration.json";
-import { getPatient } from "@/src/graphql/queries";
+import config from "@/src/aws-exports";
+import { getPatient, getVariantReport } from "@/src/graphql/queries";
 import { generateClient } from "aws-amplify/api";
-import { Patient } from "@/utils/object";
+import { Patient, VariantReportData } from "@/utils/object";
+import { ClientPageRoot } from "next/dist/client/components/client-page";
 
 Amplify.configure(config);
 
 interface PatientProops {
-  id: string;
+  id_report: string;
   patientid: string;
 }
 
-const PatientInformation: React.FC<PatientProops> = ({ id, patientid }) => {
+const PatientInformation: React.FC<PatientProops> = ({
+  id_report,
+  patientid,
+}) => {
   const [patient, setPatient] = useState<Patient>();
+  const [varReport, setVarReport] = useState<VariantReportData>();
+
   const client = generateClient();
   const fetchData = async () => {
     try {
@@ -29,7 +35,23 @@ const PatientInformation: React.FC<PatientProops> = ({ id, patientid }) => {
       setPatient((await result).data.getPatient as Patient);
     } catch (error) {}
   };
-  fetchData();
+
+  const fetchVarData = async () => {
+    try {
+      const result = client.graphql({
+        query: getVariantReport,
+        variables: { id: id_report },
+      });
+      setVarReport((await result).data.getVariantReport as VariantReportData);
+    } catch (error) {
+      console.log("");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    fetchVarData();
+  });
 
   return (
     <div className="flex flex-col">
@@ -65,9 +87,25 @@ const PatientInformation: React.FC<PatientProops> = ({ id, patientid }) => {
                   <TableCell className="w-[100px]">{patient?.dob}</TableCell>
                 </TableRow>
                 <TableRow>
+                  <TableCell className="w-[20px]">Medical History</TableCell>
+                  <TableCell className="w-[10px] text-left">:</TableCell>
+                  <TableCell className="w-[100px]">
+                    {varReport?.medical_history}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
                   <TableCell className="w-[20px]">Current Diagnosis</TableCell>
                   <TableCell className="w-[10px] text-left">:</TableCell>
-                  <TableCell className="w-[100px]">-</TableCell>
+                  <TableCell className="w-[100px]">
+                    {varReport?.current_diagnosis}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="w-[20px]">Phenotypes</TableCell>
+                  <TableCell className="w-[10px] text-left">:</TableCell>
+                  <TableCell className="w-[100px]">
+                    {varReport?.phenotype}
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell className="w-[20px]">

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import TabsVariantReport from "@/components/table/TabsVariantReport";
 import { Button } from "@/components/ui/button";
-import { Ellipsis, Ghost, Plus } from "lucide-react";
+import { Delete, Edit, Ellipsis, Ghost, Plus, Trash } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -28,7 +28,10 @@ import axios from "axios";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 
 import { listPatients, listVariantReports } from "@/src/graphql/queries";
-import { createVariantReport } from "@/src/graphql/mutations";
+import {
+  createVariantReport,
+  deleteVariantReport,
+} from "@/src/graphql/mutations";
 import { CreateVariantReportInput } from "@/src/API";
 
 import { generateClient } from "aws-amplify/api";
@@ -50,7 +53,8 @@ import {
 } from "@/components/ui/popover";
 import { useDropzone } from "react-dropzone";
 
-import config from "@/src/amplifyconfiguration.json";
+// import config from "@/src/amplifyconfiguration.json";
+import config2 from "@/src/aws-exports";
 import { Amplify } from "aws-amplify";
 
 import { uploadData } from "aws-amplify/storage";
@@ -60,8 +64,10 @@ import { generateReportID } from "@/utils/function";
 import { getDateToday, ReportStatus } from "@/utils/DateHelperFunction";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TableReportList from "@/components/table/TableReportList";
+import { Separator } from "@/components/ui/separator";
+import PatientNameItem from "@/components/items/PatientNameItem";
 
-Amplify.configure(config);
+Amplify.configure(config2);
 
 const VariantReport = () => {
   const [phenotypeQuery, setPhenotypeQuery] = useState("");
@@ -150,6 +156,8 @@ const VariantReport = () => {
   const handleSetOfModal = () => {
     setShowModal(false);
     setFiles([]);
+    setSelectedPhenotypes([]);
+    setMedicalHistory("");
   };
 
   // File dropzone settings
@@ -185,6 +193,19 @@ const VariantReport = () => {
     }
   };
 
+  const handleDeleteVariantReport = async (idreport: string) => {
+    try {
+      const result = client.graphql({
+        query: deleteVariantReport,
+        variables: { input: { id: idreport } },
+      });
+
+      setVarReports((prev) => prev.filter((item) => item.id != idreport));
+    } catch (error) {
+      console.log("Error Delete Variant Repor");
+    }
+  };
+
   useEffect(() => {
     fetchVariantReport();
     console.log(varReports);
@@ -213,7 +234,7 @@ const VariantReport = () => {
         // setVarReports([...varReports, newReport]);
         console.log("Hore Finish Create Report");
         await fetchVariantReport();
-        setOpen(!open);
+        handleSetOfModal();
       }
     } catch (error) {
       console.log(error);
@@ -278,34 +299,60 @@ const VariantReport = () => {
                             <TableHead>Medical History</TableHead>
                             <TableHead>Current Diagnosis</TableHead>
                             <TableHead>Sample Collected</TableHead>
+                            <TableHead>Patient Phenotypes</TableHead>
                             <TableHead>Report Status</TableHead>
                             <TableHead>Action</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           {varReports.map((varItem, index) => (
-                            <TableRow key={index}>
+                            <TableRow key={index} className="text-xs">
                               <TableCell>{varItem.id}</TableCell>
-                              <TableCell>{varItem.idPatient}</TableCell>
+                              <TableCell>
+                                <PatientNameItem
+                                  id_patient={varItem.idPatient ?? ""}
+                                ></PatientNameItem>
+                              </TableCell>
                               <TableCell>{varItem.medical_history}</TableCell>
                               <TableCell>{varItem.current_diagnosis}</TableCell>
                               <TableCell>{varItem.sample_collection}</TableCell>
+                              <TableCell>{varItem.phenotype}</TableCell>
                               <TableCell>
                                 {ReportStatus(varItem.status ?? 4)}
                               </TableCell>
                               <TableCell>
-                                <Button
-                                  variant={"ghost"}
-                                  onClick={() =>
-                                    navigateTo(
-                                      `variantreport/editreport?id=${varItem.id}&patientid=${varItem.idPatient}`
-                                    )
-                                  }
-                                >
-                                  <small>
-                                    <Ellipsis></Ellipsis>
-                                  </small>
-                                </Button>
+                                <div className="flex flex-row gap-2 items-center">
+                                  <Button
+                                    className="h-8 w-4 hover:bg-green-500 hover:text-white"
+                                    variant={"ghost"}
+                                    onClick={() =>
+                                      navigateTo(
+                                        `variantreport/editreport?id=${varItem.id}&patientid=${varItem.idPatient}`
+                                      )
+                                    }
+                                  >
+                                    <small>
+                                      <Edit className="h-8 w-4"></Edit>
+                                    </small>
+                                  </Button>
+                                  <Separator
+                                    orientation="vertical"
+                                    className="h-5"
+                                  ></Separator>
+                                  <Button
+                                    variant={"ghost"}
+                                    className="hover:bg-red-500 hover:text-white h-8 w-4"
+                                    onClick={(e) =>
+                                      handleDeleteVariantReport(
+                                        varItem.id ?? ""
+                                      )
+                                    }
+                                  >
+                                    <small>
+                                      <Trash className="h-4 w-4"></Trash>
+                                    </small>
+                                  </Button>
+                                </div>
                               </TableCell>
                             </TableRow>
                           ))}
@@ -467,8 +514,8 @@ const VariantReport = () => {
                   <div className="flex flex-col gap-1 mb-3">
                     <Label>Medical History</Label>
                     <small className="text-gray-500">
-                      Provide a summary of the patient is s relevant medical
-                      history that is pertinent to this variant analysis.
+                      Enter the current diagnosis that has been confirmed for
+                      this patient (e.g., Breast Cancer, Type 2 Diabetes).
                     </small>
                     <Textarea
                       value={medicalHistory}

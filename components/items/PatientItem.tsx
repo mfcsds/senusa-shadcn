@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Hospital, Accessibility } from "lucide-react";
 

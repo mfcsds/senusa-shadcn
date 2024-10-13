@@ -44,6 +44,16 @@ import {
 } from "../ui/dialog";
 import VariantInformationModal from "./VariantInformationModal";
 
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 interface SelectVariantProops {
   patientid: string | null;
   id_report: string | null;
@@ -112,6 +122,14 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
 
   const [vcfContent, setVcfContent] = useState("");
   // Handle VCF selection change
+
+  const newhandleVCFSelection = (value: string) => {
+    const selected = vcfData.find((item) => item.id === value);
+    setSelectedVCF(selected ?? null);
+    setError(null);
+    readSelectedVCF();
+  };
+
   const handleVCFSelection = (vcfId: string) => {
     // Find the selected VCF data based on the ID
     const selected = vcfData.find((item) => item.id === vcfId);
@@ -407,6 +425,35 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
           label="Choose Variant Data"
           desc="Select the Variant Call Files"
         ></LabelAndDescription>
+
+        <Select onValueChange={newhandleVCFSelection}>
+          <SelectTrigger className="w-full h-[100px] text-left">
+            <SelectValue placeholder={"Select the VCF Files"}></SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Select Variant Call Data</SelectLabel>
+            </SelectGroup>
+            {vcfData.map((item, idx) => (
+              <SelectItem
+                key={idx}
+                value={item.id ?? ""}
+                onChange={(e) => handleVCFSelection(item.id ?? "")}
+              >
+                <div className="flex flex-col p-3 ">
+                  <p className="text-balance font-semibold text-[16px]">
+                    {item.id}
+                  </p>
+                  <p className="text-balance text-gray-500 font-semibold">
+                    {`Collection Date: ${item.sample_date}`}
+                  </p>
+                  <p className="text-balance text-gray-500">{`Upload Date: ${item.uploadAt}`}</p>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {/* 
         <select
           onChange={(e) => handleVCFSelection(e.target.value)}
           className="h-[70px] p-3 border rounded-md"
@@ -416,7 +463,7 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
               {item.id}
             </option>
           ))}
-        </select>
+        </select> */}
       </div>
       {/* <h1 className="text-xl font-bold mb-4">VCF File Uploader</h1>
       <input

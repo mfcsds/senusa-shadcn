@@ -25,7 +25,7 @@ const EditVariantReport = () => {
       value: "Patient Information",
       comp: (
         <PatientInformation
-          id={reportID ?? ""}
+          id_report={reportID ?? ""}
           patientid={patientID ?? ""}
         ></PatientInformation>
       ),
