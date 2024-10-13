@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 
 import { useSearchParams } from "next/navigation";
 import { Card } from "@aws-amplify/ui-react";
@@ -113,6 +113,7 @@ const EditVariantReport = () => {
           </div>
         </CardContent>
       </Card>
+      <Suspense></Suspense>
     </div>
   );
 };

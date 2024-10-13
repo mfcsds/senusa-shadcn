@@ -27,7 +27,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 import config from "@/src/amplifyconfiguration.json";
@@ -505,6 +505,7 @@ const DataPatientPage = () => {
           </div>
         )}
       </div>
+      <Suspense></Suspense>
     </div>
   );
 };
