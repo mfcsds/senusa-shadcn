@@ -12,6 +12,7 @@ import SelectVariant from "@/components/items/SelectVariant";
 import ResultAndInterpretation from "@/components/items/ResultAndInterpretation";
 import RecommendationAndConclusion from "@/components/items/RecommendationAndConclusion";
 import PreviewReport from "@/components/items/PreviewReport";
+import DemoTableVariant from "@/components/datatable/Demo";
 
 const EditVariantReport = () => {
   const searchParams = useSearchParams();
@@ -45,6 +46,11 @@ const EditVariantReport = () => {
           id_report={reportID}
         ></SelectVariant>
       ),
+    },
+    {
+      tab: "Select Varian 2",
+      value: "Select Variant 2",
+      comp: <DemoTableVariant></DemoTableVariant>,
     },
     {
       tab: "Result and Interpretation",

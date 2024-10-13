@@ -24,7 +24,7 @@ import {
   fetchVariantDetails3,
 } from "@/utils/function";
 import { Button } from "../ui/button";
-import { Ellipsis, PlusCircle, TableOfContents } from "lucide-react";
+import { PlusCircle, TableOfContents } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { listVcfdata } from "@/src/graphql/queries";
 import LabelAndDescription from "./LabelAndDescription";
@@ -33,15 +33,6 @@ import {
   createSelectedVariant,
   createVariantInterpretation,
 } from "@/src/graphql/mutations";
-
-import { Select, SelectTrigger } from "../ui/select";
-import {
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectValue,
-} from "@radix-ui/react-select";
 
 import { generateClient } from "aws-amplify/api";
 import { CreateSelectedVariantInput, SelectedVariant } from "@/src/API";
