@@ -48,11 +48,6 @@ const EditVariantReport = () => {
       ),
     },
     {
-      tab: "Select Varian 2",
-      value: "Select Variant 2",
-      comp: <DemoTableVariant></DemoTableVariant>,
-    },
-    {
       tab: "Result and Interpretation",
       value: "Result and Interpretation",
       comp: (
