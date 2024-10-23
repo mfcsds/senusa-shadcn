@@ -73,8 +73,8 @@ Amplify.configure(config);
 
 const DataPatientPage = () => {
   const client = generateClient();
-
   const useParams = useSearchParams();
+
   const idPatient = useParams.get("idpatient");
 
   const [uploadModal, setUploadModal] = useState(false);
@@ -505,7 +505,6 @@ const DataPatientPage = () => {
           </div>
         )}
       </div>
-      <Suspense></Suspense>
     </div>
   );
 };

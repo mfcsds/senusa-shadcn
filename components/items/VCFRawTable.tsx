@@ -93,6 +93,7 @@ const VCFRawTable: React.FC<VCFRawTableProps> = ({ filepath }) => {
                 qual: fields[5],
                 filter: fields[6],
                 info: fields[7],
+                id_var: ".",
               };
               return variant;
             }

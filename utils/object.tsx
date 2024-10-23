@@ -116,6 +116,7 @@ export interface VcfData {
 }
 
 export interface VariantRawData {
+  id_var: string | null;
   chrom: string | null;
   pos: string | null;
   id: string | null;

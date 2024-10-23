@@ -21,6 +21,11 @@ import { Amplify } from "aws-amplify";
 import { ToastAction } from "@/components/ui/toast";
 import { toast, useToast } from "@/components/ui/use-toast";
 import { title } from "process";
+import { AspectRatio } from "@/src/components/ui/aspect-ratio";
+import Image from "next/image";
+
+import logo from "@/public/logo-senusa.png";
+import { Separator } from "@/components/ui/separator";
 
 Amplify.configure(awsconfig);
 
@@ -58,12 +63,15 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="h-dvh grid grid-cols-3">
-      <div className="col-span-2 bg-gray-100"></div>
-      <div className="flex items-center justify-center ">
+    <div className="flex flex-row md:flex-row w-screen h-screen overflow-hidden">
+      <div className=" w-9/12 bg-white flex flex-col items-center justify-center gap-5 ">
+        <Image src={logo} alt={"Image"} width={200} height={200}></Image>
+        <p className="font-sans font-bold text-3xl text-cyan-700">Senusa</p>
+      </div>
+      <div className="flex items-center justify-center bg-gray-50 ">
         <Card className="p-5 w-full m-10 shadow">
           <CardHeader>
-            <CardTitle>Login</CardTitle>
+            <CardTitle className="text-cyan-700">Login</CardTitle>
             <CardDescription>
               Senusa: Software Penilaian Gen Untuk Bangsa
             </CardDescription>
@@ -94,7 +102,7 @@ const LoginForm = () => {
                     <Button
                       type="submit"
                       variant="outline"
-                      className="bg-gray-100 hover:bg-violet-800 hover:text-white"
+                      className="bg-gray-100 hover:bg-cyan-800 hover:text-white"
                     >
                       Login
                     </Button>
@@ -104,10 +112,20 @@ const LoginForm = () => {
             </form>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <small>Don&#39;t have an account?</small>
-            <Button variant="ghost">
-              <small>Request an account</small>
-            </Button>
+            <div className="flex flex-col w-full">
+              <Separator></Separator>
+              <div className=" flex w-full justify-center items-center">
+                <Button variant={"link"}>
+                  <small>Forgot Password?</small>
+                </Button>
+              </div>
+              <div className="flex justify-between items-center">
+                <small>Don&#39;t have an account?</small>
+                <Button variant="link">
+                  <small>Request an account</small>
+                </Button>
+              </div>
+            </div>
           </CardFooter>
         </Card>
       </div>
