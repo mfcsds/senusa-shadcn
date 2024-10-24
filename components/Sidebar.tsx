@@ -26,10 +26,12 @@ const Sidebar = () => {
   const handleLogout = async () => {
     try {
       await signOut();
-      router.push("/login");
+      // router.push("/login");
+      router.push("/");
       console.log("log out");
     } catch (error) {
       console.log("gagal log out");
+      console.log(error);
     }
   };
   return (
