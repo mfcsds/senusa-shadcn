@@ -19,6 +19,7 @@ export interface Variant {
   id: string;
   id_vcf: string;
   id_patient: string;
+  id_report: string;
   chrom: string;
   pos: string;
   id_var: string;
@@ -29,9 +30,9 @@ export interface Variant {
   info: string;
   hgvs: string;
   variantReportID: string;
-  zygosity: string;
+  zygosity: string | null;
   globalallele: number | null;
-  functional_impact: string;
+  functional_impact: string | null;
   acmg: string;
   clinicalSign: string | null;
   severeconsequence: string | null;
@@ -113,10 +114,13 @@ export interface VcfData {
   uploadAt: string | null;
   pathfile: string | null;
   genome_reference: string | null;
+  number_variant: number | null;
 }
 
 export interface VariantRawData {
   id_var: string | null;
+  id_patient: string | null;
+  id_vcf: string | null;
   chrom: string | null;
   pos: string | null;
   id: string | null;
@@ -125,6 +129,7 @@ export interface VariantRawData {
   qual: string | null;
   info: string | null;
   filter: string | null;
+  hgvs: string | null;
 }
 
 // TypeScript Interface for SelectedVariant
@@ -276,4 +281,11 @@ export interface Domain {
   name?: string; // Domain name
   start?: number; // Start position of the domain
   end?: number; // End position of the domain
+}
+
+export interface FamilyDiseaseData {
+  id: string;
+  id_patient: string;
+  hpo_code: string;
+  hpo_desc: string[];
 }

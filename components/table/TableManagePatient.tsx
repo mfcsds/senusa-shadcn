@@ -50,10 +50,13 @@ import { keysEqual } from "@aws-amplify/datastore/dist/esm/util";
 Amplify.configure(config);
 
 import { generatePatientID } from "@/utils/function";
+import { Separator } from "@/components/ui/separator";
+import LabelAndDescription from "../items/LabelAndDescription";
 
 interface Patient {
   id: string;
   institutionID?: string;
+  id_reference?: string;
   name?: string;
   sex?: string;
   phone_number?: string;
@@ -62,10 +65,11 @@ interface Patient {
 
 const TableManagePatient = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
-  const [name, setName] = useState("");
-  const [id, setIdPatient] = useState("");
-  const [sex, setSex] = useState("");
-  const [date, setDate] = React.useState<Date>();
+  // const [name, setName] = useState("");
+  const [idReference, setIDReference] = useState("");
+  // const [id, setIdPatient] = useState("");
+  // const [sex, setSex] = useState("");
+  // const [date, setDate] = React.useState<Date>();
   const [showModal, setShowModal] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [phone_number, setPhoneNumber] = useState("");
@@ -91,11 +95,10 @@ const TableManagePatient = () => {
     try {
       const newPatient = {
         id: generatePatientID(),
-        name: name,
-        sex: sex,
-        institutionID: "ID-0012024-224420-YARSI",
+        name: idReference,
+        sex: "-",
+        id_reference: idReference,
         phone_number: phone_number,
-        dob: date?.toDateString(),
       };
 
       const result = await client.graphql({
@@ -183,16 +186,7 @@ const TableManagePatient = () => {
               <TableCell>{patients.dob || ""}</TableCell>
 
               <TableCell className="text-center">
-                <div className="flex items-center">
-                  <Button
-                    variant="ghost"
-                    className="group hover:bg-violet-800"
-                    onClick={() => handleDeletePatientModal(patients.id)}
-                  >
-                    <span>
-                      <Trash className="group-hover:text-white w-3 h-3 " />
-                    </span>
-                  </Button>
+                <div className="flex flex-row gap-1 items-center">
                   <Button
                     variant="ghost"
                     className="group hover:bg-violet-800"
@@ -204,6 +198,20 @@ const TableManagePatient = () => {
                   >
                     <span>
                       <Pencil className="w-3 h-3 group-hover:text-white" />
+                    </span>
+                  </Button>
+                  <Separator
+                    orientation={"vertical"}
+                    className="h-5"
+                  ></Separator>
+
+                  <Button
+                    variant="ghost"
+                    className="group hover:bg-rose-800"
+                    onClick={() => handleDeletePatientModal(patients.id)}
+                  >
+                    <span>
+                      <Trash className="group-hover:text-white w-3 h-3 " />
                     </span>
                   </Button>
                 </div>
@@ -259,72 +267,21 @@ const TableManagePatient = () => {
           <Card className="w-full max-w-screen-md p-5">
             <CardHeader>
               <CardTitle>Add New Patient</CardTitle>
-              <CardDescription>Adding Patient</CardDescription>
+              <CardDescription>Adding Patient Information</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-col ">
-                <form className="gap-y-10 ">
-                  {/* <Label>Patient ID</Label>
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-5 p-5 border rounded-md shadow-sm">
+                  <LabelAndDescription
+                    label="ID or Patient Reference Number"
+                    desc="Patient Identifier"
+                  ></LabelAndDescription>
                   <Input
                     type="text"
-                    placeholder="ID"
-                    onChange={(e) => setIdPatient(e.target.value)}
-                  ></Input> */}
-                  <Label>Patient Name</Label>
-                  <Input
-                    type="text"
-                    placeholder="Insert patient name"
-                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Insert ID"
+                    onChange={(e) => setIDReference(e.target.value)}
                   ></Input>
-
-                  <Label>Sex</Label>
-                  <select
-                    className="flex flex-col h-8 w-full"
-                    onChange={(e) => setSex(e.target.value)}
-                  >
-                    <option>Select Sex</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                  </select>
-
-                  <Label>Date Of Birth</Label>
-
-                  <div className="flex flex-col">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-[240px] justify-start text-left font-normal",
-                            !date && "text-muted-foreground"
-                          )}
-                          onChange={(e) => setDate(date)}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {date ? (
-                            format(date, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={date}
-                          onSelect={setDate}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                  <Label>Phone Number</Label>
-                  <Input
-                    type="text"
-                    placeholder="Phone Number"
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                  ></Input>
-                </form>
+                </div>
               </div>
             </CardContent>
             <CardFooter>

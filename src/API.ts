@@ -2,28 +2,20 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateVariantInterpretationInput = {
+export type CreateFamilyHistoryDiseaseInput = {
   id?: string | null,
-  hgvs?: string | null,
-  text?: string | null,
   id_patient?: string | null,
-  id_report?: string | null,
-  id_varsample?: string | null,
-  gene?: string | null,
-  alldesc?: string | null,
+  hpo_code?: string | null,
+  hpo_desc?: string | null,
 };
 
-export type ModelVariantInterpretationConditionInput = {
-  hgvs?: ModelStringInput | null,
-  text?: ModelStringInput | null,
+export type ModelFamilyHistoryDiseaseConditionInput = {
   id_patient?: ModelStringInput | null,
-  id_report?: ModelStringInput | null,
-  id_varsample?: ModelStringInput | null,
-  gene?: ModelStringInput | null,
-  alldesc?: ModelStringInput | null,
-  and?: Array< ModelVariantInterpretationConditionInput | null > | null,
-  or?: Array< ModelVariantInterpretationConditionInput | null > | null,
-  not?: ModelVariantInterpretationConditionInput | null,
+  hpo_code?: ModelStringInput | null,
+  hpo_desc?: ModelStringInput | null,
+  and?: Array< ModelFamilyHistoryDiseaseConditionInput | null > | null,
+  or?: Array< ModelFamilyHistoryDiseaseConditionInput | null > | null,
+  not?: ModelFamilyHistoryDiseaseConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
 };
@@ -66,6 +58,53 @@ export type ModelSizeInput = {
   ge?: number | null,
   gt?: number | null,
   between?: Array< number | null > | null,
+};
+
+export type FamilyHistoryDisease = {
+  __typename: "FamilyHistoryDisease",
+  id: string,
+  id_patient?: string | null,
+  hpo_code?: string | null,
+  hpo_desc?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateFamilyHistoryDiseaseInput = {
+  id: string,
+  id_patient?: string | null,
+  hpo_code?: string | null,
+  hpo_desc?: string | null,
+};
+
+export type DeleteFamilyHistoryDiseaseInput = {
+  id: string,
+};
+
+export type CreateVariantInterpretationInput = {
+  id?: string | null,
+  hgvs?: string | null,
+  text?: string | null,
+  id_patient?: string | null,
+  id_report?: string | null,
+  id_varsample?: string | null,
+  gene?: string | null,
+  alldesc?: string | null,
+};
+
+export type ModelVariantInterpretationConditionInput = {
+  hgvs?: ModelStringInput | null,
+  text?: ModelStringInput | null,
+  id_patient?: ModelStringInput | null,
+  id_report?: ModelStringInput | null,
+  id_varsample?: ModelStringInput | null,
+  gene?: ModelStringInput | null,
+  alldesc?: ModelStringInput | null,
+  and?: Array< ModelVariantInterpretationConditionInput | null > | null,
+  or?: Array< ModelVariantInterpretationConditionInput | null > | null,
+  not?: ModelVariantInterpretationConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type VariantInterpretation = {
@@ -247,6 +286,7 @@ export type CreateVcfdataInput = {
   uploadAt?: string | null,
   pathfile?: string | null,
   genome_reference?: string | null,
+  number_variant?: number | null,
 };
 
 export type ModelVcfdataConditionInput = {
@@ -255,11 +295,24 @@ export type ModelVcfdataConditionInput = {
   uploadAt?: ModelStringInput | null,
   pathfile?: ModelStringInput | null,
   genome_reference?: ModelStringInput | null,
+  number_variant?: ModelIntInput | null,
   and?: Array< ModelVcfdataConditionInput | null > | null,
   or?: Array< ModelVcfdataConditionInput | null > | null,
   not?: ModelVcfdataConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+};
+
+export type ModelIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
 };
 
 export type Vcfdata = {
@@ -270,6 +323,7 @@ export type Vcfdata = {
   uploadAt?: string | null,
   pathfile?: string | null,
   genome_reference?: string | null,
+  number_variant?: number | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -281,6 +335,7 @@ export type UpdateVcfdataInput = {
   uploadAt?: string | null,
   pathfile?: string | null,
   genome_reference?: string | null,
+  number_variant?: number | null,
 };
 
 export type DeleteVcfdataInput = {
@@ -548,18 +603,6 @@ export type ModelVariantReportConditionInput = {
   updatedAt?: ModelStringInput | null,
 };
 
-export type ModelIntInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-};
-
 export type ModelBooleanInput = {
   ne?: boolean | null,
   eq?: boolean | null,
@@ -653,7 +696,8 @@ export type CreatePatientInput = {
   sex?: string | null,
   phone_number?: string | null,
   dob?: string | null,
-  institutionID: string,
+  id_reference?: string | null,
+  id_institution?: string | null,
 };
 
 export type ModelPatientConditionInput = {
@@ -661,7 +705,8 @@ export type ModelPatientConditionInput = {
   sex?: ModelStringInput | null,
   phone_number?: ModelStringInput | null,
   dob?: ModelStringInput | null,
-  institutionID?: ModelIDInput | null,
+  id_reference?: ModelStringInput | null,
+  id_institution?: ModelStringInput | null,
   and?: Array< ModelPatientConditionInput | null > | null,
   or?: Array< ModelPatientConditionInput | null > | null,
   not?: ModelPatientConditionInput | null,
@@ -676,16 +721,10 @@ export type Patient = {
   sex?: string | null,
   phone_number?: string | null,
   dob?: string | null,
-  institutionID: string,
-  PatientDokuments?: ModelPatientDocumentsConnection | null,
+  id_reference?: string | null,
+  id_institution?: string | null,
   createdAt: string,
   updatedAt: string,
-};
-
-export type ModelPatientDocumentsConnection = {
-  __typename: "ModelPatientDocumentsConnection",
-  items:  Array<PatientDocuments | null >,
-  nextToken?: string | null,
 };
 
 export type UpdatePatientInput = {
@@ -694,7 +733,8 @@ export type UpdatePatientInput = {
   sex?: string | null,
   phone_number?: string | null,
   dob?: string | null,
-  institutionID?: string | null,
+  id_reference?: string | null,
+  id_institution?: string | null,
 };
 
 export type DeletePatientInput = {
@@ -856,6 +896,24 @@ export type DeleteInstitutionInput = {
   id: string,
 };
 
+export type ModelFamilyHistoryDiseaseFilterInput = {
+  id?: ModelIDInput | null,
+  id_patient?: ModelStringInput | null,
+  hpo_code?: ModelStringInput | null,
+  hpo_desc?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelFamilyHistoryDiseaseFilterInput | null > | null,
+  or?: Array< ModelFamilyHistoryDiseaseFilterInput | null > | null,
+  not?: ModelFamilyHistoryDiseaseFilterInput | null,
+};
+
+export type ModelFamilyHistoryDiseaseConnection = {
+  __typename: "ModelFamilyHistoryDiseaseConnection",
+  items:  Array<FamilyHistoryDisease | null >,
+  nextToken?: string | null,
+};
+
 export type ModelVariantInterpretationFilterInput = {
   id?: ModelIDInput | null,
   hgvs?: ModelStringInput | null,
@@ -926,6 +984,7 @@ export type ModelVcfdataFilterInput = {
   uploadAt?: ModelStringInput | null,
   pathfile?: ModelStringInput | null,
   genome_reference?: ModelStringInput | null,
+  number_variant?: ModelIntInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelVcfdataFilterInput | null > | null,
@@ -1072,13 +1131,20 @@ export type ModelPatientDocumentsFilterInput = {
   not?: ModelPatientDocumentsFilterInput | null,
 };
 
+export type ModelPatientDocumentsConnection = {
+  __typename: "ModelPatientDocumentsConnection",
+  items:  Array<PatientDocuments | null >,
+  nextToken?: string | null,
+};
+
 export type ModelPatientFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
   sex?: ModelStringInput | null,
   phone_number?: ModelStringInput | null,
   dob?: ModelStringInput | null,
-  institutionID?: ModelIDInput | null,
+  id_reference?: ModelStringInput | null,
+  id_institution?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelPatientFilterInput | null > | null,
@@ -1139,19 +1205,15 @@ export type ModelInstitutionConnection = {
   nextToken?: string | null,
 };
 
-export type ModelSubscriptionVariantInterpretationFilterInput = {
+export type ModelSubscriptionFamilyHistoryDiseaseFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  hgvs?: ModelSubscriptionStringInput | null,
-  text?: ModelSubscriptionStringInput | null,
   id_patient?: ModelSubscriptionStringInput | null,
-  id_report?: ModelSubscriptionStringInput | null,
-  id_varsample?: ModelSubscriptionStringInput | null,
-  gene?: ModelSubscriptionStringInput | null,
-  alldesc?: ModelSubscriptionStringInput | null,
+  hpo_code?: ModelSubscriptionStringInput | null,
+  hpo_desc?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionVariantInterpretationFilterInput | null > | null,
-  or?: Array< ModelSubscriptionVariantInterpretationFilterInput | null > | null,
+  and?: Array< ModelSubscriptionFamilyHistoryDiseaseFilterInput | null > | null,
+  or?: Array< ModelSubscriptionFamilyHistoryDiseaseFilterInput | null > | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -1182,6 +1244,21 @@ export type ModelSubscriptionStringInput = {
   beginsWith?: string | null,
   in?: Array< string | null > | null,
   notIn?: Array< string | null > | null,
+};
+
+export type ModelSubscriptionVariantInterpretationFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  hgvs?: ModelSubscriptionStringInput | null,
+  text?: ModelSubscriptionStringInput | null,
+  id_patient?: ModelSubscriptionStringInput | null,
+  id_report?: ModelSubscriptionStringInput | null,
+  id_varsample?: ModelSubscriptionStringInput | null,
+  gene?: ModelSubscriptionStringInput | null,
+  alldesc?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionVariantInterpretationFilterInput | null > | null,
+  or?: Array< ModelSubscriptionVariantInterpretationFilterInput | null > | null,
 };
 
 export type ModelSubscriptionSelectedVariantFilterInput = {
@@ -1237,10 +1314,23 @@ export type ModelSubscriptionVcfdataFilterInput = {
   uploadAt?: ModelSubscriptionStringInput | null,
   pathfile?: ModelSubscriptionStringInput | null,
   genome_reference?: ModelSubscriptionStringInput | null,
+  number_variant?: ModelSubscriptionIntInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionVcfdataFilterInput | null > | null,
   or?: Array< ModelSubscriptionVcfdataFilterInput | null > | null,
+};
+
+export type ModelSubscriptionIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  in?: Array< number | null > | null,
+  notIn?: Array< number | null > | null,
 };
 
 export type ModelSubscriptionVariantFilterInput = {
@@ -1320,18 +1410,6 @@ export type ModelSubscriptionVariantReportFilterInput = {
   or?: Array< ModelSubscriptionVariantReportFilterInput | null > | null,
 };
 
-export type ModelSubscriptionIntInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  in?: Array< number | null > | null,
-  notIn?: Array< number | null > | null,
-};
-
 export type ModelSubscriptionBooleanInput = {
   ne?: boolean | null,
   eq?: boolean | null,
@@ -1356,7 +1434,8 @@ export type ModelSubscriptionPatientFilterInput = {
   sex?: ModelSubscriptionStringInput | null,
   phone_number?: ModelSubscriptionStringInput | null,
   dob?: ModelSubscriptionStringInput | null,
-  institutionID?: ModelSubscriptionIDInput | null,
+  id_reference?: ModelSubscriptionStringInput | null,
+  id_institution?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionPatientFilterInput | null > | null,
@@ -1400,6 +1479,57 @@ export type ModelSubscriptionInstitutionFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionInstitutionFilterInput | null > | null,
   or?: Array< ModelSubscriptionInstitutionFilterInput | null > | null,
+};
+
+export type CreateFamilyHistoryDiseaseMutationVariables = {
+  input: CreateFamilyHistoryDiseaseInput,
+  condition?: ModelFamilyHistoryDiseaseConditionInput | null,
+};
+
+export type CreateFamilyHistoryDiseaseMutation = {
+  createFamilyHistoryDisease?:  {
+    __typename: "FamilyHistoryDisease",
+    id: string,
+    id_patient?: string | null,
+    hpo_code?: string | null,
+    hpo_desc?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateFamilyHistoryDiseaseMutationVariables = {
+  input: UpdateFamilyHistoryDiseaseInput,
+  condition?: ModelFamilyHistoryDiseaseConditionInput | null,
+};
+
+export type UpdateFamilyHistoryDiseaseMutation = {
+  updateFamilyHistoryDisease?:  {
+    __typename: "FamilyHistoryDisease",
+    id: string,
+    id_patient?: string | null,
+    hpo_code?: string | null,
+    hpo_desc?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteFamilyHistoryDiseaseMutationVariables = {
+  input: DeleteFamilyHistoryDiseaseInput,
+  condition?: ModelFamilyHistoryDiseaseConditionInput | null,
+};
+
+export type DeleteFamilyHistoryDiseaseMutation = {
+  deleteFamilyHistoryDisease?:  {
+    __typename: "FamilyHistoryDisease",
+    id: string,
+    id_patient?: string | null,
+    hpo_code?: string | null,
+    hpo_desc?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
 };
 
 export type CreateVariantInterpretationMutationVariables = {
@@ -1599,6 +1729,7 @@ export type CreateVcfdataMutation = {
     uploadAt?: string | null,
     pathfile?: string | null,
     genome_reference?: string | null,
+    number_variant?: number | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1618,6 +1749,7 @@ export type UpdateVcfdataMutation = {
     uploadAt?: string | null,
     pathfile?: string | null,
     genome_reference?: string | null,
+    number_variant?: number | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1637,6 +1769,7 @@ export type DeleteVcfdataMutation = {
     uploadAt?: string | null,
     pathfile?: string | null,
     genome_reference?: string | null,
+    number_variant?: number | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2051,11 +2184,8 @@ export type CreatePatientMutation = {
     sex?: string | null,
     phone_number?: string | null,
     dob?: string | null,
-    institutionID: string,
-    PatientDokuments?:  {
-      __typename: "ModelPatientDocumentsConnection",
-      nextToken?: string | null,
-    } | null,
+    id_reference?: string | null,
+    id_institution?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2074,11 +2204,8 @@ export type UpdatePatientMutation = {
     sex?: string | null,
     phone_number?: string | null,
     dob?: string | null,
-    institutionID: string,
-    PatientDokuments?:  {
-      __typename: "ModelPatientDocumentsConnection",
-      nextToken?: string | null,
-    } | null,
+    id_reference?: string | null,
+    id_institution?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2097,11 +2224,8 @@ export type DeletePatientMutation = {
     sex?: string | null,
     phone_number?: string | null,
     dob?: string | null,
-    institutionID: string,
-    PatientDokuments?:  {
-      __typename: "ModelPatientDocumentsConnection",
-      nextToken?: string | null,
-    } | null,
+    id_reference?: string | null,
+    id_institution?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2296,6 +2420,44 @@ export type DeleteInstitutionMutation = {
   } | null,
 };
 
+export type GetFamilyHistoryDiseaseQueryVariables = {
+  id: string,
+};
+
+export type GetFamilyHistoryDiseaseQuery = {
+  getFamilyHistoryDisease?:  {
+    __typename: "FamilyHistoryDisease",
+    id: string,
+    id_patient?: string | null,
+    hpo_code?: string | null,
+    hpo_desc?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListFamilyHistoryDiseasesQueryVariables = {
+  filter?: ModelFamilyHistoryDiseaseFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListFamilyHistoryDiseasesQuery = {
+  listFamilyHistoryDiseases?:  {
+    __typename: "ModelFamilyHistoryDiseaseConnection",
+    items:  Array< {
+      __typename: "FamilyHistoryDisease",
+      id: string,
+      id_patient?: string | null,
+      hpo_code?: string | null,
+      hpo_desc?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetVariantInterpretationQueryVariables = {
   id: string,
 };
@@ -2439,6 +2601,7 @@ export type GetVcfdataQuery = {
     uploadAt?: string | null,
     pathfile?: string | null,
     genome_reference?: string | null,
+    number_variant?: number | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2461,6 +2624,7 @@ export type ListVcfdataQuery = {
       uploadAt?: string | null,
       pathfile?: string | null,
       genome_reference?: string | null,
+      number_variant?: number | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2772,11 +2936,8 @@ export type GetPatientQuery = {
     sex?: string | null,
     phone_number?: string | null,
     dob?: string | null,
-    institutionID: string,
-    PatientDokuments?:  {
-      __typename: "ModelPatientDocumentsConnection",
-      nextToken?: string | null,
-    } | null,
+    id_reference?: string | null,
+    id_institution?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2798,7 +2959,8 @@ export type ListPatientsQuery = {
       sex?: string | null,
       phone_number?: string | null,
       dob?: string | null,
-      institutionID: string,
+      id_reference?: string | null,
+      id_institution?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2925,6 +3087,54 @@ export type ListInstitutionsQuery = {
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
+  } | null,
+};
+
+export type OnCreateFamilyHistoryDiseaseSubscriptionVariables = {
+  filter?: ModelSubscriptionFamilyHistoryDiseaseFilterInput | null,
+};
+
+export type OnCreateFamilyHistoryDiseaseSubscription = {
+  onCreateFamilyHistoryDisease?:  {
+    __typename: "FamilyHistoryDisease",
+    id: string,
+    id_patient?: string | null,
+    hpo_code?: string | null,
+    hpo_desc?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateFamilyHistoryDiseaseSubscriptionVariables = {
+  filter?: ModelSubscriptionFamilyHistoryDiseaseFilterInput | null,
+};
+
+export type OnUpdateFamilyHistoryDiseaseSubscription = {
+  onUpdateFamilyHistoryDisease?:  {
+    __typename: "FamilyHistoryDisease",
+    id: string,
+    id_patient?: string | null,
+    hpo_code?: string | null,
+    hpo_desc?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteFamilyHistoryDiseaseSubscriptionVariables = {
+  filter?: ModelSubscriptionFamilyHistoryDiseaseFilterInput | null,
+};
+
+export type OnDeleteFamilyHistoryDiseaseSubscription = {
+  onDeleteFamilyHistoryDisease?:  {
+    __typename: "FamilyHistoryDisease",
+    id: string,
+    id_patient?: string | null,
+    hpo_code?: string | null,
+    hpo_desc?: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -3118,6 +3328,7 @@ export type OnCreateVcfdataSubscription = {
     uploadAt?: string | null,
     pathfile?: string | null,
     genome_reference?: string | null,
+    number_variant?: number | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3136,6 +3347,7 @@ export type OnUpdateVcfdataSubscription = {
     uploadAt?: string | null,
     pathfile?: string | null,
     genome_reference?: string | null,
+    number_variant?: number | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3154,6 +3366,7 @@ export type OnDeleteVcfdataSubscription = {
     uploadAt?: string | null,
     pathfile?: string | null,
     genome_reference?: string | null,
+    number_variant?: number | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3546,11 +3759,8 @@ export type OnCreatePatientSubscription = {
     sex?: string | null,
     phone_number?: string | null,
     dob?: string | null,
-    institutionID: string,
-    PatientDokuments?:  {
-      __typename: "ModelPatientDocumentsConnection",
-      nextToken?: string | null,
-    } | null,
+    id_reference?: string | null,
+    id_institution?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3568,11 +3778,8 @@ export type OnUpdatePatientSubscription = {
     sex?: string | null,
     phone_number?: string | null,
     dob?: string | null,
-    institutionID: string,
-    PatientDokuments?:  {
-      __typename: "ModelPatientDocumentsConnection",
-      nextToken?: string | null,
-    } | null,
+    id_reference?: string | null,
+    id_institution?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3590,11 +3797,8 @@ export type OnDeletePatientSubscription = {
     sex?: string | null,
     phone_number?: string | null,
     dob?: string | null,
-    institutionID: string,
-    PatientDokuments?:  {
-      __typename: "ModelPatientDocumentsConnection",
-      nextToken?: string | null,
-    } | null,
+    id_reference?: string | null,
+    id_institution?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,

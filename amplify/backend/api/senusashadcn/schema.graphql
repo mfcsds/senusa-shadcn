@@ -1,3 +1,10 @@
+type FamilyHistoryDisease @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  id_patient: String
+  hpo_code: String
+  hpo_desc: String
+}
+
 type VariantInterpretation @model @auth(rules: [{allow: public}]) {
   id: ID!
   hgvs: String
@@ -46,6 +53,7 @@ type Vcfdata @model @auth(rules: [{allow: public}]) {
   uploadAt: String
   pathfile: String
   genome_reference: String
+  number_variant: Int
 }
 
 type Variant @model @auth(rules: [{allow: public}]) {
@@ -116,8 +124,8 @@ type Patient @model @auth(rules: [{allow: public}]) {
   sex: String
   phone_number: String
   dob: String
-  institutionID: ID!
-  PatientDokuments: [PatientDocuments] @hasMany(fields: ["id"])
+  id_reference: String
+  id_institution: String
 }
 
 type User @model @auth(rules: [{allow: public}]) {

@@ -80,37 +80,35 @@ const EditVariantReport = () => {
   ];
 
   return (
-    <Suspense>
-      <div className="flex w-full">
-        <Card>
-          <CardHeader>
-            <CardTitle>{reportID}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex">
-              <Tabs className="gap-x-2" defaultValue="Patient Information">
-                <TabsList>
-                  {tabs.map((item, index) => (
-                    <TabsTrigger
-                      className="w-[250px]"
-                      key={index}
-                      value={item.value}
-                    >
-                      {item.tab}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
+    <div className="flex w-full">
+      <Card>
+        <CardHeader>
+          <CardTitle>{reportID}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex">
+            <Tabs className="gap-x-2" defaultValue="Patient Information">
+              <TabsList>
                 {tabs.map((item, index) => (
-                  <TabsContent key={index} value={item.value}>
-                    {item.comp}
-                  </TabsContent>
+                  <TabsTrigger
+                    className="w-[250px]"
+                    key={index}
+                    value={item.value}
+                  >
+                    {item.tab}
+                  </TabsTrigger>
                 ))}
-              </Tabs>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </Suspense>
+              </TabsList>
+              {tabs.map((item, index) => (
+                <TabsContent key={index} value={item.value}>
+                  {item.comp}
+                </TabsContent>
+              ))}
+            </Tabs>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

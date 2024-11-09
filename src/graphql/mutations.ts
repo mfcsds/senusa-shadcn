@@ -8,6 +8,60 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const createFamilyHistoryDisease = /* GraphQL */ `mutation CreateFamilyHistoryDisease(
+  $input: CreateFamilyHistoryDiseaseInput!
+  $condition: ModelFamilyHistoryDiseaseConditionInput
+) {
+  createFamilyHistoryDisease(input: $input, condition: $condition) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateFamilyHistoryDiseaseMutationVariables,
+  APITypes.CreateFamilyHistoryDiseaseMutation
+>;
+export const updateFamilyHistoryDisease = /* GraphQL */ `mutation UpdateFamilyHistoryDisease(
+  $input: UpdateFamilyHistoryDiseaseInput!
+  $condition: ModelFamilyHistoryDiseaseConditionInput
+) {
+  updateFamilyHistoryDisease(input: $input, condition: $condition) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateFamilyHistoryDiseaseMutationVariables,
+  APITypes.UpdateFamilyHistoryDiseaseMutation
+>;
+export const deleteFamilyHistoryDisease = /* GraphQL */ `mutation DeleteFamilyHistoryDisease(
+  $input: DeleteFamilyHistoryDiseaseInput!
+  $condition: ModelFamilyHistoryDiseaseConditionInput
+) {
+  deleteFamilyHistoryDisease(input: $input, condition: $condition) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteFamilyHistoryDiseaseMutationVariables,
+  APITypes.DeleteFamilyHistoryDiseaseMutation
+>;
 export const createVariantInterpretation = /* GraphQL */ `mutation CreateVariantInterpretation(
   $input: CreateVariantInterpretationInput!
   $condition: ModelVariantInterpretationConditionInput
@@ -208,6 +262,7 @@ export const createVcfdata = /* GraphQL */ `mutation CreateVcfdata(
     uploadAt
     pathfile
     genome_reference
+    number_variant
     createdAt
     updatedAt
     __typename
@@ -228,6 +283,7 @@ export const updateVcfdata = /* GraphQL */ `mutation UpdateVcfdata(
     uploadAt
     pathfile
     genome_reference
+    number_variant
     createdAt
     updatedAt
     __typename
@@ -248,6 +304,7 @@ export const deleteVcfdata = /* GraphQL */ `mutation DeleteVcfdata(
     uploadAt
     pathfile
     genome_reference
+    number_variant
     createdAt
     updatedAt
     __typename
@@ -684,11 +741,8 @@ export const createPatient = /* GraphQL */ `mutation CreatePatient(
     sex
     phone_number
     dob
-    institutionID
-    PatientDokuments {
-      nextToken
-      __typename
-    }
+    id_reference
+    id_institution
     createdAt
     updatedAt
     __typename
@@ -708,11 +762,8 @@ export const updatePatient = /* GraphQL */ `mutation UpdatePatient(
     sex
     phone_number
     dob
-    institutionID
-    PatientDokuments {
-      nextToken
-      __typename
-    }
+    id_reference
+    id_institution
     createdAt
     updatedAt
     __typename
@@ -732,11 +783,8 @@ export const deletePatient = /* GraphQL */ `mutation DeletePatient(
     sex
     phone_number
     dob
-    institutionID
-    PatientDokuments {
-      nextToken
-      __typename
-    }
+    id_reference
+    id_institution
     createdAt
     updatedAt
     __typename

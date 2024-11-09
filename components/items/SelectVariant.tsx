@@ -17,16 +17,13 @@ import {
 import {
   generateHGVS,
   extractZygosity,
-  fetchVariantDetails,
   fetchVariantDetails2,
-  generateVariantInterpretation,
   generateVariantSampleID,
-  fetchVariantDetails3,
 } from "@/utils/function";
 import { Button } from "../ui/button";
 import { PlusCircle, TableOfContents } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { listVcfdata } from "@/src/graphql/queries";
+import { listVariants, listVcfdata } from "@/src/graphql/queries";
 import LabelAndDescription from "./LabelAndDescription";
 import { downloadData } from "aws-amplify/storage";
 import {
@@ -35,7 +32,7 @@ import {
 } from "@/src/graphql/mutations";
 
 import { generateClient } from "aws-amplify/api";
-import { CreateSelectedVariantInput, SelectedVariant } from "@/src/API";
+import { CreateSelectedVariantInput } from "@/src/API";
 import {
   Dialog,
   DialogContent,
@@ -53,6 +50,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+import { columns } from "../selectedvariant/column";
+import { DataTable } from "../selectedvariant/data-table";
 
 interface SelectVariantProops {
   patientid: string | null;
@@ -85,7 +85,7 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
 
   const [vcfData, setVCFData] = useState<VcfData[]>([]);
 
-  const [columns, setColumns] = useState(tempColumns);
+  const [columns1, setColumns1] = useState(tempColumns);
   const [error, setError] = useState<string | null>(null);
   const [variantItem, setVariantList] = useState<Variant[]>([]);
   const [loading, setLoading] = useState(false);
@@ -129,6 +129,45 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
     setError(null);
     readSelectedVCF();
   };
+
+  const newReadVCFData = async (vcfID: string) => {
+    setVarList([]); // Clear previous data
+    setLoadingVarList(true);
+
+    let allVariants: VariantRawData[] = []; // Array to hold all fetched items
+    let nextToken: string | null = null; // Token to fetch the next page
+
+    try {
+      do {
+        const result = (await client.graphql({
+          query: listVariants,
+          variables: {
+            filter: { id_vcf: { eq: vcfID } },
+            limit: 100,
+            nextToken,
+          },
+        })) as {
+          data: {
+            listVariants: { items: VariantRawData[]; nextToken: string | null };
+          };
+        };
+
+        // Concatenate the new items to the allVariants array
+        allVariants = allVariants.concat(result.data.listVariants.items);
+        nextToken = result.data.listVariants.nextToken; // Update nextToken for the next iteration
+      } while (nextToken); // Continue until there's no more data to fetch
+
+      // Set the full list of fetched variants
+      setVarList(allVariants);
+    } catch (error) {
+      console.error("Error fetching variants:", error);
+    } finally {
+      setLoadingVarList(false);
+    }
+  };
+
+  const [varList, setVarList] = useState<VariantRawData[]>([]);
+  const [loadingVarList, setLoadingVarList] = useState(false);
 
   const handleVCFSelection = (vcfId: string) => {
     // Find the selected VCF data based on the ID
@@ -184,14 +223,14 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
             (line: string) => !line.startsWith("#") && line.trim() !== ""
           );
 
-          const parsedVariants = dataLines.map(
+          const parsedVariants = await dataLines.map(
             (line: string, index: number) => {
               const fields = line.split("\t");
-
               const variant: Variant = {
                 id: generateVariantSampleID(),
                 id_patient: patientid ?? "",
                 id_vcf: selectedVCF?.id ?? "",
+                id_report: id_report ?? "",
                 chrom: fields[0],
                 pos: fields[1],
                 id_var: fields[2],
@@ -264,12 +303,12 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
     }
 
     // Create the selected variant object based on the Variant object
-    // Create the selected variant object based on the Variant object
-    const selectedVarItem: CreateSelectedVariantInput = {
+    const selectedVarItem: Variant = {
       id: variant.id, // Generate or assign an ID if necessary
       id_patient: variant.id_patient ?? "", // Use empty string if null or undefined
       id_vcf: variant.id_vcf ?? "",
-      id_report: variant.variantReportID, // Set default empty string value
+      id_report: variant.variantReportID,
+      variantReportID: variant.variantReportID, // Set default empty string value
       gene_id: variant.gene_id ?? "",
       gene_symbol: variant.gene_symbol ?? "",
       chrom: variant.chrom ?? "",
@@ -278,14 +317,15 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
       ref: variant.ref ?? "",
       alt: variant.alt ?? "",
       qual: variant.qual ?? "",
-      zigosity: variant.zygosity ?? "",
-      global_allele: variant.globalallele ?? 0, // Assuming 0 as a default for number fields
+      filter: variant.filter ?? "",
+      info: variant.info ?? "",
+      zygosity: variant.zygosity ?? "",
+      globalallele: variant.globalallele ?? 0, // Assuming 0 as a default for number fields
       functional_impact: variant.functional_impact ?? "",
       acmg: variant.acmg ?? "",
-      reviewer_class: "", // Default empty string value
-      clinical_sign: variant.clinicalSign ?? "",
+      clinicalSign: variant.clinicalSign ?? "",
       hgvs: variant.hgvs ?? "",
-      severe_consequence: variant.severeconsequence ?? "",
+      severeconsequence: variant.severeconsequence ?? "",
       sift_score: variant.sift_score ?? 0,
       sift_prediction: variant.sift_prediction ?? "",
       phenotypes: variant.phenotypes ?? "",
@@ -421,211 +461,83 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
   return (
     <div className="flex flex-col">
       <div className="flex flex-col w-full border rounded-md py-4 px-5 gap-4">
-        <LabelAndDescription
-          label="Choose Variant Data"
-          desc="Select the Variant Call Files"
-        ></LabelAndDescription>
+        <div className="flex flex-row items-center gap-2">
+          <LabelAndDescription
+            label="Choose Variant Data"
+            desc="Select the Variant Call Files"
+          ></LabelAndDescription>
+          {/* <Select onValueChange={(value) => newhandleVCFSelection(value)}>
+            <SelectTrigger className="w-[400px] h-[80px] text-left">
+              <SelectValue placeholder={"Select the VCF Files"}></SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Select Variant Call Data</SelectLabel>
+              </SelectGroup>
+              {vcfData.map((item, idx) => (
+                <SelectItem
+                  key={idx}
+                  value={item.id ?? ""}
+                  onChange={(e) => handleVCFSelection(item.id ?? "")}
+                >
+                  <div className="flex flex-col">
+                    <p className="text-balance font-semibold text-[14px]">
+                      {item.id}
+                    </p>
+                    <p className="text-balance text-gray-500 font-normal text-[10px]">
+                      {`Collection Date: ${item.sample_date}`}
+                    </p>
+                    <p className="text-balance text-[10px] text-gray-500">{`Upload Date: ${item.uploadAt}`}</p>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select> */}
+          <Select onValueChange={(value) => newReadVCFData(value)}>
+            <SelectTrigger className="w-[500px] h-[50px] text-left">
+              <SelectValue placeholder={"Select the VCF Files"}></SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Select Variant Call Data</SelectLabel>
+              </SelectGroup>
+              {vcfData.map((item, idx) => (
+                <SelectItem key={idx} value={item.id ?? ""}>
+                  <div className="flex flex-row gap-2 p-4 rounded-lg">
+                    <p className="font-semibold text-lg text-gray-900">
+                      {item.id}
+                    </p>
+                    {/* <p className="text-sm text-gray-600">
+                      <span className="font-medium text-gray-800">
+                        Collection Date:
+                      </span>{" "}
+                      {item.sample_date}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-medium text-gray-800">
+                        Upload Date:
+                      </span>{" "}
+                      {item.uploadAt}
+                    </p> */}
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-        <Select onValueChange={newhandleVCFSelection}>
-          <SelectTrigger className="w-full h-[100px] text-left">
-            <SelectValue placeholder={"Select the VCF Files"}></SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Select Variant Call Data</SelectLabel>
-            </SelectGroup>
-            {vcfData.map((item, idx) => (
-              <SelectItem
-                key={idx}
-                value={item.id ?? ""}
-                onChange={(e) => handleVCFSelection(item.id ?? "")}
-              >
-                <div className="flex flex-col p-3 ">
-                  <p className="text-balance font-semibold text-[16px]">
-                    {item.id}
-                  </p>
-                  <p className="text-balance text-gray-500 font-semibold">
-                    {`Collection Date: ${item.sample_date}`}
-                  </p>
-                  <p className="text-balance text-gray-500">{`Upload Date: ${item.uploadAt}`}</p>
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {/* 
-        <select
-          onChange={(e) => handleVCFSelection(e.target.value)}
-          className="h-[70px] p-3 border rounded-md"
-        >
-          {vcfData.map((item, index) => (
-            <option key={index} value={`${item.id}`}>
-              {item.id}
-            </option>
-          ))}
-        </select> */}
+        {loadingVarList ? (
+          <p>fetching data variant...</p>
+        ) : (
+          <div>{varList.length}</div>
+        )}
+
+        {loading ? (
+          <p>Loading ...</p>
+        ) : (
+          <DataTable columns={columns} data={variantItem}></DataTable>
+        )}
       </div>
-      {/* <h1 className="text-xl font-bold mb-4">VCF File Uploader</h1>
-      <input
-        type="file"
-        accept=".vcf"
-        onChange={handleFileUpload}
-        className="mb-4"
-      /> */}
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        columns.length > 0 && (
-          <div className="w-full h-screen">
-            {/* Filter and Sort Controls */}
-            <div className="mb-4 flex items-center">
-              <label htmlFor="clinicalSignFilter" className="mr-2">
-                Filter by Clinical Sign:
-              </label>
-              <input
-                id="clinicalSignFilter"
-                type="text"
-                value={filterClinicalSign}
-                onChange={(e) => setFilterClinicalSign(e.target.value)}
-                className="border rounded p-1 mr-4"
-              />
-              <label htmlFor="phenotypesFilter" className="mr-2">
-                Filter by Phenotypes:
-              </label>
-              <input
-                id="phenotypesFilter"
-                type="text"
-                value={filterPhenotypes}
-                onChange={(e) => setFilterPhenotypes(e.target.value)}
-                className="border rounded p-1 mr-4"
-              />
-              <label htmlFor="zygosityFilter" className="mr-2">
-                Filter by Zygosity:
-              </label>
-              <select
-                id="zygosityFilter"
-                value={filterZygosity}
-                onChange={(e) => setFilterZygosity(e.target.value)}
-                className="border rounded p-1 mr-4"
-              >
-                <option value="">All</option>
-                <option value="Heterozygous">Heterozygous</option>
-                <option value="Homozygous">Homozygous</option>
-              </select>
-              <button
-                onClick={() => setSortGlobalAlleleAsc((prev) => !prev)}
-                className="border rounded p-1"
-              >
-                Sort Global Allele {sortGlobalAlleleAsc ? "▲" : "▼"}
-              </button>
-            </div>
-
-            <div className="overflow-x-auto">
-              <Table
-                className="table-auto border-collapse w-full"
-                style={{ tableLayout: "fixed" }}
-              >
-                <TableHeader className="sticky top-0 bg-gray-100 z-10">
-                  <TableRow className="text-xs text-black">
-                    {columns.map((col, index) => (
-                      <TableHead
-                        key={index}
-                        className="border py-2 text-left text-black font-semibold"
-                        style={{ width: col.width }}
-                      >
-                        {col.header}
-                      </TableHead>
-                    ))}
-                  </TableRow>
-                </TableHeader>
-              </Table>
-            </div>
-            <div
-              className="overflow-y-auto"
-              style={{ maxHeight: "calc(100vh - 8rem)" }} // Adjusted for filter controls
-            >
-              <Table
-                className="table-auto border-collapse w-full"
-                style={{ tableLayout: "fixed" }}
-              >
-                <TableBody>
-                  {variantItem
-                    .filter((item) => {
-                      // Filter by Clinical Sign
-                      if (filterClinicalSign) {
-                        if (!item.clinicalSign) return false;
-                        if (
-                          !item.clinicalSign
-                            .toLowerCase()
-                            .includes(filterClinicalSign.toLowerCase())
-                        )
-                          return false;
-                      }
-                      // **Filter by Phenotypes**
-                      if (filterPhenotypes) {
-                        if (!item.phenotypes) return false;
-                        if (
-                          !item.phenotypes
-                            .toLowerCase()
-                            .includes(filterPhenotypes.toLowerCase())
-                        )
-                          return false;
-                      }
-                      // Filter by Zygosity
-                      if (filterZygosity && item.zygosity !== filterZygosity) {
-                        return false;
-                      }
-                      return true;
-                    })
-                    .sort((a, b) => {
-                      const gaA = a.gnomadg;
-                      const gaB = b.gnomadg;
-                      if (gaA == null && gaB == null) return 0;
-                      if (gaA == null) return 1;
-                      if (gaB == null) return -1;
-                      return sortGlobalAlleleAsc ? gaA - gaB : gaB - gaA;
-                    })
-                    .map((item, index) => (
-                      <TableRow
-                        key={index}
-                        className="text-wrap text-[10px] break-words"
-                      >
-                        {columns.map((col, colIndex) => (
-                          <TableCell
-                            key={colIndex}
-                            className="border px-4 py-2 text-wrap break-words"
-                            style={{ width: col.width }}
-                          >
-                            {renderCellContent(item, col.dataKey)}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </div>
-          </div>
-        )
-      )}
-
-      {/* Variant Interpretation Modal */}
-      <Dialog
-        open={isOpenDetailVariantDialog}
-        onOpenChange={() => setIsOpenDetailVariantDialog(false)}
-      >
-        {/* <div className="fixed inset-0 bg-black bg-opacity-0 pointer-events-none"></div> */}
-        <DialogContent className="max-w-7xl max-h-4xl ">
-          <DialogTitle>Variant Information</DialogTitle>
-          <DialogDescription>
-            Here is the detailed information about the variant.
-          </DialogDescription>
-          {/* Pass the hgvsNotation as a prop to the VariantInformationModal */}
-          <VariantInformationModal hgvsNotation={`${selectedVariant?.hgvs}`} />
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

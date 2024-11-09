@@ -9,9 +9,9 @@ import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
-import { createVcfdata } from "../graphql/mutations";
+import { createFamilyHistoryDisease } from "../graphql/mutations";
 const client = generateClient();
-export default function VcfdataCreateForm(props) {
+export default function FamilyHistoryDiseaseCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -24,41 +24,23 @@ export default function VcfdataCreateForm(props) {
   } = props;
   const initialValues = {
     id_patient: "",
-    sample_date: "",
-    uploadAt: "",
-    pathfile: "",
-    genome_reference: "",
-    number_variant: "",
+    hpo_code: "",
+    hpo_desc: "",
   };
   const [id_patient, setId_patient] = React.useState(initialValues.id_patient);
-  const [sample_date, setSample_date] = React.useState(
-    initialValues.sample_date
-  );
-  const [uploadAt, setUploadAt] = React.useState(initialValues.uploadAt);
-  const [pathfile, setPathfile] = React.useState(initialValues.pathfile);
-  const [genome_reference, setGenome_reference] = React.useState(
-    initialValues.genome_reference
-  );
-  const [number_variant, setNumber_variant] = React.useState(
-    initialValues.number_variant
-  );
+  const [hpo_code, setHpo_code] = React.useState(initialValues.hpo_code);
+  const [hpo_desc, setHpo_desc] = React.useState(initialValues.hpo_desc);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setId_patient(initialValues.id_patient);
-    setSample_date(initialValues.sample_date);
-    setUploadAt(initialValues.uploadAt);
-    setPathfile(initialValues.pathfile);
-    setGenome_reference(initialValues.genome_reference);
-    setNumber_variant(initialValues.number_variant);
+    setHpo_code(initialValues.hpo_code);
+    setHpo_desc(initialValues.hpo_desc);
     setErrors({});
   };
   const validations = {
     id_patient: [],
-    sample_date: [],
-    uploadAt: [],
-    pathfile: [],
-    genome_reference: [],
-    number_variant: [],
+    hpo_code: [],
+    hpo_desc: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -87,11 +69,8 @@ export default function VcfdataCreateForm(props) {
         event.preventDefault();
         let modelFields = {
           id_patient,
-          sample_date,
-          uploadAt,
-          pathfile,
-          genome_reference,
-          number_variant,
+          hpo_code,
+          hpo_desc,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -122,7 +101,7 @@ export default function VcfdataCreateForm(props) {
             }
           });
           await client.graphql({
-            query: createVcfdata.replaceAll("__typename", ""),
+            query: createFamilyHistoryDisease.replaceAll("__typename", ""),
             variables: {
               input: {
                 ...modelFields,
@@ -142,7 +121,7 @@ export default function VcfdataCreateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "VcfdataCreateForm")}
+      {...getOverrideProps(overrides, "FamilyHistoryDiseaseCreateForm")}
       {...rest}
     >
       <TextField
@@ -155,11 +134,8 @@ export default function VcfdataCreateForm(props) {
           if (onChange) {
             const modelFields = {
               id_patient: value,
-              sample_date,
-              uploadAt,
-              pathfile,
-              genome_reference,
-              number_variant,
+              hpo_code,
+              hpo_desc,
             };
             const result = onChange(modelFields);
             value = result?.id_patient ?? value;
@@ -175,153 +151,56 @@ export default function VcfdataCreateForm(props) {
         {...getOverrideProps(overrides, "id_patient")}
       ></TextField>
       <TextField
-        label="Sample date"
+        label="Hpo code"
         isRequired={false}
         isReadOnly={false}
-        value={sample_date}
+        value={hpo_code}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               id_patient,
-              sample_date: value,
-              uploadAt,
-              pathfile,
-              genome_reference,
-              number_variant,
+              hpo_code: value,
+              hpo_desc,
             };
             const result = onChange(modelFields);
-            value = result?.sample_date ?? value;
+            value = result?.hpo_code ?? value;
           }
-          if (errors.sample_date?.hasError) {
-            runValidationTasks("sample_date", value);
+          if (errors.hpo_code?.hasError) {
+            runValidationTasks("hpo_code", value);
           }
-          setSample_date(value);
+          setHpo_code(value);
         }}
-        onBlur={() => runValidationTasks("sample_date", sample_date)}
-        errorMessage={errors.sample_date?.errorMessage}
-        hasError={errors.sample_date?.hasError}
-        {...getOverrideProps(overrides, "sample_date")}
+        onBlur={() => runValidationTasks("hpo_code", hpo_code)}
+        errorMessage={errors.hpo_code?.errorMessage}
+        hasError={errors.hpo_code?.hasError}
+        {...getOverrideProps(overrides, "hpo_code")}
       ></TextField>
       <TextField
-        label="Upload at"
+        label="Hpo desc"
         isRequired={false}
         isReadOnly={false}
-        value={uploadAt}
+        value={hpo_desc}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               id_patient,
-              sample_date,
-              uploadAt: value,
-              pathfile,
-              genome_reference,
-              number_variant,
+              hpo_code,
+              hpo_desc: value,
             };
             const result = onChange(modelFields);
-            value = result?.uploadAt ?? value;
+            value = result?.hpo_desc ?? value;
           }
-          if (errors.uploadAt?.hasError) {
-            runValidationTasks("uploadAt", value);
+          if (errors.hpo_desc?.hasError) {
+            runValidationTasks("hpo_desc", value);
           }
-          setUploadAt(value);
+          setHpo_desc(value);
         }}
-        onBlur={() => runValidationTasks("uploadAt", uploadAt)}
-        errorMessage={errors.uploadAt?.errorMessage}
-        hasError={errors.uploadAt?.hasError}
-        {...getOverrideProps(overrides, "uploadAt")}
-      ></TextField>
-      <TextField
-        label="Pathfile"
-        isRequired={false}
-        isReadOnly={false}
-        value={pathfile}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              id_patient,
-              sample_date,
-              uploadAt,
-              pathfile: value,
-              genome_reference,
-              number_variant,
-            };
-            const result = onChange(modelFields);
-            value = result?.pathfile ?? value;
-          }
-          if (errors.pathfile?.hasError) {
-            runValidationTasks("pathfile", value);
-          }
-          setPathfile(value);
-        }}
-        onBlur={() => runValidationTasks("pathfile", pathfile)}
-        errorMessage={errors.pathfile?.errorMessage}
-        hasError={errors.pathfile?.hasError}
-        {...getOverrideProps(overrides, "pathfile")}
-      ></TextField>
-      <TextField
-        label="Genome reference"
-        isRequired={false}
-        isReadOnly={false}
-        value={genome_reference}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              id_patient,
-              sample_date,
-              uploadAt,
-              pathfile,
-              genome_reference: value,
-              number_variant,
-            };
-            const result = onChange(modelFields);
-            value = result?.genome_reference ?? value;
-          }
-          if (errors.genome_reference?.hasError) {
-            runValidationTasks("genome_reference", value);
-          }
-          setGenome_reference(value);
-        }}
-        onBlur={() => runValidationTasks("genome_reference", genome_reference)}
-        errorMessage={errors.genome_reference?.errorMessage}
-        hasError={errors.genome_reference?.hasError}
-        {...getOverrideProps(overrides, "genome_reference")}
-      ></TextField>
-      <TextField
-        label="Number variant"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={number_variant}
-        onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              id_patient,
-              sample_date,
-              uploadAt,
-              pathfile,
-              genome_reference,
-              number_variant: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.number_variant ?? value;
-          }
-          if (errors.number_variant?.hasError) {
-            runValidationTasks("number_variant", value);
-          }
-          setNumber_variant(value);
-        }}
-        onBlur={() => runValidationTasks("number_variant", number_variant)}
-        errorMessage={errors.number_variant?.errorMessage}
-        hasError={errors.number_variant?.hasError}
-        {...getOverrideProps(overrides, "number_variant")}
+        onBlur={() => runValidationTasks("hpo_desc", hpo_desc)}
+        errorMessage={errors.hpo_desc?.errorMessage}
+        hasError={errors.hpo_desc?.hasError}
+        {...getOverrideProps(overrides, "hpo_desc")}
       ></TextField>
       <Flex
         justifyContent="space-between"

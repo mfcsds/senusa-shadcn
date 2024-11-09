@@ -56,23 +56,35 @@ export function generateInstutionID() {
 }
 export function generateVariantInterpretation() {
   const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  let institutionID = "VI-";
+  let variantInterID = "VI-";
 
   for (let i = 0; i < 12; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length);
-    institutionID += characters[randomIndex];
+    variantInterID += characters[randomIndex];
   }
-  return institutionID;
+  return variantInterID;
 }
+
+export function generateFamilyHPOID() {
+  const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let fdhpo = "FD-";
+
+  for (let i = 0; i < 12; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    fdhpo += characters[randomIndex];
+  }
+  return fdhpo;
+}
+
 export function generateVariantSampleID() {
   const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstu";
-  let institutionID = "vs-";
+  let variantSampleID = "vs-";
 
   for (let i = 0; i < 12; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length);
-    institutionID += characters[randomIndex];
+    variantSampleID += characters[randomIndex];
   }
-  return institutionID;
+  return variantSampleID;
 }
 export function generateRecommendationID() {
   const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstu";
@@ -126,6 +138,22 @@ export function generateHGVS(variant: Variant): string {
   // "chromosome:position reference_allele>alternate_allele"
 
   const { chrom, pos, ref, alt } = variant;
+
+  // HGVS nomenclature
+  const hgvs = `${chrom}:g.${pos}${ref}>${alt}`;
+
+  return hgvs;
+}
+
+export function generateHGVS2(
+  chrom: string,
+  pos: string,
+  ref: string,
+  alt: string
+): string {
+  // Example HGVS format: "chr1:g.123456A>T"
+  // HGVS nomenclature usually follows this format:
+  // "chromosome:position reference_allele>alternate_allele"
 
   // HGVS nomenclature
   const hgvs = `${chrom}:g.${pos}${ref}>${alt}`;

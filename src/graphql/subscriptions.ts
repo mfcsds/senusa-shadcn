@@ -8,6 +8,57 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateFamilyHistoryDisease = /* GraphQL */ `subscription OnCreateFamilyHistoryDisease(
+  $filter: ModelSubscriptionFamilyHistoryDiseaseFilterInput
+) {
+  onCreateFamilyHistoryDisease(filter: $filter) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateFamilyHistoryDiseaseSubscriptionVariables,
+  APITypes.OnCreateFamilyHistoryDiseaseSubscription
+>;
+export const onUpdateFamilyHistoryDisease = /* GraphQL */ `subscription OnUpdateFamilyHistoryDisease(
+  $filter: ModelSubscriptionFamilyHistoryDiseaseFilterInput
+) {
+  onUpdateFamilyHistoryDisease(filter: $filter) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateFamilyHistoryDiseaseSubscriptionVariables,
+  APITypes.OnUpdateFamilyHistoryDiseaseSubscription
+>;
+export const onDeleteFamilyHistoryDisease = /* GraphQL */ `subscription OnDeleteFamilyHistoryDisease(
+  $filter: ModelSubscriptionFamilyHistoryDiseaseFilterInput
+) {
+  onDeleteFamilyHistoryDisease(filter: $filter) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteFamilyHistoryDiseaseSubscriptionVariables,
+  APITypes.OnDeleteFamilyHistoryDiseaseSubscription
+>;
 export const onCreateVariantInterpretation = /* GraphQL */ `subscription OnCreateVariantInterpretation(
   $filter: ModelSubscriptionVariantInterpretationFilterInput
 ) {
@@ -199,6 +250,7 @@ export const onCreateVcfdata = /* GraphQL */ `subscription OnCreateVcfdata($filt
     uploadAt
     pathfile
     genome_reference
+    number_variant
     createdAt
     updatedAt
     __typename
@@ -216,6 +268,7 @@ export const onUpdateVcfdata = /* GraphQL */ `subscription OnUpdateVcfdata($filt
     uploadAt
     pathfile
     genome_reference
+    number_variant
     createdAt
     updatedAt
     __typename
@@ -233,6 +286,7 @@ export const onDeleteVcfdata = /* GraphQL */ `subscription OnDeleteVcfdata($filt
     uploadAt
     pathfile
     genome_reference
+    number_variant
     createdAt
     updatedAt
     __typename
@@ -633,11 +687,8 @@ export const onCreatePatient = /* GraphQL */ `subscription OnCreatePatient($filt
     sex
     phone_number
     dob
-    institutionID
-    PatientDokuments {
-      nextToken
-      __typename
-    }
+    id_reference
+    id_institution
     createdAt
     updatedAt
     __typename
@@ -654,11 +705,8 @@ export const onUpdatePatient = /* GraphQL */ `subscription OnUpdatePatient($filt
     sex
     phone_number
     dob
-    institutionID
-    PatientDokuments {
-      nextToken
-      __typename
-    }
+    id_reference
+    id_institution
     createdAt
     updatedAt
     __typename
@@ -675,11 +723,8 @@ export const onDeletePatient = /* GraphQL */ `subscription OnDeletePatient($filt
     sex
     phone_number
     dob
-    institutionID
-    PatientDokuments {
-      nextToken
-      __typename
-    }
+    id_reference
+    id_institution
     createdAt
     updatedAt
     __typename

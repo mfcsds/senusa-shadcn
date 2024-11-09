@@ -8,6 +8,48 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getFamilyHistoryDisease = /* GraphQL */ `query GetFamilyHistoryDisease($id: ID!) {
+  getFamilyHistoryDisease(id: $id) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetFamilyHistoryDiseaseQueryVariables,
+  APITypes.GetFamilyHistoryDiseaseQuery
+>;
+export const listFamilyHistoryDiseases = /* GraphQL */ `query ListFamilyHistoryDiseases(
+  $filter: ModelFamilyHistoryDiseaseFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listFamilyHistoryDiseases(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      id_patient
+      hpo_code
+      hpo_desc
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListFamilyHistoryDiseasesQueryVariables,
+  APITypes.ListFamilyHistoryDiseasesQuery
+>;
 export const getVariantInterpretation = /* GraphQL */ `query GetVariantInterpretation($id: ID!) {
   getVariantInterpretation(id: $id) {
     id
@@ -150,6 +192,7 @@ export const getVcfdata = /* GraphQL */ `query GetVcfdata($id: ID!) {
     uploadAt
     pathfile
     genome_reference
+    number_variant
     createdAt
     updatedAt
     __typename
@@ -172,6 +215,7 @@ export const listVcfdata = /* GraphQL */ `query ListVcfdata(
       uploadAt
       pathfile
       genome_reference
+      number_variant
       createdAt
       updatedAt
       __typename
@@ -483,11 +527,8 @@ export const getPatient = /* GraphQL */ `query GetPatient($id: ID!) {
     sex
     phone_number
     dob
-    institutionID
-    PatientDokuments {
-      nextToken
-      __typename
-    }
+    id_reference
+    id_institution
     createdAt
     updatedAt
     __typename
@@ -509,7 +550,8 @@ export const listPatients = /* GraphQL */ `query ListPatients(
       sex
       phone_number
       dob
-      institutionID
+      id_reference
+      id_institution
       createdAt
       updatedAt
       __typename
