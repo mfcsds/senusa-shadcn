@@ -33,6 +33,7 @@ export declare type VariantCreateFormInputValues = {
     id_var?: string;
     id_patient?: string;
     id_vcf?: string;
+    acmg?: string;
 };
 export declare type VariantCreateFormValidationValues = {
     chrom?: ValidationFunction<string>;
@@ -46,6 +47,7 @@ export declare type VariantCreateFormValidationValues = {
     id_var?: ValidationFunction<string>;
     id_patient?: ValidationFunction<string>;
     id_vcf?: ValidationFunction<string>;
+    acmg?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type VariantCreateFormOverridesProps = {
@@ -61,6 +63,7 @@ export declare type VariantCreateFormOverridesProps = {
     id_var?: PrimitiveOverrideProps<TextFieldProps>;
     id_patient?: PrimitiveOverrideProps<TextFieldProps>;
     id_vcf?: PrimitiveOverrideProps<TextFieldProps>;
+    acmg?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type VariantCreateFormProps = React.PropsWithChildren<{
     overrides?: VariantCreateFormOverridesProps | undefined | null;

@@ -260,7 +260,65 @@ export const fetchVariantDetails = async (
 
   return variant;
 };
+export const fetchVariantDetails4 = async (
+  variant: Variant
+): Promise<Variant> => {
+  const lambdaEndpoint =
+    "https://i189efe3m3.execute-api.us-east-1.amazonaws.com/dev/variantinfo";
 
+  const maxRetries = 10;
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await axios.post(lambdaEndpoint, {
+        variant: {
+          chrom: variant.chrom,
+          pos: variant.pos,
+          ref: variant.ref,
+          alt: variant.alt,
+        },
+      });
+
+      if (response.status === 200) {
+        const lambdaBody = JSON.parse(response.data.body);
+        return {
+          ...variant,
+          globalallele: lambdaBody.globalallele || null,
+          gnomade: lambdaBody.gnomade || null,
+          gnomadg: lambdaBody.gnomadg || null,
+          clinicalSign: lambdaBody.clinicalSign || null,
+          severeconsequence: lambdaBody.severeconsequence || null,
+          sift_score: lambdaBody.sift_score || null,
+          sift_prediction: lambdaBody.sift_prediction || null,
+          gene_symbol: lambdaBody.gene_symbol || null,
+          gene_id: lambdaBody.gene_id || null,
+          rsID: lambdaBody.rsID || null,
+          phenotypes: lambdaBody.phenotypes || null,
+          alldesc: lambdaBody.alldesc || "",
+        };
+      } else {
+        console.error(
+          `Attempt ${attempt}: Lambda function returned status ${response.status}.`
+        );
+      }
+    } catch (error) {
+      console.error(`Attempt ${attempt}: Error calling Lambda function:`);
+
+      if (attempt === maxRetries) {
+        console.error("Max retries reached. Unable to fetch variant details.");
+      } else {
+        const backoffTime = Math.pow(2, attempt) * 1000; // Exponential backoff
+        console.log(`Retrying in ${backoffTime / 1000} seconds...`);
+        await delay(backoffTime);
+      }
+    }
+  }
+
+  // Return original variant if all retries fail
+  return variant;
+};
 export const fetchVariantDetails2 = async (
   variant: Variant
 ): Promise<Variant> => {

@@ -12,7 +12,6 @@ import SelectVariant from "@/components/items/SelectVariant";
 import ResultAndInterpretation from "@/components/items/ResultAndInterpretation";
 import RecommendationAndConclusion from "@/components/items/RecommendationAndConclusion";
 import PreviewReport from "@/components/items/PreviewReport";
-import DemoTableVariant from "@/components/datatable/Demo";
 
 const EditVariantReport = () => {
   const searchParams = useSearchParams();
@@ -20,16 +19,16 @@ const EditVariantReport = () => {
   const patientID = searchParams.get("patientid");
 
   const tabs = [
-    {
-      tab: "Patient Information",
-      value: "Patient Information",
-      comp: (
-        <PatientInformation
-          id_report={reportID ?? ""}
-          patientid={patientID ?? ""}
-        ></PatientInformation>
-      ),
-    },
+    // {
+    //   tab: "Patient Information",
+    //   value: "Patient Information",
+    //   comp: (
+    //     <PatientInformation
+    //       id_report={reportID ?? ""}
+    //       patientid={patientID ?? ""}
+    //     ></PatientInformation>
+    //   ),
+    // },
     {
       tab: "Testing Information",
       value: "Testing Information",
@@ -80,18 +79,24 @@ const EditVariantReport = () => {
   ];
 
   return (
-    <div className="flex w-full">
+    <div className="flex">
       <Card>
         <CardHeader>
-          <CardTitle>{reportID}</CardTitle>
+          <CardTitle className="text-lg">{reportID}</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex">
-            <Tabs className="gap-x-2" defaultValue="Patient Information">
-              <TabsList>
+          <div className="flex flex-col gap-5">
+            <div className="border rounded-md">
+              <PatientInformation
+                id_report={reportID ?? ""}
+                patientid={patientID ?? ""}
+              ></PatientInformation>
+            </div>
+            <Tabs className="gap-x-1 " defaultValue="Patient Information">
+              <TabsList className="bg-white border h-[50px] border-b-1  border-t-1 border-l-0 border-r-0">
                 {tabs.map((item, index) => (
                   <TabsTrigger
-                    className="w-[250px]"
+                    className="w-[230px] h-full hover:border-b-4 hover:border-b-violet-600 data-[state=active]:border-b-4 data-[state=active]:border-violet-900 rounded-none"
                     key={index}
                     value={item.value}
                   >

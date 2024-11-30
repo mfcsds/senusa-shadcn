@@ -1,14 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
   Variant,
   VariantInterpretation,
   VariantRawData,
@@ -19,6 +11,7 @@ import {
   extractZygosity,
   fetchVariantDetails2,
   generateVariantSampleID,
+  fetchVariantDetails4,
 } from "@/utils/function";
 import { Button } from "../ui/button";
 import { PlusCircle, TableOfContents } from "lucide-react";
@@ -54,6 +47,9 @@ import {
 import { columns } from "../selectedvariant/column";
 import { DataTable } from "../selectedvariant/data-table";
 
+// import { columns } from "../rawvariant/column";
+// import { DataTable } from "../rawvariant/data-table";
+
 interface SelectVariantProops {
   patientid: string | null;
   id_report: string | null;
@@ -63,39 +59,12 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
   patientid,
   id_report,
 }) => {
-  const tempColumns = [
-    { header: "Gene", width: "75px", dataKey: "gene_symbol" },
-    { header: "Variant Detail", width: "120px", dataKey: "hgvs" },
-    { header: "Zygosity", width: "80px", dataKey: "zygosity" },
-
-    { header: "Gnomade", width: "65px", dataKey: "gnomade" },
-    { header: "Gnomadg", width: "65px", dataKey: "gnomadg" },
-    { header: "Clinical Sign", width: "140px", dataKey: "clinicalSign" },
-    {
-      header: "Most Severe Consequences",
-      width: "180px",
-      dataKey: "severeconsequence",
-    },
-    { header: "rsID", width: "100px", dataKey: "rsID" },
-    { header: "Sift Score", width: "100px", dataKey: "sift_score" },
-    { header: "Sift Prediction", width: "100px", dataKey: "sift_prediction" },
-    { header: "Phenotypes", width: "200px", dataKey: "phenotypes" },
-    { header: "Action", width: "80px", dataKey: "action" },
-  ];
-
   const [vcfData, setVCFData] = useState<VcfData[]>([]);
 
-  const [columns1, setColumns1] = useState(tempColumns);
   const [error, setError] = useState<string | null>(null);
   const [variantItem, setVariantList] = useState<Variant[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // State variables for filtering and sorting
-  const [filterClinicalSign, setFilterClinicalSign] = useState("");
-  const [filterZygosity, setFilterZygosity] = useState("");
-  const [sortGlobalAlleleAsc, setSortGlobalAlleleAsc] = useState(false);
-  // **Added state variable for Phenotypes filter**
-  const [filterPhenotypes, setFilterPhenotypes] = useState("");
   const client = generateClient();
 
   const [selectedVariant, setSelectedVariant] = useState<Variant>();
@@ -131,12 +100,10 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
   };
 
   const newReadVCFData = async (vcfID: string) => {
-    setVarList([]); // Clear previous data
-    setLoadingVarList(true);
-
+    setVariantList([]); // Clear previous data
+    setLoading(true);
     let allVariants: VariantRawData[] = []; // Array to hold all fetched items
     let nextToken: string | null = null; // Token to fetch the next page
-
     try {
       do {
         const result = (await client.graphql({
@@ -151,22 +118,67 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
             listVariants: { items: VariantRawData[]; nextToken: string | null };
           };
         };
-
         // Concatenate the new items to the allVariants array
         allVariants = allVariants.concat(result.data.listVariants.items);
         nextToken = result.data.listVariants.nextToken; // Update nextToken for the next iteration
       } while (nextToken); // Continue until there's no more data to fetch
 
       // Set the full list of fetched variants
-      setVarList(allVariants);
+      const parsedVariants = await allVariants.map((item) => {
+        const variantTemporary: Variant = {
+          id: item.id ?? "",
+          id_patient: item.id_patient ?? "",
+          id_vcf: item.id_vcf ?? "",
+          id_report: id_report ?? "",
+          chrom: item.chrom ?? "",
+          pos: item.pos ?? "",
+          id_var: item.id_var ?? "",
+          ref: item.ref ?? "",
+          alt: item.alt ?? "",
+          qual: item.qual ?? "",
+          filter: item.filter ?? "",
+          info: item.filter ?? "",
+          hgvs: item.hgvs ?? "",
+          variantReportID: id_report ?? "",
+          zygosity: extractZygosity(item.info ?? ""),
+          globalallele: null, // Set to null to indicate loading state
+          functional_impact: "",
+          acmg: item.acmg ?? "VUS",
+          clinicalSign: null, // Set to null to indicate loading state
+          gene_id: null,
+          gene_symbol: null,
+          severeconsequence: null,
+          sift_score: null,
+          sift_prediction: null,
+          phenotypes: null,
+          rsID: null,
+          gnomade: null,
+          gnomadg: null,
+          alldesc: null,
+        };
+        return variantTemporary;
+      });
+      setVariantList(parsedVariants);
+      parsedVariants.forEach((variant, index) => {
+        fetchVariantDetails4(variant)
+          .then((details) => {
+            setVariantList((prevVariants) => {
+              const newVariants = [...prevVariants];
+              newVariants[index] = { ...newVariants[index], ...details };
+              return newVariants;
+            });
+          })
+          .then((variant) => {
+            console.log("Variant: Sukses");
+          });
+      });
     } catch (error) {
       console.error("Error fetching variants:", error);
     } finally {
-      setLoadingVarList(false);
+      setLoading(false);
     }
   };
 
-  const [varList, setVarList] = useState<VariantRawData[]>([]);
   const [loadingVarList, setLoadingVarList] = useState(false);
 
   const handleVCFSelection = (vcfId: string) => {
@@ -244,7 +256,7 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
                 zygosity: extractZygosity(fields[7]),
                 globalallele: null, // Set to null to indicate loading state
                 functional_impact: "",
-                acmg: "",
+                acmg: "VUS",
                 clinicalSign: null, // Set to null to indicate loading state
                 gene_id: null,
                 gene_symbol: null,
@@ -459,40 +471,14 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-col w-full border rounded-md py-4 px-5 gap-4">
-        <div className="flex flex-row items-center gap-2">
-          <LabelAndDescription
-            label="Choose Variant Data"
-            desc="Select the Variant Call Files"
-          ></LabelAndDescription>
-          {/* <Select onValueChange={(value) => newhandleVCFSelection(value)}>
-            <SelectTrigger className="w-[400px] h-[80px] text-left">
-              <SelectValue placeholder={"Select the VCF Files"}></SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Select Variant Call Data</SelectLabel>
-              </SelectGroup>
-              {vcfData.map((item, idx) => (
-                <SelectItem
-                  key={idx}
-                  value={item.id ?? ""}
-                  onChange={(e) => handleVCFSelection(item.id ?? "")}
-                >
-                  <div className="flex flex-col">
-                    <p className="text-balance font-semibold text-[14px]">
-                      {item.id}
-                    </p>
-                    <p className="text-balance text-gray-500 font-normal text-[10px]">
-                      {`Collection Date: ${item.sample_date}`}
-                    </p>
-                    <p className="text-balance text-[10px] text-gray-500">{`Upload Date: ${item.uploadAt}`}</p>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select> */}
+    <div className="flex flex-col w-fit">
+      <div className="flex flex-col border rounded-md py-4 px-5 gap-4">
+        <div className="flex flex-row items-center gap-10">
+          <div className="flex flex-col">
+            <p className="text-xl">Choose Variant Data</p>
+            <p className="text-sm">Select the Variant Call Files</p>
+          </div>
+
           <Select onValueChange={(value) => newReadVCFData(value)}>
             <SelectTrigger className="w-[500px] h-[50px] text-left">
               <SelectValue placeholder={"Select the VCF Files"}></SelectValue>
@@ -526,14 +512,8 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
           </Select>
         </div>
 
-        {loadingVarList ? (
-          <p>fetching data variant...</p>
-        ) : (
-          <div>{varList.length}</div>
-        )}
-
         {loading ? (
-          <p>Loading ...</p>
+          <p>fetching data variant...</p>
         ) : (
           <DataTable columns={columns} data={variantItem}></DataTable>
         )}

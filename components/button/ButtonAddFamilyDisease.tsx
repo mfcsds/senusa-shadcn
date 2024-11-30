@@ -104,7 +104,7 @@ const ButtonAddFamilyDisease: React.FC<FamilyProops> = ({ patient_id }) => {
                 type={"text"}
                 onChange={(e) => setPhenotypeQuery(e.target.value)}
                 placeholder="Type family history disease"
-                className=" focus:outline-none focus:border-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-400 shadow-sm"
+                className="focus:border-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-400 shadow-sm"
               ></Input>
               <Button variant={"outline"}>
                 <small>

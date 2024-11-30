@@ -34,6 +34,7 @@ export default function VariantCreateForm(props) {
     id_var: "",
     id_patient: "",
     id_vcf: "",
+    acmg: "",
   };
   const [chrom, setChrom] = React.useState(initialValues.chrom);
   const [pos, setPos] = React.useState(initialValues.pos);
@@ -46,6 +47,7 @@ export default function VariantCreateForm(props) {
   const [id_var, setId_var] = React.useState(initialValues.id_var);
   const [id_patient, setId_patient] = React.useState(initialValues.id_patient);
   const [id_vcf, setId_vcf] = React.useState(initialValues.id_vcf);
+  const [acmg, setAcmg] = React.useState(initialValues.acmg);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setChrom(initialValues.chrom);
@@ -59,6 +61,7 @@ export default function VariantCreateForm(props) {
     setId_var(initialValues.id_var);
     setId_patient(initialValues.id_patient);
     setId_vcf(initialValues.id_vcf);
+    setAcmg(initialValues.acmg);
     setErrors({});
   };
   const validations = {
@@ -73,6 +76,7 @@ export default function VariantCreateForm(props) {
     id_var: [],
     id_patient: [],
     id_vcf: [],
+    acmg: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -111,6 +115,7 @@ export default function VariantCreateForm(props) {
           id_var,
           id_patient,
           id_vcf,
+          acmg,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -184,6 +189,7 @@ export default function VariantCreateForm(props) {
               id_var,
               id_patient,
               id_vcf,
+              acmg,
             };
             const result = onChange(modelFields);
             value = result?.chrom ?? value;
@@ -218,6 +224,7 @@ export default function VariantCreateForm(props) {
               id_var,
               id_patient,
               id_vcf,
+              acmg,
             };
             const result = onChange(modelFields);
             value = result?.pos ?? value;
@@ -252,6 +259,7 @@ export default function VariantCreateForm(props) {
               id_var,
               id_patient,
               id_vcf,
+              acmg,
             };
             const result = onChange(modelFields);
             value = result?.ref ?? value;
@@ -286,6 +294,7 @@ export default function VariantCreateForm(props) {
               id_var,
               id_patient,
               id_vcf,
+              acmg,
             };
             const result = onChange(modelFields);
             value = result?.alt ?? value;
@@ -320,6 +329,7 @@ export default function VariantCreateForm(props) {
               id_var,
               id_patient,
               id_vcf,
+              acmg,
             };
             const result = onChange(modelFields);
             value = result?.qual ?? value;
@@ -354,6 +364,7 @@ export default function VariantCreateForm(props) {
               id_var,
               id_patient,
               id_vcf,
+              acmg,
             };
             const result = onChange(modelFields);
             value = result?.filter ?? value;
@@ -388,6 +399,7 @@ export default function VariantCreateForm(props) {
               id_var,
               id_patient,
               id_vcf,
+              acmg,
             };
             const result = onChange(modelFields);
             value = result?.info ?? value;
@@ -422,6 +434,7 @@ export default function VariantCreateForm(props) {
               id_var,
               id_patient,
               id_vcf,
+              acmg,
             };
             const result = onChange(modelFields);
             value = result?.hgvs ?? value;
@@ -456,6 +469,7 @@ export default function VariantCreateForm(props) {
               id_var: value,
               id_patient,
               id_vcf,
+              acmg,
             };
             const result = onChange(modelFields);
             value = result?.id_var ?? value;
@@ -490,6 +504,7 @@ export default function VariantCreateForm(props) {
               id_var,
               id_patient: value,
               id_vcf,
+              acmg,
             };
             const result = onChange(modelFields);
             value = result?.id_patient ?? value;
@@ -524,6 +539,7 @@ export default function VariantCreateForm(props) {
               id_var,
               id_patient,
               id_vcf: value,
+              acmg,
             };
             const result = onChange(modelFields);
             value = result?.id_vcf ?? value;
@@ -537,6 +553,41 @@ export default function VariantCreateForm(props) {
         errorMessage={errors.id_vcf?.errorMessage}
         hasError={errors.id_vcf?.hasError}
         {...getOverrideProps(overrides, "id_vcf")}
+      ></TextField>
+      <TextField
+        label="Acmg"
+        isRequired={false}
+        isReadOnly={false}
+        value={acmg}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              chrom,
+              pos,
+              ref,
+              alt,
+              qual,
+              filter,
+              info,
+              hgvs,
+              id_var,
+              id_patient,
+              id_vcf,
+              acmg: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.acmg ?? value;
+          }
+          if (errors.acmg?.hasError) {
+            runValidationTasks("acmg", value);
+          }
+          setAcmg(value);
+        }}
+        onBlur={() => runValidationTasks("acmg", acmg)}
+        errorMessage={errors.acmg?.errorMessage}
+        hasError={errors.acmg?.hasError}
+        {...getOverrideProps(overrides, "acmg")}
       ></TextField>
       <Flex
         justifyContent="space-between"

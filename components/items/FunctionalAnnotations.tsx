@@ -9,7 +9,7 @@ import {
   TableBody,
 } from "@/components/ui/table";
 
-interface VariantComputationalPredictionProps {
+interface VariantFunctionalAnnotationsProops {
   data?: TranscriptConsequence[];
 }
 
@@ -19,34 +19,35 @@ interface FeatureGroup {
   color: string; // Tailwind CSS class for background color
 }
 
-const VariantComputationalPrediction: React.FC<
-  VariantComputationalPredictionProps
-> = ({ data }) => {
+const FunctionalAnnotations: React.FC<VariantFunctionalAnnotationsProops> = ({
+  data,
+}) => {
   if (!data || data.length === 0) {
     return <div>No computational predictions available.</div>;
   }
 
   const groupedFeatures: FeatureGroup[] = [
     {
-      groupName: "Gene and Transcript Information",
+      groupName: "Variant Impact and Functional Significance",
       features: [
-        { key: "transcript_id", label: "Transcript ID" },
-        { key: "gene_symbol", label: "Gene Symbol" },
-        { key: "gene_id", label: "Gene ID" },
-        { key: "biotype", label: "Biotype" },
-        { key: "canonical", label: "Canonical" },
-        { key: "appris", label: "APPRIS" },
-        { key: "tsl", label: "TSL" },
+        { key: "cadd_phred", label: "CADD Phred" },
+        { key: "cadd_raw", label: "CADD Raw" },
+        { key: "sift_prediction", label: "SIFT Prediction" },
+        { key: "sift_score", label: "SIFT Score" },
+        { key: "polyphen_prediction", label: "PolyPhen Prediction" },
+        { key: "polyphen_score", label: "PolyPhen Score" },
+        { key: "conservation", label: "Conservation" },
       ],
-      color: "bg-blue-50",
+      color: "bg-yellow-50",
     },
     {
-      groupName: "Consequence Terms",
+      groupName: "Location Information",
       features: [
-        { key: "consequence_terms", label: "Consequence Terms" },
-        { key: "impact", label: "Impact" },
+        { key: "location", label: "Location" },
+        { key: "distance", label: "Distance" },
+        { key: "strand", label: "Strand" },
       ],
-      color: "bg-green-50",
+      color: "bg-red-50",
     },
   ];
 
@@ -117,4 +118,4 @@ const VariantComputationalPrediction: React.FC<
   );
 };
 
-export default VariantComputationalPrediction;
+export default FunctionalAnnotations;

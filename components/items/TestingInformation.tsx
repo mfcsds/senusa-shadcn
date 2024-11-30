@@ -16,7 +16,7 @@ const TestingInformation: React.FC<TestingInformationProops> = ({
 }) => {
   return (
     <div className="flex">
-      <Card className="w-full border-none">
+      <Card className="w-fit border-none">
         <CardHeader>
           <CardTitle>Testing Detail</CardTitle>
         </CardHeader>

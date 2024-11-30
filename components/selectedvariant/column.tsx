@@ -12,7 +12,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Badge } from "../ui/badge";
-import { Variant } from "@/utils/object";
+import { AcmgCriteria, Variant } from "@/utils/object";
 import {
   Dialog,
   DialogContent,
@@ -36,6 +36,13 @@ import {
 } from "@/src/components/ui/sheet";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Checkbox } from "../ui/checkbox";
+import { Skeleton } from "../ui/skeleton";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
 
 // Define a custom filter function for a number range
 const numberRangeFilterFn = (
@@ -52,62 +59,108 @@ const numberRangeFilterFn = (
 };
 
 export const columns: ColumnDef<Variant>[] = [
+  { accessorKey: "gene_symbol", header: "Gene Symbol" },
   {
     accessorKey: "gene_id",
-    header: "Gene ID",
-  },
-  {
-    accessorKey: "gene_symbol",
     header: ({ column }) => {
-      return (
-        <Button
-          className="text-xs"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Gene Symbol
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
+      return <p className="text-lg font-sans ml-5">Variant Detail</p>;
     },
     cell: ({ row }) => {
       const item = row.original;
-      const getCodeColor = () => {
+      const getGeneColor = () => {
         switch (item.gene_symbol) {
           case "BRCA1":
-            return "bg-red-500 text-white";
           case "BRCA2":
-            return "bg-red-500 text-white";
+          case "TP53":
+          case "PTEN":
+          case "CDH1":
+          case "STK11":
+          case "CHEK2":
+          case "PALB2":
+          case "ATM":
+          case "MLH1":
+          case "MSH2":
+          case "MSH6":
+          case "PMS2":
+          case "RAD51C":
+          case "RAD51D":
+          case "BARD1":
+            return "border-red-600 ";
+          default:
+            return "border-gray-300"; // Default color if value doesn't match
         }
       };
+      const getTextGeneColor = () => {
+        switch (item.gene_symbol) {
+          case "BRCA1":
+          case "BRCA2":
+          case "TP53":
+          case "PTEN":
+          case "CDH1":
+          case "STK11":
+          case "CHEK2":
+          case "PALB2":
+          case "ATM":
+          case "MLH1":
+          case "MSH2":
+          case "MSH6":
+          case "PMS2":
+          case "RAD51C":
+          case "RAD51D":
+          case "BARD1":
+            return "text-red-600 font-semibold ";
+          default:
+            return "text-gray-600"; // Default color if value doesn't match
+        }
+      };
+
       return (
-        <Badge variant={"secondary"} className={`${getCodeColor()}`}>
-          {item.gene_symbol}
-        </Badge>
+        <div className="flex flex-row gap-10 ml-5 items-center">
+          <div
+            className={`border-l-4 ${getGeneColor()} w-[200px] items-start flex flex-col justify-start pl-5`}
+          >
+            <div className=" px-2 rounded-md border-gray-500 border-2">
+              {item.gene_symbol ? (
+                <p className={`text-lg font-medium ${getTextGeneColor()}`}>
+                  {item.gene_symbol}
+                </p>
+              ) : (
+                <Skeleton
+                  aria-label="..."
+                  className="h-6 w-[100px]  bg-gray-300"
+                />
+              )}
+            </div>
+            {item.gene_id ? (
+              <p className="text-lg font-medium text-gray-400 ">
+                {item.gene_id}
+              </p>
+            ) : (
+              <Skeleton
+                vocab="Loading"
+                className="h-6 w-[150px] pl-2 mt-2 bg-gray-300"
+              />
+            )}
+          </div>
+          <div className="flex flex-col">
+            <p className="text-lg">{item.hgvs}</p>
+            {item.rsID ? (
+              <p className="text-lg font-sans text-gray-500 ">{`RSID: ${item.rsID?.toUpperCase()}`}</p>
+            ) : (
+              <Skeleton vocab="Loading" className="h-6 w-[100px] bg-gray-300" />
+            )}
+          </div>
+        </div>
       );
     },
   },
-  {
-    accessorKey: "hgvs",
-    header: ({ column }) => {
-      return (
-        <Button
-          className="text-xs hover:bg-black hover:text-white"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          HGVS Notation
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
+
   {
     accessorKey: "zygosity",
     header: ({ column }) => {
       return (
         <Button
-          className="text-xs hover:bg-black hover:text-white"
+          className="text-lg hover:bg-transparent"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -116,7 +169,11 @@ export const columns: ColumnDef<Variant>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.zygosity}</p>;
+    },
   },
+
   {
     accessorKey: "functional_impact",
     header: ({ column }) => {
@@ -137,7 +194,7 @@ export const columns: ColumnDef<Variant>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-xs hover:bg-black hover:text-white"
+          className="text-lg hover:bg-transparent hover:text-black"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -146,454 +203,96 @@ export const columns: ColumnDef<Variant>[] = [
         </Button>
       );
     },
+
     cell: ({ row }) => {
       const item = row.original;
-      item.acmg = "Likely Benign";
+
+      // // Function to determine ACMG classification based on API response
+      // const classifyVariant = (acmg: AcmgCriteria) => {
+      //   if (acmg.PVS1 || acmg.PS1 || acmg.PS4) {
+      //     // Strong evidence of pathogenicity
+      //     return "Pathogenic";
+      //   }
+      //   if (
+      //     acmg.PS3 ||
+      //     acmg.PM1 ||
+      //     acmg.PM2 ||
+      //     acmg.PM5 ||
+      //     acmg.PP1 ||
+      //     acmg.PP2
+      //   ) {
+      //     // Moderate evidence of pathogenicity
+      //     return "Likely Pathogenic";
+      //   }
+      //   if (acmg.BA1) {
+      //     // Strong evidence of benign
+      //     return "Benign";
+      //   }
+      //   if (acmg.BS1 || acmg.BS2 || acmg.BP1 || acmg.BP2) {
+      //     // Moderate evidence of benign
+      //     return "Likely Benign";
+      //   }
+      //   // If no strong or moderate evidence exists
+      //   return "VUS";
+      // };
+
+      // // Fetch the ACMG criteria from the API
+      // const fetchAcmgCriteria = async () => {
+      //   try {
+      //     const response = await fetch(
+      //       "https://yyj4sdbsd6.execute-api.us-east-1.amazonaws.com/dev-acmg/classification",
+      //       {
+      //         method: "POST",
+      //         headers: {
+      //           "Content-Type": "application/json",
+      //         },
+      //         body: JSON.stringify({ variants: [item.hgvs] }), // Pass the HGVS notation
+      //       }
+      //     );
+
+      //     if (!response.ok) {
+      //       console.error(
+      //         `Error fetching ACMG criteria: ${response.statusText}`
+      //       );
+      //       item.acmg = "VUS"; // Default to VUS if API fails
+      //       return;
+      //     }
+
+      //     const responseData = await response.json();
+      //     const acmgCriteria = JSON.parse(responseData.body)[0]; // Extract the first ACMG criteria object
+
+      //     // Map ACMG criteria to classification
+      //     item.acmg = classifyVariant(acmgCriteria);
+      //   } catch (error) {
+      //     console.error("Error fetching ACMG criteria:", error);
+      //     item.acmg = "VUS"; // Default to VUS in case of error
+      //   }
+      // };
+      // fetchAcmgCriteria();
+
+      // Fetch ACMG criteria and determine classification
+
       const getBadgeColor = () => {
         switch (item.acmg) {
           case "Pathogenic":
-            return "bg-red-500";
+            return "border-red-300 bg-red-50 text-gray-700";
           case "Likely Pathogenic":
-            return "bg-red-200";
+            return "border-red-300 bg-red-50 text-gray-700";
           case "Likely Benign":
-            return "bg-green-200"; // Red for pathogenic
+            return "border-green-300 bg-green-50"; // Red for pathogenic
           case "Benign":
-            return "bg-green-500"; // Green for benign
-          case "Vus":
-            return "bg-yellow-500"; // Yellow for VUS
+            return "border-green-300 bg-green-50"; // Green for benign
+          case "VUS":
+            return "border-yellow-200 bg-yellow-50"; // Yellow for VUS
           default:
-            return "bg-gray-500"; // Default color if value doesn't match
+            return "border-gray-500"; // Default color if value doesn't match
         }
       };
       return (
-        <div className="flex flex-row items-center gap-2">
-          <Badge
-            className={`font-medium ${getBadgeColor()} hover:${getBadgeColor()} text-black text-nowrap`}
-          >
-            {item.acmg}
-          </Badge>
-          <Separator orientation="vertical" className="h-5"></Separator>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant={"ghost"} onClick={(e) => {}}>
-                <small>
-                  <Edit2 className="w-3 h-3"></Edit2>
-                </small>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side={"right"} className="min-w-fit">
-              <SheetHeader className="mb-10">
-                <SheetTitle className="text-4xl">
-                  Variant Detail:{item.hgvs}
-                </SheetTitle>
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-gray-400">
-                      Variant Statistic
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-5"></CardContent>
-                </Card>
-              </SheetHeader>
-              <div className="flex flex-col rounded-sm border-solid  mb-5 overflow-y-auto">
-                <Card className="border">
-                  <CardHeader>
-                    <CardTitle className="bg-red-800 p-5 rounded-md text-white">
-                      Pathogenicity
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-col gap-3">
-                      <div className="flex flex-col">
-                        <p className="font-sans font-bold mb-5 text-xl">
-                          Very Strong
-                        </p>
-                        <div className="flex flex-row gap-2 items-baseline pl-10">
-                          <Checkbox value={"Halo"}></Checkbox>
-                          <p className="text-wrap items-baseline text-xl">
-                            PVS1 null variant (nonsense, frameshift, canonical
-                            ±1 or 2 splice sites, initiation codon, single or
-                            multiexon deletion) in a gene where LOF is a known
-                            mechanism of disease
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col">
-                        <p className="font-sans font-bold mb-5 text-xl">
-                          Strong
-                        </p>
-                        <div className="flex flex-row gap-2 items-baseline pl-10">
-                          <Checkbox value={"Halo"}></Checkbox>
-                          <p className="text-wrap items-baseline text-xl">
-                            <strong>PS1</strong> Same amino acid change as a
-                            previously established pathogenic variant regardless
-                            of nucleotide change
-                          </p>
-                        </div>
-                        <div className="flex flex-row gap-2 items-baseline pl-10">
-                          <Checkbox value={"Halo"}></Checkbox>
-                          <p className="text-wrap items-baseline text-xl">
-                            <strong>PS2</strong> De novo (both maternity and
-                            paternity confirmed) in a patient with the disease
-                            and no family history
-                          </p>
-                        </div>
-                        <div className="flex flex-row gap-2 items-baseline pl-10">
-                          <Checkbox value={"Halo"}></Checkbox>
-                          <p className="text-wrap items-baseline text-xl font-sans">
-                            <strong>PS3</strong> Well-established in vitro or in
-                            vivo functional studies supportive of a damaging
-                            effect on the gene or gene product
-                          </p>
-                        </div>
-                        <div className="flex flex-row gap-2 items-baseline pl-10">
-                          <Checkbox value={"Halo"}></Checkbox>
-                          <p className="text-wrap items-baseline text-xl font-sans">
-                            <strong>PS4</strong> The prevalence of the variant
-                            in affected individuals is significantly increased
-                            compared with the prevalence in controls
-                          </p>
-                        </div>
-                        <div className="flex flex-row gap-2 items-baseline pl-10">
-                          <Checkbox value={"Halo"}></Checkbox>
-                          <p className="text-wrap items-baseline text-xl font-sans">
-                            <strong>PP1</strong> (Strong evidence) Cosegregation
-                            with disease in multiple affected family members in
-                            a gene definitively known to cause the disease
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                {/* Likely Phatogenic */}
-                {/* Likely Pathogenic */}
-                <Card className="border">
-                  <CardHeader>
-                    <CardTitle className="bg-yellow-500 p-5 rounded-md text-white">
-                      Likely Pathogenic
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-col gap-3">
-                      <div className="flex flex-col">
-                        <p className="font-sans font-bold mb-5 text-xl">
-                          Moderate
-                        </p>
-                        <div className="flex flex-row gap-2 items-baseline pl-10">
-                          <Checkbox value={"PM1"}></Checkbox>
-                          <p className="text-wrap items-baseline text-xl">
-                            <strong>PM1</strong> Located in a mutational hot
-                            spot and/or critical functional domain
-                          </p>
-                        </div>
-                        <div className="flex flex-row gap-2 items-baseline pl-10">
-                          <Checkbox value={"PM2"}></Checkbox>
-                          <p className="text-wrap items-baseline text-xl">
-                            <strong>PM2</strong> Absent from controls or at
-                            extremely low frequency in population databases
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                {/* VUS */}
-                <Card className="border">
-                  <CardHeader>
-                    <CardTitle className="bg-gray-500 p-5 rounded-md text-white">
-                      Variant of Uncertain Significance (VUS)
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-col gap-3">
-                      <div className="flex flex-col">
-                        <p className="font-sans font-bold mb-5 text-xl">
-                          Supporting
-                        </p>
-                        <div className="flex flex-row gap-2 items-baseline pl-10">
-                          <Checkbox value={"PP3"}></Checkbox>
-                          <p className="text-wrap items-baseline text-xl">
-                            <strong>PP3</strong> Multiple lines of computational
-                            evidence support a deleterious effect on the gene or
-                            gene product
-                          </p>
-                        </div>
-                        <div className="flex flex-row gap-2 items-baseline pl-10">
-                          <Checkbox value={"BP4"}></Checkbox>
-                          <p className="text-wrap items-baseline text-xl">
-                            <strong>BP4</strong> Multiple lines of computational
-                            evidence suggest no impact on gene or gene product
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                {/* Likely Benign */}
-                <Card className="border">
-                  <CardHeader>
-                    <CardTitle className="bg-blue-500 p-5 rounded-md text-white">
-                      Likely Benign
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-col gap-3">
-                      <div className="flex flex-col">
-                        <p className="font-sans font-bold mb-5 text-xl">
-                          Supporting
-                        </p>
-                        <div className="flex flex-row gap-2 items-baseline pl-10">
-                          <Checkbox value={"BP1"}></Checkbox>
-                          <p className="text-wrap items-baseline text-xl">
-                            <strong>BP1</strong> Missense variant in a gene
-                            where truncating variants are known to cause disease
-                          </p>
-                        </div>
-                        <div className="flex flex-row gap-2 items-baseline pl-10">
-                          <Checkbox value={"BP6"}></Checkbox>
-                          <p className="text-wrap items-baseline text-xl">
-                            <strong>BP6</strong> Reputable source reports
-                            variant as benign
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Benign */}
-                <Card className="border">
-                  <CardHeader>
-                    <CardTitle className="bg-green-500 p-5 rounded-md text-white">
-                      Benign
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-col gap-3">
-                      <div className="flex flex-col">
-                        <p className="font-sans font-bold mb-5 text-xl">
-                          Standalone
-                        </p>
-                        <div className="flex flex-row gap-2 items-baseline pl-10">
-                          <Checkbox value={"BA1"}></Checkbox>
-                          <p className="text-wrap items-baseline text-xl">
-                            <strong>BA1</strong> Allele frequency is too high
-                            for the disorder to be pathogenic
-                          </p>
-                        </div>
-                        <div className="flex flex-row gap-2 items-baseline pl-10">
-                          <Checkbox value={"BS1"}></Checkbox>
-                          <p className="text-wrap items-baseline text-xl">
-                            <strong>BS1</strong> Allele frequency is greater
-                            than expected for the disorder
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </SheetContent>
-          </Sheet>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant={"ghost"} onClick={(e) => {}}>
-                <small>
-                  <Edit2 className="w-3 h-3"></Edit2>
-                </small>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side={"right"} className="min-w-fit">
-              <SheetHeader className="mb-10">
-                <SheetTitle className="text-4xl">
-                  Variant Detail:{item.hgvs}
-                </SheetTitle>
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-gray-400">
-                      Variant Statistic
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-5"></CardContent>
-                </Card>
-              </SheetHeader>
-              <div className="flex flex-col rounded-sm border-solid mb-5">
-                <Card className="border">
-                  <CardHeader>
-                    <CardTitle className="bg-gray-800 p-5 rounded-md text-white">
-                      ACMG Criteria Checklist
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-col gap-3">
-                      {/* PVS1 */}
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PVS1"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PVS1 null variant (nonsense, frameshift, canonical ±1
-                          or 2 splice sites, initiation codon, single or
-                          multiexon deletion) in a gene where LOF is a known
-                          mechanism of disease
-                        </p>
-                      </div>
-
-                      {/* PS1 - PS4 */}
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PS1"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PS1 Same amino acid change as a previously established
-                          pathogenic variant regardless of nucleotide change
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PS2"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PS2 De novo (both maternity and paternity confirmed)
-                          in a patient with the disease and no family history
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PS3"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PS3 Well-established in vitro or in vivo functional
-                          studies supportive of a damaging effect on the gene or
-                          gene product
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PS4"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PS4 The prevalence of the variant in affected
-                          individuals is significantly increased compared with
-                          the prevalence in controls
-                        </p>
-                      </div>
-
-                      {/* PP1 (Strong and Moderate Evidence) */}
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PP1_Strong"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PP1 (Strong evidence) Cosegregation with disease in
-                          multiple affected family members in a gene
-                          definitively known to cause the disease
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PP1_Moderate"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PP1 (Moderate evidence) Cosegregation with disease in
-                          multiple affected family members in a gene
-                          definitively known to cause the disease
-                        </p>
-                      </div>
-
-                      {/* PM1 - PM6 */}
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PM1"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PM1 Located in a mutational hot spot and/or critical
-                          and well-established functional domain (e.g., active
-                          site of an enzyme) without benign variation
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PM2"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PM2 Absent from controls (or at extremely low
-                          frequency if recessive) in Exome Sequencing Project,
-                          1000 Genomes Project, or Exome Aggregation Consortium
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PM3"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PM3 For recessive disorders, detected in trans with a
-                          pathogenic variant
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PM4"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PM4 Protein length changes as a result of in-frame
-                          deletions/insertions in a nonrepeat region or
-                          stop-loss variants
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PM5"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PM5 Novel missense change at an amino acid residue
-                          where a different missense change determined to be
-                          pathogenic has been seen before
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PM6"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PM6 Assumed de novo, but without confirmation of
-                          paternity and maternity
-                        </p>
-                      </div>
-
-                      {/* PP1 - PP5 */}
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PP2"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PP2 Missense variant in a gene that has a low rate of
-                          benign missense variation and in which missense
-                          variants are a common mechanism of disease
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PP3"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PP3 Multiple lines of computational evidence support a
-                          deleterious effect on the gene or gene product
-                          (conservation, evolutionary, splicing impact, etc.)
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PP4"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PP4 Patient’s phenotype or family history is highly
-                          specific for a disease with a single genetic etiology
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"PP5"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          PP5 Reputable source recently reports variant as
-                          pathogenic, but the evidence is not available to the
-                          laboratory to perform an independent evaluation
-                        </p>
-                      </div>
-
-                      {/* BP1 - BP7 */}
-                      {/* BS1 - BS4 */}
-                      {/* BA1 */}
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"BA1"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          BA1 Allele frequency is greather than 5% in Exome
-                          Sequencing Project, 1000 Genomes Project, or Exome
-                          Aggregation Consortium
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2 items-baseline pl-10">
-                        <Checkbox value={"Artifact"}></Checkbox>
-                        <p className="text-wrap items-baseline text-xl">
-                          Sequencing artifact as determined by depth, quality,
-                          or other previously reviewed data
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </SheetContent>
-          </Sheet>
+        <div
+          className={`flex flex-row items-center gap-2 justify-center rounded-md px-3 py-1 border-2 ${getBadgeColor()}`}
+        >
+          <p className="text-lg font-medium">{item.acmg}</p>
         </div>
       );
     },
@@ -604,13 +303,21 @@ export const columns: ColumnDef<Variant>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-xs hover:bg-black hover:text-white"
+          className="text-lg hover:text-black hover:bg-transparent"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Clinical Significance
+          Clinical Sign
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const item = row.original;
+      return (
+        <p className="text-lg">
+          {item.clinicalSign?.replace("_", " ").toUpperCase()}
+        </p>
       );
     },
   },
@@ -620,13 +327,21 @@ export const columns: ColumnDef<Variant>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-xs hover:bg-black hover:text-white"
+          className="text-lg hover:text-black hover:bg-transparent"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Severe Consequence
+          Most Consequence
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const item = row.original;
+      return (
+        <p className="text-lg">
+          {item.severeconsequence?.toUpperCase().replaceAll("_", " ")}
+        </p>
       );
     },
   },
@@ -635,7 +350,7 @@ export const columns: ColumnDef<Variant>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-xs hover:bg-black hover:text-white"
+          className="text-xs hover:bg-black hover:text-black"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -650,7 +365,7 @@ export const columns: ColumnDef<Variant>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-xs hover:bg-black hover:text-white"
+          className="text-xs hover:bg-black hover:text-black"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -666,39 +381,53 @@ export const columns: ColumnDef<Variant>[] = [
     header: "Phenotypes",
     cell: ({ row }) => {
       const item = row.original;
+      const phenotypesList = item.phenotypes
+        ? Array.from(new Set(item.phenotypes.split(";")))
+        : [];
       return (
-        <HoverCard>
-          <HoverCardTrigger>
-            <div className="flex flex-row items-center gap-3">
-              <Button variant={"link"}>
-                Detail
-                <Badge variant={"outline"}>
-                  {item.phenotypes
-                    ? Array.from(new Set(item.phenotypes.split(";"))).length
-                    : "".length}
-                </Badge>
-              </Button>
-            </div>
-          </HoverCardTrigger>
-          <HoverCardContent>
-            {item.phenotypes
-              ? Array.from(new Set(item.phenotypes.split(";"))).join(";")
-              : ""}
-          </HoverCardContent>
-        </HoverCard>
+        <div className="w-full">
+          <Accordion type="single" collapsible>
+            <AccordionItem value="phenotypes">
+              <AccordionTrigger>
+                <div className="flex flex-row items-center gap-3">
+                  <Button
+                    variant="link"
+                    className="text-lg text-gray-500"
+                  >{`${phenotypesList.length} Found`}</Button>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                {phenotypesList.length > 0 ? (
+                  <ul className="list-disc pl-5">
+                    {phenotypesList.map((phenotype, index) => (
+                      <li key={index} className="text-gray-700 text-sm">
+                        {phenotype}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-500">No phenotypes available</p>
+                )}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
       );
     },
   },
   {
     accessorKey: "rsID",
-    header: "rsID",
+    header: "RSID",
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.rsID?.toUpperCase()}</p>;
+    },
   },
   {
     accessorKey: "gnomade",
     header: ({ column }) => {
       return (
         <Button
-          className="text-xs hover:bg-black hover:text-white"
+          className="text-xs hover:bg-black hover:text-black"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -714,7 +443,7 @@ export const columns: ColumnDef<Variant>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-xs hover:bg-black hover:text-white"
+          className="text-xs hover:bg-black hover:text-black"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -733,8 +462,11 @@ export const columns: ColumnDef<Variant>[] = [
     cell: ({ row }) => {
       const item = row.original;
       return (
-        <div className="flex flex-row items-center justify-center p-2">
+        <div className="flex flex-row items-center justify-center p-2 gap-2">
           <Dialog>
+            <DialogHeader>
+              <DialogTitle></DialogTitle>
+            </DialogHeader>
             <DialogTrigger asChild>
               <Button variant="outline">
                 <small>
@@ -742,7 +474,7 @@ export const columns: ColumnDef<Variant>[] = [
                 </small>
               </Button>
             </DialogTrigger>
-            <DialogContent className="xl:max-w-[1400px]">
+            <DialogContent className="w-full max-w-[1800px]">
               <VariantInformationModal
                 hgvsNotation={item.hgvs}
               ></VariantInformationModal>

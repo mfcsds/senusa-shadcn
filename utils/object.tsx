@@ -130,6 +130,7 @@ export interface VariantRawData {
   info: string | null;
   filter: string | null;
   hgvs: string | null;
+  acmg: string | null;
 }
 
 // TypeScript Interface for SelectedVariant
@@ -288,4 +289,45 @@ export interface FamilyDiseaseData {
   id_patient: string;
   hpo_code: string;
   hpo_desc: string[];
+}
+
+export interface AcmgCriteria {
+  PVS1: boolean;
+  PS1: boolean;
+  PS2: boolean;
+  PS3: boolean;
+  PS4: boolean;
+  PP1_strong: boolean;
+  PM1: boolean;
+  PM2: boolean;
+  PM3: boolean;
+  PM4: boolean;
+  PM5: boolean;
+  PM6: boolean;
+  PP1_moderate: boolean;
+  PP1: boolean;
+  PP2: boolean;
+  PP3: boolean;
+  PP4: boolean;
+  PP5: boolean;
+  BP1: boolean;
+  BP2: boolean;
+  BP3: boolean;
+  BP4: boolean;
+  BP5: boolean;
+  BP6: boolean;
+  BP7: boolean;
+  BS1: boolean;
+  BS2: boolean;
+  BS3: boolean;
+  BS4: boolean;
+  BA1: boolean;
+  class: string;
+}
+
+export interface ReferenceVariant {
+  title: string;
+  date: string;
+  abstract: string;
+  author: string;
 }

@@ -8,6 +8,144 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const createAcmgAnnotation = /* GraphQL */ `mutation CreateAcmgAnnotation(
+  $input: CreateAcmgAnnotationInput!
+  $condition: ModelAcmgAnnotationConditionInput
+) {
+  createAcmgAnnotation(input: $input, condition: $condition) {
+    id
+    id_variant
+    PVS1
+    PS1
+    PS2
+    PS3
+    PS4
+    PP1_Strong
+    PM1
+    PM2
+    PM3
+    PM4
+    PM5
+    PM6
+    PP1_Moderate
+    PP1_Cosegregation
+    PP2
+    PP3
+    PP4
+    PP5
+    BP1
+    BP2
+    BP3
+    BP4
+    BP5
+    BP6
+    BP7
+    BS1
+    BS2
+    BS3
+    BS4
+    BA1
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateAcmgAnnotationMutationVariables,
+  APITypes.CreateAcmgAnnotationMutation
+>;
+export const updateAcmgAnnotation = /* GraphQL */ `mutation UpdateAcmgAnnotation(
+  $input: UpdateAcmgAnnotationInput!
+  $condition: ModelAcmgAnnotationConditionInput
+) {
+  updateAcmgAnnotation(input: $input, condition: $condition) {
+    id
+    id_variant
+    PVS1
+    PS1
+    PS2
+    PS3
+    PS4
+    PP1_Strong
+    PM1
+    PM2
+    PM3
+    PM4
+    PM5
+    PM6
+    PP1_Moderate
+    PP1_Cosegregation
+    PP2
+    PP3
+    PP4
+    PP5
+    BP1
+    BP2
+    BP3
+    BP4
+    BP5
+    BP6
+    BP7
+    BS1
+    BS2
+    BS3
+    BS4
+    BA1
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateAcmgAnnotationMutationVariables,
+  APITypes.UpdateAcmgAnnotationMutation
+>;
+export const deleteAcmgAnnotation = /* GraphQL */ `mutation DeleteAcmgAnnotation(
+  $input: DeleteAcmgAnnotationInput!
+  $condition: ModelAcmgAnnotationConditionInput
+) {
+  deleteAcmgAnnotation(input: $input, condition: $condition) {
+    id
+    id_variant
+    PVS1
+    PS1
+    PS2
+    PS3
+    PS4
+    PP1_Strong
+    PM1
+    PM2
+    PM3
+    PM4
+    PM5
+    PM6
+    PP1_Moderate
+    PP1_Cosegregation
+    PP2
+    PP3
+    PP4
+    PP5
+    BP1
+    BP2
+    BP3
+    BP4
+    BP5
+    BP6
+    BP7
+    BS1
+    BS2
+    BS3
+    BS4
+    BA1
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteAcmgAnnotationMutationVariables,
+  APITypes.DeleteAcmgAnnotationMutation
+>;
 export const createFamilyHistoryDisease = /* GraphQL */ `mutation CreateFamilyHistoryDisease(
   $input: CreateFamilyHistoryDiseaseInput!
   $condition: ModelFamilyHistoryDiseaseConditionInput
@@ -331,6 +469,7 @@ export const createVariant = /* GraphQL */ `mutation CreateVariant(
     id_var
     id_patient
     id_vcf
+    acmg
     createdAt
     updatedAt
     __typename
@@ -357,6 +496,7 @@ export const updateVariant = /* GraphQL */ `mutation UpdateVariant(
     id_var
     id_patient
     id_vcf
+    acmg
     createdAt
     updatedAt
     __typename
@@ -383,6 +523,7 @@ export const deleteVariant = /* GraphQL */ `mutation DeleteVariant(
     id_var
     id_patient
     id_vcf
+    acmg
     createdAt
     updatedAt
     __typename

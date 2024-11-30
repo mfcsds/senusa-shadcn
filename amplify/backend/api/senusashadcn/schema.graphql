@@ -1,3 +1,38 @@
+type AcmgAnnotation @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  id_variant: String
+  PVS1: Boolean
+  PS1: Boolean
+  PS2: Boolean
+  PS3: Boolean
+  PS4: Boolean
+  PP1_Strong: Boolean
+  PM1: Boolean
+  PM2: Boolean
+  PM3: Boolean
+  PM4: Boolean
+  PM5: Boolean
+  PM6: Boolean
+  PP1_Moderate: Boolean
+  PP1_Cosegregation: Boolean
+  PP2: Boolean
+  PP3: Boolean
+  PP4: Boolean
+  PP5: Boolean
+  BP1: Boolean
+  BP2: Boolean
+  BP3: Boolean
+  BP4: Boolean
+  BP5: Boolean
+  BP6: Boolean
+  BP7: Boolean
+  BS1: Boolean
+  BS2: Boolean
+  BS3: Boolean
+  BS4: Boolean
+  BA1: Boolean
+}
+
 type FamilyHistoryDisease @model @auth(rules: [{allow: public}]) {
   id: ID!
   id_patient: String
@@ -69,6 +104,7 @@ type Variant @model @auth(rules: [{allow: public}]) {
   id_var: String
   id_patient: String
   id_vcf: String
+  acmg: String
 }
 
 type GeneticsConselor @model @auth(rules: [{allow: public}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}]) {

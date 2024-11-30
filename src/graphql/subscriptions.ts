@@ -8,6 +8,141 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateAcmgAnnotation = /* GraphQL */ `subscription OnCreateAcmgAnnotation(
+  $filter: ModelSubscriptionAcmgAnnotationFilterInput
+) {
+  onCreateAcmgAnnotation(filter: $filter) {
+    id
+    id_variant
+    PVS1
+    PS1
+    PS2
+    PS3
+    PS4
+    PP1_Strong
+    PM1
+    PM2
+    PM3
+    PM4
+    PM5
+    PM6
+    PP1_Moderate
+    PP1_Cosegregation
+    PP2
+    PP3
+    PP4
+    PP5
+    BP1
+    BP2
+    BP3
+    BP4
+    BP5
+    BP6
+    BP7
+    BS1
+    BS2
+    BS3
+    BS4
+    BA1
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateAcmgAnnotationSubscriptionVariables,
+  APITypes.OnCreateAcmgAnnotationSubscription
+>;
+export const onUpdateAcmgAnnotation = /* GraphQL */ `subscription OnUpdateAcmgAnnotation(
+  $filter: ModelSubscriptionAcmgAnnotationFilterInput
+) {
+  onUpdateAcmgAnnotation(filter: $filter) {
+    id
+    id_variant
+    PVS1
+    PS1
+    PS2
+    PS3
+    PS4
+    PP1_Strong
+    PM1
+    PM2
+    PM3
+    PM4
+    PM5
+    PM6
+    PP1_Moderate
+    PP1_Cosegregation
+    PP2
+    PP3
+    PP4
+    PP5
+    BP1
+    BP2
+    BP3
+    BP4
+    BP5
+    BP6
+    BP7
+    BS1
+    BS2
+    BS3
+    BS4
+    BA1
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateAcmgAnnotationSubscriptionVariables,
+  APITypes.OnUpdateAcmgAnnotationSubscription
+>;
+export const onDeleteAcmgAnnotation = /* GraphQL */ `subscription OnDeleteAcmgAnnotation(
+  $filter: ModelSubscriptionAcmgAnnotationFilterInput
+) {
+  onDeleteAcmgAnnotation(filter: $filter) {
+    id
+    id_variant
+    PVS1
+    PS1
+    PS2
+    PS3
+    PS4
+    PP1_Strong
+    PM1
+    PM2
+    PM3
+    PM4
+    PM5
+    PM6
+    PP1_Moderate
+    PP1_Cosegregation
+    PP2
+    PP3
+    PP4
+    PP5
+    BP1
+    BP2
+    BP3
+    BP4
+    BP5
+    BP6
+    BP7
+    BS1
+    BS2
+    BS3
+    BS4
+    BA1
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteAcmgAnnotationSubscriptionVariables,
+  APITypes.OnDeleteAcmgAnnotationSubscription
+>;
 export const onCreateFamilyHistoryDisease = /* GraphQL */ `subscription OnCreateFamilyHistoryDisease(
   $filter: ModelSubscriptionFamilyHistoryDiseaseFilterInput
 ) {
@@ -310,6 +445,7 @@ export const onCreateVariant = /* GraphQL */ `subscription OnCreateVariant($filt
     id_var
     id_patient
     id_vcf
+    acmg
     createdAt
     updatedAt
     __typename
@@ -333,6 +469,7 @@ export const onUpdateVariant = /* GraphQL */ `subscription OnUpdateVariant($filt
     id_var
     id_patient
     id_vcf
+    acmg
     createdAt
     updatedAt
     __typename
@@ -356,6 +493,7 @@ export const onDeleteVariant = /* GraphQL */ `subscription OnDeleteVariant($filt
     id_var
     id_patient
     id_vcf
+    acmg
     createdAt
     updatedAt
     __typename

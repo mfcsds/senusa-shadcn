@@ -54,7 +54,7 @@ const PatientInformation: React.FC<PatientProops> = ({
   });
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-fit">
       {/* {id} */}
       <Card className="border-none">
         <CardHeader>
@@ -67,32 +67,18 @@ const PatientInformation: React.FC<PatientProops> = ({
             <Table className="w-[500px]">
               <TableBody>
                 <TableRow>
-                  <TableCell className="w-[20px]">ID Patient</TableCell>
+                  <TableCell className="w-[20px]">
+                    ID Patient / Referrence Number
+                  </TableCell>
                   <TableCell className="w-[10px] text-left">:</TableCell>
                   <TableCell className="w-[100px]">{patient?.id}</TableCell>
                 </TableRow>
-                <TableRow>
+                {/* <TableRow>
                   <TableCell className="w-[20px]">Full Name</TableCell>
                   <TableCell className="w-[10px] text-left">:</TableCell>
                   <TableCell className="w-[100px]">{patient?.name}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="w-[20px]">Sex</TableCell>
-                  <TableCell className="w-[10px] text-left">:</TableCell>
-                  <TableCell className="w-[100px]">{patient?.sex}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="w-[20px]">Date of Birth</TableCell>
-                  <TableCell className="w-[10px] text-left">:</TableCell>
-                  <TableCell className="w-[100px]">{patient?.dob}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="w-[20px]">Medical History</TableCell>
-                  <TableCell className="w-[10px] text-left">:</TableCell>
-                  <TableCell className="w-[100px]">
-                    {varReport?.medical_history}
-                  </TableCell>
-                </TableRow>
+                </TableRow> */}
+                {/* 
                 <TableRow>
                   <TableCell className="w-[20px]">Current Diagnosis</TableCell>
                   <TableCell className="w-[10px] text-left">:</TableCell>
@@ -106,14 +92,7 @@ const PatientInformation: React.FC<PatientProops> = ({
                   <TableCell className="w-[100px]">
                     {varReport?.phenotype}
                   </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="w-[20px]">
-                    Supplementary Files
-                  </TableCell>
-                  <TableCell className="w-[10px] text-left">:</TableCell>
-                  <TableCell className="w-[100px]">-</TableCell>
-                </TableRow>
+                </TableRow> */}
               </TableBody>
             </Table>
           </div>

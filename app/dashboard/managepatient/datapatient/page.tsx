@@ -71,11 +71,14 @@ import {
 import { SelectContent, SelectGroup } from "@radix-ui/react-select";
 import { Input } from "@/components/ui/input";
 
+import { listVariants } from "@/src/graphql/queries";
+
 import { remove } from "aws-amplify/storage";
 import { deleteVcfdata } from "@/src/graphql/mutations";
 import { Amplify } from "aws-amplify";
 import VCFRawTable from "@/components/items/VCFRawTable";
 import ButtonAddFamilyDisease from "@/components/button/ButtonAddFamilyDisease";
+import VariantRawTable from "@/components/items/VariantRawTable";
 
 Amplify.configure(config);
 
@@ -92,6 +95,7 @@ interface VariantRawData {
   filter: string;
   info: string;
   hgvs: string;
+  acmg: string;
 }
 
 const DataPatientPage = () => {
@@ -111,7 +115,9 @@ const DataPatientPage = () => {
   const [selectedReferencetType, setSelectedReferenceType] = useState("");
   const [patient, setPatient] = useState<CreatePatientInput>();
   const [showModalVCFData, setShowModalVCFData] = useState(false);
-  const [variantRaw, setVariantRaw] = useState<VariantRawData[]>([]);
+  const [readVariantFromText, setReadVariantFromText] = useState<
+    VariantRawData[]
+  >([]);
 
   // Function to read VCF file and parse its contents
   const handlePreviewVCFFile = (file: File) => {
@@ -152,11 +158,12 @@ const DataPatientPage = () => {
           id_patient: idPatient ?? "",
           id_var: fields[2],
           hgvs: generateHGVS2(fields[0], fields[1], fields[3], fields[4]),
+          acmg: "Benign",
         };
       });
 
       // Set the parsed variants to state for preview
-      setVariantRaw(parsedVariants);
+      setReadVariantFromText(parsedVariants);
     };
 
     reader.onerror = () => {
@@ -224,12 +231,50 @@ const DataPatientPage = () => {
 
   const saveSampleVariant = async (variant: VariantRawData) => {
     try {
-      const result = client.graphql({
-        query: createVariant,
-        variables: { input: variant },
-      });
+      // Fetch ACMG classification from the API
+      const response = await fetch(
+        "https://yyj4sdbsd6.execute-api.us-east-1.amazonaws.com/dev-acmg/classification",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            body: JSON.stringify({
+              variants: [variant.hgvs],
+            }),
+          }),
+        }
+      );
+
+      // Check if the API call was successful
+      if (!response.ok) {
+        throw new Error("Failed to fetch ACMG classification");
+      }
+
+      const data = await response.json();
+
+      // Parse the ACMG result from the API response
+      const acmgResults = JSON.parse(data.body); // Assuming `body` is a stringified array
+      if (acmgResults && acmgResults.length > 0) {
+        variant.acmg = acmgResults[0].acmg; // Extract `acmg` value
+      } else {
+        throw new Error("ACMG classification not found in the response");
+      }
+
+      // Store the variant in the database only if `acmg` is filled
+      if (variant.acmg) {
+        const result = await client.graphql({
+          query: createVariant,
+          variables: { input: variant },
+        });
+        console.log("Variant saved successfully", result);
+      } else {
+        console.error("ACMG classification is missing, variant not saved");
+      }
     } catch (error) {
-      console.log("Error save variant");
+      console.error("Error saving variant:", error);
     }
   };
 
@@ -267,7 +312,7 @@ const DataPatientPage = () => {
             sample_date: date?.toDateString() ?? "No Date Selected",
             uploadAt: getDateToday(), // Format the date as needed
             pathfile: filePath,
-            number_variant: variantRaw.length,
+            number_variant: readVariantFromText.length,
           };
 
           const saveData = async () => {
@@ -291,13 +336,13 @@ const DataPatientPage = () => {
       setFiles([]);
       setUploadProgress(0);
     }
-    await variantRaw.forEach(saveSampleVariant);
+    await readVariantFromText.forEach(saveSampleVariant);
   };
 
   const cancelButtonUpload = () => {
     setUploadModal(!uploadModal);
     setFiles([]);
-    setVariantRaw([]);
+    setReadVariantFromText([]);
   };
 
   return (
@@ -567,7 +612,7 @@ const DataPatientPage = () => {
                           </TableRow>
                         </TableHeader>
                         <TableBody className="overflow-y-auto">
-                          {variantRaw.map((variant, idx) => (
+                          {readVariantFromText.map((variant, idx) => (
                             <TableRow key={idx} className="text-xs">
                               <TableCell>{variant.chrom}</TableCell>
                               <TableCell>{variant.pos}</TableCell>
@@ -609,9 +654,12 @@ const DataPatientPage = () => {
                 </Button>
               </div>
               {/* <VCFUploader id_patient="Sample Patient ID" /> */}
-              <VCFRawTable
+              {/* <VCFRawTable
                 filepath={vcfFiles.at(0)?.pathfile ?? ""}
-              ></VCFRawTable>
+              ></VCFRawTable> */}
+              <VariantRawTable
+                id_vcf={vcfFiles.at(0)?.id ?? ""}
+              ></VariantRawTable>
             </div>
           </div>
         )}

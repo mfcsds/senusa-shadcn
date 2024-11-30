@@ -9,7 +9,7 @@ import {
   TableBody,
 } from "@/components/ui/table";
 
-interface VariantComputationalPredictionProps {
+interface ConservationScoresProops {
   data?: TranscriptConsequence[];
 }
 
@@ -19,34 +19,26 @@ interface FeatureGroup {
   color: string; // Tailwind CSS class for background color
 }
 
-const VariantComputationalPrediction: React.FC<
-  VariantComputationalPredictionProps
-> = ({ data }) => {
+const ConservationScores: React.FC<ConservationScoresProops> = ({ data }) => {
   if (!data || data.length === 0) {
     return <div>No computational predictions available.</div>;
   }
 
   const groupedFeatures: FeatureGroup[] = [
     {
-      groupName: "Gene and Transcript Information",
+      groupName: "Annotations and External Database References",
       features: [
-        { key: "transcript_id", label: "Transcript ID" },
-        { key: "gene_symbol", label: "Gene Symbol" },
-        { key: "gene_id", label: "Gene ID" },
-        { key: "biotype", label: "Biotype" },
-        { key: "canonical", label: "Canonical" },
-        { key: "appris", label: "APPRIS" },
-        { key: "tsl", label: "TSL" },
+        { key: "refseq_transcript_ids", label: "RefSeq Transcript IDs" },
+        { key: "ccds", label: "CCDS" },
+        { key: "swissprot", label: "SwissProt" },
+        { key: "trembl", label: "TrEMBL" },
+        { key: "uniparc", label: "UniParc" },
+        { key: "uniprot_isoform", label: "UniProt Isoform" },
+        { key: "gene_symbol_source", label: "Gene Symbol Source" },
+        { key: "hgnc_id", label: "HGNC ID" },
+        { key: "mane_select", label: "MANE Select" },
       ],
-      color: "bg-blue-50",
-    },
-    {
-      groupName: "Consequence Terms",
-      features: [
-        { key: "consequence_terms", label: "Consequence Terms" },
-        { key: "impact", label: "Impact" },
-      ],
-      color: "bg-green-50",
+      color: "bg-gray-50",
     },
   ];
 
@@ -59,7 +51,7 @@ const VariantComputationalPrediction: React.FC<
   );
 
   return (
-    <div className="overflow-auto w-full overflow-x-auto max-h-[500px] overflow-y-auto">
+    <div className="overflow-auto max-w-[1200px] overflow-x-auto max-h-[500px] overflow-y-auto">
       <Table>
         <thead>
           {/* Group Headers */}
@@ -117,4 +109,4 @@ const VariantComputationalPrediction: React.FC<
   );
 };
 
-export default VariantComputationalPrediction;
+export default ConservationScores;

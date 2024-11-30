@@ -82,6 +82,8 @@ export function DataTable<TData, TValue>({
   const [rowSelection, setRowSelection] = useState({});
   const [zygosityFilter, setZygosityFilter] = useState<string | null>(null);
 
+  const [fiVis, setFiVis] = useState(false);
+
   const handleZygosityChange = (value: string) => {
     setZygosityFilter(value);
     setColumnFilters((prev) => [
@@ -89,10 +91,28 @@ export function DataTable<TData, TValue>({
       { id: "zygosity", value }, // Add the new zygosity filter
     ]);
   };
+  const containsFilterFn = (
+    row: Row<any>,
+    columnId: string,
+    filterValue: string
+  ): boolean => {
+    const cellValue = row.getValue<string>(columnId);
+    return cellValue
+      ? cellValue.toLowerCase().includes(filterValue.toLowerCase())
+      : false;
+  };
 
   const table = useReactTable({
     data,
-    columns,
+    columns: columns.map((column) => {
+      if (column.id === "clinicalSign") {
+        return {
+          ...column,
+          filterFn: containsFilterFn, // Assign the custom filter function
+        };
+      }
+      return column;
+    }),
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
@@ -102,13 +122,24 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
 
-    state: { sorting, columnFilters, columnVisibility, rowSelection },
-    initialState: {
-      columnFilters: [{ id: "clinicalSign", value: "pathogenic" }],
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility: {
+        gene_symbol: false,
+        rsID: false,
+        sift_score: false,
+        sift_prediction: false,
+        gnomade: false,
+        gnomadg: false,
+        functional_impact: false,
+      },
+      rowSelection,
     },
   });
 
   const [gene_id, setGeneID] = useState("");
+  const [gene_symbol, setGeneSymbol] = useState("");
 
   // Define states for the min and max values for the Gnomadg filter
   const [gnomadgMin, setGnomadgMin] = useState<number | "">("");
@@ -129,12 +160,12 @@ export function DataTable<TData, TValue>({
   };
 
   return (
-    <div className="flex flex-col rounded-md border gap-3">
+    <div className="flex flex-col rounded-md border gap-3 w-fit">
       <div className="flex items-center p-4">
         <div className="flex flex-row justify-between items-center w-full">
           <div className="flex flex-row gap-5">
             <div className="flex flex-col gap-2">
-              <Label>Gene ID</Label>
+              <Label className="text-lg">Gene ID</Label>
               <Input
                 className="max-w-sm"
                 placeholder="Gene ID"
@@ -148,25 +179,21 @@ export function DataTable<TData, TValue>({
             </div>
             {/* Gene Sysmbol */}
             <div className="flex flex-col gap-2">
-              <Label>Gene Symbol</Label>
+              <Label className="text-lg">Gene Symbol</Label>
               <Input
                 className="max-w-sm"
                 placeholder="Gene Symbol"
-                value={
-                  (table
-                    .getColumn("gene_symbol")
-                    ?.getFilterValue() as string) ?? ""
-                }
-                onChange={(event) =>
-                  table
-                    .getColumn("gene_symbol")
-                    ?.setFilterValue(event.target.value)
-                }
+                value={gene_symbol}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setGeneSymbol(value);
+                  table.getColumn("gene_symbol")?.setFilterValue(value);
+                }}
               ></Input>
             </div>
             {/* Clinical Sign */}
             <div className="flex flex-col gap-2">
-              <Label>Clinical Significance</Label>
+              <Label className="text-lg">Clinical Significance</Label>
               <Input
                 className="max-w-sm"
                 placeholder="Clinical Sign"
@@ -184,28 +211,22 @@ export function DataTable<TData, TValue>({
             </div>
             {/* Allele Population Frequency */}
             <div className="flex flex-col gap-2">
-              <Label>Allel Population Frequency</Label>
+              <Label className="text-lg">Allele Population Frequency</Label>
               <div className="flex flex-row gap-1">
                 <Input
                   className="max-w-sm"
+                  type="number"
                   placeholder="Gnomade"
-                  value={
-                    (table.getColumn("gnomade")?.getFilterValue() as number) ??
-                    ""
-                  }
                 ></Input>
                 <Input
                   className="max-w-sm"
                   placeholder="Gnomadg"
-                  value={
-                    (table.getColumn("gnomadg")?.getFilterValue() as number) ??
-                    ""
-                  }
+                  type="number"
                 ></Input>
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <Label>Zygosity</Label>
+              <Label className="text-lg">Zygosity</Label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="ml-auto">
@@ -255,9 +276,12 @@ export function DataTable<TData, TValue>({
                       key={column.id}
                       className="capitalize"
                       checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
+                      onCheckedChange={(value) => {
+                        column.toggleVisibility(!!value);
+                        if (column.id === "functional_impact") {
+                          setFiVis(!!value);
+                        }
+                      }}
                     >
                       {column.id}
                     </DropdownMenuCheckboxItem>
@@ -269,17 +293,17 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="flex flex-col overflow-x-auto w-full">
         <Table className="m-4 rounded-md min-w-full">
-          <TableHeader>
+          <TableHeader className="h-[50px]">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="text-xs hover:bg-black bg-black text-white"
+                className=" hover:bg-violet-200 bg-violet-200 border-y-4 border-gray-900 rounded-md"
               >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
-                      className="text-white px-2 md:px-4"
+                      className="text-gray-90 px-2 md:px-4 h-[70px] text-lg  "
                     >
                       {header.isPlaceholder
                         ? null

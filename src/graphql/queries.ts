@@ -8,6 +8,100 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getAcmgAnnotation = /* GraphQL */ `query GetAcmgAnnotation($id: ID!) {
+  getAcmgAnnotation(id: $id) {
+    id
+    id_variant
+    PVS1
+    PS1
+    PS2
+    PS3
+    PS4
+    PP1_Strong
+    PM1
+    PM2
+    PM3
+    PM4
+    PM5
+    PM6
+    PP1_Moderate
+    PP1_Cosegregation
+    PP2
+    PP3
+    PP4
+    PP5
+    BP1
+    BP2
+    BP3
+    BP4
+    BP5
+    BP6
+    BP7
+    BS1
+    BS2
+    BS3
+    BS4
+    BA1
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetAcmgAnnotationQueryVariables,
+  APITypes.GetAcmgAnnotationQuery
+>;
+export const listAcmgAnnotations = /* GraphQL */ `query ListAcmgAnnotations(
+  $filter: ModelAcmgAnnotationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAcmgAnnotations(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      id_variant
+      PVS1
+      PS1
+      PS2
+      PS3
+      PS4
+      PP1_Strong
+      PM1
+      PM2
+      PM3
+      PM4
+      PM5
+      PM6
+      PP1_Moderate
+      PP1_Cosegregation
+      PP2
+      PP3
+      PP4
+      PP5
+      BP1
+      BP2
+      BP3
+      BP4
+      BP5
+      BP6
+      BP7
+      BS1
+      BS2
+      BS3
+      BS4
+      BA1
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListAcmgAnnotationsQueryVariables,
+  APITypes.ListAcmgAnnotationsQuery
+>;
 export const getFamilyHistoryDisease = /* GraphQL */ `query GetFamilyHistoryDisease($id: ID!) {
   getFamilyHistoryDisease(id: $id) {
     id
@@ -242,6 +336,7 @@ export const getVariant = /* GraphQL */ `query GetVariant($id: ID!) {
     id_var
     id_patient
     id_vcf
+    acmg
     createdAt
     updatedAt
     __typename
@@ -270,6 +365,7 @@ export const listVariants = /* GraphQL */ `query ListVariants(
       id_var
       id_patient
       id_vcf
+      acmg
       createdAt
       updatedAt
       __typename

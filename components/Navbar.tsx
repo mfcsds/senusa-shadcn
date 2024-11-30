@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex flex-row-reverse shadow-md px-10 w-full items-center py-2 cursor-pointer">
+    <div className="flex flex-row-reverse shadow-md px-10 w-full items-center py-4 cursor-pointer">
       <div className="flex gap-2 items-center">
         <p className="ml-2 text-gray-500 text-[10px]">Dark Mode</p>
         <Switch className="h-2"></Switch>

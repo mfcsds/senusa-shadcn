@@ -3,18 +3,23 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
+import { VariantRawData } from "@/utils/object";
 
-export type RawVariant = {
-  chrom: string;
-  pos: string;
-  id_var: string;
-  ref: string;
-  alt: string;
-  qual: string;
-  info: string;
-  filter: string;
-};
-export const columns: ColumnDef<RawVariant>[] = [
+export const columns: ColumnDef<VariantRawData>[] = [
+  {
+    accessorKey: "hgvs",
+    header: ({ column }) => (
+      <Button
+        variant={"ghost"}
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Hgvs
+        <small>
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </small>
+      </Button>
+    ),
+  },
   {
     accessorKey: "chrom",
     header: ({ column }) => (

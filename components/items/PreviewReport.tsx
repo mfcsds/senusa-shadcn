@@ -181,8 +181,8 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
   });
 
   return (
-    <div className="flex flex-col min-w-12">
-      <div className="flex flex-col w-10/12">
+    <div className="flex flex-col w-full">
+      <div className="flex flex-col min-fit">
         <Card>
           <CardHeader>
             <CardTitle>Preview and Approval</CardTitle>

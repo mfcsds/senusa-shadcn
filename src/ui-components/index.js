@@ -4,6 +4,8 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
+export { default as AcmgAnnotationCreateForm } from "./AcmgAnnotationCreateForm";
+export { default as AcmgAnnotationUpdateForm } from "./AcmgAnnotationUpdateForm";
 export { default as ConclusionCreateForm } from "./ConclusionCreateForm";
 export { default as ConclusionUpdateForm } from "./ConclusionUpdateForm";
 export { default as FamilyHistoryDiseaseCreateForm } from "./FamilyHistoryDiseaseCreateForm";
