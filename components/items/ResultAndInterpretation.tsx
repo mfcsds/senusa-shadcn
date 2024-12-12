@@ -58,6 +58,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Skeleton } from "../ui/skeleton";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
 
 Amplify.configure(config);
 
@@ -65,6 +72,77 @@ interface ResultAndInterpretationProops {
   patientid: string | null;
   id_report: string | null;
 }
+
+const getGeneColor = (item: SelectedVariant) => {
+  switch (item.gene_symbol) {
+    case "BRCA1":
+    case "BRCA2":
+    case "TP53":
+    case "PTEN":
+    case "CDH1":
+    case "STK11":
+    case "CHEK2":
+    case "PALB2":
+    case "ATM":
+    case "MLH1":
+    case "MSH2":
+    case "MSH6":
+    case "PMS2":
+    case "RAD51C":
+    case "RAD51D":
+    case "BARD1":
+      return "border-red-600 ";
+    default:
+      return "border-gray-300"; // Default color if value doesn't match
+  }
+};
+const getTextGeneColor = (item: SelectedVariant) => {
+  switch (item.gene_symbol) {
+    case "BRCA1":
+    case "BRCA2":
+    case "TP53":
+    case "PTEN":
+    case "CDH1":
+    case "STK11":
+    case "CHEK2":
+    case "PALB2":
+    case "ATM":
+    case "MLH1":
+    case "MSH2":
+    case "MSH6":
+    case "PMS2":
+    case "RAD51C":
+    case "RAD51D":
+    case "BARD1":
+      return "text-red-600 font-semibold ";
+    default:
+      return "text-gray-600"; // Default color if value doesn't match
+  }
+};
+
+const getPhenotypesList = (item: SelectedVariant) => {
+  const phenotypesList = item.phenotypes
+    ? Array.from(new Set(item.phenotypes.split(";")))
+    : [];
+  return phenotypesList;
+};
+
+const getBadgeColor = (item: SelectedVariant) => {
+  switch (item.acmg) {
+    case "Pathogenic":
+      return "border-red-300 bg-red-50 text-gray-700";
+    case "Likely Pathogenic":
+      return "border-red-300 bg-red-50 text-gray-700";
+    case "Likely Benign":
+      return "border-green-300 bg-green-50"; // Red for pathogenic
+    case "Benign":
+      return "border-green-300 bg-green-50"; // Green for benign
+    case "VUS":
+      return "border-yellow-200 bg-yellow-50"; // Yellow for VUS
+    default:
+      return "border-gray-500"; // Default color if value doesn't match
+  }
+};
 
 const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
   patientid,
@@ -181,7 +259,6 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
           query: deleteSelectedVariant,
           variables: { input: { id: item?.id ?? "" } },
         });
-
         await setSelectedVariant((prevFiles) =>
           prevFiles.filter((file) => file.id != idvar)
         );
@@ -193,7 +270,7 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
           variables: { input: { id: itemInter?.id ?? "" } },
         });
 
-        fetchVariantInterpretation();
+        await fetchVariantInterpretation();
       }
     } catch (error) {
       console.log(error);
@@ -216,94 +293,125 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="font-semibold">Gene</TableHead>
-                      <TableHead className="font-semibold">
+                      <TableHead className="font-semibold text-lg">
                         Variant Detail
                       </TableHead>
-                      <TableHead className="font-semibold">Zigosity</TableHead>
-
-                      <TableHead className="font-semibold">
-                        Gnomade Allele Frequency
+                      <TableHead className="font-semibold text-lg">
+                        Zigosity
                       </TableHead>
-                      <TableHead className="font-semibold">
-                        Gnomadg Allele Frequency
+                      <TableHead className="font-semibold text-lg">
+                        ACMG
                       </TableHead>
-                      <TableHead className="font-semibold">
+                      <TableHead className="font-semibold text-lg">
                         Phenotypes
                       </TableHead>
-                      <TableHead className="font-semibold">
-                        Clinvar (Clinical Sign)
+                      <TableHead className="font-semibold text-lg">
+                        Detail
                       </TableHead>
-                      <TableHead className="font-semibold">
-                        Reviewer-Classification
+                      <TableHead className="font-semibold text-lg">
+                        Remove
                       </TableHead>
-                      <TableHead className="font-semibold">Detail</TableHead>
-                      <TableHead className="font-semibold">Remove</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {selectedVariantItemList.map((item, index) => (
                       <TableRow key={index}>
-                        <TableCell>{item.gene_symbol}</TableCell>
-                        <TableCell>{item.hgvs}</TableCell>
-                        <TableCell>{item.zigosity}</TableCell>
-                        <TableCell>{item.gnomade}</TableCell>
-                        <TableCell>{item.gnomadg}</TableCell>
-                        <TableCell className="text-xs">
-                          {item.phenotypes}
-                        </TableCell>
-                        <TableCell>{item?.clinical_sign ?? "-"}</TableCell>
                         <TableCell>
-                          <div className="flex flex-col gap-3">
-                            <LabelAndDescription
-                              label="Current Classification"
-                              desc={item?.reviewer_class ?? "-"}
-                            ></LabelAndDescription>
-                            <Separator></Separator>
-                            <div className="flex flex-row gap-1 items-center">
-                              <Select onValueChange={setChooseClass}>
-                                <SelectTrigger className="w-[180px]">
-                                  <SelectValue placeholder="Select Variant Classification" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectGroup>
-                                    <SelectLabel>Variant Class</SelectLabel>
-                                    <SelectItem value="Benign">
-                                      Benign
-                                    </SelectItem>
-                                    <SelectItem value="Likely Benign">
-                                      Likely Benign
-                                    </SelectItem>
-                                    <SelectItem value="Variant Uncertain Significance">
-                                      Variant Uncertain Significance
-                                    </SelectItem>
-                                    <SelectItem value="Likely Pathogenic">
-                                      Likely Pathogenic
-                                    </SelectItem>
-                                    <SelectItem value="Pathogenic">
-                                      Pathogenic
-                                    </SelectItem>
-                                  </SelectGroup>
-                                </SelectContent>
-                              </Select>
-                              <Separator
-                                className="h-5"
-                                orientation="vertical"
-                              ></Separator>
-                              <Button
-                                variant={"ghost"}
-                                className=" hover:bg-green-300"
-                                onClick={(e) =>
-                                  handleUpdateClassVariant(item.id)
-                                }
-                              >
-                                <small>
-                                  <Save className="w-4 h-4"></Save>
-                                </small>
-                              </Button>
+                          <div className="flex flex-row gap-10 ml-5 items-center">
+                            <div
+                              className={`border-l-4 ${getGeneColor(
+                                item
+                              )} w-[200px] items-start flex flex-col justify-start pl-5`}
+                            >
+                              <div className=" px-2 rounded-md border-gray-500 border-2">
+                                {item.gene_symbol ? (
+                                  <p
+                                    className={`text-lg font-medium ${getTextGeneColor(
+                                      item
+                                    )}`}
+                                  >
+                                    {item.gene_symbol}
+                                  </p>
+                                ) : (
+                                  <Skeleton
+                                    aria-label="..."
+                                    className="h-6 w-[100px]  bg-gray-300"
+                                  />
+                                )}
+                              </div>
+                              {item.gene_id ? (
+                                <p className="text-lg font-medium text-gray-400 ">
+                                  {item.gene_id}
+                                </p>
+                              ) : (
+                                <Skeleton
+                                  vocab="Loading"
+                                  className="h-6 w-[150px] pl-2 mt-2 bg-gray-300"
+                                />
+                              )}
+                            </div>
+                            <div className="flex flex-col">
+                              <p className="text-lg">{item.hgvs}</p>
+                              {item.rsID ? (
+                                <p className="text-lg font-sans text-gray-500 ">{`RSID: ${item.rsID?.toUpperCase()}`}</p>
+                              ) : (
+                                <Skeleton
+                                  vocab="Loading"
+                                  className="h-6 w-[100px] bg-gray-300"
+                                />
+                              )}
                             </div>
                           </div>
                         </TableCell>
+                        <TableCell>
+                          <p className="text-lg">{item.zigosity}</p>
+                        </TableCell>
+                        <TableCell>
+                          <div
+                            className={`flex flex-row items-center gap-2 justify-center rounded-md px-3 py-1 border-2 ${getBadgeColor(
+                              item
+                            )}`}
+                          >
+                            <p className="text-lg font-medium">{item.acmg}</p>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-xs">
+                          <Accordion type="single" collapsible>
+                            <AccordionItem value="phenotypes">
+                              <AccordionTrigger>
+                                <div className="flex flex-row items-center gap-3">
+                                  <Button
+                                    variant="link"
+                                    className="text-lg text-gray-500"
+                                  >{`${
+                                    getPhenotypesList(item).length
+                                  } Found`}</Button>
+                                </div>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                {getPhenotypesList(item).length > 0 ? (
+                                  <ul className="list-disc pl-5">
+                                    {getPhenotypesList(item).map(
+                                      (phenotype, index) => (
+                                        <li
+                                          key={index}
+                                          className="text-gray-700 text-sm"
+                                        >
+                                          {phenotype}
+                                        </li>
+                                      )
+                                    )}
+                                  </ul>
+                                ) : (
+                                  <p className="text-gray-500">
+                                    No phenotypes available
+                                  </p>
+                                )}
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
+                        </TableCell>
+
                         <TableCell>
                           <div className="flex flex-row items-center">
                             <TooltipProvider>
@@ -366,7 +474,6 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
             <div className="flex flex-col mt-4">
               <p className="text-xl font-semibold">Variant Interpretation</p>
             </div>
-
             <div className="flex flex-col h-[450px] min-h-[450px] overflow-y-auto gap-1">
               {variantInterpretations.length > 0 &&
                 variantInterpretations.map((item, index) => (

@@ -282,7 +282,9 @@ const VariantQuery = () => {
           hgvs={variant}
         />
       ) : (
-        <div>No data available. Please search for a variant.</div>
+        <div className="flex w-full items-center mt-3 text-gray-400 justify-center">
+          <p className=""> No data available. Please search for a variant.</p>
+        </div>
       )}
     </div>
   );

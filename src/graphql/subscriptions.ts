@@ -204,8 +204,9 @@ export const onCreateVariantInterpretation = /* GraphQL */ `subscription OnCreat
     id_patient
     id_report
     id_varsample
-    gene
     alldesc
+    gene_symbol
+    gene_id
     createdAt
     updatedAt
     __typename
@@ -225,8 +226,9 @@ export const onUpdateVariantInterpretation = /* GraphQL */ `subscription OnUpdat
     id_patient
     id_report
     id_varsample
-    gene
     alldesc
+    gene_symbol
+    gene_id
     createdAt
     updatedAt
     __typename
@@ -246,8 +248,9 @@ export const onDeleteVariantInterpretation = /* GraphQL */ `subscription OnDelet
     id_patient
     id_report
     id_varsample
-    gene
     alldesc
+    gene_symbol
+    gene_id
     createdAt
     updatedAt
     __typename

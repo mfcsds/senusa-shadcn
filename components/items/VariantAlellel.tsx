@@ -38,7 +38,7 @@ const VariantAlellel: React.FC<VariantAlellelProops> = ({ data }) => {
   }
 
   return (
-    <div className="flex flex-col max-h-[500px] overflow-y-auto w-[1700px]">
+    <div className="flex flex-col max-h-[500px] overflow-y-auto w-full">
       <Card className="border-none shadow-none">
         <CardContent>
           <div className="flex flex-col">

@@ -211,8 +211,9 @@ export const createVariantInterpretation = /* GraphQL */ `mutation CreateVariant
     id_patient
     id_report
     id_varsample
-    gene
     alldesc
+    gene_symbol
+    gene_id
     createdAt
     updatedAt
     __typename
@@ -233,8 +234,9 @@ export const updateVariantInterpretation = /* GraphQL */ `mutation UpdateVariant
     id_patient
     id_report
     id_varsample
-    gene
     alldesc
+    gene_symbol
+    gene_id
     createdAt
     updatedAt
     __typename
@@ -255,8 +257,9 @@ export const deleteVariantInterpretation = /* GraphQL */ `mutation DeleteVariant
     id_patient
     id_report
     id_varsample
-    gene
     alldesc
+    gene_symbol
+    gene_id
     createdAt
     updatedAt
     __typename

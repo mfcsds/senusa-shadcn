@@ -30,8 +30,9 @@ export default function VariantInterpretationUpdateForm(props) {
     id_patient: "",
     id_report: "",
     id_varsample: "",
-    gene: "",
     alldesc: "",
+    gene_symbol: "",
+    gene_id: "",
   };
   const [hgvs, setHgvs] = React.useState(initialValues.hgvs);
   const [text, setText] = React.useState(initialValues.text);
@@ -40,8 +41,11 @@ export default function VariantInterpretationUpdateForm(props) {
   const [id_varsample, setId_varsample] = React.useState(
     initialValues.id_varsample
   );
-  const [gene, setGene] = React.useState(initialValues.gene);
   const [alldesc, setAlldesc] = React.useState(initialValues.alldesc);
+  const [gene_symbol, setGene_symbol] = React.useState(
+    initialValues.gene_symbol
+  );
+  const [gene_id, setGene_id] = React.useState(initialValues.gene_id);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = variantInterpretationRecord
@@ -52,8 +56,9 @@ export default function VariantInterpretationUpdateForm(props) {
     setId_patient(cleanValues.id_patient);
     setId_report(cleanValues.id_report);
     setId_varsample(cleanValues.id_varsample);
-    setGene(cleanValues.gene);
     setAlldesc(cleanValues.alldesc);
+    setGene_symbol(cleanValues.gene_symbol);
+    setGene_id(cleanValues.gene_id);
     setErrors({});
   };
   const [variantInterpretationRecord, setVariantInterpretationRecord] =
@@ -79,8 +84,9 @@ export default function VariantInterpretationUpdateForm(props) {
     id_patient: [],
     id_report: [],
     id_varsample: [],
-    gene: [],
     alldesc: [],
+    gene_symbol: [],
+    gene_id: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -113,8 +119,9 @@ export default function VariantInterpretationUpdateForm(props) {
           id_patient: id_patient ?? null,
           id_report: id_report ?? null,
           id_varsample: id_varsample ?? null,
-          gene: gene ?? null,
           alldesc: alldesc ?? null,
+          gene_symbol: gene_symbol ?? null,
+          gene_id: gene_id ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -180,8 +187,9 @@ export default function VariantInterpretationUpdateForm(props) {
               id_patient,
               id_report,
               id_varsample,
-              gene,
               alldesc,
+              gene_symbol,
+              gene_id,
             };
             const result = onChange(modelFields);
             value = result?.hgvs ?? value;
@@ -210,8 +218,9 @@ export default function VariantInterpretationUpdateForm(props) {
               id_patient,
               id_report,
               id_varsample,
-              gene,
               alldesc,
+              gene_symbol,
+              gene_id,
             };
             const result = onChange(modelFields);
             value = result?.text ?? value;
@@ -240,8 +249,9 @@ export default function VariantInterpretationUpdateForm(props) {
               id_patient: value,
               id_report,
               id_varsample,
-              gene,
               alldesc,
+              gene_symbol,
+              gene_id,
             };
             const result = onChange(modelFields);
             value = result?.id_patient ?? value;
@@ -270,8 +280,9 @@ export default function VariantInterpretationUpdateForm(props) {
               id_patient,
               id_report: value,
               id_varsample,
-              gene,
               alldesc,
+              gene_symbol,
+              gene_id,
             };
             const result = onChange(modelFields);
             value = result?.id_report ?? value;
@@ -300,8 +311,9 @@ export default function VariantInterpretationUpdateForm(props) {
               id_patient,
               id_report,
               id_varsample: value,
-              gene,
               alldesc,
+              gene_symbol,
+              gene_id,
             };
             const result = onChange(modelFields);
             value = result?.id_varsample ?? value;
@@ -317,36 +329,6 @@ export default function VariantInterpretationUpdateForm(props) {
         {...getOverrideProps(overrides, "id_varsample")}
       ></TextField>
       <TextField
-        label="Gene"
-        isRequired={false}
-        isReadOnly={false}
-        value={gene}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              hgvs,
-              text,
-              id_patient,
-              id_report,
-              id_varsample,
-              gene: value,
-              alldesc,
-            };
-            const result = onChange(modelFields);
-            value = result?.gene ?? value;
-          }
-          if (errors.gene?.hasError) {
-            runValidationTasks("gene", value);
-          }
-          setGene(value);
-        }}
-        onBlur={() => runValidationTasks("gene", gene)}
-        errorMessage={errors.gene?.errorMessage}
-        hasError={errors.gene?.hasError}
-        {...getOverrideProps(overrides, "gene")}
-      ></TextField>
-      <TextField
         label="Alldesc"
         isRequired={false}
         isReadOnly={false}
@@ -360,8 +342,9 @@ export default function VariantInterpretationUpdateForm(props) {
               id_patient,
               id_report,
               id_varsample,
-              gene,
               alldesc: value,
+              gene_symbol,
+              gene_id,
             };
             const result = onChange(modelFields);
             value = result?.alldesc ?? value;
@@ -375,6 +358,68 @@ export default function VariantInterpretationUpdateForm(props) {
         errorMessage={errors.alldesc?.errorMessage}
         hasError={errors.alldesc?.hasError}
         {...getOverrideProps(overrides, "alldesc")}
+      ></TextField>
+      <TextField
+        label="Gene symbol"
+        isRequired={false}
+        isReadOnly={false}
+        value={gene_symbol}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              hgvs,
+              text,
+              id_patient,
+              id_report,
+              id_varsample,
+              alldesc,
+              gene_symbol: value,
+              gene_id,
+            };
+            const result = onChange(modelFields);
+            value = result?.gene_symbol ?? value;
+          }
+          if (errors.gene_symbol?.hasError) {
+            runValidationTasks("gene_symbol", value);
+          }
+          setGene_symbol(value);
+        }}
+        onBlur={() => runValidationTasks("gene_symbol", gene_symbol)}
+        errorMessage={errors.gene_symbol?.errorMessage}
+        hasError={errors.gene_symbol?.hasError}
+        {...getOverrideProps(overrides, "gene_symbol")}
+      ></TextField>
+      <TextField
+        label="Gene id"
+        isRequired={false}
+        isReadOnly={false}
+        value={gene_id}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              hgvs,
+              text,
+              id_patient,
+              id_report,
+              id_varsample,
+              alldesc,
+              gene_symbol,
+              gene_id: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.gene_id ?? value;
+          }
+          if (errors.gene_id?.hasError) {
+            runValidationTasks("gene_id", value);
+          }
+          setGene_id(value);
+        }}
+        onBlur={() => runValidationTasks("gene_id", gene_id)}
+        errorMessage={errors.gene_id?.errorMessage}
+        hasError={errors.gene_id?.hasError}
+        {...getOverrideProps(overrides, "gene_id")}
       ></TextField>
       <Flex
         justifyContent="space-between"

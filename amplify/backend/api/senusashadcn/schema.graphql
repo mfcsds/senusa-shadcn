@@ -47,8 +47,9 @@ type VariantInterpretation @model @auth(rules: [{allow: public}]) {
   id_patient: String
   id_report: String
   id_varsample: String
-  gene: String
   alldesc: String
+  gene_symbol: String
+  gene_id: String
 }
 
 type SelectedVariant @model @auth(rules: [{allow: public}]) {

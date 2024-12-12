@@ -171,7 +171,8 @@ export interface VariantInterpretation {
   id_patient: string | "";
   id_report: string | "";
   id_varsample: string | "";
-  gene: string | "";
+  gene_symbol: string | "";
+  gene_id: string | "";
   alldesc: string | "";
 }
 

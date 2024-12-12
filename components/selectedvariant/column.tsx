@@ -3,6 +3,10 @@
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { Button } from "../ui/button";
 import { ArrowUpDown, Edit2, PlusCircle, TableOfContents } from "lucide-react";
+import {
+  createSelectedVariant,
+  createVariantInterpretation,
+} from "@/src/graphql/mutations";
 
 import { useState } from "react";
 
@@ -12,7 +16,12 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Badge } from "../ui/badge";
-import { AcmgCriteria, Variant } from "@/utils/object";
+import {
+  AcmgCriteria,
+  SelectedVariant,
+  Variant,
+  VariantInterpretation,
+} from "@/utils/object";
 import {
   Dialog,
   DialogContent,
@@ -43,6 +52,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
+
+import { generateClient } from "aws-amplify/api";
+import awsconfig from "@/src/amplifyconfiguration.json";
+import { Amplify } from "aws-amplify";
+import { generateUserID } from "@/utils/function";
+
+Amplify.configure(awsconfig);
 
 // Define a custom filter function for a number range
 const numberRangeFilterFn = (
@@ -461,6 +477,69 @@ export const columns: ColumnDef<Variant>[] = [
     header: "Actions",
     cell: ({ row }) => {
       const item = row.original;
+
+      const itemTemp: SelectedVariant = {
+        id_report: "R-KA1IE8PG1FRB",
+        id_patient: "P-QP1EYI3O1HBB",
+        id: item.id, // ID type is represented as string in TypeScript
+        id_vcf: item.id_vcf,
+        gene_id: item.gene_id,
+        gene_symbol: item.gene_symbol,
+        chrom: item.chrom,
+        pos: item.pos,
+        id_var: item.id_var,
+        ref: item.ref,
+        alt: item.alt,
+        qual: item.qual,
+        zigosity: item.zygosity,
+        global_allele: item.globalallele, // Float type in TypeScript is represented as number
+        functional_impact: item.functional_impact,
+        acmg: item.acmg,
+        reviewer_class: "",
+        clinical_sign: item.clinicalSign,
+        hgvs: item.hgvs,
+        severe_consequence: item.severeconsequence,
+        sift_score: item.sift_score,
+        sift_prediction: item.sift_prediction,
+        phenotypes: item.phenotypes,
+        rsID: item.rsID,
+        gnomade: item.gnomade,
+        gnomadg: item.gnomadg,
+        alldesc: item.alldesc,
+      };
+
+      const client = generateClient();
+      const saveSelectedVariant = async () => {
+        try {
+          const result = await client.graphql({
+            query: createSelectedVariant,
+            variables: { input: itemTemp },
+          });
+          if (result.data) {
+            try {
+              const tempVarInter: VariantInterpretation = {
+                id: generateUserID(),
+                hgvs: itemTemp.hgvs ?? "",
+                id_report: itemTemp.id_report ?? "",
+                id_patient: itemTemp.id_patient ?? "",
+                text: "",
+                id_varsample: itemTemp.id_var ?? "",
+                alldesc: itemTemp.alldesc ?? "",
+                gene_id: itemTemp.gene_id ?? "",
+                gene_symbol: itemTemp.gene_symbol ?? "",
+              };
+              const re = await client.graphql({
+                query: createVariantInterpretation,
+                variables: { input: tempVarInter },
+              });
+            } catch (error) {}
+            // console.log(`Berhasil add data ${item.hgvs}`);
+          }
+        } catch (error) {
+          console.log(`Error adding ${item.hgvs} ${error}`);
+          console.log(error);
+        }
+      };
       return (
         <div className="flex flex-row items-center justify-center p-2 gap-2">
           <Dialog>
@@ -488,7 +567,10 @@ export const columns: ColumnDef<Variant>[] = [
             className="hover:bg-red-500 hover:text-white"
           >
             <small>
-              <PlusCircle className="h-4 w-4"></PlusCircle>
+              <PlusCircle
+                className="h-4 w-4"
+                onClick={saveSelectedVariant}
+              ></PlusCircle>
             </small>
           </Button>
         </div>

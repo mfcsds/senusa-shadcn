@@ -152,8 +152,9 @@ export const getVariantInterpretation = /* GraphQL */ `query GetVariantInterpret
     id_patient
     id_report
     id_varsample
-    gene
     alldesc
+    gene_symbol
+    gene_id
     createdAt
     updatedAt
     __typename
@@ -180,8 +181,9 @@ export const listVariantInterpretations = /* GraphQL */ `query ListVariantInterp
       id_patient
       id_report
       id_varsample
-      gene
       alldesc
+      gene_symbol
+      gene_id
       createdAt
       updatedAt
       __typename
