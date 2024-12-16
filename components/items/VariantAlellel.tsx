@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "../ui/card";
@@ -18,6 +19,10 @@ import {
 } from "../ui/table";
 import { TableCell } from "@aws-amplify/ui-react";
 import { Separator } from "../ui/separator";
+import VariantSynonym from "./reviewvariant/VariantSynonym";
+import { Source_Code_Pro } from "next/font/google";
+import RefereceVariant from "./references/Reference";
+import Reference from "./references/Reference";
 
 interface VariantAlellelProops {
   data?: ColocatedVariant[];
@@ -33,7 +38,7 @@ const VariantAlellel: React.FC<VariantAlellelProops> = ({ data }) => {
   }
 
   return (
-    <div className="flex flex-col max-h-[500px] overflow-y-auto">
+    <div className="flex flex-col max-h-[500px] overflow-y-auto w-full">
       <Card className="border-none shadow-none">
         <CardContent>
           <div className="flex flex-col">
@@ -106,7 +111,8 @@ const VariantAlellel: React.FC<VariantAlellelProops> = ({ data }) => {
                               {variant.clin_sig_allele ?? "-"}
                             </TableCell>
                           </TableRow>
-                          <TableRow>
+                          {/* Pubmed References */}
+                          {/* <TableRow>
                             <TableCell>PubMed References</TableCell>
                             <TableCell>
                               {variant.pubmed && variant.pubmed.length > 0
@@ -124,59 +130,13 @@ const VariantAlellel: React.FC<VariantAlellelProops> = ({ data }) => {
                                   ))
                                 : "-"}
                             </TableCell>
-                          </TableRow>
+                          </TableRow> */}
                         </TableBody>
                       </Table>
                       {/* Ini adalah Variant Synonyms */}
                       {/* Nested table for synonyms if available */}
-                      {variant.var_synonyms && (
-                        <div className="mt-4 max-w-[500px] flex flex-wrap">
-                          <p className="font-semibold">Variant Synonyms:</p>
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead>Source</TableHead>
-                                <TableHead>Synonyms</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {Object.entries(variant.var_synonyms).map(
-                                ([source, synonyms], index) => (
-                                  <TableRow key={index}>
-                                    <TableCell>{source}</TableCell>
-                                    <TableCell className="whitespace-normal">
-                                      {source === "ClinVar" && synonyms
-                                        ? synonyms.map((synonym, synIndex) => (
-                                            <div
-                                              key={synIndex}
-                                              className="flex flex-wrap"
-                                            >
-                                              <a
-                                                href={`https://www.ncbi.nlm.nih.gov/clinvar/${synonym}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                style={{ marginRight: "8px" }}
-                                                className="mr-2 text-blue-400"
-                                              >
-                                                {synonym}
-                                                {synIndex < synonyms.length - 1
-                                                  ? ","
-                                                  : ""}
-                                              </a>
-                                            </div>
-                                          ))
-                                        : synonyms
-                                        ? synonyms.join(",")
-                                        : "-"}
-                                    </TableCell>
-                                  </TableRow>
-                                )
-                              )}
-                            </TableBody>
-                          </Table>
-                        </div>
-                      )}
                     </div>
+                    {/* Allele Frequenc */}
                     <div className="flex flex-col border rounded-md p-5 w-1/2">
                       <p className="font-semibold text-balance">
                         Allele Frequency Distribution Across Populations
@@ -214,6 +174,61 @@ const VariantAlellel: React.FC<VariantAlellelProops> = ({ data }) => {
                     </div>
                   </div>
                 </CardContent>
+                <CardFooter>
+                  <div className="flex flex-col w-full">
+                    <div className="flex flex-col w-full">
+                      {variant.var_synonyms && (
+                        <div className="mt-4 w-full flex flex-col gap-4">
+                          <p className="text-lg font-semibold text-gray-700">
+                            Synonyms
+                          </p>
+                          <div className="flex flex-col gap-4">
+                            {Object.entries(variant.var_synonyms).map(
+                              ([source, synonyms], index) => (
+                                <div key={index} className=" p-4 rounded-lg">
+                                  <p className="text-base font-medium text-violet-600">
+                                    {source}
+                                  </p>
+                                  <div className="mt-2 text-gray-700">
+                                    {source === "ClinVar" && synonyms ? (
+                                      synonyms.map((synonym, synIndex) => (
+                                        <div
+                                          key={synIndex}
+                                          className="flex flex-wrap items-center gap-2"
+                                        >
+                                          <VariantSynonym synonym={synonym} />
+                                        </div>
+                                      ))
+                                    ) : synonyms ? (
+                                      <span>{synonyms.join(", ")}</span>
+                                    ) : (
+                                      <span className="text-gray-500 italic">
+                                        No synonyms available
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-col">
+                      <div className="flex flex-col">
+                        <p className="font-bold">Referencess</p>
+                      </div>
+
+                      <div className="flex flex-col gap-4">
+                        {variant.pubmed && variant.pubmed.length > 0
+                          ? variant.pubmed.map((id, index) => (
+                              <Reference key={index} ref_code={id}></Reference>
+                            ))
+                          : "-"}
+                      </div>
+                    </div>
+                  </div>
+                </CardFooter>
               </Card>
             ))}
           </div>

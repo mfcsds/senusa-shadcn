@@ -8,6 +8,142 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getAcmgAnnotation = /* GraphQL */ `query GetAcmgAnnotation($id: ID!) {
+  getAcmgAnnotation(id: $id) {
+    id
+    id_variant
+    PVS1
+    PS1
+    PS2
+    PS3
+    PS4
+    PP1_Strong
+    PM1
+    PM2
+    PM3
+    PM4
+    PM5
+    PM6
+    PP1_Moderate
+    PP1_Cosegregation
+    PP2
+    PP3
+    PP4
+    PP5
+    BP1
+    BP2
+    BP3
+    BP4
+    BP5
+    BP6
+    BP7
+    BS1
+    BS2
+    BS3
+    BS4
+    BA1
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetAcmgAnnotationQueryVariables,
+  APITypes.GetAcmgAnnotationQuery
+>;
+export const listAcmgAnnotations = /* GraphQL */ `query ListAcmgAnnotations(
+  $filter: ModelAcmgAnnotationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAcmgAnnotations(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      id_variant
+      PVS1
+      PS1
+      PS2
+      PS3
+      PS4
+      PP1_Strong
+      PM1
+      PM2
+      PM3
+      PM4
+      PM5
+      PM6
+      PP1_Moderate
+      PP1_Cosegregation
+      PP2
+      PP3
+      PP4
+      PP5
+      BP1
+      BP2
+      BP3
+      BP4
+      BP5
+      BP6
+      BP7
+      BS1
+      BS2
+      BS3
+      BS4
+      BA1
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListAcmgAnnotationsQueryVariables,
+  APITypes.ListAcmgAnnotationsQuery
+>;
+export const getFamilyHistoryDisease = /* GraphQL */ `query GetFamilyHistoryDisease($id: ID!) {
+  getFamilyHistoryDisease(id: $id) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetFamilyHistoryDiseaseQueryVariables,
+  APITypes.GetFamilyHistoryDiseaseQuery
+>;
+export const listFamilyHistoryDiseases = /* GraphQL */ `query ListFamilyHistoryDiseases(
+  $filter: ModelFamilyHistoryDiseaseFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listFamilyHistoryDiseases(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      id_patient
+      hpo_code
+      hpo_desc
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListFamilyHistoryDiseasesQueryVariables,
+  APITypes.ListFamilyHistoryDiseasesQuery
+>;
 export const getVariantInterpretation = /* GraphQL */ `query GetVariantInterpretation($id: ID!) {
   getVariantInterpretation(id: $id) {
     id
@@ -16,8 +152,9 @@ export const getVariantInterpretation = /* GraphQL */ `query GetVariantInterpret
     id_patient
     id_report
     id_varsample
-    gene
     alldesc
+    gene_symbol
+    gene_id
     createdAt
     updatedAt
     __typename
@@ -44,8 +181,9 @@ export const listVariantInterpretations = /* GraphQL */ `query ListVariantInterp
       id_patient
       id_report
       id_varsample
-      gene
       alldesc
+      gene_symbol
+      gene_id
       createdAt
       updatedAt
       __typename
@@ -87,6 +225,17 @@ export const getSelectedVariant = /* GraphQL */ `query GetSelectedVariant($id: I
     gnomade
     gnomadg
     alldesc
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename
@@ -130,6 +279,17 @@ export const listSelectedVariants = /* GraphQL */ `query ListSelectedVariants(
       gnomade
       gnomadg
       alldesc
+      ac
+      af
+      an
+      dp
+      fs
+      mq
+      mqranksum
+      qd
+      readposrank
+      sor
+      fraction
       createdAt
       updatedAt
       __typename
@@ -150,6 +310,7 @@ export const getVcfdata = /* GraphQL */ `query GetVcfdata($id: ID!) {
     uploadAt
     pathfile
     genome_reference
+    number_variant
     createdAt
     updatedAt
     __typename
@@ -172,6 +333,7 @@ export const listVcfdata = /* GraphQL */ `query ListVcfdata(
       uploadAt
       pathfile
       genome_reference
+      number_variant
       createdAt
       updatedAt
       __typename
@@ -198,6 +360,18 @@ export const getVariant = /* GraphQL */ `query GetVariant($id: ID!) {
     id_var
     id_patient
     id_vcf
+    acmg
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename
@@ -226,6 +400,18 @@ export const listVariants = /* GraphQL */ `query ListVariants(
       id_var
       id_patient
       id_vcf
+      acmg
+      ac
+      af
+      an
+      dp
+      fs
+      mq
+      mqranksum
+      qd
+      readposrank
+      sor
+      fraction
       createdAt
       updatedAt
       __typename
@@ -483,11 +669,8 @@ export const getPatient = /* GraphQL */ `query GetPatient($id: ID!) {
     sex
     phone_number
     dob
-    institutionID
-    PatientDokuments {
-      nextToken
-      __typename
-    }
+    id_reference
+    id_institution
     createdAt
     updatedAt
     __typename
@@ -509,7 +692,8 @@ export const listPatients = /* GraphQL */ `query ListPatients(
       sex
       phone_number
       dob
-      institutionID
+      id_reference
+      id_institution
       createdAt
       updatedAt
       __typename

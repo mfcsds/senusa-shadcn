@@ -19,6 +19,7 @@ export interface Variant {
   id: string;
   id_vcf: string;
   id_patient: string;
+  id_report: string;
   chrom: string;
   pos: string;
   id_var: string;
@@ -28,10 +29,21 @@ export interface Variant {
   filter: string;
   info: string;
   hgvs: string;
+  ac: number;
+  af: number;
+  an: number;
+  dp: number;
+  fs: number;
+  mq: number;
+  mqranksum: number;
+  qd: number;
+  readposrank: number;
+  sor: number;
+  fraction: number;
   variantReportID: string;
-  zygosity: string;
+  zygosity: string | null;
   globalallele: number | null;
-  functional_impact: string;
+  functional_impact: string | null;
   acmg: string;
   clinicalSign: string | null;
   severeconsequence: string | null;
@@ -113,10 +125,13 @@ export interface VcfData {
   uploadAt: string | null;
   pathfile: string | null;
   genome_reference: string | null;
+  number_variant: number | null;
 }
 
 export interface VariantRawData {
   id_var: string | null;
+  id_patient: string | null;
+  id_vcf: string | null;
   chrom: string | null;
   pos: string | null;
   id: string | null;
@@ -125,6 +140,19 @@ export interface VariantRawData {
   qual: string | null;
   info: string | null;
   filter: string | null;
+  hgvs: string | null;
+  ac: number;
+  af: number;
+  an: number;
+  dp: number;
+  fs: number;
+  mq: number;
+  mqranksum: number;
+  qd: number;
+  readposrank: number;
+  sor: number;
+  fraction: number;
+  acmg: string | null;
 }
 
 // TypeScript Interface for SelectedVariant
@@ -165,7 +193,8 @@ export interface VariantInterpretation {
   id_patient: string | "";
   id_report: string | "";
   id_varsample: string | "";
-  gene: string | "";
+  gene_symbol: string | "";
+  gene_id: string | "";
   alldesc: string | "";
 }
 
@@ -276,4 +305,52 @@ export interface Domain {
   name?: string; // Domain name
   start?: number; // Start position of the domain
   end?: number; // End position of the domain
+}
+
+export interface FamilyDiseaseData {
+  id: string;
+  id_patient: string;
+  hpo_code: string;
+  hpo_desc: string[];
+}
+
+export interface AcmgCriteria {
+  PVS1: boolean;
+  PS1: boolean;
+  PS2: boolean;
+  PS3: boolean;
+  PS4: boolean;
+  PP1_strong: boolean;
+  PM1: boolean;
+  PM2: boolean;
+  PM3: boolean;
+  PM4: boolean;
+  PM5: boolean;
+  PM6: boolean;
+  PP1_moderate: boolean;
+  PP1: boolean;
+  PP2: boolean;
+  PP3: boolean;
+  PP4: boolean;
+  PP5: boolean;
+  BP1: boolean;
+  BP2: boolean;
+  BP3: boolean;
+  BP4: boolean;
+  BP5: boolean;
+  BP6: boolean;
+  BP7: boolean;
+  BS1: boolean;
+  BS2: boolean;
+  BS3: boolean;
+  BS4: boolean;
+  BA1: boolean;
+  class: string;
+}
+
+export interface ReferenceVariant {
+  title: string;
+  date: string;
+  abstract: string;
+  author: string;
 }

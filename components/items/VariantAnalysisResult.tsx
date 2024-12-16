@@ -137,8 +137,7 @@ The interpretation should include the clinical significance, potential impacts, 
           <TableRow>
             <TableHead className="w-1/12">
               <div className="flex flex-col">
-                <p className="text-sm font-bold">Gene</p>
-                <p>Variant</p>
+                <p className="text-sm font-bold">Variant Detail</p>
               </div>
             </TableHead>
             <TableHead className="w-6/12">Interpretation</TableHead>
@@ -148,10 +147,10 @@ The interpretation should include the clinical significance, potential impacts, 
         <TableBody>
           <TableRow>
             <TableCell className="text-balance">
-              <LabelAndDescription
-                label={`${variantInterpretation.gene}`}
-                desc={`${variantInterpretation.hgvs}`}
-              ></LabelAndDescription>
+              <div className="flex flex-col">
+                <p className="text-lg">{`${variantInterpretation.gene_symbol}`}</p>
+                <p className="text-lg">{`${variantInterpretation.gene_id}:${variantInterpretation.hgvs}`}</p>
+              </div>
             </TableCell>
             <TableCell className="text-balance">
               {/* Show updated interpretation text */}

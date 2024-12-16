@@ -20,8 +20,6 @@ import { Amplify } from "aws-amplify";
 
 import { ToastAction } from "@/components/ui/toast";
 import { toast, useToast } from "@/components/ui/use-toast";
-import { title } from "process";
-import { AspectRatio } from "@/src/components/ui/aspect-ratio";
 import Image from "next/image";
 
 import logo from "@/public/logo-senusa.png";
@@ -56,38 +54,43 @@ const LoginForm = () => {
       console.log(error);
       toast({
         variant: "destructive",
-        title: "Login Failed ",
+        title: "Login Failed",
         action: <ToastAction altText="Please Try again">Try Again</ToastAction>,
       });
     }
   };
 
   return (
-    <div className="flex flex-row md:flex-row w-screen h-screen overflow-hidden">
-      <div className=" w-9/12 bg-white flex flex-col items-center justify-center gap-5 ">
-        <Image src={logo} alt={"Image"} width={200} height={200}></Image>
-        <p className="font-sans font-bold text-3xl text-cyan-700">Senusa</p>
+    <div className="flex flex-col md:flex-row w-screen h-screen overflow-hidden">
+      <div className="w-full md:w-7/12 bg-white flex flex-col items-center justify-center gap-5 p-5 md:p-10">
+        <Image src={logo} alt={"Senusa Logo"} width={150} height={150} />
+        <p className="font-sans font-bold text-2xl md:text-3xl text-cyan-700">
+          Senusa
+        </p>
       </div>
-      <div className="flex items-center justify-center bg-gray-50 ">
-        <Card className="p-5 w-full m-10 shadow">
+      <div className="flex items-center justify-center bg-gray-50 w-full md:w-5/12 p-5">
+        <Card className="w-full max-w-md p-5 shadow">
           <CardHeader>
-            <CardTitle className="text-cyan-700">Login</CardTitle>
+            <CardTitle className="text-cyan-700 text-lg md:text-xl">
+              Login
+            </CardTitle>
             <CardDescription>
               Senusa: Software Penilaian Gen Untuk Bangsa
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin}>
-              <div className="grid w-full items-center gap-4">
+              <div className="grid gap-4">
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">Email</Label>
+                  <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter Email"
-                  ></Input>
+                    className="w-full"
+                  />
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="password">Password</Label>
@@ -97,34 +100,31 @@ const LoginForm = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter Password"
-                  ></Input>
-                  <div className="flex flex-col space-y-1.5">
-                    <Button
-                      type="submit"
-                      variant="outline"
-                      className="bg-gray-100 hover:bg-cyan-800 hover:text-white"
-                    >
-                      Login
-                    </Button>
-                  </div>
+                    className="w-full"
+                  />
                 </div>
+                <Button
+                  type="submit"
+                  variant="outline"
+                  className="w-full mt-4 bg-gray-100 hover:bg-cyan-800 hover:text-white"
+                >
+                  Login
+                </Button>
               </div>
             </form>
           </CardContent>
-          <CardFooter className="flex justify-between">
-            <div className="flex flex-col w-full">
-              <Separator></Separator>
-              <div className=" flex w-full justify-center items-center">
-                <Button variant={"link"}>
-                  <small>Forgot Password?</small>
-                </Button>
-              </div>
-              <div className="flex justify-between items-center">
-                <small>Don&#39;t have an account?</small>
-                <Button variant="link">
-                  <small>Request an account</small>
-                </Button>
-              </div>
+          <CardFooter className="flex flex-col items-center">
+            <Separator />
+            <div className="w-full flex justify-center my-2">
+              <Button variant="link">
+                <small>Forgot Password?</small>
+              </Button>
+            </div>
+            <div className="w-full flex justify-between items-center">
+              <small>Don&#39;t have an account?</small>
+              <Button variant="link">
+                <small>Request an account</small>
+              </Button>
             </div>
           </CardFooter>
         </Card>

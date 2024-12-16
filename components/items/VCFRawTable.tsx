@@ -21,6 +21,10 @@ import {
   TableHead,
 } from "../ui/table";
 
+// Import Table Component
+import { RawVariant, columns } from "../rawvariant/column";
+import { DataTable } from "../rawvariant/data-table";
+
 Amplify.configure(config);
 
 interface VCFRawTableProps {
@@ -29,7 +33,7 @@ interface VCFRawTableProps {
 
 const VCFRawTable: React.FC<VCFRawTableProps> = ({ filepath }) => {
   const client = generateClient();
-  const [variantRaw, setVariantRaw] = useState<VariantRawData[]>([]);
+  const [variantRaw, setVariantRaw] = useState<RawVariant[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [vcfContent, setVcfContent] = useState("");
@@ -84,16 +88,15 @@ const VCFRawTable: React.FC<VCFRawTableProps> = ({ filepath }) => {
           const parsedVariants = dataLines.map(
             (line: string, index: number) => {
               const fields = line.split("\t");
-              const variant: VariantRawData = {
+              const variant: RawVariant = {
                 chrom: fields[0],
                 pos: fields[1],
-                id: fields[2],
+                id_var: fields[2],
                 ref: fields[3],
                 alt: fields[4],
                 qual: fields[5],
                 filter: fields[6],
                 info: fields[7],
-                id_var: ".",
               };
               return variant;
             }
@@ -133,41 +136,14 @@ const VCFRawTable: React.FC<VCFRawTableProps> = ({ filepath }) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col overflow-y-auto max-h-[400px]">
+          <div className="flex flex-col ">
             {loading ? (
               <p>Loading...</p>
             ) : error ? (
               <p className="text-red-500">{error}</p>
             ) : (
               <>
-                <Table className="overflow-y-auto h-[200px]">
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Chrom</TableHead>
-                      <TableHead>Pos</TableHead>
-                      <TableHead>Id</TableHead>
-                      <TableHead>Ref</TableHead>
-                      <TableHead>Alt</TableHead>
-                      <TableHead>Qual</TableHead>
-                      <TableHead>Info</TableHead>
-                      <TableHead>Filter</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody className="overflow-y-auto">
-                    {variantRaw.map((item, index) => (
-                      <TableRow key={index} className="text-xs">
-                        <TableCell>{item.chrom ?? "No Data"}</TableCell>
-                        <TableCell>{item.pos ?? "No Data"}</TableCell>
-                        <TableCell>{item.id ?? "No Data"}</TableCell>
-                        <TableCell>{item.ref ?? "No Data"}</TableCell>
-                        <TableCell>{item.alt ?? "No Data"}</TableCell>
-                        <TableCell>{item.qual ?? "No Data"}</TableCell>
-                        <TableCell>{item.info ?? "No Data"}</TableCell>
-                        <TableCell>{item.filter ?? "No Data"}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                <DataTable columns={columns} data={variantRaw}></DataTable>
               </>
             )}
           </div>

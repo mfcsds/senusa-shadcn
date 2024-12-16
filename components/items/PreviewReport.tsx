@@ -1,4 +1,8 @@
 "use client";
+import { PDFDocument, rgb, StandardFonts, PDFPage, PDFFont } from "pdf-lib";
+import { BlobProvider } from "@react-pdf/renderer";
+import MyPDFDocument from "@/components/MyPDFDocument";
+import handleGeneratePDF from "@/components/HandleGeneratePDF";
 import React, { useEffect, useState } from "react";
 import { Amplify } from "aws-amplify";
 import config from "@/src/amplifyconfiguration.json";
@@ -50,19 +54,223 @@ import {
   ReportStatusStringToNumber,
 } from "@/utils/DateHelperFunction";
 import { updateVariantReport } from "@/src/graphql/mutations";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
 
 interface PreviewReportProops {
   id_report: string;
   id_patient: string;
 }
 
+const getGeneColor = (item: SelectedVariant) => {
+  switch (item.gene_symbol) {
+    case "BRCA1":
+    case "BRCA2":
+    case "TP53":
+    case "PTEN":
+    case "CDH1":
+    case "STK11":
+    case "CHEK2":
+    case "PALB2":
+    case "ATM":
+    case "MLH1":
+    case "MSH2":
+    case "MSH6":
+    case "PMS2":
+    case "RAD51C":
+    case "RAD51D":
+    case "BARD1":
+      return "border-red-600 ";
+    default:
+      return "border-gray-300"; // Default color if value doesn't match
+  }
+};
+const getTextGeneColor = (item: SelectedVariant) => {
+  switch (item.gene_symbol) {
+    case "BRCA1":
+    case "BRCA2":
+    case "TP53":
+    case "PTEN":
+    case "CDH1":
+    case "STK11":
+    case "CHEK2":
+    case "PALB2":
+    case "ATM":
+    case "MLH1":
+    case "MSH2":
+    case "MSH6":
+    case "PMS2":
+    case "RAD51C":
+    case "RAD51D":
+    case "BARD1":
+      return "text-red-600 font-semibold ";
+    default:
+      return "text-gray-600"; // Default color if value doesn't match
+  }
+};
+
+const getBadgeColor = (item: SelectedVariant) => {
+  switch (item.acmg) {
+    case "Pathogenic":
+      return "border-red-300 bg-red-50 text-gray-700";
+    case "Likely Pathogenic":
+      return "border-red-300 bg-red-50 text-gray-700";
+    case "Likely Benign":
+      return "border-green-300 bg-green-50"; // Red for pathogenic
+    case "Benign":
+      return "border-green-300 bg-green-50"; // Green for benign
+    case "VUS":
+      return "border-yellow-200 bg-yellow-50"; // Yellow for VUS
+    default:
+      return "border-gray-500"; // Default color if value doesn't match
+  }
+};
+const drawTextWithLineSpacing = (
+  page: PDFPage,
+  text: string,
+  x: number,
+  y: number,
+  font: PDFFont,
+  fontSize: number,
+  lineHeight: number,
+  maxWidth: number
+): void => {
+  const words = text.split(" ");
+  let currentLine = "";
+  const lines: string[] = [];
+
+  words.forEach((word) => {
+    const testLine = currentLine + word + " ";
+    const testWidth = font.widthOfTextAtSize(testLine, fontSize);
+    if (testWidth > maxWidth) {
+      lines.push(currentLine.trim());
+      currentLine = word + " ";
+    } else {
+      currentLine = testLine;
+    }
+  });
+
+  if (currentLine) lines.push(currentLine.trim()); // Add the last line
+
+  // Draw each line with the specified line height
+  lines.forEach((line, index) => {
+    page.drawText(line, {
+      x,
+      y: y - index * lineHeight, // Adjust the y position by the lineHeight for each line
+      size: fontSize,
+      font,
+      color: rgb(0, 0, 0),
+    });
+  });
+};
+
 const PreviewReport: React.FC<PreviewReportProops> = ({
   id_report,
   id_patient,
 }) => {
   const client = generateClient();
+  const [ensembleVersion, setEnsembleVersion] = useState<string>("");
 
-  const [patient, setPatient] = useState<Patient>();
+  const [ensembleRestVersion, setEnsembleRestVersion] = useState<string>("");
+
+  const generatePDF = async () => {
+    handleGeneratePDF({
+      patient,
+      listConc,
+      listRec,
+      listSelVariants,
+      variantInter,
+      ensembleVersion: ensembleVersion,
+      ensembleRestVersion: ensembleRestVersion,
+    });
+  };
+  const generateXML = () => {
+    // Create XML root
+    const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
+    const rootStart = "<VariantReport>";
+    const rootEnd = "</VariantReport>";
+
+    // Generate XML for each variant
+    const variantsXML = listSelVariants
+      .map((variant) => {
+        const interpretation =
+          variantInter.find(
+            (inter) => inter.gene_symbol === variant.gene_symbol
+          )?.text || "No interpretation available";
+
+        return `
+          <Variant>
+            <Detail>${variant.gene_symbol} (${variant.gene_id}): ${variant.hgvs}</Detail>
+            <Zygosity>${variant.zigosity}</Zygosity>
+            <ACMG>${variant.acmg}</ACMG>
+            <Interpretation>${interpretation}</Interpretation>
+          </Variant>`;
+      })
+      .join("");
+
+    // Combine XML parts
+    const xmlContent = `${xmlHeader}\n${rootStart}\n${variantsXML}\n${rootEnd}`;
+
+    // Create a Blob and trigger download
+    const blob = new Blob([xmlContent], { type: "application/xml" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "variant_analysis.xml";
+    link.click();
+
+    // Clean up
+    URL.revokeObjectURL(url);
+  };
+
+  const generateCSV = () => {
+    // Define CSV headers
+    const headers = ["Variant Detail", "Zygosity", "ACMG", "Interpretation"];
+
+    // Map the data to rows
+    const rows = listSelVariants.map((variant) => {
+      const interpretation =
+        variantInter.find((inter) => inter.gene_symbol === variant.gene_symbol)
+          ?.text || "No interpretation available";
+
+      return [
+        `${variant.gene_symbol} (${variant.gene_id}): ${variant.hgvs}`,
+        variant.zigosity,
+        variant.acmg,
+        interpretation,
+      ];
+    });
+
+    // Combine headers and rows into a CSV format
+    const csvContent = [
+      headers.join(","), // Join header row
+      ...rows.map((row) => row.join(",")), // Join data rows
+    ].join("\n");
+
+    // Create a Blob and trigger download
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "variant_analysis.csv";
+    link.click();
+
+    // Clean up
+    URL.revokeObjectURL(url);
+  };
+
+  const [patient, setPatient] = useState<Patient>({
+    id: "",
+    name: "",
+    sex: "",
+    dob: "",
+  });
   const [listConc, setListConclusion] = useState<Conclusion[]>([]);
   const [listRec, setListRecommendation] = useState<Recommendation[]>([]);
   const [listSelVariants, setListSelectedVariant] = useState<SelectedVariant[]>(
@@ -178,11 +386,42 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
     fetchPatient();
     fetchVariantInterpretation();
     fetchVariantReport();
+    const fetchEnsemblVersion = async () => {
+      try {
+        const response = await fetch(
+          "https://rest.ensembl.org/info/software?content-type=application/json"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch Ensembl version");
+        }
+        const data = await response.json();
+        setEnsembleVersion(data.release); // Assuming the "release" key contains the version
+      } catch (error) {
+        console.error("Error fetching Ensembl version:", error);
+      }
+    };
+
+    const fetchEnsemblRestVersion = async () => {
+      try {
+        const response = await fetch(
+          "https://rest.ensembl.org/info/rest?content-type=application/json"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch Ensembl version");
+        }
+        const data = await response.json();
+        setEnsembleRestVersion(data.release); // Assuming the "release" key contains the version
+      } catch (error) {
+        console.error("Error fetching Ensembl version:", error);
+      }
+    };
+    fetchEnsemblVersion();
+    fetchEnsemblRestVersion();
   });
 
   return (
-    <div className="flex flex-col min-w-12">
-      <div className="flex flex-col w-10/12">
+    <div className="flex flex-col w-full">
+      <div className="flex flex-col min-fit">
         <Card>
           <CardHeader>
             <CardTitle>Preview and Approval</CardTitle>
@@ -219,7 +458,6 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                               <SelectItem value="process">
                                 In Process
                               </SelectItem>
-
                               <SelectItem value="wait">
                                 Waiting for Approval
                               </SelectItem>
@@ -264,7 +502,35 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                           orientation="vertical"
                           className="h-5"
                         ></Separator>
-                        <Button variant={"outline"}>Download Report</Button>
+                        <Accordion type="single" collapsible>
+                          <AccordionItem value="item-1">
+                            <AccordionTrigger>Download Format</AccordionTrigger>
+                            <AccordionContent>
+                              <div className="flex flex-row gap-2">
+                                <div className="flex flex-row gap-1">
+                                  <Button
+                                    variant={"outline"}
+                                    onClick={(e) => generatePDF()}
+                                  >
+                                    PDF
+                                  </Button>
+                                  <Button
+                                    variant={"outline"}
+                                    onClick={generateCSV}
+                                  >
+                                    CSV
+                                  </Button>
+                                  <Button
+                                    variant={"outline"}
+                                    onClick={generateXML}
+                                  >
+                                    XML
+                                  </Button>
+                                </div>
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -378,57 +644,59 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                 <TableHeader className="bg-gray-900 ">
                   <TableRow className="border-b text-white">
                     <TableHead className="px-6 py-4 text-left font-medium text-white-900">
-                      Gene
-                    </TableHead>
-                    <TableHead className="px-6 py-4 text-left font-medium text-white-900">
                       Variant Detail
                     </TableHead>
                     <TableHead className="px-6 py-4 text-left font-medium text-white-900">
                       Zygosity
                     </TableHead>
-                    <TableHead className="px-6 py-4 text-left font-medium text-white-900">
-                      Clinvar ( Clinical Sign)
-                    </TableHead>
 
                     <TableHead className="px-6 py-4 text-left font-medium text-white-900">
-                      Gnomade Allele Frequency
-                    </TableHead>
-                    <TableHead className="px-6 py-4 text-left font-medium text-white-900">
-                      Gnomadg Allele Frequency
-                    </TableHead>
-                    <TableHead className="px-6 py-4 text-left font-medium text-white-900">
-                      Reviewer is Classification
+                      ACMG
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {listSelVariants.map((item, idx) => (
                     <TableRow key={idx}>
-                      <TableCell>{item.gene_symbol}</TableCell>
-                      <TableCell>{item.hgvs}</TableCell>
+                      <TableCell>
+                        {`${item.gene_symbol}(${item.gene_id}):${item.hgvs}`}
+                      </TableCell>
                       <TableCell>{item.zigosity}</TableCell>
-                      <TableCell>{item.clinical_sign}</TableCell>
-                      <TableCell>{item.gnomade}</TableCell>
-                      <TableCell>{item.gnomadg ?? "-"}</TableCell>
-                      <TableCell>{item.reviewer_class ?? "-"}</TableCell>
+                      <TableCell>{item.acmg}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
 
+              <p className="font-semibold pl-3">Variant Interpretation</p>
               <ul className="list-disc pl-5 text-gray-700 gap-1">
                 {variantInter.map((item, idx) => (
                   <li
                     key={idx}
                     className="text-balance font-sans font-light text-justify my-3 mx-2 text-xm "
                   >
-                    <strong className="font-extrabold">{item.hgvs}: </strong>
+                    <strong className="font-extrabold">
+                      {`(${item.gene_symbol}):${item.hgvs}`}:{" "}
+                    </strong>
                     {item.text}
                   </li>
                 ))}
               </ul>
             </div>
 
+            {/* Conclusion */}
+            <div className="bg-gray-50 p-4 rounded-md mb-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">
+                Conclusions
+              </h2>
+              {listConc.map((item, idx) => (
+                <p key={idx} className="text-sm text-gray-600 text-justify">
+                  {item.text}
+                </p>
+              ))}
+            </div>
+
+            {/* Recommendation */}
             <div className="bg-gray-50 p-4 rounded-md mb-6">
               <h2 className="text-lg font-semibold text-gray-800 mb-2">
                 Recommendation
@@ -471,7 +739,11 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
               </ul>
             </div> */}
 
-            <div className="bg-gray-200 p-4 rounded-md mb-6">
+            <div className="flex flex-col">
+              <h2>Database Info</h2>
+              <p>{`Ensemble Software Release: ${ensembleVersion}; Ensemble Rest API: ${ensembleRestVersion}; Senusa Version: 1.00`}</p>
+            </div>
+            {/* <div className="bg-gray-200 p-4 rounded-md mb-6">
               <h2 className="text-lg font-semibold text-gray-800 mb-2">
                 Supporting Evidence from Academic Journal
               </h2>
@@ -481,26 +753,15 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                   2023.
                   {/* "Impact of recurrent BRCA1 mutations in breast cancer
               susceptibility." */}
-                </li>
+            {/* </li>
                 <li>
                   MLH1 c.3503_3504delTA: Lee et al., Clinical Cancer Research,
-                  2022.
-                  {/* "Genetic landscape of Lynch syndrome: early detection and new
+                  2022. */}
+            {/* "Genetic landscape of Lynch syndrome: early detection and new
               treatments." */}
-                </li>
+            {/* </li>
               </ul>
-            </div>
-
-            <div className="bg-gray-50 p-4 rounded-md">
-              <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                Conclusions
-              </h2>
-              {listConc.map((item, idx) => (
-                <p key={idx} className="text-sm text-gray-600 text-justify">
-                  {item.text}
-                </p>
-              ))}
-            </div>
+            </div> */}
 
             <div className="flex justify-between items-center mt-8">
               <div className="text-center">

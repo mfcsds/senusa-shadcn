@@ -33,6 +33,18 @@ export declare type VariantCreateFormInputValues = {
     id_var?: string;
     id_patient?: string;
     id_vcf?: string;
+    acmg?: string;
+    ac?: number;
+    af?: number;
+    an?: number;
+    dp?: number;
+    fs?: number;
+    mq?: number;
+    mqranksum?: number;
+    qd?: number;
+    readposrank?: number;
+    sor?: number;
+    fraction?: number;
 };
 export declare type VariantCreateFormValidationValues = {
     chrom?: ValidationFunction<string>;
@@ -46,6 +58,18 @@ export declare type VariantCreateFormValidationValues = {
     id_var?: ValidationFunction<string>;
     id_patient?: ValidationFunction<string>;
     id_vcf?: ValidationFunction<string>;
+    acmg?: ValidationFunction<string>;
+    ac?: ValidationFunction<number>;
+    af?: ValidationFunction<number>;
+    an?: ValidationFunction<number>;
+    dp?: ValidationFunction<number>;
+    fs?: ValidationFunction<number>;
+    mq?: ValidationFunction<number>;
+    mqranksum?: ValidationFunction<number>;
+    qd?: ValidationFunction<number>;
+    readposrank?: ValidationFunction<number>;
+    sor?: ValidationFunction<number>;
+    fraction?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type VariantCreateFormOverridesProps = {
@@ -61,6 +85,18 @@ export declare type VariantCreateFormOverridesProps = {
     id_var?: PrimitiveOverrideProps<TextFieldProps>;
     id_patient?: PrimitiveOverrideProps<TextFieldProps>;
     id_vcf?: PrimitiveOverrideProps<TextFieldProps>;
+    acmg?: PrimitiveOverrideProps<TextFieldProps>;
+    ac?: PrimitiveOverrideProps<TextFieldProps>;
+    af?: PrimitiveOverrideProps<TextFieldProps>;
+    an?: PrimitiveOverrideProps<TextFieldProps>;
+    dp?: PrimitiveOverrideProps<TextFieldProps>;
+    fs?: PrimitiveOverrideProps<TextFieldProps>;
+    mq?: PrimitiveOverrideProps<TextFieldProps>;
+    mqranksum?: PrimitiveOverrideProps<TextFieldProps>;
+    qd?: PrimitiveOverrideProps<TextFieldProps>;
+    readposrank?: PrimitiveOverrideProps<TextFieldProps>;
+    sor?: PrimitiveOverrideProps<TextFieldProps>;
+    fraction?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type VariantCreateFormProps = React.PropsWithChildren<{
     overrides?: VariantCreateFormOverridesProps | undefined | null;

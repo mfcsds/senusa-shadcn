@@ -242,7 +242,7 @@ const VariantReport = () => {
   };
 
   return (
-    <div className="flex w-full">
+    <div className="flex w-full items-start">
       <Card className="w-full h-svh">
         <CardHeader>
           <CardTitle>Variant Report Manager</CardTitle>

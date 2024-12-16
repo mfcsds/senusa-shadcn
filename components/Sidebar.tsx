@@ -10,6 +10,7 @@ import {
   PersonStanding,
   User,
   Gem,
+  Info,
 } from "lucide-react";
 
 import React from "react";
@@ -77,6 +78,12 @@ const Sidebar = () => {
 
       <div className="mt-auto">
         <MenuHeading title="Settings"></MenuHeading>
+
+        <MenuItems
+          title="About"
+          Icon={Info}
+          path="/dashboard/about"
+        ></MenuItems>
         <MenuItems title="Subscription" Icon={Gem}></MenuItems>
         <MenuItems title="Manuals" Icon={CircleHelp} />
         <MenuItems onClick={handleLogout} title="Log Out" Icon={LogOut} />

@@ -1,3 +1,45 @@
+type AcmgAnnotation @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  id_variant: String
+  PVS1: Boolean
+  PS1: Boolean
+  PS2: Boolean
+  PS3: Boolean
+  PS4: Boolean
+  PP1_Strong: Boolean
+  PM1: Boolean
+  PM2: Boolean
+  PM3: Boolean
+  PM4: Boolean
+  PM5: Boolean
+  PM6: Boolean
+  PP1_Moderate: Boolean
+  PP1_Cosegregation: Boolean
+  PP2: Boolean
+  PP3: Boolean
+  PP4: Boolean
+  PP5: Boolean
+  BP1: Boolean
+  BP2: Boolean
+  BP3: Boolean
+  BP4: Boolean
+  BP5: Boolean
+  BP6: Boolean
+  BP7: Boolean
+  BS1: Boolean
+  BS2: Boolean
+  BS3: Boolean
+  BS4: Boolean
+  BA1: Boolean
+}
+
+type FamilyHistoryDisease @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  id_patient: String
+  hpo_code: String
+  hpo_desc: String
+}
+
 type VariantInterpretation @model @auth(rules: [{allow: public}]) {
   id: ID!
   hgvs: String
@@ -5,8 +47,9 @@ type VariantInterpretation @model @auth(rules: [{allow: public}]) {
   id_patient: String
   id_report: String
   id_varsample: String
-  gene: String
   alldesc: String
+  gene_symbol: String
+  gene_id: String
 }
 
 type SelectedVariant @model @auth(rules: [{allow: public}]) {
@@ -37,6 +80,17 @@ type SelectedVariant @model @auth(rules: [{allow: public}]) {
   gnomade: Float
   gnomadg: Float
   alldesc: String
+  ac: Float
+  af: Float
+  an: Float
+  dp: Float
+  fs: Float
+  mq: Float
+  mqranksum: Float
+  qd: Float
+  readposrank: Float
+  sor: Float
+  fraction: Float
 }
 
 type Vcfdata @model @auth(rules: [{allow: public}]) {
@@ -46,6 +100,7 @@ type Vcfdata @model @auth(rules: [{allow: public}]) {
   uploadAt: String
   pathfile: String
   genome_reference: String
+  number_variant: Int
 }
 
 type Variant @model @auth(rules: [{allow: public}]) {
@@ -61,6 +116,18 @@ type Variant @model @auth(rules: [{allow: public}]) {
   id_var: String
   id_patient: String
   id_vcf: String
+  acmg: String
+  ac: Float
+  af: Float
+  an: Float
+  dp: Float
+  fs: Float
+  mq: Float
+  mqranksum: Float
+  qd: Float
+  readposrank: Float
+  sor: Float
+  fraction: Float
 }
 
 type GeneticsConselor @model @auth(rules: [{allow: public}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}]) {
@@ -116,8 +183,8 @@ type Patient @model @auth(rules: [{allow: public}]) {
   sex: String
   phone_number: String
   dob: String
-  institutionID: ID!
-  PatientDokuments: [PatientDocuments] @hasMany(fields: ["id"])
+  id_reference: String
+  id_institution: String
 }
 
 type User @model @auth(rules: [{allow: public}]) {

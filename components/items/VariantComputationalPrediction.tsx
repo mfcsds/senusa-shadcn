@@ -48,54 +48,6 @@ const VariantComputationalPrediction: React.FC<
       ],
       color: "bg-green-50",
     },
-    {
-      groupName: "Variant Impact and Functional Significance",
-      features: [
-        { key: "cadd_phred", label: "CADD Phred" },
-        { key: "cadd_raw", label: "CADD Raw" },
-        { key: "sift_prediction", label: "SIFT Prediction" },
-        { key: "sift_score", label: "SIFT Score" },
-        { key: "polyphen_prediction", label: "PolyPhen Prediction" },
-        { key: "polyphen_score", label: "PolyPhen Score" },
-        { key: "conservation", label: "Conservation" },
-      ],
-      color: "bg-yellow-50",
-    },
-    {
-      groupName: "Location Information",
-      features: [
-        { key: "location", label: "Location" },
-        { key: "distance", label: "Distance" },
-        { key: "strand", label: "Strand" },
-      ],
-      color: "bg-red-50",
-    },
-    {
-      groupName: "Transcript and Protein Impact",
-      features: [
-        { key: "hgvsc", label: "HGVSc" },
-        { key: "hgvsp", label: "HGVSp" },
-        { key: "aa", label: "Amino Acid Change" },
-        { key: "protein_id", label: "Protein ID" },
-        { key: "variant_allele", label: "Variant Allele" },
-      ],
-      color: "bg-purple-50",
-    },
-    {
-      groupName: "Annotations and External Database References",
-      features: [
-        { key: "refseq_transcript_ids", label: "RefSeq Transcript IDs" },
-        { key: "ccds", label: "CCDS" },
-        { key: "swissprot", label: "SwissProt" },
-        { key: "trembl", label: "TrEMBL" },
-        { key: "uniparc", label: "UniParc" },
-        { key: "uniprot_isoform", label: "UniProt Isoform" },
-        { key: "gene_symbol_source", label: "Gene Symbol Source" },
-        { key: "hgnc_id", label: "HGNC ID" },
-        { key: "mane_select", label: "MANE Select" },
-      ],
-      color: "bg-gray-50",
-    },
   ];
 
   // Flatten the features for easy access to the total number of columns
@@ -107,7 +59,7 @@ const VariantComputationalPrediction: React.FC<
   );
 
   return (
-    <div className="overflow-auto max-w-[1200px] overflow-x-auto max-h-[500px] overflow-y-auto">
+    <div className="overflow-auto w-full overflow-x-auto max-h-[500px] overflow-y-auto">
       <Table>
         <thead>
           {/* Group Headers */}

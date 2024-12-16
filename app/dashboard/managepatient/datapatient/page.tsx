@@ -21,11 +21,16 @@ import {
   CalendarIcon,
   Icon,
   Plus,
+  PlusCircle,
+  Search,
   SidebarCloseIcon,
   SquareX,
   TableOfContents,
   Trash2,
+  Upload,
 } from "lucide-react";
+
+import axios from "axios";
 
 import React, { Suspense, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -44,8 +49,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { generateVCFDataID } from "@/utils/function";
-import { VcfData } from "@/utils/object";
+import {
+  generateHGVS,
+  generateHGVS2,
+  generateVariantSampleID,
+  generateVCFDataID,
+} from "@/utils/function";
+import { Variant, VcfData } from "@/utils/object";
 import { getDateToday } from "@/utils/DateHelperFunction";
 import { useSearchParams } from "next/navigation";
 
@@ -53,7 +63,7 @@ import { getPatient } from "@/src/graphql/queries";
 import { listVcfdata } from "@/src/graphql/queries";
 import { generateClient } from "aws-amplify/api";
 import { CreatePatientInput } from "@/src/API";
-import { createVcfdata } from "@/src/graphql/mutations";
+import { createVariant, createVcfdata } from "@/src/graphql/mutations";
 import {
   Select,
   SelectItem,
@@ -62,34 +72,228 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SelectContent, SelectGroup } from "@radix-ui/react-select";
-import { Input } from "postcss";
+import { Input } from "@/components/ui/input";
+
+import { listVariants } from "@/src/graphql/queries";
 
 import { remove } from "aws-amplify/storage";
 import { deleteVcfdata } from "@/src/graphql/mutations";
 import { Amplify } from "aws-amplify";
 import VCFRawTable from "@/components/items/VCFRawTable";
+import ButtonAddFamilyDisease from "@/components/button/ButtonAddFamilyDisease";
+import VariantRawTable from "@/components/items/VariantRawTable";
+import { Console } from "console";
 
 Amplify.configure(config);
+
+interface VariantRawData {
+  id_patient: string;
+  id_vcf: string;
+  id_var: string;
+  chrom: string;
+  pos: string;
+  id: string;
+  ref: string;
+  alt: string;
+  qual: string;
+  filter: string;
+  info: string;
+  ac: number;
+  af: number;
+  an: number;
+  dp: number;
+  fs: number;
+  mq: number;
+  mqranksum: number;
+  qd: number;
+  readposrank: number;
+  sor: number;
+  fraction: number;
+  hgvs: string;
+  acmg: string;
+}
 
 const DataPatientPage = () => {
   const client = generateClient();
   const useParams = useSearchParams();
 
-  const idPatient = useParams.get("idpatient");
+  const idPatient = useParams?.get("idpatient") || "";
 
   const [uploadModal, setUploadModal] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [files, setFiles] = useState<File[]>([]);
+  const [file, setFile] = useState<File>();
+  const [tableData, setTableData] = useState<any[]>([]);
   const [date, setDate] = useState<Date>();
 
   const [vcfID, setVCFID] = useState(generateVCFDataID());
 
   const [vcfFiles, setVCFFiles] = useState<VcfData[]>([]);
-  const [selectedReferencetType, setSelectedReferenceType] = useState("");
-
+  const [selectedReferenceType, setSelectedReferenceType] = useState(""); // GRCH37 ATAU GRCH38
   const [patient, setPatient] = useState<CreatePatientInput>();
-
   const [showModalVCFData, setShowModalVCFData] = useState(false);
+  const [readVariantFromText, setReadVariantFromText] = useState<
+    VariantRawData[]
+  >([]);
+
+  const [loading, setLoading] = useState(false);
+  const [filePath, setFilePath] = useState("");
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setFile(event.target.files[0]);
+    }
+  };
+
+  const handleUploadButton = async () => {
+    if (!file) {
+      alert("Please select a file!");
+      return;
+    }
+    setLoading(true);
+    setUploadProgress(0);
+    try {
+      const fileKey = `public/${idPatient}/${"vcf"}/${vcfID}/${file.name}`;
+
+      // Upload file to S3 with progress monitoring
+      const result = await uploadData({
+        path: fileKey,
+        data: file,
+        options: {
+          onProgress: ({ transferredBytes, totalBytes }) => {
+            if (totalBytes) {
+              const progress = Math.round(
+                (transferredBytes / totalBytes) * 100
+              );
+              setUploadProgress(progress);
+            }
+          },
+        },
+      }).result;
+
+      console.log("Path from Response: ", result.path);
+      setFilePath(result.path);
+
+      // Call the Lambda API
+      const apiUrl =
+        "https://sdcmg4zzh7.execute-api.us-east-1.amazonaws.com/dev/parsevcf";
+      const payload = {
+        Records: [
+          {
+            s3: {
+              bucket: {
+                name: "senusashadcn-storage-31e4d581ab8b9-dev",
+              },
+              object: {
+                key: result.path,
+              },
+            },
+          },
+        ],
+      };
+      console.log("Im call- Lambda aPI");
+      const response = await axios.post(apiUrl, payload, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.data && response.data.body) {
+        const parsedData = JSON.parse(response.data.body);
+        setTableData(parsedData);
+        const parsedVariant: VariantRawData[] = parsedData.map(
+          (item: any, index: number) => ({
+            id_patient: idPatient, // Replace with actual patient ID if available
+            id_vcf: vcfID, // Replace with actual VCF ID if available
+            id_var: item.id, // Unique variant identifier
+            chrom: item.chrom || "",
+            pos: item.pos?.toString() || "",
+            id: generateVariantSampleID() || "",
+            ref: item.ref || "",
+            alt: item.alts || "", // Assuming only the first alt allele is required
+            qual: item.qual?.toString() || "",
+            filter: item.filter || "PASS", // Default to PASS if no filter field exists
+            info: JSON.stringify(item.info || {}), // Convert the entire info field to a string if needed
+            ac: item.AC || 0,
+            af: item.AF || 0,
+            an: item.AN || 0,
+            dp: item.DP || 0,
+            fs: item.FS || 0,
+            mq: item.MQ || 0,
+            mqranksum: item.MQRankSum || 0,
+            qd: item.QD || 0,
+            readposrank: item.ReadPosRankSum || 0,
+            sor: item.SOR || 0,
+            fraction: item.FractionInformativeReads || 0,
+            hgvs: generateHGVS2(item.chrom, item.pos, item.ref, item.alts), // Placeholder HGVS
+            acmg: "Benign", // Placeholder for ACMG, populate if available
+          })
+        );
+        await setReadVariantFromText(parsedVariant);
+      } else {
+        alert("No data returned from API.");
+      }
+    } catch (error) {
+      console.error("Error uploading file or calling API:", error);
+      alert("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+      setUploadProgress(0);
+      setFile(undefined);
+    }
+  };
+
+  // Function to read VCF file and parse its contents
+  const handlePreviewVCFFile = (file: File) => {
+    const reader = new FileReader();
+
+    reader.onload = async (e) => {
+      const vcfText = e.target?.result as string;
+
+      if (!vcfText || vcfText.trim() === "") {
+        console.error("The file appears to be empty or unreadable.");
+        return;
+      }
+
+      const lines = vcfText.split("\n");
+      const headerLine = lines.find((line) => line.startsWith("#CHROM"));
+
+      if (!headerLine) {
+        console.error("Invalid VCF file: Missing header line (#CHROM)");
+        return;
+      }
+
+      const dataLines = lines.filter(
+        (line) => !line.startsWith("#") && line.trim() !== ""
+      );
+
+      // const parsedVariants: VariantRawData[] = dataLines.map((line) => {
+      //   const fields = line.split("\t");
+      //   return {
+      //     chrom: fields[0],
+      //     pos: fields[1],
+      //     id: generateVariantSampleID(),
+      //     ref: fields[3],
+      //     alt: fields[4],
+      //     qual: fields[5],
+      //     filter: fields[6],
+      //     info: fields[7],
+      //     id_vcf: vcfID,
+      //     id_patient: idPatient ?? "",
+      //     id_var: fields[2],
+      //     hgvs: generateHGVS2(fields[0], fields[1], fields[3], fields[4]),
+      //     acmg: "Benign",
+      //   };
+      // });
+
+      // // Set the parsed variants to state for preview
+      // setReadVariantFromText(parsedVariants);
+    };
+
+    reader.onerror = () => {
+      console.error("Error reading the file. Please try again.");
+    };
+
+    reader.readAsText(file);
+  };
 
   const handleShowModalVCFData = () => {
     setShowModalVCFData(!showModalVCFData);
@@ -136,9 +340,10 @@ const DataPatientPage = () => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
       setFiles([...files, ...acceptedFiles]);
+      acceptedFiles.forEach(handlePreviewVCFFile);
     },
     accept: {
-      "application/octet-stream": [".vcf", ".tbi"], // Accepted file types
+      "application/octet-stream": [".vcf", ".tbi", ".gz"], // Accepted file types
     }, // Accepted file types, // Accepted file types
   });
 
@@ -146,69 +351,103 @@ const DataPatientPage = () => {
     setUploadModal(!uploadModal);
   };
 
+  const saveSampleVariant = async (variant: VariantRawData) => {
+    // console.log(variant.hgvs);
+    try {
+      const apiUrl =
+        selectedReferenceType === "GRCH37"
+          ? "https://pr2yknfpne.execute-api.us-east-1.amazonaws.com/dev/acmg_grch37"
+          : "https://yyj4sdbsd6.execute-api.us-east-1.amazonaws.com/dev-acmg/classification";
+
+      // Fetch ACMG classification from the API
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          body: JSON.stringify({
+            variants: [variant.hgvs],
+          }),
+        }),
+      });
+      // Check if the API call was successful
+      if (!response.ok) {
+        throw new Error("Failed to fetch ACMG classification");
+      }
+
+      const data = await response.json();
+
+      // Parse the ACMG result from the API response
+      const acmgResults = JSON.parse(data.body); // Assuming `body` is a stringified array
+      if (acmgResults && acmgResults.length > 0) {
+        variant.acmg = acmgResults[0].acmg; // Extract `acmg` value
+      } else {
+        throw new Error("ACMG classification not found in the response");
+      }
+
+      // Store the variant in the database only if `acmg` is filled
+      if (variant.acmg) {
+        const result = await client.graphql({
+          query: createVariant,
+          variables: { input: variant },
+        });
+        console.log("Variant saved successfully", result);
+      } else {
+        console.error("ACMG classification is missing, variant not saved");
+      }
+    } catch (error) {
+      console.error("Error saving variant:", error);
+    }
+  };
+
   const uploadFilesButton = async () => {
     console.log("Click Upload Button");
     setVCFID(generateVCFDataID());
-    setUploadProgress(0);
+    // Save to Database
     try {
-      const upload = await Promise.all(
-        files.map(async (file) => {
-          const filePath = `public/${file.name}`;
-          const result = await uploadData({
-            path: filePath,
-            data: file,
-            options: {
-              onProgress: ({ transferredBytes, totalBytes }) => {
-                if (totalBytes) {
-                  const tempPro = Math.round(
-                    (transferredBytes / totalBytes) * 100
-                  );
-                  setUploadProgress(tempPro);
-                }
-              },
-            },
-          }).result;
+      // const upload = await Promise.all(
+      //   // Upload Data
+      //   files.map(async (file) => {
+      //     // path for storing the vcf data
+      //     const filePath = `public/${idPatient}/${"vcf"}/${vcfID}/${file.name}`;
+      //     const result = await uploadData({
+      //       path: filePath,
+      //       data: file,
+      //       options: {
+      //         onProgress: ({ transferredBytes, totalBytes }) => {
+      //           if (totalBytes) {
+      //             const tempPro = Math.round(
+      //               (transferredBytes / totalBytes) * 100
+      //             );
+      //             setUploadProgress(tempPro);
+      //           }
+      //         },
+      //       },
+      //     }).result;
+      const newVCFFile: VcfData = {
+        id: vcfID,
+        id_patient: idPatient,
+        genome_reference: selectedReferenceType, // You'll need to add this to your state
+        sample_date: date?.toDateString() ?? "No Date Selected",
+        uploadAt: getDateToday(), // Format the date as needed
+        pathfile: filePath,
+        number_variant: readVariantFromText.length,
+      };
 
-          const newVCFFile: VcfData = {
-            id: vcfID,
-            id_patient: idPatient,
-            genome_reference: selectedReferencetType, // You'll need to add this to your state
-            sample_date: date?.toDateString() ?? "No Date Selected",
-            uploadAt: getDateToday(), // Format the date as needed
-            pathfile: filePath,
-          };
-
-          const saveData = async () => {
-            try {
-              const saveVCFData = await client.graphql({
-                query: createVcfdata,
-                variables: { input: newVCFFile },
-              });
-            } catch (error) {
-              console.log(error);
-            }
-          };
-          await saveData();
-          setVCFFiles((vcfData) => [...vcfData, newVCFFile]);
-        })
-      );
-
-      // const resultUpload = await uploadData({
-      //   path: "public/",
-      //   data: files[0],
-      //   options: {
-      //     onProgress: ({ transferredBytes, totalBytes }) => {
-      //       if (totalBytes) {
-      //         console.log(
-      //           `Upload progress ${Math.round(
-      //             (transferredBytes / totalBytes) * 100
-      //           )} %`
-      //         );
-      //       }
-      //     },
-      //   },
-      // }).result;
-      // console.log(resultUpload.path);
+      const saveData = async () => {
+        try {
+          const saveVCFData = await client.graphql({
+            query: createVcfdata,
+            variables: { input: newVCFFile },
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      await saveData();
+      setVCFFiles((vcfData) => [...vcfData, newVCFFile]);
     } catch (error) {
       console.log(error);
     } finally {
@@ -216,11 +455,13 @@ const DataPatientPage = () => {
       setFiles([]);
       setUploadProgress(0);
     }
+    await readVariantFromText.forEach(saveSampleVariant);
   };
 
   const cancelButtonUpload = () => {
     setUploadModal(!uploadModal);
     setFiles([]);
+    setReadVariantFromText([]);
   };
 
   return (
@@ -233,34 +474,19 @@ const DataPatientPage = () => {
           <div>:</div>
           <p className="ml-4">{patient?.id}</p>
         </div>
-        <div className="flex flex-row w-full">
-          <div className="w-[200px]">
-            <p className="font-semibold text-sm">Patient Name</p>
+        <div className="flex flex-row w-full p-2 justify-between items-center">
+          <div className="flex flex-row">
+            <div className="w-[200px]">
+              <p className="font-semibold text-sm">Family Disease History</p>
+            </div>
+            <div>:</div>
+            <p className="ml-4">-</p>
           </div>
-          <div>:</div>
-          <p className="ml-4">{patient?.name}</p>
+          <ButtonAddFamilyDisease
+            patient_id={idPatient}
+          ></ButtonAddFamilyDisease>
         </div>
-        <div className="flex flex-row w-full">
-          <div className="w-[200px]">
-            <p className="font-semibold text-sm">Sex</p>
-          </div>
-          <div>:</div>
-          <p className="ml-4">{patient?.sex}</p>
-        </div>
-        <div className="flex flex-row w-full">
-          <div className="w-[200px]">
-            <p className="font-semibold text-sm">Date of Birth</p>
-          </div>
-          <div>:</div>
-          <p className="ml-4">{patient?.dob}</p>
-        </div>
-        <div className="flex flex-row w-full">
-          <div className="w-[200px]">
-            <p className="font-semibold text-sm">Phone Number</p>
-          </div>
-          <div>:</div>
-          <p className="ml-4">{patient?.phone_number}</p>
-        </div>
+        <Separator className="mt-10"></Separator>
       </div>
       <div className="flex flex-col">
         <Card className="border-none">
@@ -292,6 +518,7 @@ const DataPatientPage = () => {
                     <TableHead>ID</TableHead>
                     <TableHead>Genome Reference</TableHead>
                     <TableHead>Sample Collection Date</TableHead>
+                    <TableHead>Number of Variants</TableHead>
                     <TableHead>Upload Date</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
@@ -302,8 +529,8 @@ const DataPatientPage = () => {
                       <TableCell>{file.id}</TableCell>
                       <TableCell>{file.genome_reference}</TableCell>
                       <TableCell>{file.sample_date}</TableCell>
+                      <TableCell>{file.number_variant}</TableCell>
                       <TableCell>{file.uploadAt}</TableCell>
-
                       <TableCell>
                         <div className="flex flex-row items-center">
                           <Button
@@ -343,11 +570,20 @@ const DataPatientPage = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* New Table for Variants Data References */}
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Patient Variant Data Reference Call</CardTitle>
+          </CardHeader>
+        </Card>
+
         {/* <VCFUploader id_patient={patient?.id ?? ""}></VCFUploader> */}
         {uploadModal && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65">
-            <Card className="w-full max-w-screen-md p-5">
-              <CardHeader>
+            <Card className="w-screen  max-w-screen-2xl p-5 ">
+              <CardHeader className="mb-1 gap-3">
                 <CardTitle>Upload Variant Call Data</CardTitle>
                 <CardDescription>
                   Please select and upload your VCF file containing the variant
@@ -357,124 +593,263 @@ const DataPatientPage = () => {
                   the table below. If you encounter any issues, please contact
                   support.
                 </CardDescription>
+                <Separator></Separator>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-col">
-                  <div className="flex flex-col  mb-5 gap-3">
-                    <LabelAndDescription
-                      label="Genome Reference"
-                      desc="Please select the appropriate reference genome version for
+                <div className="flex flex-col w-full gap-3">
+                  <div className="grid grid-cols-2 gap-4 ">
+                    <div className="flex flex-col">
+                      <div className="flex flex-col mb-5 gap-3">
+                        <LabelAndDescription
+                          label="Genome Reference"
+                          desc="Please select the appropriate reference genome version for
                       your VCF file. Ensure that the selected version matches
                       the reference genome used during variant calling to avoid
                       inconsistencies in analysis."
-                    ></LabelAndDescription>
-                    {/* <select
-                      onChange={(e) => setSelectedReferenceType(e.target.value)}
-                    >
-                      <option>Select</option>
-                      <option>GrCH38</option>
-                      <option>GrCH37</option>
-                    </select> */}
+                        ></LabelAndDescription>
+                        <Select
+                          onValueChange={(value) =>
+                            setSelectedReferenceType(value)
+                          }
+                        >
+                          <SelectTrigger className="w-[250px] border bg-white border-black">
+                            <SelectValue placeholder="Select the Genome Reference"></SelectValue>
+                          </SelectTrigger>
+                          <SelectContent className="p-4 mr-3 bg-white w-full border rounded-md">
+                            <SelectGroup className="w-full border-gray-300">
+                              <SelectLabel className="w-full">
+                                Genome Reference
+                              </SelectLabel>
+                              <Separator></Separator>
+                              <SelectItem className="w-full" value="GRCH38">
+                                GRCH38
+                              </SelectItem>
+                              <SelectItem className="w-full" value="GRCH37">
+                                GRCH37
+                              </SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className=" flex flex-col mb-2 gap-2 ">
+                        <LabelAndDescription
+                          label="Sample Date"
+                          desc="The date when the patient’s sample was collected for variant analysis. Please select the accurate collection date to ensure proper tracking of sample data."
+                        ></LabelAndDescription>
+                        <div className="">
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-[250px] justify-start text-left font-normal",
+                                  !date && "text-muted-foreground"
+                                )}
+                              >
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {date ? (
+                                  format(date, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={date}
+                                onSelect={setDate}
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-row gap-10">
+                      <div className="flex flex-col ">
+                        {uploadProgress > 0 && (
+                          <div className="w-full bg-gray-200 rounded-full h-4 mt-4">
+                            <div
+                              className="bg-blue-600 h-4 rounded-full"
+                              style={{ width: `${uploadProgress}%` }}
+                            ></div>
+                          </div>
+                        )}
 
-                    <Select
-                      onValueChange={(value) => setSelectedReferenceType(value)}
-                    >
-                      <SelectTrigger className="w-full border bg-white border-black">
-                        <SelectValue placeholder="Select the Genome Reference"></SelectValue>
-                      </SelectTrigger>
-                      <SelectContent className="p-4 mr-3 bg-white w-full border rounded-md">
-                        <SelectGroup className="w-full border-gray-300">
-                          <SelectLabel className="w-full">
-                            Genome Reference
-                          </SelectLabel>
-                          <Separator></Separator>
-                          <SelectItem className="w-full" value="GRCH38">
-                            GRCH38
-                          </SelectItem>
-                          <SelectItem className="w-full" value="GRCH37">
-                            GRCH37
-                          </SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className=" flex flex-col mb-2 gap-2 w-full">
-                    <LabelAndDescription
-                      label="Sample Date"
-                      desc="The date when the patient’s sample was collected for variant analysis. Please select the accurate collection date to ensure proper tracking of sample data."
-                    ></LabelAndDescription>
-                    <div className="w-full">
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-full justify-start text-left font-normal",
-                              !date && "text-muted-foreground"
+                        <div className="mt-4 gap-3">
+                          <LabelAndDescription
+                            label="Upload VCF File"
+                            desc="Please upload the Variant Call Format (VCF) file containing the patient's variant data. Ensure that the file is properly formatted and does not exceed the upload size limit. Only .vcf and .tbi file formats will be accepted. If you encounter any issues with uploading, please contact support for assistance."
+                          ></LabelAndDescription>
+                          <div className="border-2 border-dashed border-violet-400 h-[100px] p-1 text-center rounded-md my-3 flex flex-col justify-center">
+                            <label
+                              htmlFor="file-upload"
+                              className="text-gray-400 cursor-pointer block"
+                            >
+                              Drag n drop some files here, or click to select
+                              files
+                              <br />
+                              <span className="text-gray-500 text-sm">
+                                (Only *.vcf, *.tbi will be accepted)
+                              </span>
+                            </label>
+                            <Input
+                              id="file-upload"
+                              type="file"
+                              accept=".vcf,.vcf.gz,.gz"
+                              onChange={handleFileChange}
+                              className="ring-0 border-none hidden"
+                            ></Input>
+                            {/* Show the file name if a file is selected */}
+                            {file && (
+                              <div className="mt-4 text-sm text-gray-600">
+                                <strong>Selected file:</strong> {file.name}
+                              </div>
                             )}
+                          </div>
+                          {/* Upload Berkas Lama */}
+                          {/* <div
+                            {...getRootProps({
+                              className:
+                                "mt-4 border-2 border-dashed border-gray-300 p-4 text-center cursor-pointer hover:border-gray-500 transition-colors duration-150",
+                            })}
                           >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {date ? (
-                              format(date, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={date}
-                            onSelect={setDate}
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
+                            <input {...getInputProps()} />
+                            <p>
+                              Drag n drop some files here, or click to select
+                              files
+                            </p>
+                            <em>(Only *.vcf, *.tbi will be accepted)</em>
+                          </div> */}
+                          {files.length > 0 && (
+                            <ul className="mt-2">
+                              {files.map((file, index) => (
+                                <li key={index} className="text-gray-600">
+                                  {file.name}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                        <Button
+                          variant={"outline"}
+                          className={`border border-violet-700 bg-violet-200 gap-1 hover:bg-violet-300`}
+                          onClick={handleUploadButton}
+                          disabled={loading}
+                        >
+                          <Upload></Upload>
+                          Upload
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                  <Separator className="mt-5"></Separator>
-
-                  {uploadProgress > 0 && (
-                    <div className="w-full bg-gray-200 rounded-full h-4 mt-4">
-                      <div
-                        className="bg-blue-600 h-4 rounded-full"
-                        style={{ width: `${uploadProgress}%` }}
-                      ></div>
+                  <Separator></Separator>
+                  {/* Preview Data */}
+                  <div className="flex flex-col">
+                    <div className="flex flex-col p-3 rounded-md border-violet-400 border-2 ">
+                      <LabelAndDescription
+                        label="Preview Variant Data"
+                        desc="Detail"
+                      ></LabelAndDescription>
+                      {/* <Table className="overflow-y-auto h-[300px] block">
+                        <TableHeader className="sticky top-0 bg-white z-10">
+                          <TableRow>
+                            <TableHead className="w-1/6">Chrom</TableHead>
+                            <TableHead className="w-1/6">Pos</TableHead>
+                            <TableHead className="w-1/6">Id</TableHead>
+                            <TableHead className="w-1/6">Ref</TableHead>
+                            <TableHead className="w-1/6">Alt</TableHead>
+                            <TableHead className="w-1/6">Qual</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody className="overflow-y-auto">
+                          {readVariantFromText.map((variant, idx) => (
+                            <TableRow key={idx} className="text-xs">
+                              <TableCell>{variant.chrom}</TableCell>
+                              <TableCell>{variant.pos}</TableCell>
+                              <TableCell>{variant.id_var}</TableCell>
+                              <TableCell>{variant.ref}</TableCell>
+                              <TableCell>{variant.alt}</TableCell>
+                              <TableCell>{variant.qual}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table> */}
+                      {tableData.length > 0 && (
+                        <div className="mt-6">
+                          <Table className="overflow-y-auto h-[300px] block">
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Chrom</TableHead>
+                                <TableHead>Pos</TableHead>
+                                <TableHead>ID</TableHead>
+                                <TableHead>Ref</TableHead>
+                                <TableHead>Alts</TableHead>
+                                <TableHead>Qual</TableHead>
+                                <TableHead>Filter</TableHead>
+                                <TableHead>AC</TableHead>
+                                <TableHead>AF</TableHead>
+                                <TableHead>AN</TableHead>
+                                <TableHead>DP</TableHead>
+                                <TableHead>FS</TableHead>
+                                <TableHead>MQ</TableHead>
+                                <TableHead>MQRankSum</TableHead>
+                                <TableHead>QD</TableHead>
+                                <TableHead>ReadPosRankSum</TableHead>
+                                <TableHead>SOR</TableHead>
+                                <TableHead>FractionInformativeReads</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {tableData.map((row, index) => (
+                                <TableRow key={index}>
+                                  <TableCell>{row.chrom}</TableCell>
+                                  <TableCell>{row.pos}</TableCell>
+                                  <TableCell>{row.id ?? "N/A"}</TableCell>
+                                  <TableCell>{row.ref}</TableCell>
+                                  <TableCell>{row.alts.join(", ")}</TableCell>
+                                  <TableCell>{row.qual ?? "N/A"}</TableCell>
+                                  <TableCell>{row.filter ?? "N/A"}</TableCell>
+                                  <TableCell>{row.AC ?? "N/A"}</TableCell>
+                                  <TableCell>{row.AF ?? "N/A"}</TableCell>
+                                  <TableCell>{row.AN ?? "N/A"}</TableCell>
+                                  <TableCell>{row.DP ?? "N/A"}</TableCell>
+                                  <TableCell>{row.FS ?? "N/A"}</TableCell>
+                                  <TableCell>{row.MQ ?? "N/A"}</TableCell>
+                                  <TableCell>
+                                    {row.MQRankSum ?? "N/A"}
+                                  </TableCell>
+                                  <TableCell>{row.QD ?? "N/A"}</TableCell>
+                                  <TableCell>
+                                    {row.ReadPosRankSum ?? "N/A"}
+                                  </TableCell>
+                                  <TableCell>{row.SOR ?? "N/A"}</TableCell>
+                                  <TableCell>
+                                    {row.FractionInformativeReads ?? "N/A"}
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                      )}
                     </div>
-                  )}
-
-                  <div className="mt-4 gap-3">
-                    <LabelAndDescription
-                      label="Upload VCF File"
-                      desc="Please upload the Variant Call Format (VCF) file containing the patient's variant data. Ensure that the file is properly formatted and does not exceed the upload size limit. Only .vcf and .tbi file formats will be accepted. If you encounter any issues with uploading, please contact support for assistance."
-                    ></LabelAndDescription>
-                    <div
-                      {...getRootProps({
-                        className:
-                          "mt-4 border-2 border-dashed border-gray-300 p-4 text-center cursor-pointer hover:border-gray-500 transition-colors duration-150",
-                      })}
-                    >
-                      <input {...getInputProps()} />
-                      <p>
-                        Drag n drop some files here, or click to select files
-                      </p>
-                      <em>(Only *.vcf, *.tbi will be accepted)</em>
-                    </div>
-                    {files.length > 0 && (
-                      <ul className="mt-2">
-                        {files.map((file, index) => (
-                          <li key={index} className="text-gray-600">
-                            {file.name}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
                   </div>
                 </div>
               </CardContent>
               <CardFooter>
                 <div className="w-full gap-4 flex flex-row-reverse">
-                  <Button onClick={uploadFilesButton}>Upload</Button>
+                  <Button
+                    onClick={uploadFilesButton}
+                    variant={"outline"}
+                    className="bg-violet-700 text-white hover:bg-violet-700 hover:text-white font-semibold"
+                  >
+                    Save Variant Record
+                  </Button>
                   <Button variant="secondary" onClick={cancelButtonUpload}>
                     Cancel
                   </Button>
@@ -485,7 +860,7 @@ const DataPatientPage = () => {
         )}
         {showModalVCFData && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65">
-            <div className="bg-white rounded-lg shadow-lg p-5 w-[1000px] h-[700px] flex flex-col">
+            <div className="bg-white rounded-lg shadow-lg p-5 w-[1200px] h-[1000px] flex flex-col">
               <div className="flex flex-row-reverse">
                 <Button
                   variant="ghost"
@@ -498,9 +873,12 @@ const DataPatientPage = () => {
                 </Button>
               </div>
               {/* <VCFUploader id_patient="Sample Patient ID" /> */}
-              <VCFRawTable
+              {/* <VCFRawTable
                 filepath={vcfFiles.at(0)?.pathfile ?? ""}
-              ></VCFRawTable>
+              ></VCFRawTable> */}
+              <VariantRawTable
+                id_vcf={vcfFiles.at(0)?.id ?? ""}
+              ></VariantRawTable>
             </div>
           </div>
         )}

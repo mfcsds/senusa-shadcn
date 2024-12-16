@@ -28,6 +28,7 @@ export default function VcfdataCreateForm(props) {
     uploadAt: "",
     pathfile: "",
     genome_reference: "",
+    number_variant: "",
   };
   const [id_patient, setId_patient] = React.useState(initialValues.id_patient);
   const [sample_date, setSample_date] = React.useState(
@@ -38,6 +39,9 @@ export default function VcfdataCreateForm(props) {
   const [genome_reference, setGenome_reference] = React.useState(
     initialValues.genome_reference
   );
+  const [number_variant, setNumber_variant] = React.useState(
+    initialValues.number_variant
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setId_patient(initialValues.id_patient);
@@ -45,6 +49,7 @@ export default function VcfdataCreateForm(props) {
     setUploadAt(initialValues.uploadAt);
     setPathfile(initialValues.pathfile);
     setGenome_reference(initialValues.genome_reference);
+    setNumber_variant(initialValues.number_variant);
     setErrors({});
   };
   const validations = {
@@ -53,6 +58,7 @@ export default function VcfdataCreateForm(props) {
     uploadAt: [],
     pathfile: [],
     genome_reference: [],
+    number_variant: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -85,6 +91,7 @@ export default function VcfdataCreateForm(props) {
           uploadAt,
           pathfile,
           genome_reference,
+          number_variant,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -152,6 +159,7 @@ export default function VcfdataCreateForm(props) {
               uploadAt,
               pathfile,
               genome_reference,
+              number_variant,
             };
             const result = onChange(modelFields);
             value = result?.id_patient ?? value;
@@ -180,6 +188,7 @@ export default function VcfdataCreateForm(props) {
               uploadAt,
               pathfile,
               genome_reference,
+              number_variant,
             };
             const result = onChange(modelFields);
             value = result?.sample_date ?? value;
@@ -208,6 +217,7 @@ export default function VcfdataCreateForm(props) {
               uploadAt: value,
               pathfile,
               genome_reference,
+              number_variant,
             };
             const result = onChange(modelFields);
             value = result?.uploadAt ?? value;
@@ -236,6 +246,7 @@ export default function VcfdataCreateForm(props) {
               uploadAt,
               pathfile: value,
               genome_reference,
+              number_variant,
             };
             const result = onChange(modelFields);
             value = result?.pathfile ?? value;
@@ -264,6 +275,7 @@ export default function VcfdataCreateForm(props) {
               uploadAt,
               pathfile,
               genome_reference: value,
+              number_variant,
             };
             const result = onChange(modelFields);
             value = result?.genome_reference ?? value;
@@ -277,6 +289,39 @@ export default function VcfdataCreateForm(props) {
         errorMessage={errors.genome_reference?.errorMessage}
         hasError={errors.genome_reference?.hasError}
         {...getOverrideProps(overrides, "genome_reference")}
+      ></TextField>
+      <TextField
+        label="Number variant"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={number_variant}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              sample_date,
+              uploadAt,
+              pathfile,
+              genome_reference,
+              number_variant: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.number_variant ?? value;
+          }
+          if (errors.number_variant?.hasError) {
+            runValidationTasks("number_variant", value);
+          }
+          setNumber_variant(value);
+        }}
+        onBlur={() => runValidationTasks("number_variant", number_variant)}
+        errorMessage={errors.number_variant?.errorMessage}
+        hasError={errors.number_variant?.hasError}
+        {...getOverrideProps(overrides, "number_variant")}
       ></TextField>
       <Flex
         justifyContent="space-between"

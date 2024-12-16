@@ -27,6 +27,7 @@ export declare type VcfdataCreateFormInputValues = {
     uploadAt?: string;
     pathfile?: string;
     genome_reference?: string;
+    number_variant?: number;
 };
 export declare type VcfdataCreateFormValidationValues = {
     id_patient?: ValidationFunction<string>;
@@ -34,6 +35,7 @@ export declare type VcfdataCreateFormValidationValues = {
     uploadAt?: ValidationFunction<string>;
     pathfile?: ValidationFunction<string>;
     genome_reference?: ValidationFunction<string>;
+    number_variant?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type VcfdataCreateFormOverridesProps = {
@@ -43,6 +45,7 @@ export declare type VcfdataCreateFormOverridesProps = {
     uploadAt?: PrimitiveOverrideProps<TextFieldProps>;
     pathfile?: PrimitiveOverrideProps<TextFieldProps>;
     genome_reference?: PrimitiveOverrideProps<TextFieldProps>;
+    number_variant?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type VcfdataCreateFormProps = React.PropsWithChildren<{
     overrides?: VcfdataCreateFormOverridesProps | undefined | null;

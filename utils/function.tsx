@@ -56,23 +56,35 @@ export function generateInstutionID() {
 }
 export function generateVariantInterpretation() {
   const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  let institutionID = "VI-";
+  let variantInterID = "VI-";
 
   for (let i = 0; i < 12; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length);
-    institutionID += characters[randomIndex];
+    variantInterID += characters[randomIndex];
   }
-  return institutionID;
+  return variantInterID;
 }
+
+export function generateFamilyHPOID() {
+  const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let fdhpo = "FD-";
+
+  for (let i = 0; i < 12; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    fdhpo += characters[randomIndex];
+  }
+  return fdhpo;
+}
+
 export function generateVariantSampleID() {
   const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstu";
-  let institutionID = "vs-";
+  let variantSampleID = "vs-";
 
   for (let i = 0; i < 12; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length);
-    institutionID += characters[randomIndex];
+    variantSampleID += characters[randomIndex];
   }
-  return institutionID;
+  return variantSampleID;
 }
 export function generateRecommendationID() {
   const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstu";
@@ -126,6 +138,22 @@ export function generateHGVS(variant: Variant): string {
   // "chromosome:position reference_allele>alternate_allele"
 
   const { chrom, pos, ref, alt } = variant;
+
+  // HGVS nomenclature
+  const hgvs = `${chrom}:g.${pos}${ref}>${alt}`;
+
+  return hgvs;
+}
+
+export function generateHGVS2(
+  chrom: string,
+  pos: string,
+  ref: string,
+  alt: string
+): string {
+  // Example HGVS format: "chr1:g.123456A>T"
+  // HGVS nomenclature usually follows this format:
+  // "chromosome:position reference_allele>alternate_allele"
 
   // HGVS nomenclature
   const hgvs = `${chrom}:g.${pos}${ref}>${alt}`;
@@ -232,7 +260,65 @@ export const fetchVariantDetails = async (
 
   return variant;
 };
+export const fetchVariantDetails4 = async (
+  variant: Variant
+): Promise<Variant> => {
+  const lambdaEndpoint =
+    "https://i189efe3m3.execute-api.us-east-1.amazonaws.com/dev/variantinfo";
 
+  const maxRetries = 10;
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await axios.post(lambdaEndpoint, {
+        variant: {
+          chrom: variant.chrom,
+          pos: variant.pos,
+          ref: variant.ref,
+          alt: variant.alt,
+        },
+      });
+
+      if (response.status === 200) {
+        const lambdaBody = JSON.parse(response.data.body);
+        return {
+          ...variant,
+          globalallele: lambdaBody.globalallele || null,
+          gnomade: lambdaBody.gnomade || null,
+          gnomadg: lambdaBody.gnomadg || null,
+          clinicalSign: lambdaBody.clinicalSign || null,
+          severeconsequence: lambdaBody.severeconsequence || null,
+          sift_score: lambdaBody.sift_score || null,
+          sift_prediction: lambdaBody.sift_prediction || null,
+          gene_symbol: lambdaBody.gene_symbol || null,
+          gene_id: lambdaBody.gene_id || null,
+          rsID: lambdaBody.rsID || null,
+          phenotypes: lambdaBody.phenotypes || null,
+          alldesc: lambdaBody.alldesc || "",
+        };
+      } else {
+        console.error(
+          `Attempt ${attempt}: Lambda function returned status ${response.status}.`
+        );
+      }
+    } catch (error) {
+      console.error(`Attempt ${attempt}: Error calling Lambda function:`);
+
+      if (attempt === maxRetries) {
+        console.error("Max retries reached. Unable to fetch variant details.");
+      } else {
+        const backoffTime = Math.pow(2, attempt) * 1000; // Exponential backoff
+        console.log(`Retrying in ${backoffTime / 1000} seconds...`);
+        await delay(backoffTime);
+      }
+    }
+  }
+
+  // Return original variant if all retries fail
+  return variant;
+};
 export const fetchVariantDetails2 = async (
   variant: Variant
 ): Promise<Variant> => {
