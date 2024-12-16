@@ -474,6 +474,110 @@ The conclusion make it easy to understand, make it efficient, and short, no more
           </div>
         </div>
       )}
+      {/* Conclusion Section */}
+      <div className="flex flex-col">
+        <Card>
+          <CardHeader>
+            <CardTitle>Conclusion</CardTitle>
+            <CardDescription>
+              Provide a conclusion that summarizes the results and
+              interpretations of the variant analysis. Make sure to address
+              clinical relevance and any potential genetic implications.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col w-full">
+              <div className="flex flex-row-reverse items-center p-3">
+                <Button
+                  variant={"link"}
+                  className="rounded-full"
+                  onClick={() => setConclusionDialogOpen(true)}
+                >
+                  <PlusCircle className="" />
+                </Button>
+                <p className="text-balance text-gray-500">Add Conclusion</p>
+              </div>
+              <Separator />
+              <div className="flex flex-col">
+                <div className="flex flex-row">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-1/12">No</TableHead>
+                        <TableHead className="w-9/12">Conclusion</TableHead>
+                        <TableHead className="w-1/12">Actions</TableHead>
+                        <TableHead className="w-1/12">Remove</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                  </Table>
+                </div>
+                <div className="flex flex-col h-[200px] overflow-y-auto">
+                  <Table>
+                    <TableBody>
+                      {listConclusion.map((conc, index) => (
+                        <TableRow
+                          key={conc.id}
+                          className="h-[50px] text-balance"
+                        >
+                          <TableCell className="pl-2 text-left w-1/12">
+                            {index + 1}
+                          </TableCell>
+                          <TableCell className="w-9/12">{conc.text}</TableCell>
+                          <TableCell className="w-1/12">
+                            <div className="flex flex-row gap-1 items-center">
+                              <Button
+                                variant={"ghost"}
+                                onClick={(e) =>
+                                  handleOpenEditModalConclusion(conc.id)
+                                }
+                              >
+                                <small>
+                                  <Edit className="w-4 h-4"></Edit>
+                                </small>
+                              </Button>
+                              <Separator
+                                orientation="vertical"
+                                className="h-5"
+                              ></Separator>
+                              <Button
+                                variant={"ghost"}
+                                className="hover:bg-green-500 hover:text-white"
+                                onClick={(e) =>
+                                  handleAIPreTextConclusion(conc.id)
+                                }
+                              >
+                                <small>
+                                  <Lightbulb className="w-4 h-4"></Lightbulb>
+                                </small>
+                              </Button>
+                            </div>
+                          </TableCell>
+                          <TableCell className="w-1/12">
+                            <div className="flex flex-row gap-1 items-center">
+                              <Button
+                                variant={"ghost"}
+                                className="hover:bg-red-500"
+                                onClick={(e) =>
+                                  handleDeleteConclusion(conc.id ?? "")
+                                }
+                              >
+                                <small>
+                                  <X className="w-4 h-4"></X>
+                                </small>
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Recommendation Section */}
       <div className="flex flex-col w-full">
         <Card>
@@ -601,110 +705,6 @@ The conclusion make it easy to understand, make it efficient, and short, no more
         </Card>
       </div>
 
-      {/* Conclusion Section */}
-      <div className="flex flex-col">
-        <Card>
-          <CardHeader>
-            <CardTitle>Conclusion</CardTitle>
-            <CardDescription>
-              Provide a conclusion that summarizes the results and
-              interpretations of the variant analysis. Make sure to address
-              clinical relevance and any potential genetic implications.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col w-full">
-              <div className="flex flex-row-reverse items-center p-3">
-                <Button
-                  variant={"link"}
-                  className="rounded-full"
-                  onClick={() => setConclusionDialogOpen(true)}
-                >
-                  <PlusCircle className="" />
-                </Button>
-                <p className="text-balance text-gray-500">Add Conclusion</p>
-              </div>
-              <Separator />
-              <div className="flex flex-col">
-                <div className="flex flex-row">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-1/12">No</TableHead>
-                        <TableHead className="w-9/12">Conclusion</TableHead>
-                        <TableHead className="w-1/12">Actions</TableHead>
-                        <TableHead className="w-1/12">Remove</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                  </Table>
-                </div>
-                <div className="flex flex-col h-[200px] overflow-y-auto">
-                  <Table>
-                    <TableBody>
-                      {listConclusion.map((conc, index) => (
-                        <TableRow
-                          key={conc.id}
-                          className="h-[50px] text-balance"
-                        >
-                          <TableCell className="pl-2 text-left w-1/12">
-                            {index + 1}
-                          </TableCell>
-                          <TableCell className="w-9/12">{conc.text}</TableCell>
-                          <TableCell className="w-1/12">
-                            <div className="flex flex-row gap-1 items-center">
-                              <Button
-                                variant={"ghost"}
-                                onClick={(e) =>
-                                  handleOpenEditModalConclusion(conc.id)
-                                }
-                              >
-                                <small>
-                                  <Edit className="w-4 h-4"></Edit>
-                                </small>
-                              </Button>
-                              <Separator
-                                orientation="vertical"
-                                className="h-5"
-                              ></Separator>
-                              <Button
-                                variant={"ghost"}
-                                className="hover:bg-green-500 hover:text-white"
-                                onClick={(e) =>
-                                  handleAIPreTextConclusion(conc.id)
-                                }
-                              >
-                                <small>
-                                  <Lightbulb className="w-4 h-4"></Lightbulb>
-                                </small>
-                              </Button>
-                            </div>
-                          </TableCell>
-                          <TableCell className="w-1/12">
-                            <div className="flex flex-row gap-1 items-center">
-                              <Button
-                                variant={"ghost"}
-                                className="hover:bg-red-500"
-                                onClick={(e) =>
-                                  handleDeleteConclusion(conc.id ?? "")
-                                }
-                              >
-                                <small>
-                                  <X className="w-4 h-4"></X>
-                                </small>
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Recommendation Dialog */}
       <Dialog
         open={isRecommendationDialogOpen}
@@ -761,8 +761,6 @@ The conclusion make it easy to understand, make it efficient, and short, no more
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      {}
     </div>
   );
 };

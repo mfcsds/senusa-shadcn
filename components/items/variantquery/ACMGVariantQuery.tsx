@@ -284,6 +284,7 @@ const ACMGVariantQuery: React.FC<ACMGVariantQueryProops> = ({ data }) => {
           ))}
         </TableBody>
       </Table>
+      History
     </div>
   );
 };

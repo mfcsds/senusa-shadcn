@@ -40,6 +40,9 @@ import {
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  Download,
+  FileCode,
+  Logs,
 } from "lucide-react";
 import {
   DoubleArrowLeftIcon,
@@ -48,7 +51,9 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
@@ -61,6 +66,12 @@ import {
 import VariantInformationModal from "../items/VariantInformationModal";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -72,14 +83,40 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  // Colum yang akan dimunculkan
+  const visibleColumns = [
+    "gene_id",
+    "AC",
+    "AF",
+    "fraction",
+    "acmg",
+    "clinicalSign",
+    "phenotypes",
+    "action",
+  ]; // List of columns to be visible initially
+
+  const initialColumnVisibility = columns.reduce((acc, column) => {
+    const columnId = column.id || (column as any).accessorKey; // Fallback to accessorKey if id is not defined
+    if (columnId) {
+      acc[columnId] = visibleColumns.includes(columnId); // Set true for visible columns, false otherwise
+    }
+    return acc;
+  }, {} as VisibilityState);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+    initialColumnVisibility
+  );
   const [isOpenDetailVariantDialog, setIsOpenDetailVariantDialog] =
     useState(false);
+
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
+    { id: "acmg", value: "Pathogenic" },
+  ]);
 
   const [selectedVariant, setSelectedVariant] = useState<TData | null>(null);
   const [rowSelection, setRowSelection] = useState({});
   const [zygosityFilter, setZygosityFilter] = useState<string | null>(null);
+
+  const [acmgFilter, setACMGFilter] = useState<string | null>(null);
 
   const [fiVis, setFiVis] = useState(false);
 
@@ -90,6 +127,15 @@ export function DataTable<TData, TValue>({
       { id: "zygosity", value }, // Add the new zygosity filter
     ]);
   };
+
+  const handleACMGChange = (value: string) => {
+    setACMGFilter(value);
+    setColumnFilters((prev) => [
+      ...prev.filter((filter) => filter.id !== "acmg"), // Remove any existing zygosity filter
+      { id: "acmg", value }, // Add the new zygosity filter
+    ]);
+  };
+
   const containsFilterFn = (
     row: Row<any>,
     columnId: string,
@@ -124,18 +170,84 @@ export function DataTable<TData, TValue>({
     state: {
       sorting,
       columnFilters,
-      columnVisibility: {
-        gene_symbol: false,
-        rsID: false,
-        sift_score: false,
-        sift_prediction: false,
-        gnomade: false,
-        gnomadg: false,
-        functional_impact: false,
-      },
+      columnVisibility,
       rowSelection,
     },
   });
+
+  const generateXML = (id_report: string, id_patient: string) => {
+    // XML Header
+    const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
+    const rootStart = `<VariantReport reportId="${id_report}" patientId="${id_patient}">`;
+    const rootEnd = "</VariantReport>";
+
+    // Access all rows from the filtered row model
+    const rows = table.getFilteredRowModel().rows;
+
+    // Generate XML for each row
+    const variantsXML = rows
+      .map((row) => {
+        const cells = row.getAllCells();
+        const variantData = cells
+          .map((cell) => {
+            const columnName = cell.column.id; // Column name from the table
+            const value = cell.getValue(); // Cell value
+            return `  <${columnName}>${value ?? "N/A"}</${columnName}>`; // Handle null/undefined values
+          })
+          .join("\n");
+
+        return `<Variant>\n${variantData}\n</Variant>`;
+      })
+      .join("\n");
+
+    // Combine XML parts
+    const xmlContent = `${xmlHeader}\n${rootStart}\n${variantsXML}\n${rootEnd}`;
+
+    // Create a Blob and trigger download
+    const blob = new Blob([xmlContent], { type: "application/xml" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `sample.xml`; // Dynamic file name
+    link.click();
+
+    // Clean up
+    URL.revokeObjectURL(url);
+  };
+
+  const generateCSV = () => {
+    // Get column headers dynamically from the table
+    // Get column headers dynamically from the table
+    const headers = table.getAllColumns().map((column) => column.id);
+
+    // Access all rows from the filtered row model
+    const rows = table.getFilteredRowModel().rows.map((row) => {
+      return row.getAllCells().map((cell) => {
+        // Ensure proper formatting or handling of cell values
+        const value = cell.getValue();
+        return typeof value === "string" ? value.replace(/,/g, " ") : value; // Replace commas if present
+      });
+    });
+
+    // Combine headers and rows into a CSV format
+    const csvContent = [
+      headers.join(","), // Join headers
+      ...rows.map((row) => row.join(",")), // Join data rows
+    ].join("\n");
+
+    // Create a Blob and trigger download
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `sample.csv`; // Dynamic file name
+    link.click();
+
+    // Clean up
+    URL.revokeObjectURL(url);
+  };
 
   const [gene_id, setGeneID] = useState("");
   const [gene_symbol, setGeneSymbol] = useState("");
@@ -257,37 +369,133 @@ export function DataTable<TData, TValue>({
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
+            <div className="flex flex-col gap-2">
+              <Label className="text-lg">ACMG</Label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="ml-auto">
+                    ACMG Classification
+                    <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent>
+                  <DropdownMenuCheckboxItem
+                    onCheckedChange={(isChecked) => {
+                      const value = isChecked ? "Pathogenic" : null;
+                      setACMGFilter(value);
+                      table.getColumn("acmg")?.setFilterValue(value);
+                    }}
+                    checked={acmgFilter === "Pathogenic"}
+                  >
+                    <div className="border-2 border-red-600 w-full p-2 rounded-sm bg-red-400">
+                      <p className="text-black font-semibold">Pathogenic</p>
+                    </div>
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    onCheckedChange={(isChecked) => {
+                      const value = isChecked ? "Likely Pathogenic" : null;
+                      setACMGFilter(value);
+                      table.getColumn("acmg")?.setFilterValue(value);
+                    }}
+                    checked={acmgFilter === "Likely Pathogenic"}
+                  >
+                    <div className="border-2 border-red-600 w-full p-2 rounded-sm bg-red-300">
+                      <p className="text-black font-semibold">
+                        Likely Pathogenic
+                      </p>
+                    </div>
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    onCheckedChange={(isChecked) => {
+                      const value = isChecked ? "VUS" : null;
+                      setACMGFilter(value);
+                      table.getColumn("acmg")?.setFilterValue(value);
+                    }}
+                    checked={acmgFilter === "VUS"}
+                  >
+                    <div className="border-2 border-yellow-600 w-full p-2 rounded-sm bg-yellow-300">
+                      <p className="text-black font-semibold">VUS</p>
+                    </div>
+                  </DropdownMenuCheckboxItem>
+
+                  <DropdownMenuCheckboxItem
+                    onCheckedChange={(isChecked) => {
+                      const value = isChecked ? "Likely Benign" : null;
+                      setACMGFilter(value);
+                      table.getColumn("acmg")?.setFilterValue(value);
+                    }}
+                    checked={acmgFilter === "Likely Benign"}
+                  >
+                    <div className="border-2 border-green-600 w-full p-2 rounded-sm bg-green-200">
+                      <p className="text-black font-semibold">Likely Benign</p>
+                    </div>
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    onCheckedChange={(isChecked) => {
+                      const value = isChecked ? "Benign" : null;
+                      setACMGFilter(value);
+                      table.getColumn("acmg")?.setFilterValue(value);
+                    }}
+                    checked={acmgFilter === "Benign"}
+                  >
+                    <div className="border-2 border-green-600 w-full p-2 rounded-sm bg-green-300">
+                      <p className="text-black font-semibold">Benign</p>
+                    </div>
+                  </DropdownMenuCheckboxItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Select Column to Show
-                <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) => {
-                        column.toggleVisibility(!!value);
-                        if (column.id === "functional_impact") {
-                          setFiVis(!!value);
-                        }
-                      }}
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex flex-row ml-3 gap-2 items-center justify-center ">
+            <div className="flex flex-col gap-2">
+              <Label className="text-lg">Select Column</Label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="ml-auto">
+                    Select Column to Show
+                    <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) => {
+                            column.toggleVisibility(!!value);
+                            if (column.id === "functional_impact") {
+                              setFiVis(!!value);
+                            }
+                          }}
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label className="text-lg">Download Type</Label>
+              <div className="flex flex-row">
+                <Button variant={"outline"} onClick={(e) => generateCSV()}>
+                  <Logs> </Logs>CSV
+                </Button>
+                <Button
+                  variant={"outline"}
+                  onClick={(e) => generateXML("ID_RECORD", "ID_PATIENT")}
+                >
+                  <FileCode> </FileCode>XML
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div className="flex flex-col overflow-x-auto w-full">

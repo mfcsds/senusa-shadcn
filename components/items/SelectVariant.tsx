@@ -92,12 +92,12 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
   const [vcfContent, setVcfContent] = useState("");
   // Handle VCF selection change
 
-  const newhandleVCFSelection = (value: string) => {
-    const selected = vcfData.find((item) => item.id === value);
-    setSelectedVCF(selected ?? null);
-    setError(null);
-    readSelectedVCF();
-  };
+  // const newhandleVCFSelection = (value: string) => {
+  //   const selected = vcfData.find((item) => item.id === value);
+  //   setSelectedVCF(selected ?? null);
+  //   setError(null);
+  //   readSelectedVCF();
+  // };
 
   const newReadVCFData = async (vcfID: string) => {
     setVariantList([]); // Clear previous data
@@ -139,6 +139,17 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
           filter: item.filter ?? "",
           info: item.filter ?? "",
           hgvs: item.hgvs ?? "",
+          af: item.af ?? 0,
+          ac: item.ac ?? 0,
+          an: item.an ?? 0,
+          dp: item.dp ?? 0,
+          fs: item.dp ?? 0,
+          mq: item.mq ?? 0,
+          mqranksum: item.mqranksum ?? 0,
+          qd: item.qd ?? 0,
+          readposrank: item.readposrank ?? 0,
+          sor: item.sor ?? 0,
+          fraction: item.fraction ?? 0,
           variantReportID: id_report ?? "",
           zygosity: extractZygosity(item.info ?? ""),
           globalallele: null, // Set to null to indicate loading state
@@ -181,128 +192,128 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
 
   const [loadingVarList, setLoadingVarList] = useState(false);
 
-  const handleVCFSelection = (vcfId: string) => {
-    // Find the selected VCF data based on the ID
-    const selected = vcfData.find((item) => item.id === vcfId);
-    setSelectedVCF(selected ?? null);
-    setError(null);
-    readSelectedVCF();
-    // setVariantList([]); // Clear previous variant list
-    // setColumns(tempColumns); // Reset columns
-  };
+  // const handleVCFSelection = (vcfId: string) => {
+  //   // Find the selected VCF data based on the ID
+  //   const selected = vcfData.find((item) => item.id === vcfId);
+  //   setSelectedVCF(selected ?? null);
+  //   setError(null);
+  //   readSelectedVCF();
+  //   // setVariantList([]); // Clear previous variant list
+  //   // setColumns(tempColumns); // Reset columns
+  // };
 
-  const readSelectedVCF = async () => {
-    setLoading(true);
-    try {
-      const downloadResult = await downloadData({
-        path: selectedVCF?.pathfile ?? "",
-      }).result;
+  // const readSelectedVCF = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const downloadResult = await downloadData({
+  //       path: selectedVCF?.pathfile ?? "",
+  //     }).result;
 
-      if (!downloadResult || !downloadResult.body) {
-        throw new Error("Failed to download file from AWS.");
-      }
-      const blob = await downloadResult.body.blob();
-      const file = new File([blob], "downloaded.vcf", { type: blob.type });
+  //     if (!downloadResult || !downloadResult.body) {
+  //       throw new Error("Failed to download file from AWS.");
+  //     }
+  //     const blob = await downloadResult.body.blob();
+  //     const file = new File([blob], "downloaded.vcf", { type: blob.type });
 
-      if (file && file.name.endsWith(".vcf")) {
-        const reader = new FileReader();
+  //     if (file && file.name.endsWith(".vcf")) {
+  //       const reader = new FileReader();
 
-        reader.onload = async (e) => {
-          const vcfText = e.target?.result as string;
+  //       reader.onload = async (e) => {
+  //         const vcfText = e.target?.result as string;
 
-          // Handle empty or unreadable file
-          if (!vcfText || vcfText.trim() === "") {
-            setError("The file appears to be empty or unreadable.");
-            setLoading(false);
-            return;
-          }
+  //         // Handle empty or unreadable file
+  //         if (!vcfText || vcfText.trim() === "") {
+  //           setError("The file appears to be empty or unreadable.");
+  //           setLoading(false);
+  //           return;
+  //         }
 
-          // Store the content of the VCF file in state for display
-          setVcfContent(vcfText);
+  //         // Store the content of the VCF file in state for display
+  //         setVcfContent(vcfText);
 
-          const lines = vcfText.split("\n");
-          const headerLine = lines.find((line: string) =>
-            line.startsWith("#CHROM")
-          );
+  //         const lines = vcfText.split("\n");
+  //         const headerLine = lines.find((line: string) =>
+  //           line.startsWith("#CHROM")
+  //         );
 
-          if (!headerLine) {
-            setError("Invalid VCF file: Missing header line (#CHROM)");
-            setLoading(false);
-            return;
-          }
+  //         if (!headerLine) {
+  //           setError("Invalid VCF file: Missing header line (#CHROM)");
+  //           setLoading(false);
+  //           return;
+  //         }
 
-          const dataLines = lines.filter(
-            (line: string) => !line.startsWith("#") && line.trim() !== ""
-          );
+  //         const dataLines = lines.filter(
+  //           (line: string) => !line.startsWith("#") && line.trim() !== ""
+  //         );
 
-          const parsedVariants = await dataLines.map(
-            (line: string, index: number) => {
-              const fields = line.split("\t");
-              const variant: Variant = {
-                id: generateVariantSampleID(),
-                id_patient: patientid ?? "",
-                id_vcf: selectedVCF?.id ?? "",
-                id_report: id_report ?? "",
-                chrom: fields[0],
-                pos: fields[1],
-                id_var: fields[2],
-                ref: fields[3],
-                alt: fields[4],
-                qual: fields[5],
-                filter: fields[6],
-                info: fields[7],
-                hgvs: "",
-                variantReportID: id_report ?? "",
-                zygosity: extractZygosity(fields[7]),
-                globalallele: null, // Set to null to indicate loading state
-                functional_impact: "",
-                acmg: "VUS",
-                clinicalSign: null, // Set to null to indicate loading state
-                gene_id: null,
-                gene_symbol: null,
-                severeconsequence: null,
-                sift_score: null,
-                sift_prediction: null,
-                phenotypes: null,
-                rsID: null,
-                gnomade: null,
-                gnomadg: null,
-                alldesc: null,
-              };
-              variant.hgvs = generateHGVS(variant);
-              return variant;
-            }
-          );
+  //         const parsedVariants = await dataLines.map(
+  //           (line: string, index: number) => {
+  //             const fields = line.split("\t");
+  //             const variant: Variant = {
+  //               id: generateVariantSampleID(),
+  //               id_patient: patientid ?? "",
+  //               id_vcf: selectedVCF?.id ?? "",
+  //               id_report: id_report ?? "",
+  //               chrom: fields[0],
+  //               pos: fields[1],
+  //               id_var: fields[2],
+  //               ref: fields[3],
+  //               alt: fields[4],
+  //               qual: fields[5],
+  //               filter: fields[6],
+  //               info: fields[7],
+  //               hgvs: "",
+  //               variantReportID: id_report ?? "",
+  //               zygosity: extractZygosity(fields[7]),
+  //               globalallele: null, // Set to null to indicate loading state
+  //               functional_impact: "",
+  //               acmg: "VUS",
+  //               clinicalSign: null, // Set to null to indicate loading state
+  //               gene_id: null,
+  //               gene_symbol: null,
+  //               severeconsequence: null,
+  //               sift_score: null,
+  //               sift_prediction: null,
+  //               phenotypes: null,
+  //               rsID: null,
+  //               gnomade: null,
+  //               gnomadg: null,
+  //               alldesc: null,
+  //             };
+  //             variant.hgvs = generateHGVS(variant);
+  //             return variant;
+  //           }
+  //         );
 
-          setVariantList(parsedVariants);
-          parsedVariants.forEach((variant, index) => {
-            fetchVariantDetails2(variant).then((details) => {
-              setVariantList((prevVariants) => {
-                const newVariants = [...prevVariants];
-                newVariants[index] = { ...newVariants[index], ...details };
-                return newVariants;
-              });
-            });
-          });
-          setLoading(false); // Set loading to false after parsing the file
-          // setLoading(false);
-        };
+  //         setVariantList(parsedVariants);
+  //         parsedVariants.forEach((variant, index) => {
+  //           fetchVariantDetails2(variant).then((details) => {
+  //             setVariantList((prevVariants) => {
+  //               const newVariants = [...prevVariants];
+  //               newVariants[index] = { ...newVariants[index], ...details };
+  //               return newVariants;
+  //             });
+  //           });
+  //         });
+  //         setLoading(false); // Set loading to false after parsing the file
+  //         // setLoading(false);
+  //       };
 
-        reader.onerror = () => {
-          setError("Error reading the file. Please try again.");
-          setLoading(false);
-        };
+  //       reader.onerror = () => {
+  //         setError("Error reading the file. Please try again.");
+  //         setLoading(false);
+  //       };
 
-        reader.readAsText(file);
-      } else {
-        setError("Please upload a valid .vcf file.");
-        setLoading(false);
-      }
-    } catch (error) {
-      setError(`Failed to download or parse the file: ${error}`);
-      setLoading(false);
-    }
-  };
+  //       reader.readAsText(file);
+  //     } else {
+  //       setError("Please upload a valid .vcf file.");
+  //       setLoading(false);
+  //     }
+  //   } catch (error) {
+  //     setError(`Failed to download or parse the file: ${error}`);
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleAddSelectedVariant = async (idvar: string) => {
     // Find the variant that matches the provided idvar
@@ -331,6 +342,17 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
       qual: variant.qual ?? "",
       filter: variant.filter ?? "",
       info: variant.info ?? "",
+      af: variant.af ?? 0,
+      ac: variant.ac ?? 0,
+      an: variant.an ?? 0,
+      dp: variant.dp ?? 0,
+      fs: variant.dp ?? 0,
+      mq: variant.mq ?? 0,
+      mqranksum: variant.mqranksum ?? 0,
+      qd: variant.qd ?? 0,
+      readposrank: variant.readposrank ?? 0,
+      sor: variant.sor ?? 0,
+      fraction: variant.fraction ?? 0,
       zygosity: variant.zygosity ?? "",
       globalallele: variant.globalallele ?? 0, // Assuming 0 as a default for number fields
       functional_impact: variant.functional_impact ?? "",
@@ -366,7 +388,8 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
       id_patient: selectedVarItem.id_patient ?? "",
       id_report: selectedVarItem.id_report ?? "",
       id_varsample: selectedVarItem.id ?? "",
-      gene: selectedVarItem.gene_symbol ?? "",
+      gene_symbol: selectedVarItem.gene_symbol ?? "",
+      gene_id: selectedVarItem.gene_id ?? "",
       alldesc: selectedVarItem.alldesc ?? "",
     };
     const saveInterpretation = async () => {

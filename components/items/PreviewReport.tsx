@@ -173,6 +173,9 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
   id_patient,
 }) => {
   const client = generateClient();
+  const [ensembleVersion, setEnsembleVersion] = useState<string>("");
+
+  const [ensembleRestVersion, setEnsembleRestVersion] = useState<string>("");
 
   const generatePDF = async () => {
     handleGeneratePDF({
@@ -181,6 +184,8 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
       listRec,
       listSelVariants,
       variantInter,
+      ensembleVersion: ensembleVersion,
+      ensembleRestVersion: ensembleRestVersion,
     });
   };
   const generateXML = () => {
@@ -381,6 +386,37 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
     fetchPatient();
     fetchVariantInterpretation();
     fetchVariantReport();
+    const fetchEnsemblVersion = async () => {
+      try {
+        const response = await fetch(
+          "https://rest.ensembl.org/info/software?content-type=application/json"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch Ensembl version");
+        }
+        const data = await response.json();
+        setEnsembleVersion(data.release); // Assuming the "release" key contains the version
+      } catch (error) {
+        console.error("Error fetching Ensembl version:", error);
+      }
+    };
+
+    const fetchEnsemblRestVersion = async () => {
+      try {
+        const response = await fetch(
+          "https://rest.ensembl.org/info/rest?content-type=application/json"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch Ensembl version");
+        }
+        const data = await response.json();
+        setEnsembleRestVersion(data.release); // Assuming the "release" key contains the version
+      } catch (error) {
+        console.error("Error fetching Ensembl version:", error);
+      }
+    };
+    fetchEnsemblVersion();
+    fetchEnsemblRestVersion();
   });
 
   return (
@@ -474,7 +510,7 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                                 <div className="flex flex-row gap-1">
                                   <Button
                                     variant={"outline"}
-                                    onClick={generatePDF}
+                                    onClick={(e) => generatePDF()}
                                   >
                                     PDF
                                   </Button>
@@ -648,6 +684,19 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
               </ul>
             </div>
 
+            {/* Conclusion */}
+            <div className="bg-gray-50 p-4 rounded-md mb-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">
+                Conclusions
+              </h2>
+              {listConc.map((item, idx) => (
+                <p key={idx} className="text-sm text-gray-600 text-justify">
+                  {item.text}
+                </p>
+              ))}
+            </div>
+
+            {/* Recommendation */}
             <div className="bg-gray-50 p-4 rounded-md mb-6">
               <h2 className="text-lg font-semibold text-gray-800 mb-2">
                 Recommendation
@@ -690,7 +739,11 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
               </ul>
             </div> */}
 
-            <div className="bg-gray-200 p-4 rounded-md mb-6">
+            <div className="flex flex-col">
+              <h2>Database Info</h2>
+              <p>{`Ensemble Software Release: ${ensembleVersion}; Ensemble Rest API: ${ensembleRestVersion}; Senusa Version: 1.00`}</p>
+            </div>
+            {/* <div className="bg-gray-200 p-4 rounded-md mb-6">
               <h2 className="text-lg font-semibold text-gray-800 mb-2">
                 Supporting Evidence from Academic Journal
               </h2>
@@ -700,26 +753,15 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                   2023.
                   {/* "Impact of recurrent BRCA1 mutations in breast cancer
               susceptibility." */}
-                </li>
+            {/* </li>
                 <li>
                   MLH1 c.3503_3504delTA: Lee et al., Clinical Cancer Research,
-                  2022.
-                  {/* "Genetic landscape of Lynch syndrome: early detection and new
+                  2022. */}
+            {/* "Genetic landscape of Lynch syndrome: early detection and new
               treatments." */}
-                </li>
+            {/* </li>
               </ul>
-            </div>
-
-            <div className="bg-gray-50 p-4 rounded-md">
-              <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                Conclusions
-              </h2>
-              {listConc.map((item, idx) => (
-                <p key={idx} className="text-sm text-gray-600 text-justify">
-                  {item.text}
-                </p>
-              ))}
-            </div>
+            </div> */}
 
             <div className="flex justify-between items-center mt-8">
               <div className="text-center">

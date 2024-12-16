@@ -119,6 +119,8 @@ interface MyPDFDocumentProps {
   listRec: Recommendation[];
   listSelVariants: SelectedVariant[];
   variantInter: VariantInterpretation[];
+  ensembleVersion: string;
+  ensembleRestVersion: string;
 }
 
 // PDF Document Component
@@ -128,6 +130,8 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
   listRec,
   listSelVariants,
   variantInter,
+  ensembleVersion,
+  ensembleRestVersion,
 }) => (
   <Document>
     <Page size="A4" style={styles.page}>
@@ -213,6 +217,18 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
           ))}
         </View>
 
+        {/* Conclusions */}
+        {listConc.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.subtitle}>Conclusions</Text>
+            {listConc.map((item, idx) => (
+              <Text key={idx} style={styles.text}>
+                {item.text}
+              </Text>
+            ))}
+          </View>
+        )}
+
         {/* Recommendations */}
         {listRec.length > 0 && (
           <View style={styles.section}>
@@ -225,23 +241,11 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
           </View>
         )}
 
-        {/* Conclusions */}
-        {listConc.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.subtitle}>Conclusions</Text>
-            {listConc.map((item, idx) => (
-              <Text key={idx} style={styles.textxs}>
-                {item.text}
-              </Text>
-            ))}
-          </View>
-        )}
-
         {/* Database Version */}
         <View style={styles.section}>
           <Text style={styles.subtitle}>Database Information</Text>
           <Text style={styles.textsmall}>
-            Ensembl Version: 113.0 October 2024; Senusa Version:Alpha 1.00
+            {`Ensembl Software: ${ensembleVersion}; Ensemble Rest API:${ensembleRestVersion}; Senusa Version:Alpha 1.00`}
           </Text>
         </View>
 

@@ -225,6 +225,17 @@ export const getSelectedVariant = /* GraphQL */ `query GetSelectedVariant($id: I
     gnomade
     gnomadg
     alldesc
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename
@@ -268,6 +279,17 @@ export const listSelectedVariants = /* GraphQL */ `query ListSelectedVariants(
       gnomade
       gnomadg
       alldesc
+      ac
+      af
+      an
+      dp
+      fs
+      mq
+      mqranksum
+      qd
+      readposrank
+      sor
+      fraction
       createdAt
       updatedAt
       __typename
@@ -339,6 +361,17 @@ export const getVariant = /* GraphQL */ `query GetVariant($id: ID!) {
     id_patient
     id_vcf
     acmg
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename
@@ -368,6 +401,17 @@ export const listVariants = /* GraphQL */ `query ListVariants(
       id_patient
       id_vcf
       acmg
+      ac
+      af
+      an
+      dp
+      fs
+      mq
+      mqranksum
+      qd
+      readposrank
+      sor
+      fraction
       createdAt
       updatedAt
       __typename

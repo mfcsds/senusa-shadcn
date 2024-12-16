@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { BlobProvider } from "@react-pdf/renderer";
 import MyPDFDocument from "../components/MyPDFDocument";
@@ -16,6 +17,8 @@ interface GeneratePDFProps {
   listRec: Recommendation[];
   listSelVariants: SelectedVariant[];
   variantInter: VariantInterpretation[];
+  ensembleVersion: string;
+  ensembleRestVersion: string;
 }
 
 const handleGeneratePDF = ({
@@ -24,6 +27,8 @@ const handleGeneratePDF = ({
   listRec,
   listSelVariants,
   variantInter,
+  ensembleVersion,
+  ensembleRestVersion,
 }: GeneratePDFProps) => {
   const container = document.createElement("div");
   document.body.appendChild(container);
@@ -39,6 +44,8 @@ const handleGeneratePDF = ({
           listRec={listRec}
           listSelVariants={listSelVariants}
           variantInter={variantInter}
+          ensembleVersion={ensembleVersion}
+          ensembleRestVersion={ensembleRestVersion}
         />
       }
     >

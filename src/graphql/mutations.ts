@@ -301,6 +301,17 @@ export const createSelectedVariant = /* GraphQL */ `mutation CreateSelectedVaria
     gnomade
     gnomadg
     alldesc
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename
@@ -342,6 +353,17 @@ export const updateSelectedVariant = /* GraphQL */ `mutation UpdateSelectedVaria
     gnomade
     gnomadg
     alldesc
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename
@@ -383,6 +405,17 @@ export const deleteSelectedVariant = /* GraphQL */ `mutation DeleteSelectedVaria
     gnomade
     gnomadg
     alldesc
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename
@@ -473,6 +506,17 @@ export const createVariant = /* GraphQL */ `mutation CreateVariant(
     id_patient
     id_vcf
     acmg
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename
@@ -500,6 +544,17 @@ export const updateVariant = /* GraphQL */ `mutation UpdateVariant(
     id_patient
     id_vcf
     acmg
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename
@@ -527,6 +582,17 @@ export const deleteVariant = /* GraphQL */ `mutation DeleteVariant(
     id_patient
     id_vcf
     acmg
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename

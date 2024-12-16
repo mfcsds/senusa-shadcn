@@ -51,6 +51,17 @@ export default function SelectedVariantUpdateForm(props) {
     gnomade: "",
     gnomadg: "",
     alldesc: "",
+    ac: "",
+    af: "",
+    an: "",
+    dp: "",
+    fs: "",
+    mq: "",
+    mqranksum: "",
+    qd: "",
+    readposrank: "",
+    sor: "",
+    fraction: "",
   };
   const [id_patient, setId_patient] = React.useState(initialValues.id_patient);
   const [id_vcf, setId_vcf] = React.useState(initialValues.id_vcf);
@@ -92,6 +103,19 @@ export default function SelectedVariantUpdateForm(props) {
   const [gnomade, setGnomade] = React.useState(initialValues.gnomade);
   const [gnomadg, setGnomadg] = React.useState(initialValues.gnomadg);
   const [alldesc, setAlldesc] = React.useState(initialValues.alldesc);
+  const [ac, setAc] = React.useState(initialValues.ac);
+  const [af, setAf] = React.useState(initialValues.af);
+  const [an, setAn] = React.useState(initialValues.an);
+  const [dp, setDp] = React.useState(initialValues.dp);
+  const [fs, setFs] = React.useState(initialValues.fs);
+  const [mq, setMq] = React.useState(initialValues.mq);
+  const [mqranksum, setMqranksum] = React.useState(initialValues.mqranksum);
+  const [qd, setQd] = React.useState(initialValues.qd);
+  const [readposrank, setReadposrank] = React.useState(
+    initialValues.readposrank
+  );
+  const [sor, setSor] = React.useState(initialValues.sor);
+  const [fraction, setFraction] = React.useState(initialValues.fraction);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = selectedVariantRecord
@@ -123,6 +147,17 @@ export default function SelectedVariantUpdateForm(props) {
     setGnomade(cleanValues.gnomade);
     setGnomadg(cleanValues.gnomadg);
     setAlldesc(cleanValues.alldesc);
+    setAc(cleanValues.ac);
+    setAf(cleanValues.af);
+    setAn(cleanValues.an);
+    setDp(cleanValues.dp);
+    setFs(cleanValues.fs);
+    setMq(cleanValues.mq);
+    setMqranksum(cleanValues.mqranksum);
+    setQd(cleanValues.qd);
+    setReadposrank(cleanValues.readposrank);
+    setSor(cleanValues.sor);
+    setFraction(cleanValues.fraction);
     setErrors({});
   };
   const [selectedVariantRecord, setSelectedVariantRecord] = React.useState(
@@ -170,6 +205,17 @@ export default function SelectedVariantUpdateForm(props) {
     gnomade: [],
     gnomadg: [],
     alldesc: [],
+    ac: [],
+    af: [],
+    an: [],
+    dp: [],
+    fs: [],
+    mq: [],
+    mqranksum: [],
+    qd: [],
+    readposrank: [],
+    sor: [],
+    fraction: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -223,6 +269,17 @@ export default function SelectedVariantUpdateForm(props) {
           gnomade: gnomade ?? null,
           gnomadg: gnomadg ?? null,
           alldesc: alldesc ?? null,
+          ac: ac ?? null,
+          af: af ?? null,
+          an: an ?? null,
+          dp: dp ?? null,
+          fs: fs ?? null,
+          mq: mq ?? null,
+          mqranksum: mqranksum ?? null,
+          qd: qd ?? null,
+          readposrank: readposrank ?? null,
+          sor: sor ?? null,
+          fraction: fraction ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -309,6 +366,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.id_patient ?? value;
@@ -358,6 +426,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.id_vcf ?? value;
@@ -407,6 +486,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.id_report ?? value;
@@ -456,6 +546,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.gene_id ?? value;
@@ -505,6 +606,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.gene_symbol ?? value;
@@ -554,6 +666,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.chrom ?? value;
@@ -603,6 +726,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.pos ?? value;
@@ -652,6 +786,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.id_var ?? value;
@@ -701,6 +846,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.ref ?? value;
@@ -750,6 +906,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.alt ?? value;
@@ -799,6 +966,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.qual ?? value;
@@ -848,6 +1026,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.zigosity ?? value;
@@ -901,6 +1090,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.global_allele ?? value;
@@ -950,6 +1150,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.functional_impact ?? value;
@@ -1001,6 +1212,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.acmg ?? value;
@@ -1050,6 +1272,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.reviewer_class ?? value;
@@ -1099,6 +1332,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.clinical_sign ?? value;
@@ -1148,6 +1392,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.hgvs ?? value;
@@ -1197,6 +1452,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.severe_consequence ?? value;
@@ -1252,6 +1518,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.sift_score ?? value;
@@ -1301,6 +1578,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.sift_prediction ?? value;
@@ -1350,6 +1638,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.phenotypes ?? value;
@@ -1399,6 +1698,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.rsID ?? value;
@@ -1452,6 +1762,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade: value,
               gnomadg,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.gnomade ?? value;
@@ -1505,6 +1826,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg: value,
               alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.gnomadg ?? value;
@@ -1554,6 +1886,17 @@ export default function SelectedVariantUpdateForm(props) {
               gnomade,
               gnomadg,
               alldesc: value,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
             };
             const result = onChange(modelFields);
             value = result?.alldesc ?? value;
@@ -1567,6 +1910,710 @@ export default function SelectedVariantUpdateForm(props) {
         errorMessage={errors.alldesc?.errorMessage}
         hasError={errors.alldesc?.hasError}
         {...getOverrideProps(overrides, "alldesc")}
+      ></TextField>
+      <TextField
+        label="Ac"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={ac}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              zigosity,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
+              ac: value,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
+            };
+            const result = onChange(modelFields);
+            value = result?.ac ?? value;
+          }
+          if (errors.ac?.hasError) {
+            runValidationTasks("ac", value);
+          }
+          setAc(value);
+        }}
+        onBlur={() => runValidationTasks("ac", ac)}
+        errorMessage={errors.ac?.errorMessage}
+        hasError={errors.ac?.hasError}
+        {...getOverrideProps(overrides, "ac")}
+      ></TextField>
+      <TextField
+        label="Af"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={af}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              zigosity,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
+              ac,
+              af: value,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
+            };
+            const result = onChange(modelFields);
+            value = result?.af ?? value;
+          }
+          if (errors.af?.hasError) {
+            runValidationTasks("af", value);
+          }
+          setAf(value);
+        }}
+        onBlur={() => runValidationTasks("af", af)}
+        errorMessage={errors.af?.errorMessage}
+        hasError={errors.af?.hasError}
+        {...getOverrideProps(overrides, "af")}
+      ></TextField>
+      <TextField
+        label="An"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={an}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              zigosity,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
+              ac,
+              af,
+              an: value,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
+            };
+            const result = onChange(modelFields);
+            value = result?.an ?? value;
+          }
+          if (errors.an?.hasError) {
+            runValidationTasks("an", value);
+          }
+          setAn(value);
+        }}
+        onBlur={() => runValidationTasks("an", an)}
+        errorMessage={errors.an?.errorMessage}
+        hasError={errors.an?.hasError}
+        {...getOverrideProps(overrides, "an")}
+      ></TextField>
+      <TextField
+        label="Dp"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={dp}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              zigosity,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
+              ac,
+              af,
+              an,
+              dp: value,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
+            };
+            const result = onChange(modelFields);
+            value = result?.dp ?? value;
+          }
+          if (errors.dp?.hasError) {
+            runValidationTasks("dp", value);
+          }
+          setDp(value);
+        }}
+        onBlur={() => runValidationTasks("dp", dp)}
+        errorMessage={errors.dp?.errorMessage}
+        hasError={errors.dp?.hasError}
+        {...getOverrideProps(overrides, "dp")}
+      ></TextField>
+      <TextField
+        label="Fs"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={fs}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              zigosity,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs: value,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
+            };
+            const result = onChange(modelFields);
+            value = result?.fs ?? value;
+          }
+          if (errors.fs?.hasError) {
+            runValidationTasks("fs", value);
+          }
+          setFs(value);
+        }}
+        onBlur={() => runValidationTasks("fs", fs)}
+        errorMessage={errors.fs?.errorMessage}
+        hasError={errors.fs?.hasError}
+        {...getOverrideProps(overrides, "fs")}
+      ></TextField>
+      <TextField
+        label="Mq"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={mq}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              zigosity,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq: value,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
+            };
+            const result = onChange(modelFields);
+            value = result?.mq ?? value;
+          }
+          if (errors.mq?.hasError) {
+            runValidationTasks("mq", value);
+          }
+          setMq(value);
+        }}
+        onBlur={() => runValidationTasks("mq", mq)}
+        errorMessage={errors.mq?.errorMessage}
+        hasError={errors.mq?.hasError}
+        {...getOverrideProps(overrides, "mq")}
+      ></TextField>
+      <TextField
+        label="Mqranksum"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={mqranksum}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              zigosity,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum: value,
+              qd,
+              readposrank,
+              sor,
+              fraction,
+            };
+            const result = onChange(modelFields);
+            value = result?.mqranksum ?? value;
+          }
+          if (errors.mqranksum?.hasError) {
+            runValidationTasks("mqranksum", value);
+          }
+          setMqranksum(value);
+        }}
+        onBlur={() => runValidationTasks("mqranksum", mqranksum)}
+        errorMessage={errors.mqranksum?.errorMessage}
+        hasError={errors.mqranksum?.hasError}
+        {...getOverrideProps(overrides, "mqranksum")}
+      ></TextField>
+      <TextField
+        label="Qd"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={qd}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              zigosity,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd: value,
+              readposrank,
+              sor,
+              fraction,
+            };
+            const result = onChange(modelFields);
+            value = result?.qd ?? value;
+          }
+          if (errors.qd?.hasError) {
+            runValidationTasks("qd", value);
+          }
+          setQd(value);
+        }}
+        onBlur={() => runValidationTasks("qd", qd)}
+        errorMessage={errors.qd?.errorMessage}
+        hasError={errors.qd?.hasError}
+        {...getOverrideProps(overrides, "qd")}
+      ></TextField>
+      <TextField
+        label="Readposrank"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={readposrank}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              zigosity,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank: value,
+              sor,
+              fraction,
+            };
+            const result = onChange(modelFields);
+            value = result?.readposrank ?? value;
+          }
+          if (errors.readposrank?.hasError) {
+            runValidationTasks("readposrank", value);
+          }
+          setReadposrank(value);
+        }}
+        onBlur={() => runValidationTasks("readposrank", readposrank)}
+        errorMessage={errors.readposrank?.errorMessage}
+        hasError={errors.readposrank?.hasError}
+        {...getOverrideProps(overrides, "readposrank")}
+      ></TextField>
+      <TextField
+        label="Sor"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={sor}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              zigosity,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor: value,
+              fraction,
+            };
+            const result = onChange(modelFields);
+            value = result?.sor ?? value;
+          }
+          if (errors.sor?.hasError) {
+            runValidationTasks("sor", value);
+          }
+          setSor(value);
+        }}
+        onBlur={() => runValidationTasks("sor", sor)}
+        errorMessage={errors.sor?.errorMessage}
+        hasError={errors.sor?.hasError}
+        {...getOverrideProps(overrides, "sor")}
+      ></TextField>
+      <TextField
+        label="Fraction"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={fraction}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              zigosity,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.fraction ?? value;
+          }
+          if (errors.fraction?.hasError) {
+            runValidationTasks("fraction", value);
+          }
+          setFraction(value);
+        }}
+        onBlur={() => runValidationTasks("fraction", fraction)}
+        errorMessage={errors.fraction?.errorMessage}
+        hasError={errors.fraction?.hasError}
+        {...getOverrideProps(overrides, "fraction")}
       ></TextField>
       <Flex
         justifyContent="space-between"

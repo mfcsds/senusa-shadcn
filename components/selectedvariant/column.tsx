@@ -172,6 +172,108 @@ export const columns: ColumnDef<Variant>[] = [
   },
 
   {
+    accessorKey: "AC",
+    header: ({ column }) => {
+      return <p className="text-lg font-sans ml-5">AC</p>;
+    },
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.ac}</p>;
+    },
+  },
+  {
+    accessorKey: "AF",
+    header: ({ column }) => {
+      return <p className="text-lg font-sans ml-5">AF</p>;
+    },
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.af}</p>;
+    },
+  },
+  {
+    accessorKey: "AN",
+    header: ({ column }) => {
+      return <p className="text-lg font-sans ml-5">AN</p>;
+    },
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.an}</p>;
+    },
+  },
+  {
+    accessorKey: "DP",
+    header: ({ column }) => {
+      return <p className="text-lg font-sans ml-5">DP</p>;
+    },
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.dp}</p>;
+    },
+  },
+  {
+    accessorKey: "FS",
+    header: ({ column }) => {
+      return <p className="text-lg font-sans ml-5">FS</p>;
+    },
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.fs}</p>;
+    },
+  },
+  {
+    accessorKey: "MQ",
+    header: ({ column }) => {
+      return <p className="text-lg font-sans ml-5">MQ</p>;
+    },
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.mq}</p>;
+    },
+  },
+  {
+    accessorKey: "MQRankSum",
+    header: ({ column }) => {
+      return <p className="text-lg font-sans ml-5">MQRankSum</p>;
+    },
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.mqranksum}</p>;
+    },
+  },
+  {
+    accessorKey: "QD",
+    header: ({ column }) => {
+      return <p className="text-lg font-sans ml-5">QD</p>;
+    },
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.qd}</p>;
+    },
+  },
+
+  {
+    accessorKey: "ReadPosRank",
+    header: ({ column }) => {
+      return <p className="text-lg font-sans ml-5">ReadPosRank</p>;
+    },
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.readposrank}</p>;
+    },
+  },
+  {
+    accessorKey: "Fraction",
+    header: ({ column }) => {
+      return <p className="text-lg font-sans ml-5">Fraction</p>;
+    },
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.fraction}</p>;
+    },
+  },
+
+  {
+    accessorKey: "SOR",
+    header: ({ column }) => {
+      return <p className="text-lg font-sans ml-5">SOR</p>;
+    },
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.sor}</p>;
+    },
+  },
+
+  {
     accessorKey: "zygosity",
     header: ({ column }) => {
       return (

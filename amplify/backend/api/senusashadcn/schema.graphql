@@ -80,6 +80,17 @@ type SelectedVariant @model @auth(rules: [{allow: public}]) {
   gnomade: Float
   gnomadg: Float
   alldesc: String
+  ac: Float
+  af: Float
+  an: Float
+  dp: Float
+  fs: Float
+  mq: Float
+  mqranksum: Float
+  qd: Float
+  readposrank: Float
+  sor: Float
+  fraction: Float
 }
 
 type Vcfdata @model @auth(rules: [{allow: public}]) {
@@ -106,6 +117,17 @@ type Variant @model @auth(rules: [{allow: public}]) {
   id_patient: String
   id_vcf: String
   acmg: String
+  ac: Float
+  af: Float
+  an: Float
+  dp: Float
+  fs: Float
+  mq: Float
+  mqranksum: Float
+  qd: Float
+  readposrank: Float
+  sor: Float
+  fraction: Float
 }
 
 type GeneticsConselor @model @auth(rules: [{allow: public}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}]) {

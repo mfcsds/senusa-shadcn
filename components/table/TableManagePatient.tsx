@@ -228,7 +228,13 @@ const TableManagePatient = () => {
               <CardTitle>Delete Data Patient</CardTitle>
             </CardHeader>
             <CardContent>
-              <div>Are you sure want to delete this data?</div>
+              <div>
+                Are you sure you want to delete this patient data?
+                <br />
+                <strong>Note:</strong> All associated data, including reports,
+                VCF files, and variant samples linked to this patient, will be
+                permanently deleted. This action cannot be undone.
+              </div>
             </CardContent>
             <CardFooter>
               <div className="flex flex-row items-center justify-center gap-2">

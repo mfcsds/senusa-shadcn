@@ -29,6 +29,17 @@ export interface Variant {
   filter: string;
   info: string;
   hgvs: string;
+  ac: number;
+  af: number;
+  an: number;
+  dp: number;
+  fs: number;
+  mq: number;
+  mqranksum: number;
+  qd: number;
+  readposrank: number;
+  sor: number;
+  fraction: number;
   variantReportID: string;
   zygosity: string | null;
   globalallele: number | null;
@@ -130,6 +141,17 @@ export interface VariantRawData {
   info: string | null;
   filter: string | null;
   hgvs: string | null;
+  ac: number;
+  af: number;
+  an: number;
+  dp: number;
+  fs: number;
+  mq: number;
+  mqranksum: number;
+  qd: number;
+  readposrank: number;
+  sor: number;
+  fraction: number;
   acmg: string | null;
 }
 

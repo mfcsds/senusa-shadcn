@@ -291,6 +291,17 @@ export const onCreateSelectedVariant = /* GraphQL */ `subscription OnCreateSelec
     gnomade
     gnomadg
     alldesc
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename
@@ -331,6 +342,17 @@ export const onUpdateSelectedVariant = /* GraphQL */ `subscription OnUpdateSelec
     gnomade
     gnomadg
     alldesc
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename
@@ -371,6 +393,17 @@ export const onDeleteSelectedVariant = /* GraphQL */ `subscription OnDeleteSelec
     gnomade
     gnomadg
     alldesc
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename
@@ -449,6 +482,17 @@ export const onCreateVariant = /* GraphQL */ `subscription OnCreateVariant($filt
     id_patient
     id_vcf
     acmg
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename
@@ -473,6 +517,17 @@ export const onUpdateVariant = /* GraphQL */ `subscription OnUpdateVariant($filt
     id_patient
     id_vcf
     acmg
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename
@@ -497,6 +552,17 @@ export const onDeleteVariant = /* GraphQL */ `subscription OnDeleteVariant($filt
     id_patient
     id_vcf
     acmg
+    ac
+    af
+    an
+    dp
+    fs
+    mq
+    mqranksum
+    qd
+    readposrank
+    sor
+    fraction
     createdAt
     updatedAt
     __typename

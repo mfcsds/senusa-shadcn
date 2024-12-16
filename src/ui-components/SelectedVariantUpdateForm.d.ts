@@ -49,6 +49,17 @@ export declare type SelectedVariantUpdateFormInputValues = {
     gnomade?: number;
     gnomadg?: number;
     alldesc?: string;
+    ac?: number;
+    af?: number;
+    an?: number;
+    dp?: number;
+    fs?: number;
+    mq?: number;
+    mqranksum?: number;
+    qd?: number;
+    readposrank?: number;
+    sor?: number;
+    fraction?: number;
 };
 export declare type SelectedVariantUpdateFormValidationValues = {
     id_patient?: ValidationFunction<string>;
@@ -77,6 +88,17 @@ export declare type SelectedVariantUpdateFormValidationValues = {
     gnomade?: ValidationFunction<number>;
     gnomadg?: ValidationFunction<number>;
     alldesc?: ValidationFunction<string>;
+    ac?: ValidationFunction<number>;
+    af?: ValidationFunction<number>;
+    an?: ValidationFunction<number>;
+    dp?: ValidationFunction<number>;
+    fs?: ValidationFunction<number>;
+    mq?: ValidationFunction<number>;
+    mqranksum?: ValidationFunction<number>;
+    qd?: ValidationFunction<number>;
+    readposrank?: ValidationFunction<number>;
+    sor?: ValidationFunction<number>;
+    fraction?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type SelectedVariantUpdateFormOverridesProps = {
@@ -107,6 +129,17 @@ export declare type SelectedVariantUpdateFormOverridesProps = {
     gnomade?: PrimitiveOverrideProps<TextFieldProps>;
     gnomadg?: PrimitiveOverrideProps<TextFieldProps>;
     alldesc?: PrimitiveOverrideProps<TextFieldProps>;
+    ac?: PrimitiveOverrideProps<TextFieldProps>;
+    af?: PrimitiveOverrideProps<TextFieldProps>;
+    an?: PrimitiveOverrideProps<TextFieldProps>;
+    dp?: PrimitiveOverrideProps<TextFieldProps>;
+    fs?: PrimitiveOverrideProps<TextFieldProps>;
+    mq?: PrimitiveOverrideProps<TextFieldProps>;
+    mqranksum?: PrimitiveOverrideProps<TextFieldProps>;
+    qd?: PrimitiveOverrideProps<TextFieldProps>;
+    readposrank?: PrimitiveOverrideProps<TextFieldProps>;
+    sor?: PrimitiveOverrideProps<TextFieldProps>;
+    fraction?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type SelectedVariantUpdateFormProps = React.PropsWithChildren<{
     overrides?: SelectedVariantUpdateFormOverridesProps | undefined | null;
