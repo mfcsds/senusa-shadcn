@@ -141,18 +141,18 @@ export interface VariantRawData {
   info: string | null;
   filter: string | null;
   hgvs: string | null;
-  ac: number;
-  af: number;
-  an: number;
-  dp: number;
-  fs: number;
-  mq: number;
-  mqranksum: number;
-  qd: number;
-  readposrank: number;
-  sor: number;
-  fraction: number;
-  acmg: string | null;
+  ac?: number;
+  af?: number;
+  an?: number;
+  dp?: number;
+  fs?: number;
+  mq?: number;
+  mqranksum?: number;
+  qd?: number;
+  readposrank?: number;
+  sor?: number;
+  fraction?: number;
+  acmg?: string | null;
 }
 
 // TypeScript Interface for SelectedVariant

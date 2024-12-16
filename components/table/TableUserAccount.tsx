@@ -50,7 +50,7 @@ import { userStatus } from "@/utils/DateHelperFunction";
 Amplify.configure(config);
 
 const TableUserAccount = () => {
-  const idParamsEmail = useSearchParams().get("id");
+  const idParamsEmail = useSearchParams()?.get("id") || "";
 
   const colors = [
     "bg-red-900",
