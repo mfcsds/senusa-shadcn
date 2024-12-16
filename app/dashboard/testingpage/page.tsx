@@ -1,5 +1,4 @@
 "use client";
-import DemoTableVariant from "@/components/datatable/Demo";
 import { Variant, VariantRawData } from "@/utils/object";
 import { createVariant } from "@/src/graphql/mutations";
 import React, { useState } from "react";

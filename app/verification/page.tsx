@@ -46,7 +46,7 @@ const Verification = () => {
   const [process, setProcess] = useState(false);
 
   useEffect(() => {
-    const emailFromQuery = searchParams.get("email");
+    const emailFromQuery = searchParams?.get("email");
     if (emailFromQuery) {
       setEmail(emailFromQuery);
     }

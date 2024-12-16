@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 
 const EditProfileInstitution = () => {
   const searchParams = useSearchParams();
-  const institutionID = searchParams.get("id");
+  const institutionID = searchParams?.get("id") || "";
 
   return (
     <div className="flex flex-col w-full">
