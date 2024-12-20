@@ -1,21 +1,36 @@
-"use client";
-import ManageInstituionData from "@/components/form/ManageInstitution";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
+import React from "react";
+import EditProfileInstitution from "./ManageInstitution-content";
 
-import { useSearchParams } from "next/navigation";
+function ManageInstitutionFallback() {
+  return <p>Loading...page</p>;
+}
 
-const EditProfileInstitution = () => {
-  const searchParams = useSearchParams();
-  const institutionID = searchParams?.get("id") || "";
-
+const ManageInstitution = () => {
   return (
-    <div className="flex flex-col w-full">
-      <Suspense fallback={<p className="text-gray-300 text-xs">Loading...</p>}>
-        <ManageInstituionData id={institutionID}></ManageInstituionData>
-      </Suspense>
-    </div>
+    <Suspense fallback={<ManageInstitutionFallback />}>
+      <EditProfileInstitution></EditProfileInstitution>
+    </Suspense>
   );
 };
 
-export default EditProfileInstitution;
+export default ManageInstitution;
+
+// // export default Verification;
+// import React, { Suspense } from "react";
+// import VerificationContent from "./verification-content";
+
+// // Placeholder fallback component for Suspense
+// function VerificationFallback() {
+//   return <p>Loading verification page...</p>;
+// }
+
+// const VerificationPage = () => {
+//   return (
+//     <Suspense fallback={<VerificationFallback />}>
+//       <VerificationContent />
+//     </Suspense>
+//   );
+// };
+
+// export default VerificationPage;

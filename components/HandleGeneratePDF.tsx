@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { BlobProvider } from "@react-pdf/renderer";
+
 import MyPDFDocument from "../components/MyPDFDocument";
 import {
   Patient,

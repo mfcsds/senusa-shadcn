@@ -1,8 +1,14 @@
 "use client";
-import { PDFDocument, rgb, StandardFonts, PDFPage, PDFFont } from "pdf-lib";
-import { BlobProvider } from "@react-pdf/renderer";
-import MyPDFDocument from "@/components/MyPDFDocument";
-import handleGeneratePDF from "@/components/HandleGeneratePDF";
+import dynamic from "next/dynamic";
+// import { PDFDocument, rgb, StandardFonts, PDFPage, PDFFont } from "pdf-lib";
+
+// import handleGeneratePDF from "@/components/HandleGeneratePDF";
+// import DynamicGeneratePDF from "../DynamicGeneratePDF";
+
+const DynamicGeneratePDF = dynamic(() => import("../DynamicGeneratePDF"), {
+  ssr: false,
+});
+
 import React, { useEffect, useState } from "react";
 import { Amplify } from "aws-amplify";
 import config from "@/src/amplifyconfiguration.json";
@@ -129,44 +135,6 @@ const getBadgeColor = (item: SelectedVariant) => {
       return "border-gray-500"; // Default color if value doesn't match
   }
 };
-const drawTextWithLineSpacing = (
-  page: PDFPage,
-  text: string,
-  x: number,
-  y: number,
-  font: PDFFont,
-  fontSize: number,
-  lineHeight: number,
-  maxWidth: number
-): void => {
-  const words = text.split(" ");
-  let currentLine = "";
-  const lines: string[] = [];
-
-  words.forEach((word) => {
-    const testLine = currentLine + word + " ";
-    const testWidth = font.widthOfTextAtSize(testLine, fontSize);
-    if (testWidth > maxWidth) {
-      lines.push(currentLine.trim());
-      currentLine = word + " ";
-    } else {
-      currentLine = testLine;
-    }
-  });
-
-  if (currentLine) lines.push(currentLine.trim()); // Add the last line
-
-  // Draw each line with the specified line height
-  lines.forEach((line, index) => {
-    page.drawText(line, {
-      x,
-      y: y - index * lineHeight, // Adjust the y position by the lineHeight for each line
-      size: fontSize,
-      font,
-      color: rgb(0, 0, 0),
-    });
-  });
-};
 
 const PreviewReport: React.FC<PreviewReportProops> = ({
   id_report,
@@ -177,17 +145,17 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
 
   const [ensembleRestVersion, setEnsembleRestVersion] = useState<string>("");
 
-  const generatePDF = async () => {
-    handleGeneratePDF({
-      patient,
-      listConc,
-      listRec,
-      listSelVariants,
-      variantInter,
-      ensembleVersion: ensembleVersion,
-      ensembleRestVersion: ensembleRestVersion,
-    });
-  };
+  // const generatePDF = async () => {
+  //   DynamicGeneratePDF({
+  //     patient,
+  //     listConc,
+  //     listRec,
+  //     listSelVariants,
+  //     variantInter,
+  //     ensembleVersion: ensembleVersion,
+  //     ensembleRestVersion: ensembleRestVersion,
+  //   });
+  // };
   const generateXML = () => {
     // Create XML root
     const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -508,12 +476,21 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                             <AccordionContent>
                               <div className="flex flex-row gap-2">
                                 <div className="flex flex-row gap-1">
-                                  <Button
+                                  {/* <Button
                                     variant={"outline"}
                                     onClick={(e) => generatePDF()}
                                   >
                                     PDF
-                                  </Button>
+                                  </Button> */}
+                                  <DynamicGeneratePDF
+                                    patient={patient}
+                                    listConc={listConc}
+                                    listRec={listRec}
+                                    variantInter={variantInter}
+                                    listSelVariants={listSelVariants}
+                                    ensembleRestVersion={ensembleRestVersion}
+                                    ensembleVersion={ensembleVersion}
+                                  ></DynamicGeneratePDF>
                                   <Button
                                     variant={"outline"}
                                     onClick={generateCSV}

@@ -195,7 +195,7 @@ const ManageAccount = () => {
       }
     };
     fetchInstitutionData();
-  }, []);
+  });
 
   return (
     <div className="flex flex-col-reverse w-full">

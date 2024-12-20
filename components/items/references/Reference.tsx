@@ -3,6 +3,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ReferenceVariant } from "@/utils/object";
 import React, { useEffect, useState } from "react";
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
 interface ReferenceVariantProps {
   ref_code: number;
 }
@@ -62,7 +69,9 @@ const Reference: React.FC<ReferenceVariantProps> = ({ ref_code }) => {
         <div>
           <div className="flex flex-row items-center justify-between">
             <p className="text-2xl font-semibold text-blue-600">
-              <a href={link}>{refData?.title || "No title available"}</a>
+              <a href={link} target="_blank" rel="noopener noreferrer">
+                {refData?.title || "No title available"}
+              </a>
             </p>
             <p className="text-sm border-2 p-2 rounded-md bg-violet-50 border-violet-200">
               {refData?.date}
@@ -72,9 +81,16 @@ const Reference: React.FC<ReferenceVariantProps> = ({ ref_code }) => {
             <p className="text-sm italic text-gray-700 mb-3 mt-2">
               {refData?.author || "No authors available"}
             </p>
-            <p className="text-justify font-sans text-lg text-black italic text-balance">
-              {refData?.abstract || "No abstract available"}
-            </p>
+            <Accordion type="single" collapsible>
+              <AccordionItem value="item-1">
+                <AccordionTrigger>See Full Abstract</AccordionTrigger>
+                <AccordionContent>
+                  <p className="text-justify font-sans text-lg text-black italic text-balance">
+                    {refData?.abstract || "No abstract available"}
+                  </p>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
         </div>
       )}
