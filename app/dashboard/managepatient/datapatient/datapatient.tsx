@@ -182,7 +182,8 @@ const DataPatientPage = () => {
           {
             s3: {
               bucket: {
-                name: "senusashadcn-storage-31e4d581ab8b9-dev",
+                // name: "senusashadcn-storage-31e4d581ab8b9-dev" config.NEXT,
+                name: config.aws_user_files_s3_bucket,
               },
               object: {
                 key: result.path,
