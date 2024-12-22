@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React from "react";
-import { Search } from "lucide-react";
+import { CopyIcon, Search } from "lucide-react";
 
 import { useState } from "react";
 import axios from "axios";
@@ -147,6 +147,8 @@ const VariantQuery = () => {
         return null;
       }
 
+      console.log("ParsedBody", parsedBody);
+
       // Map the first item in the response to AcmgCriteria
       const acmgCriteria: AcmgCriteria = {
         PVS1: parsedBody[0].PVS1,
@@ -154,15 +156,15 @@ const VariantQuery = () => {
         PS2: parsedBody[0].PS2,
         PS3: parsedBody[0].PS3,
         PS4: parsedBody[0].PS4,
-        PP1_strong: parsedBody[0]["PP1 Strong"],
+        PP1_Strong: parsedBody[0]["PP1_Strong"],
         PM1: parsedBody[0].PM1,
         PM2: parsedBody[0].PM2,
         PM3: parsedBody[0].PM3,
         PM4: parsedBody[0].PM4,
         PM5: parsedBody[0].PM5,
         PM6: parsedBody[0].PM6,
-        PP1_moderate: parsedBody[0]["PP1 Moderate"],
-        PP1: parsedBody[0].PP1,
+        PP1_Moderate: parsedBody[0]["PP1_Moderate"],
+        PP1_Cosegregation: parsedBody[0]["PP1_Moderate"],
         PP2: parsedBody[0].PP2,
         PP3: parsedBody[0].PP3,
         PP4: parsedBody[0].PP4,
@@ -179,7 +181,7 @@ const VariantQuery = () => {
         BS3: parsedBody[0].BS3,
         BS4: parsedBody[0].BS4,
         BA1: parsedBody[0].BA1,
-        class: parsedBody[0].acmg,
+        acmg_class: parsedBody[0].acmg,
       };
 
       return acmgCriteria;
@@ -219,6 +221,28 @@ const VariantQuery = () => {
         {/* Instruction text to put variant Query */}
         <div className="w-full text-center mb-5">
           <p className="text-gray-400">Search for variant information</p>
+        </div>
+        <div className="w-full text-center mb-5 flex flex-row items-center justify-center gap-2">
+          <Button
+            variant={"outline"}
+            onClick={(e) => setVariant("NM_024675.4:c.172_175del")}
+            className="gap-2"
+          >
+            <p className="text-gray-500"> NM_024675.4:c.172_175del</p>
+            <small>
+              <CopyIcon className="w-3 h-4"></CopyIcon>
+            </small>
+          </Button>
+          <Button
+            variant={"outline"}
+            onClick={(e) => setVariant("NM_000059.4:c.9648+1G>C")}
+            className="gap-2"
+          >
+            <p className="text-gray-500"> {`NM_000059.4:c.9648+1G>C`}</p>
+            <small>
+              <CopyIcon className="w-3 h-4"></CopyIcon>
+            </small>
+          </Button>
         </div>
         <div className="flex flex-row w-full  gap-2 items-center px-5">
           <Input

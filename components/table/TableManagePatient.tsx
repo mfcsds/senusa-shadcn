@@ -165,11 +165,11 @@ const TableManagePatient = () => {
         <TableCaption>User Accounts Details.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Sex</TableHead>
+            <TableHead className="text-xl w-10/12">ID / Reference</TableHead>
+            {/* <TableHead>Sex</TableHead>
             <TableHead>Phone Number</TableHead>
-            <TableHead>Date of Birth</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>Date of Birth</TableHead> */}
+            <TableHead className="text-xl">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -181,9 +181,9 @@ const TableManagePatient = () => {
                   name={patients.name}
                 ></PatientItem>
               </TableCell>
-              <TableCell>{patients.sex || ""}</TableCell>
+              {/* <TableCell>{patients.sex || ""}</TableCell>
               <TableCell>{patients.phone_number || ""}</TableCell>
-              <TableCell>{patients.dob || ""}</TableCell>
+              <TableCell>{patients.dob || ""}</TableCell> */}
 
               <TableCell className="text-center">
                 <div className="flex flex-row gap-1 items-center">

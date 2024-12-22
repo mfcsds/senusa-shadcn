@@ -44,6 +44,7 @@ export const onCreateAcmgAnnotation = /* GraphQL */ `subscription OnCreateAcmgAn
     BS3
     BS4
     BA1
+    acmg_class
     createdAt
     updatedAt
     __typename
@@ -89,6 +90,7 @@ export const onUpdateAcmgAnnotation = /* GraphQL */ `subscription OnUpdateAcmgAn
     BS3
     BS4
     BA1
+    acmg_class
     createdAt
     updatedAt
     __typename
@@ -134,6 +136,7 @@ export const onDeleteAcmgAnnotation = /* GraphQL */ `subscription OnDeleteAcmgAn
     BS3
     BS4
     BA1
+    acmg_class
     createdAt
     updatedAt
     __typename
@@ -493,6 +496,7 @@ export const onCreateVariant = /* GraphQL */ `subscription OnCreateVariant($filt
     readposrank
     sor
     fraction
+    zygosity
     createdAt
     updatedAt
     __typename
@@ -528,6 +532,7 @@ export const onUpdateVariant = /* GraphQL */ `subscription OnUpdateVariant($filt
     readposrank
     sor
     fraction
+    zygosity
     createdAt
     updatedAt
     __typename
@@ -563,6 +568,7 @@ export const onDeleteVariant = /* GraphQL */ `subscription OnDeleteVariant($filt
     readposrank
     sor
     fraction
+    zygosity
     createdAt
     updatedAt
     __typename

@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { getAcmgAnnotation, listAcmgAnnotations } from "@/src/graphql/queries";
+import { generateClient } from "aws-amplify/api";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"; // Adjust import based on your setup
 import axios from "axios";
 import VariantGeneralInfo from "./VariantGeneralInfo";
@@ -20,16 +22,23 @@ import {
   TableRow,
 } from "../ui/table";
 import ACMGVariantQuery from "./variantquery/ACMGVariantQuery";
+import { equal } from "assert";
+import ACMGVariantReport from "./variantquery/ACMGVariantReport";
 
 interface VariantInformation {
   hgvsNotation: string | "";
+  id_variant: string | "";
 }
 const VariantInformationModal: React.FC<VariantInformation> = ({
   hgvsNotation,
+  id_variant,
 }) => {
   const [variantData, setVariantData] = useState<VariantData | null>(null);
   const [loading, setLoading] = useState(true);
   const [theACMGCriteria, setACMGCriteria] = useState<AcmgCriteria>();
+  const [theListACMGCriteria, setListACMGCriteria] = useState<AcmgCriteria[]>(
+    []
+  );
 
   useEffect(() => {
     // Function to fetch variant data
@@ -62,23 +71,24 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
           console.error("Error: Invalid response format or empty data.");
           return null;
         }
-
         // Map the first item in the response to AcmgCriteria
         const acmgCriteria: AcmgCriteria = {
+          id_variant: "",
+          id: "",
           PVS1: parsedBody[0].PVS1,
           PS1: parsedBody[0].PS1,
           PS2: parsedBody[0].PS2,
           PS3: parsedBody[0].PS3,
           PS4: parsedBody[0].PS4,
-          PP1_strong: parsedBody[0]["PP1 Strong"],
+          PP1_Strong: parsedBody[0]["PP1 Strong"],
           PM1: parsedBody[0].PM1,
           PM2: parsedBody[0].PM2,
           PM3: parsedBody[0].PM3,
           PM4: parsedBody[0].PM4,
           PM5: parsedBody[0].PM5,
           PM6: parsedBody[0].PM6,
-          PP1_moderate: parsedBody[0]["PP1 Moderate"],
-          PP1: parsedBody[0].PP1,
+          PP1_Moderate: parsedBody[0]["PP1 Moderate"],
+          PP1_Cosegregation: parsedBody[0]["PP1 Cosegregation"],
           PP2: parsedBody[0].PP2,
           PP3: parsedBody[0].PP3,
           PP4: parsedBody[0].PP4,
@@ -95,7 +105,7 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
           BS3: parsedBody[0].BS3,
           BS4: parsedBody[0].BS4,
           BA1: parsedBody[0].BA1,
-          class: parsedBody[0].acmg,
+          acmg_class: parsedBody[0].acmg,
         };
 
         return acmgCriteria;
@@ -104,6 +114,16 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
         return null;
       }
     };
+
+    // const client = generateClient();
+    // const fetchACMGCriteria = async () => {
+    //   try {
+    //     const acmgResult = await client.graphql({
+    //       query: listAcmgAnnotations,
+    //       variables: { filter: { id_variant: { eq: id_variant } } },
+    //     });
+    //   } catch (error) {}
+    // };
 
     const fetchVariantData = async () => {
       setLoading(true);
@@ -157,11 +177,11 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
 
     if (hgvsNotation) {
       fetchVariantData();
-      fetchACMGCriteria(hgvsNotation).then((variant) => {
-        if (variant) {
-          setACMGCriteria(variant);
-        }
-      });
+      // fetchACMGCriteria(hgvsNotation).then((variant) => {
+      //   if (variant) {
+      //     setACMGCriteria(variant);
+      //   }
+      // });
     }
   }, [hgvsNotation]);
 
@@ -217,10 +237,12 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
   } = variantData || {};
 
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-col border p-4 mb-5 w-[1000px]">
-        <p className="text-2xl font-semibold text-balance">General Info</p>
-        <Table>
+    <div className="flex flex-col h-[1000px]">
+      <div className="flex flex-col border p-4 mb-5 w-full ">
+        <p className="text-2xl font-semibold text-balance border-l-emerald-500 border-l-4 pl-5">
+          {hgvsNotation}
+        </p>
+        {/* <Table>
           <TableBody className="divide-y divide-gray-200">
             <TableRow className="even:bg-gray-50">
               <TableCell>Assembly Name</TableCell>
@@ -231,7 +253,7 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
               <TableCell>{seq_region_name || "N/A"}</TableCell>
             </TableRow>
           </TableBody>
-        </Table>
+        </Table> */}
       </div>
       <div className="flex flex-col w-full items-start ">
         <Tabs defaultValue="acmg" className="w-full items-start justify-start">
@@ -283,7 +305,10 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
           {/* ACMG Classification */}
 
           <TabsContent value="acmg">
-            <ACMGVariantQuery data={theACMGCriteria}></ACMGVariantQuery>
+            <ACMGVariantReport
+              id_variantku={id_variant}
+              hgvs={hgvsNotation}
+            ></ACMGVariantReport>
           </TabsContent>
 
           {/* General Information Tab */}

@@ -499,7 +499,10 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
             {`Here is the detailed information about the ${selectedItemVar?.hgvs}`}
           </DialogDescription>
           {/* Pass the hgvsNotation as a prop to the VariantInformationModal */}
-          <VariantInformationModal hgvsNotation={`${selectedItemVar?.hgvs}`} />
+          <VariantInformationModal
+            id_variant={`${selectedItemVar?.id}`}
+            hgvsNotation={`${selectedItemVar?.hgvs}`}
+          />
         </DialogContent>
       </Dialog>
     </div>

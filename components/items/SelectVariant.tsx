@@ -151,11 +151,11 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
           sor: item.sor ?? 0,
           fraction: item.fraction ?? 0,
           variantReportID: id_report ?? "",
-          zygosity: extractZygosity(item.info ?? ""),
+          zygosity: item.zigosity ?? "",
           globalallele: null, // Set to null to indicate loading state
           functional_impact: "",
           acmg: item.acmg ?? "VUS",
-          clinicalSign: null, // Set to null to indicate loading state
+          clinicalSign: "", // Set to null to indicate loading state
           gene_id: null,
           gene_symbol: null,
           severeconsequence: null,
@@ -169,18 +169,20 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
         };
         return variantTemporary;
       });
-      setVariantList(parsedVariants);
-      parsedVariants.forEach((variant, index) => {
+      await setVariantList(parsedVariants);
+      await parsedVariants.forEach((variant, index) => {
         fetchVariantDetails4(variant)
           .then((details) => {
             setVariantList((prevVariants) => {
               const newVariants = [...prevVariants];
               newVariants[index] = { ...newVariants[index], ...details };
+              // console.log(newVariants[index].phenotypes);
               return newVariants;
             });
           })
           .then((variant) => {
             console.log("Variant: Sukses");
+            // console.log(`${var}`);
           });
       });
     } catch (error) {

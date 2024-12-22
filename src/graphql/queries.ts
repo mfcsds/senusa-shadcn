@@ -42,6 +42,7 @@ export const getAcmgAnnotation = /* GraphQL */ `query GetAcmgAnnotation($id: ID!
     BS3
     BS4
     BA1
+    acmg_class
     createdAt
     updatedAt
     __typename
@@ -90,6 +91,7 @@ export const listAcmgAnnotations = /* GraphQL */ `query ListAcmgAnnotations(
       BS3
       BS4
       BA1
+      acmg_class
       createdAt
       updatedAt
       __typename
@@ -372,6 +374,7 @@ export const getVariant = /* GraphQL */ `query GetVariant($id: ID!) {
     readposrank
     sor
     fraction
+    zygosity
     createdAt
     updatedAt
     __typename
@@ -412,6 +415,7 @@ export const listVariants = /* GraphQL */ `query ListVariants(
       readposrank
       sor
       fraction
+      zygosity
       createdAt
       updatedAt
       __typename

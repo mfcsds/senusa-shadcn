@@ -60,6 +60,7 @@ export default function AcmgAnnotationCreateForm(props) {
     BS3: false,
     BS4: false,
     BA1: false,
+    acmg_class: "",
   };
   const [id_variant, setId_variant] = React.useState(initialValues.id_variant);
   const [PVS1, setPVS1] = React.useState(initialValues.PVS1);
@@ -96,6 +97,7 @@ export default function AcmgAnnotationCreateForm(props) {
   const [BS3, setBS3] = React.useState(initialValues.BS3);
   const [BS4, setBS4] = React.useState(initialValues.BS4);
   const [BA1, setBA1] = React.useState(initialValues.BA1);
+  const [acmg_class, setAcmg_class] = React.useState(initialValues.acmg_class);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setId_variant(initialValues.id_variant);
@@ -129,6 +131,7 @@ export default function AcmgAnnotationCreateForm(props) {
     setBS3(initialValues.BS3);
     setBS4(initialValues.BS4);
     setBA1(initialValues.BA1);
+    setAcmg_class(initialValues.acmg_class);
     setErrors({});
   };
   const validations = {
@@ -163,6 +166,7 @@ export default function AcmgAnnotationCreateForm(props) {
     BS3: [],
     BS4: [],
     BA1: [],
+    acmg_class: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -221,6 +225,7 @@ export default function AcmgAnnotationCreateForm(props) {
           BS3,
           BS4,
           BA1,
+          acmg_class,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -314,6 +319,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.id_variant ?? value;
@@ -368,6 +374,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PVS1 ?? value;
@@ -422,6 +429,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PS1 ?? value;
@@ -476,6 +484,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PS2 ?? value;
@@ -530,6 +539,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PS3 ?? value;
@@ -584,6 +594,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PS4 ?? value;
@@ -638,6 +649,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PP1_Strong ?? value;
@@ -692,6 +704,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PM1 ?? value;
@@ -746,6 +759,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PM2 ?? value;
@@ -800,6 +814,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PM3 ?? value;
@@ -854,6 +869,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PM4 ?? value;
@@ -908,6 +924,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PM5 ?? value;
@@ -962,6 +979,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PM6 ?? value;
@@ -1016,6 +1034,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PP1_Moderate ?? value;
@@ -1070,6 +1089,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PP1_Cosegregation ?? value;
@@ -1126,6 +1146,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PP2 ?? value;
@@ -1180,6 +1201,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PP3 ?? value;
@@ -1234,6 +1256,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PP4 ?? value;
@@ -1288,6 +1311,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.PP5 ?? value;
@@ -1342,6 +1366,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.BP1 ?? value;
@@ -1396,6 +1421,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.BP2 ?? value;
@@ -1450,6 +1476,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.BP3 ?? value;
@@ -1504,6 +1531,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.BP4 ?? value;
@@ -1558,6 +1586,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.BP5 ?? value;
@@ -1612,6 +1641,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.BP6 ?? value;
@@ -1666,6 +1696,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.BP7 ?? value;
@@ -1720,6 +1751,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.BS1 ?? value;
@@ -1774,6 +1806,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.BS2 ?? value;
@@ -1828,6 +1861,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3: value,
               BS4,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.BS3 ?? value;
@@ -1882,6 +1916,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4: value,
               BA1,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.BS4 ?? value;
@@ -1936,6 +1971,7 @@ export default function AcmgAnnotationCreateForm(props) {
               BS3,
               BS4,
               BA1: value,
+              acmg_class,
             };
             const result = onChange(modelFields);
             value = result?.BA1 ?? value;
@@ -1950,6 +1986,61 @@ export default function AcmgAnnotationCreateForm(props) {
         hasError={errors.BA1?.hasError}
         {...getOverrideProps(overrides, "BA1")}
       ></SwitchField>
+      <TextField
+        label="Acmg class"
+        isRequired={false}
+        isReadOnly={false}
+        value={acmg_class}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              id_variant,
+              PVS1,
+              PS1,
+              PS2,
+              PS3,
+              PS4,
+              PP1_Strong,
+              PM1,
+              PM2,
+              PM3,
+              PM4,
+              PM5,
+              PM6,
+              PP1_Moderate,
+              PP1_Cosegregation,
+              PP2,
+              PP3,
+              PP4,
+              PP5,
+              BP1,
+              BP2,
+              BP3,
+              BP4,
+              BP5,
+              BP6,
+              BP7,
+              BS1,
+              BS2,
+              BS3,
+              BS4,
+              BA1,
+              acmg_class: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.acmg_class ?? value;
+          }
+          if (errors.acmg_class?.hasError) {
+            runValidationTasks("acmg_class", value);
+          }
+          setAcmg_class(value);
+        }}
+        onBlur={() => runValidationTasks("acmg_class", acmg_class)}
+        errorMessage={errors.acmg_class?.errorMessage}
+        hasError={errors.acmg_class?.hasError}
+        {...getOverrideProps(overrides, "acmg_class")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

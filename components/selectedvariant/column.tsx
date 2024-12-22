@@ -57,6 +57,7 @@ import { generateClient } from "aws-amplify/api";
 import awsconfig from "@/src/amplifyconfiguration.json";
 import { Amplify } from "aws-amplify";
 import { generateUserID } from "@/utils/function";
+import { Toast } from "../ui/toast";
 
 Amplify.configure(awsconfig);
 
@@ -177,7 +178,19 @@ export const columns: ColumnDef<Variant>[] = [
       return <p className="text-lg font-sans ml-5">AC</p>;
     },
     cell: ({ row }) => {
-      return <p className="text-lg">{row.original.ac}</p>;
+      const ac = row.original.ac;
+      let displayValue;
+
+      // Handle various data types
+      if (Array.isArray(ac)) {
+        displayValue = ac.join(", ");
+      } else if (typeof ac === "object" && ac !== null) {
+        displayValue = JSON.stringify(ac);
+      } else {
+        displayValue = ac || "N/A";
+      }
+
+      return <p className="text-lg">{displayValue}</p>;
     },
   },
   {
@@ -581,8 +594,8 @@ export const columns: ColumnDef<Variant>[] = [
       const item = row.original;
 
       const itemTemp: SelectedVariant = {
-        id_report: "R-KA1IE8PG1FRB",
-        id_patient: "P-QP1EYI3O1HBB",
+        id_report: item.id_report,
+        id_patient: item.id_patient,
         id: item.id, // ID type is represented as string in TypeScript
         id_vcf: item.id_vcf,
         gene_id: item.gene_id,
@@ -634,8 +647,10 @@ export const columns: ColumnDef<Variant>[] = [
                 query: createVariantInterpretation,
                 variables: { input: tempVarInter },
               });
-            } catch (error) {}
-            // console.log(`Berhasil add data ${item.hgvs}`);
+              console.log("Berhasil Menambahkan");
+            } catch (error) {
+              console.log("Gagal Menambahkan");
+            }
           }
         } catch (error) {
           console.log(`Error adding ${item.hgvs} ${error}`);
@@ -658,6 +673,7 @@ export const columns: ColumnDef<Variant>[] = [
             <DialogContent className="w-full max-w-[1800px]">
               <VariantInformationModal
                 hgvsNotation={item.hgvs}
+                id_variant={itemTemp.id}
               ></VariantInformationModal>
               <DialogFooter>
                 <Button type="submit">Save changes</Button>
@@ -667,12 +683,10 @@ export const columns: ColumnDef<Variant>[] = [
           <Button
             variant={"ghost"}
             className="hover:bg-red-500 hover:text-white"
+            onClick={saveSelectedVariant}
           >
             <small>
-              <PlusCircle
-                className="h-4 w-4"
-                onClick={saveSelectedVariant}
-              ></PlusCircle>
+              <PlusCircle className="h-4 w-4"></PlusCircle>
             </small>
           </Button>
         </div>

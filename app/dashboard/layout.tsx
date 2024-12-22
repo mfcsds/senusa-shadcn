@@ -3,6 +3,12 @@ import { Inter } from "next/font/google";
 import "@/app/globals.css";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
+import { Amplify } from "aws-amplify";
+import config from "@/src/amplifyconfiguration.json";
+
+// function AmplifyConfiguration() {
+//   Amplify.configure(config);
+// }
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -10,6 +16,7 @@ export const metadata: Metadata = {
   description: "Software Penilaian Gen untuk Bangsa",
 };
 
+Amplify.configure(config);
 export default function RootLayout({
   children,
 }: Readonly<{

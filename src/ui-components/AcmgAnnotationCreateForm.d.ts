@@ -53,6 +53,7 @@ export declare type AcmgAnnotationCreateFormInputValues = {
     BS3?: boolean;
     BS4?: boolean;
     BA1?: boolean;
+    acmg_class?: string;
 };
 export declare type AcmgAnnotationCreateFormValidationValues = {
     id_variant?: ValidationFunction<string>;
@@ -86,6 +87,7 @@ export declare type AcmgAnnotationCreateFormValidationValues = {
     BS3?: ValidationFunction<boolean>;
     BS4?: ValidationFunction<boolean>;
     BA1?: ValidationFunction<boolean>;
+    acmg_class?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type AcmgAnnotationCreateFormOverridesProps = {
@@ -121,6 +123,7 @@ export declare type AcmgAnnotationCreateFormOverridesProps = {
     BS3?: PrimitiveOverrideProps<SwitchFieldProps>;
     BS4?: PrimitiveOverrideProps<SwitchFieldProps>;
     BA1?: PrimitiveOverrideProps<SwitchFieldProps>;
+    acmg_class?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type AcmgAnnotationCreateFormProps = React.PropsWithChildren<{
     overrides?: AcmgAnnotationCreateFormOverridesProps | undefined | null;

@@ -11,6 +11,19 @@ export function generatePatientID() {
 
   return patientID;
 }
+
+export function generateACMGID() {
+  const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let acmgID = "ACMG-";
+
+  for (let i = 0; i < 12; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    acmgID += characters[randomIndex];
+  }
+
+  return acmgID;
+}
+
 export function generateReportID() {
   const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let reportID = "R-";
@@ -272,17 +285,32 @@ export const fetchVariantDetails4 = async (
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      const response = await axios.post(lambdaEndpoint, {
-        variant: {
-          chrom: variant.chrom,
-          pos: variant.pos,
-          ref: variant.ref,
-          alt: variant.alt,
+      const response = await axios.post(
+        lambdaEndpoint,
+        {
+          variant: {
+            chrom: variant.chrom.replace("chr", ""),
+            pos: variant.pos,
+            ref: variant.ref,
+            alt: variant.alt,
+          },
         },
-      });
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       if (response.status === 200) {
-        const lambdaBody = JSON.parse(response.data.body);
+        // const lambdaBody = JSON.parse(response.data.body);
+        // Print the entire lambdaBody to the console
+        const lambdaBody =
+          typeof response.data.body === "string"
+            ? JSON.parse(response.data.body)
+            : response.data.body;
+
+        // Debug the parsed response
+        console.log("Parsed Lambda Body:", lambdaBody);
+
         return {
           ...variant,
           globalallele: lambdaBody.globalallele || null,

@@ -147,6 +147,7 @@ export interface VariantRawData {
   dp?: number;
   fs?: number;
   mq?: number;
+  zigosity?: string;
   mqranksum?: number;
   qd?: number;
   readposrank?: number;
@@ -308,27 +309,30 @@ export interface Domain {
 }
 
 export interface FamilyDiseaseData {
-  id: string;
+  id?: string;
   id_patient: string;
   hpo_code: string;
-  hpo_desc: string[];
+  hpo_desc: string;
 }
 
+// 33 Feature
 export interface AcmgCriteria {
+  id?: string;
+  id_variant?: string;
   PVS1: boolean;
   PS1: boolean;
   PS2: boolean;
   PS3: boolean;
   PS4: boolean;
-  PP1_strong: boolean;
+  PP1_Strong: boolean;
   PM1: boolean;
   PM2: boolean;
   PM3: boolean;
   PM4: boolean;
   PM5: boolean;
   PM6: boolean;
-  PP1_moderate: boolean;
-  PP1: boolean;
+  PP1_Moderate: boolean;
+  PP1_Cosegregation: boolean;
   PP2: boolean;
   PP3: boolean;
   PP4: boolean;
@@ -345,7 +349,7 @@ export interface AcmgCriteria {
   BS3: boolean;
   BS4: boolean;
   BA1: boolean;
-  class: string;
+  acmg_class?: string;
 }
 
 export interface ReferenceVariant {

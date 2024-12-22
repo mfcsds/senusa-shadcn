@@ -3,54 +3,104 @@
 import React, { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Trash2 } from "lucide-react";
 import { Input } from "../ui/input";
 import axios from "axios";
 
-import { createFamilyHistoryDisease } from "@/src/graphql/mutations";
+import {
+  createFamilyHistoryDisease,
+  deleteFamilyHistoryDisease,
+} from "@/src/graphql/mutations";
+import { listFamilyHistoryDiseases } from "@/src/graphql/queries";
 import { Amplify } from "aws-amplify";
 import config from "@/src/amplifyconfiguration.json";
 import { generateClient } from "aws-amplify/api";
-import { generateFamilyHPOID } from "@/utils/function";
 import { FamilyDiseaseData } from "@/utils/object";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "../ui/accordion";
 
 Amplify.configure(config);
 
-interface FamilyProops {
+interface FamilyProps {
   patient_id: string | null;
 }
 
-const ButtonAddFamilyDisease: React.FC<FamilyProops> = ({ patient_id }) => {
+const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
   const [phenotypeQuery, setPhenotypeQuery] = useState("");
   const [suggestions, setSuggestions] = useState<
     { id: string; name: string }[]
   >([]);
-  const [selectedPhenotypes, setSelectedPhenotypes] = useState<string[]>([]);
+  const [selectedPhenotypes, setSelectedPhenotypes] = useState<
+    FamilyDiseaseData[]
+  >([]);
 
   const client = generateClient();
 
-  //   const saveSelected = async (suggestion: { id_hpo: string; name: string }) => {
-  //     const inputTemp: FamilyDiseaseData = {
-  //       id: generateFamilyHPOID(),
-  //       id_patient: patient_id ?? "",
-  //       hpo_code: suggestion.id_hpo ?? "",
-  //       hpo_desc: selectedPhenotypes,
-  //     };
-  //     try {
-  //       const result = await client.graphql({
-  //         query: createFamilyHistoryDisease,
-  //         variables: { input: inputTemp },
-  //       });
-  //     } catch (error) {
-  //       console.log("error save family history");
-  //     }
-  //   };
+  useEffect(() => {
+    const loadInitialData = async () => {
+      try {
+        const result = await client.graphql({
+          query: listFamilyHistoryDiseases,
+          variables: {
+            filter: {
+              id_patient: { eq: patient_id },
+            },
+          },
+        });
+
+        const initialData = result.data.listFamilyHistoryDiseases
+          .items as FamilyDiseaseData[];
+        setSelectedPhenotypes(initialData);
+      } catch (error) {
+        console.error("Error loading family history data:", error);
+      }
+    };
+
+    if (patient_id) {
+      loadInitialData();
+    }
+  }, [patient_id]);
+
+  const saveSelected = async (suggestion: { id: string; name: string }) => {
+    const newPhenotype: FamilyDiseaseData = {
+      id_patient: patient_id ?? "",
+      hpo_code: suggestion.id,
+      hpo_desc: suggestion.name,
+    };
+
+    try {
+      const result = await client.graphql({
+        query: createFamilyHistoryDisease,
+        variables: { input: newPhenotype },
+      });
+
+      setSelectedPhenotypes((prev) => [...prev, newPhenotype]);
+    } catch (error) {
+      console.log("Error saving family history:", error);
+    }
+  };
+
+  const deletePhenotype = async (id: string) => {
+    try {
+      await client.graphql({
+        query: deleteFamilyHistoryDisease,
+        variables: { input: { id } }, // Gunakan id, bukan hpo_code
+      });
+
+      // Hapus item dari state lokal berdasarkan id
+      setSelectedPhenotypes((prev) => prev.filter((p) => p.id !== id));
+    } catch (error) {
+      console.error("Error deleting family history:", error);
+    }
+  };
 
   const handlePhenotypeSelect = (suggestion: { id: string; name: string }) => {
-    const formattedSuggestion = `${suggestion.id} - ${suggestion.name}`;
-
-    if (!selectedPhenotypes.includes(formattedSuggestion)) {
-      setSelectedPhenotypes([...selectedPhenotypes, formattedSuggestion]);
+    if (!selectedPhenotypes.find((p) => p.hpo_code === suggestion.id)) {
+      saveSelected(suggestion);
     }
     setPhenotypeQuery("");
     setSuggestions([]);
@@ -86,37 +136,60 @@ const ButtonAddFamilyDisease: React.FC<FamilyProops> = ({ patient_id }) => {
   }, [phenotypeQuery]);
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row gap-4 items-center justify-center w-[500px] mr-10">
+      <Accordion type="single" collapsible className="w-[200px]">
+        <AccordionItem value="family-history">
+          <AccordionTrigger>Family Disease History</AccordionTrigger>
+          <AccordionContent>
+            <ul className="list-disc list-inside">
+              {selectedPhenotypes.map((phenotype, index) => (
+                <li key={index} className="flex justify-between items-center">
+                  {phenotype.hpo_code} - {phenotype.hpo_desc}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      if (phenotype.id) {
+                        // Pastikan id tidak undefined
+                        deletePhenotype(phenotype.id);
+                      } else {
+                        console.error(
+                          "ID is undefined for phenotype:",
+                          phenotype
+                        );
+                      }
+                    }}
+                  >
+                    <Trash2 className="w-4 h-4 text-red-500" />
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant={"outline"} className="">
-            <small>
-              <Plus className="w-4 h-4 mr-2"></Plus>
-            </small>
-            Add Family Disease
+          <Button variant={"outline"}>
+            <Plus className="w-4 h-4 " />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="-translate-x-60 -translate-y-10 w-[400px]">
-          <div className="flex flex-col w-full p-2 ">
+          <div className="flex flex-col w-full p-2">
             <div className="flex flex-row items-center justify-between gap-2">
               <Input
                 value={phenotypeQuery}
-                type={"text"}
+                type="text"
                 onChange={(e) => setPhenotypeQuery(e.target.value)}
                 placeholder="Type family history disease"
                 className="focus:border-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-400 shadow-sm"
-              ></Input>
-              <Button variant={"outline"}>
-                <small>
-                  <Search className="w-4 h-4 text-gray-400"></Search>
-                </small>
+              />
+              <Button variant="outline">
+                <Search className="w-4 h-4 text-gray-400" />
               </Button>
             </div>
             {suggestions.length > 0 && (
-              <ul
-                className="absolute 
-                 translate-y-14 z-10 bg-white border border-gray-300 w-md mt-1 rounded-md shadow-lg"
-              >
+              <ul className="absolute translate-y-14 z-10 bg-white border border-gray-300 w-md mt-1 rounded-md shadow-lg">
                 {suggestions.map((suggestion, index) => (
                   <li
                     key={index}

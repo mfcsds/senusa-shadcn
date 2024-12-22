@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
+import ButtonAddFamilyDisease from "@/components/button/ButtonAddFamilyDisease";
 
 const EditVariantReport = () => {
   const searchParams = useSearchParams();
@@ -95,22 +96,9 @@ const EditVariantReport = () => {
           <p className="text-lg  border-gray-400 p-2">{`Patient ID : ${patientID}`}</p>
         </div>
         <div className="flex flex-row items-center p-2 w-[400px]">
-          <Label className="font-semibold text-sm">Select VCF Data</Label>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Select The VCF Files
-                <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuCheckboxItem>
-                <div className="border-l-2 border-gray-600 w-full p-2 rounded-sm bg-violet-400">
-                  <p className="text-black font-semibold">VCF-3219DNKASD</p>
-                </div>
-              </DropdownMenuCheckboxItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <ButtonAddFamilyDisease
+            patient_id={patientID}
+          ></ButtonAddFamilyDisease>
         </div>
       </div>
       <div className="flex flex-col gap-5 border mt-5">
@@ -133,10 +121,10 @@ const EditVariantReport = () => {
           ))}
         </Tabs>
       </div>
-      <Card>
+      {/* <Card>
         <CardHeader></CardHeader>
         <CardContent></CardContent>
-      </Card>
+      </Card> */}
     </div>
   );
 };

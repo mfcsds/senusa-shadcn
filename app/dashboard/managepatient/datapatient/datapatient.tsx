@@ -50,20 +50,34 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import {
+  generateACMGID,
   generateHGVS,
   generateHGVS2,
   generateVariantSampleID,
   generateVCFDataID,
 } from "@/utils/function";
-import { Variant, VcfData } from "@/utils/object";
+import {
+  AcmgCriteria,
+  FamilyDiseaseData,
+  Variant,
+  VcfData,
+} from "@/utils/object";
 import { getDateToday } from "@/utils/DateHelperFunction";
 import { useSearchParams } from "next/navigation";
 
 import { getPatient } from "@/src/graphql/queries";
 import { listVcfdata } from "@/src/graphql/queries";
 import { generateClient } from "aws-amplify/api";
-import { CreatePatientInput } from "@/src/API";
-import { createVariant, createVcfdata } from "@/src/graphql/mutations";
+import {
+  CreateAcmgAnnotationInput,
+  CreatePatientInput,
+  CreateVariantInput,
+} from "@/src/API";
+import {
+  createAcmgAnnotation,
+  createVariant,
+  createVcfdata,
+} from "@/src/graphql/mutations";
 import {
   Select,
   SelectItem,
@@ -92,12 +106,13 @@ interface VariantRawData {
   id_var: string;
   chrom: string;
   pos: string;
-  id: string;
+  id?: string;
   ref: string;
   alt: string;
   qual: string;
   filter: string;
   info: string;
+  zygosity: string;
   ac: number;
   af: number;
   an: number;
@@ -121,6 +136,12 @@ const DataPatientPage = () => {
 
   const [uploadModal, setUploadModal] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [savingProgress, setSavingProgress] = useState(0);
+
+  const [familyDisease, setFamilyDisease] = useState<FamilyDiseaseData[]>([]);
+
+  const [disabledButtonSave, setDisabledButtonSave] = useState(false);
+
   const [files, setFiles] = useState<File[]>([]);
   const [file, setFile] = useState<File>();
   const [tableData, setTableData] = useState<any[]>([]);
@@ -133,7 +154,7 @@ const DataPatientPage = () => {
   const [patient, setPatient] = useState<CreatePatientInput>();
   const [showModalVCFData, setShowModalVCFData] = useState(false);
   const [readVariantFromText, setReadVariantFromText] = useState<
-    VariantRawData[]
+    CreateVariantInput[]
   >([]);
 
   const [loading, setLoading] = useState(false);
@@ -152,6 +173,7 @@ const DataPatientPage = () => {
     }
     setLoading(true);
     setUploadProgress(0);
+    setReadVariantFromText([]); // INI RESET SET VARIANT KEY
     try {
       const fileKey = `public/${idPatient}/${"vcf"}/${vcfID}/${file.name}`;
 
@@ -200,18 +222,18 @@ const DataPatientPage = () => {
       if (response.data && response.data.body) {
         const parsedData = JSON.parse(response.data.body);
         setTableData(parsedData);
-        const parsedVariant: VariantRawData[] = parsedData.map(
+        const parsedVariant: CreateVariantInput[] = parsedData.map(
           (item: any, index: number) => ({
             id_patient: idPatient, // Replace with actual patient ID if available
             id_vcf: vcfID, // Replace with actual VCF ID if available
-            id_var: item.id, // Unique variant identifier
+            id_var: item.id_var, // Unique variant identifier
             chrom: item.chrom || "",
             pos: item.pos?.toString() || "",
-            id: generateVariantSampleID() || "",
             ref: item.ref || "",
             alt: item.alts || "", // Assuming only the first alt allele is required
             qual: item.qual?.toString() || "",
-            filter: item.filter || "PASS", // Default to PASS if no filter field exists
+            filter: item.filter || "PASS",
+            zygosity: item.zygosity || "",
             info: JSON.stringify(item.info || {}), // Convert the entire info field to a string if needed
             ac: item.AC || 0,
             af: item.AF || 0,
@@ -352,8 +374,7 @@ const DataPatientPage = () => {
     setUploadModal(!uploadModal);
   };
 
-  const saveSampleVariant = async (variant: VariantRawData) => {
-    // console.log(variant.hgvs);
+  const saveACMGCriteria = async (variant: CreateVariantInput) => {
     try {
       const apiUrl =
         selectedReferenceType === "GRCH37"
@@ -373,39 +394,196 @@ const DataPatientPage = () => {
           }),
         }),
       });
-      // Check if the API call was successful
+
       if (!response.ok) {
         throw new Error("Failed to fetch ACMG classification");
       }
 
       const data = await response.json();
+      const acmgResults = JSON.parse(data.body);
 
-      // Parse the ACMG result from the API response
-      const acmgResults = JSON.parse(data.body); // Assuming `body` is a stringified array
       if (acmgResults && acmgResults.length > 0) {
-        variant.acmg = acmgResults[0].acmg; // Extract `acmg` value
-      } else {
-        throw new Error("ACMG classification not found in the response");
-      }
+        const acmgData = acmgResults[0];
+        variant.acmg = acmgData.acmg;
 
-      // Store the variant in the database only if `acmg` is filled
-      if (variant.acmg) {
-        const result = await client.graphql({
-          query: createVariant,
-          variables: { input: variant },
+        // // // Store the variant only if ACMG is filled
+        // if (variant.acmg) {
+        //   const variantResult = await client.graphql({
+        //     query: createVariant,
+        //     variables: { input: variant },
+        //   });
+        //   console.log("Variant saved successfully", variantResult);
+        //   // 3. Confirm variant is saved successfully
+        //   const savedVariant = variantResult.data?.createVariant;
+        //   if (!savedVariant) {
+        //     throw new Error("Failed to save variant to database.");
+        //   }
+
+        //   console.log("Variant saved successfully:", savedVariant);
+
+        const acmgCriteria: AcmgCriteria = {
+          id_variant: variant.id ?? "",
+          PVS1: acmgData.PVS1 || false,
+          PS1: acmgData.PS1 || false,
+          PS2: acmgData.PS2 || false,
+          PS3: acmgData.PS3 || false,
+          PS4: acmgData.PS4 || false,
+          PP1_Strong: acmgData.PP1_Strong || false,
+          PM1: acmgData.PM1 || false,
+          PM2: acmgData.PM2 || false,
+          PM3: acmgData.PM3 || false,
+          PM4: acmgData.PM4 || false,
+          PM5: acmgData.PM5 || false,
+          PM6: acmgData.PM6 || false,
+          PP1_Moderate: acmgData.PP1_Moderate || false,
+          PP1_Cosegregation: acmgData.PP1_Cosegregation || false,
+          PP2: acmgData.PP2 || false,
+          PP3: acmgData.PP3 || false,
+          PP4: acmgData.PP4 || false,
+          PP5: acmgData.PP5 || false,
+          BP1: acmgData.BP1 || false,
+          BP2: acmgData.BP2 || false,
+          BP3: acmgData.BP3 || false,
+          BP4: acmgData.BP4 || false,
+          BP5: acmgData.BP5 || false,
+          BP6: acmgData.BP6 || false,
+          BP7: acmgData.BP7 || false,
+          BS1: acmgData.BS1 || false,
+          BS2: acmgData.BS2 || false,
+          BS3: acmgData.BS3 || false,
+          BS4: acmgData.BS4 || false,
+          BA1: acmgData.BA1 || false,
+          acmg_class: acmgData.acmg || "",
+        };
+
+        // Store ACMG Criteria if variant is saved
+        const acmgResult = await client.graphql({
+          query: createAcmgAnnotation,
+          variables: { input: acmgCriteria },
         });
-        console.log("Variant saved successfully", result);
+        console.log("ACMG Criteria saved successfully", acmgResult);
+        console.log(
+          `${variant.id} and acmg criteria id ${acmgCriteria.id_variant}`
+        );
       } else {
-        console.error("ACMG classification is missing, variant not saved");
+        throw new Error("ACMG classification missing; cannot save variant");
       }
     } catch (error) {
-      console.error("Error saving variant:", error);
+      console.error("Error saving variant and ACMG criteria:", error);
+    }
+  };
+
+  const saveSampleVariant = async (variant: CreateVariantInput) => {
+    try {
+      // const variantId = generateVariantSampleID(); // Generate ID once
+      // variant.id = variantId; // Assign the generated ID
+
+      const apiUrl =
+        selectedReferenceType === "GRCH37"
+          ? "https://pr2yknfpne.execute-api.us-east-1.amazonaws.com/dev/acmg_grch37"
+          : "https://yyj4sdbsd6.execute-api.us-east-1.amazonaws.com/dev-acmg/classification";
+
+      // Fetch ACMG classification from the API
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          body: JSON.stringify({
+            variants: [variant.hgvs],
+          }),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch ACMG classification");
+      }
+
+      const data = await response.json();
+      const acmgResults = JSON.parse(data.body);
+
+      if (acmgResults && acmgResults.length > 0) {
+        const acmgData = acmgResults[0];
+        variant.acmg = acmgData.acmg;
+
+        // // Store the variant only if ACMG is filled
+        if (variant.acmg) {
+          const variantResult = await client.graphql({
+            query: createVariant,
+            variables: { input: variant },
+          });
+          console.log("Variant saved successfully", variantResult);
+          // 3. Confirm variant is saved successfully
+          const savedVariant = variantResult.data?.createVariant;
+          if (!savedVariant) {
+            throw new Error("Failed to save variant to database.");
+          }
+
+          console.log("Variant saved successfully:", savedVariant);
+
+          // const acmgCriteria: AcmgCriteria = {
+          //   id: generateACMGID(),
+          //   id_variant: savedVariant.id,
+          //   PVS1: acmgData.PVS1 || false,
+          //   PS1: acmgData.PS1 || false,
+          //   PS2: acmgData.PS2 || false,
+          //   PS3: acmgData.PS3 || false,
+          //   PS4: acmgData.PS4 || false,
+          //   PP1_Strong: acmgData.PP1_Strong || false,
+          //   PM1: acmgData.PM1 || false,
+          //   PM2: acmgData.PM2 || false,
+          //   PM3: acmgData.PM3 || false,
+          //   PM4: acmgData.PM4 || false,
+          //   PM5: acmgData.PM5 || false,
+          //   PM6: acmgData.PM6 || false,
+          //   PP1_Moderate: acmgData.PP1_Moderate || false,
+          //   PP1_Cosegregation: acmgData.PP1_Cosegregation || false,
+          //   PP2: acmgData.PP2 || false,
+          //   PP3: acmgData.PP3 || false,
+          //   PP4: acmgData.PP4 || false,
+          //   PP5: acmgData.PP5 || false,
+          //   BP1: acmgData.BP1 || false,
+          //   BP2: acmgData.BP2 || false,
+          //   BP3: acmgData.BP3 || false,
+          //   BP4: acmgData.BP4 || false,
+          //   BP5: acmgData.BP5 || false,
+          //   BP6: acmgData.BP6 || false,
+          //   BP7: acmgData.BP7 || false,
+          //   BS1: acmgData.BS1 || false,
+          //   BS2: acmgData.BS2 || false,
+          //   BS3: acmgData.BS3 || false,
+          //   BS4: acmgData.BS4 || false,
+          //   BA1: acmgData.BA1 || false,
+          //   acmg_class: acmgData.acmg || "",
+          // };
+
+          // // Store ACMG Criteria if variant is saved
+          // const acmgResult = await client.graphql({
+          //   query: createAcmgAnnotation,
+          //   variables: { input: acmgCriteria },
+          // });
+          // console.log("ACMG Criteria saved successfully", acmgResult);
+          // console.log(
+          //   `${variant.id} and acmg criteria id ${acmgCriteria.id_variant}`
+          // );
+        } else {
+          throw new Error("ACMG classification missing; cannot save variant");
+        }
+      } else {
+        throw new Error("ACMG classification not found in response");
+      }
+    } catch (error) {
+      console.error("Error saving variant and ACMG criteria:", error);
     }
   };
 
   const uploadFilesButton = async () => {
     console.log("Click Upload Button");
     setVCFID(generateVCFDataID());
+    setSavingProgress(0);
+    setDisabledButtonSave(true);
     // Save to Database
     try {
       // const upload = await Promise.all(
@@ -449,14 +627,39 @@ const DataPatientPage = () => {
       };
       await saveData();
       setVCFFiles((vcfData) => [...vcfData, newVCFFile]);
+      // Save variants and update progress
+
+      // console.log("Jumlah Variant", totalVariants);
+      // for (let i = 0; i < totalVariants; i++) {
+      //   await saveSampleVariant(readVariantFromText[i]);
+      //   // await saveACMGCriteria(readVariantFromText[i]);
+      //   setSavingProgress(Math.round(((i + 1) / totalVariants) * 100)); // Update progress
+      // }
+      let completed = 0;
+      const totalVariants = readVariantFromText.length;
+      await Promise.all(
+        readVariantFromText.map(async (variant) => {
+          await saveSampleVariant(variant);
+          completed++;
+
+          // Update progress setiap 10 varian
+          if (completed % 10 === 0 || completed === totalVariants) {
+            setSavingProgress(Math.round((completed / totalVariants) * 100));
+          }
+        })
+      );
+      setUploadModal(false);
     } catch (error) {
       console.log(error);
     } finally {
-      setUploadModal(!uploadModal);
+      // setUploadModal(!uploadModal);
       setFiles([]);
       setUploadProgress(0);
+      setSavingProgress(0);
+      setReadVariantFromText([]); // Cek Data ini
+      setDisabledButtonSave(false);
     }
-    await readVariantFromText.forEach(saveSampleVariant);
+    // await readVariantFromText.forEach(saveSampleVariant);
   };
 
   const cancelButtonUpload = () => {
@@ -470,30 +673,30 @@ const DataPatientPage = () => {
       <div className="flex flex-col mb-5 gap-5">
         <div className="flex flex-row w-full">
           <div className="w-[200px]">
-            <p className="font-semibold text-sm">Patient ID</p>
+            <p className="font-semibold text-lg">Patient ID</p>
           </div>
           <div>:</div>
-          <p className="ml-4">{patient?.id}</p>
+          <p className="ml-4 text-lg">{patient?.id}</p>
         </div>
         <div className="flex flex-row w-full p-2 justify-between items-center">
-          <div className="flex flex-row">
+          <div className="flex flex-row gap-5">
             <div className="w-[200px]">
-              <p className="font-semibold text-sm">Family Disease History</p>
+              <p className="font-semibold text-xl">Family Disease History</p>
             </div>
             <div>:</div>
-            <p className="ml-4">-</p>
+            {/* <p className="ml-4">-</p> */}
+            <ButtonAddFamilyDisease
+              patient_id={idPatient}
+            ></ButtonAddFamilyDisease>
           </div>
-          <ButtonAddFamilyDisease
-            patient_id={idPatient}
-          ></ButtonAddFamilyDisease>
         </div>
         <Separator className="mt-10"></Separator>
       </div>
       <div className="flex flex-col">
         <Card className="border-none">
           <CardHeader>
-            <CardTitle>Patient Variant Data</CardTitle>
-            <CardDescription className="text-gray-500 text-sm">
+            <CardTitle className="text-xl">Patient Variant Data</CardTitle>
+            <CardDescription className="text-gray-500 text-lg">
               This table contains variant call data for each patient, including
               genome reference, sample collection date, upload date, and
               actions. Please ensure that the data is up-to-date and complete.
@@ -516,23 +719,33 @@ const DataPatientPage = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>ID</TableHead>
-                    <TableHead>Genome Reference</TableHead>
-                    <TableHead>Sample Collection Date</TableHead>
-                    <TableHead>Number of Variants</TableHead>
-                    <TableHead>Upload Date</TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableHead className="text-xl">ID</TableHead>
+                    <TableHead className="text-xl">Genome Reference</TableHead>
+                    <TableHead className="text-xl">
+                      Sample Collection Date
+                    </TableHead>
+                    <TableHead className="text-xl">
+                      Number of Variants
+                    </TableHead>
+                    <TableHead className="text-xl">Upload Date</TableHead>
+                    <TableHead className="text-xl">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {vcfFiles.map((file) => (
                     <TableRow key={file.id}>
-                      <TableCell>{file.id}</TableCell>
-                      <TableCell>{file.genome_reference}</TableCell>
-                      <TableCell>{file.sample_date}</TableCell>
-                      <TableCell>{file.number_variant}</TableCell>
-                      <TableCell>{file.uploadAt}</TableCell>
-                      <TableCell>
+                      <TableCell className="text-xl">{file.id}</TableCell>
+                      <TableCell className="text-xl">
+                        {file.genome_reference}
+                      </TableCell>
+                      <TableCell className="text-xl">
+                        {file.sample_date}
+                      </TableCell>
+                      <TableCell className="text-xl">
+                        {file.number_variant}
+                      </TableCell>
+                      <TableCell className="text-xl">{file.uploadAt}</TableCell>
+                      <TableCell className="text-xl">
                         <div className="flex flex-row items-center">
                           <Button
                             variant={"ghost"}
@@ -541,7 +754,7 @@ const DataPatientPage = () => {
                           >
                             {/* <Icon className="w-4 h-4"></Icon> */}
                             <small>
-                              <TableOfContents className="w-4 h-4"></TableOfContents>
+                              <TableOfContents className="w-5 h-5"></TableOfContents>
                             </small>
                           </Button>
 
@@ -574,11 +787,11 @@ const DataPatientPage = () => {
 
         {/* New Table for Variants Data References */}
 
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle>Patient Variant Data Reference Call</CardTitle>
           </CardHeader>
-        </Card>
+        </Card> */}
 
         {/* <VCFUploader id_patient={patient?.id ?? ""}></VCFUploader> */}
         {uploadModal && (
@@ -586,7 +799,7 @@ const DataPatientPage = () => {
             <Card className="w-screen  max-w-screen-2xl p-5 ">
               <CardHeader className="mb-1 gap-3">
                 <CardTitle>Upload Variant Call Data</CardTitle>
-                <CardDescription>
+                <CardDescription className="text-xl">
                   Please select and upload your VCF file containing the variant
                   data. Ensure that the file follows the correct format and is
                   below the maximum upload size. Once uploaded, the system will
@@ -792,6 +1005,7 @@ const DataPatientPage = () => {
                                 <TableHead>Alts</TableHead>
                                 <TableHead>Qual</TableHead>
                                 <TableHead>Filter</TableHead>
+                                <TableHead>Zygosity</TableHead>
                                 <TableHead>AC</TableHead>
                                 <TableHead>AF</TableHead>
                                 <TableHead>AN</TableHead>
@@ -812,9 +1026,10 @@ const DataPatientPage = () => {
                                   <TableCell>{row.pos}</TableCell>
                                   <TableCell>{row.id ?? "N/A"}</TableCell>
                                   <TableCell>{row.ref}</TableCell>
-                                  <TableCell>{row.alts.join(", ")}</TableCell>
+                                  <TableCell>{row.alts}</TableCell>
                                   <TableCell>{row.qual ?? "N/A"}</TableCell>
                                   <TableCell>{row.filter ?? "N/A"}</TableCell>
+                                  <TableCell>{row.zygosity ?? "N/A"}</TableCell>
                                   <TableCell>{row.AC ?? "N/A"}</TableCell>
                                   <TableCell>{row.AF ?? "N/A"}</TableCell>
                                   <TableCell>{row.AN ?? "N/A"}</TableCell>
@@ -843,10 +1058,22 @@ const DataPatientPage = () => {
                 </div>
               </CardContent>
               <CardFooter>
+                {savingProgress > 0 && (
+                  <div className="w-full bg-gray-200 rounded-full h-4 my-4">
+                    <div
+                      className="bg-green-500 h-4 rounded-full transition-all duration-300"
+                      style={{ width: `${savingProgress}%` }}
+                    ></div>
+                    <p className="text-center text-sm font-semibold mt-2">
+                      Saving... {savingProgress}%
+                    </p>
+                  </div>
+                )}
                 <div className="w-full gap-4 flex flex-row-reverse">
                   <Button
                     onClick={uploadFilesButton}
                     variant={"outline"}
+                    disabled={disabledButtonSave}
                     className="bg-violet-700 text-white hover:bg-violet-700 hover:text-white font-semibold"
                   >
                     Save Variant Record

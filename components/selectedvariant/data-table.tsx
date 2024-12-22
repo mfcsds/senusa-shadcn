@@ -215,37 +215,37 @@ export function DataTable<TData, TValue>({
     // Clean up
     URL.revokeObjectURL(url);
   };
-
   const generateCSV = () => {
-    // Get column headers dynamically from the table
-    // Get column headers dynamically from the table
     const headers = table.getAllColumns().map((column) => column.id);
 
-    // Access all rows from the filtered row model
-    const rows = table.getFilteredRowModel().rows.map((row) => {
-      return row.getAllCells().map((cell) => {
-        // Ensure proper formatting or handling of cell values
-        const value = cell.getValue();
-        return typeof value === "string" ? value.replace(/,/g, " ") : value; // Replace commas if present
-      });
-    });
+    const rows = table.getFilteredRowModel().rows.map((row) =>
+      row.getAllCells().map((cell) => {
+        let value = cell.getValue();
 
-    // Combine headers and rows into a CSV format
+        // Jika objek, ubah menjadi string JSON
+        if (typeof value === "object" && value !== null) {
+          value = JSON.stringify(value); // Mengonversi objek menjadi string JSON
+        }
+
+        // Format CSV
+        return typeof value === "string"
+          ? `"${value.replace(/"/g, '""')}"`
+          : value;
+      })
+    );
+
     const csvContent = [
-      headers.join(","), // Join headers
-      ...rows.map((row) => row.join(",")), // Join data rows
+      headers.join(","),
+      ...rows.map((row) => row.join(",")),
     ].join("\n");
 
-    // Create a Blob and trigger download
     const blob = new Blob([csvContent], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
-
     const link = document.createElement("a");
     link.href = url;
-    link.download = `sample.csv`; // Dynamic file name
+    link.download = `sample.csv`;
     link.click();
 
-    // Clean up
     URL.revokeObjectURL(url);
   };
 
@@ -320,7 +320,7 @@ export function DataTable<TData, TValue>({
                 }
               ></Input>
             </div>
-            {/* Allele Population Frequency */}
+            {/* Allele Population Frequency
             <div className="flex flex-col gap-2">
               <Label className="text-lg">Allele Population Frequency</Label>
               <div className="flex flex-row gap-1">
@@ -335,7 +335,7 @@ export function DataTable<TData, TValue>({
                   type="number"
                 ></Input>
               </div>
-            </div>
+            </div> */}
             <div className="flex flex-col gap-2">
               <Label className="text-lg">Zygosity</Label>
               <DropdownMenu>

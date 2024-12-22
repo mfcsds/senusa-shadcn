@@ -19,7 +19,7 @@ interface ACMGVariantQueryProops {
 
 const ACMGVariantQuery: React.FC<ACMGVariantQueryProops> = ({ data }) => {
   const getBadgeColor = () => {
-    switch (data?.class) {
+    switch (data?.acmg_class) {
       case "Pathogenic":
         return "border-red-300 bg-red-50 text-gray-700";
       case "Likely Pathogenic":
@@ -66,7 +66,7 @@ const ACMGVariantQuery: React.FC<ACMGVariantQueryProops> = ({ data }) => {
         "The prevalence of the variant in affected individuals is significantly increased compared with the prevalence in controls.",
     },
     {
-      status: data?.PP1_strong,
+      status: data?.PP1_Strong,
       criteria: "PP1 Strong",
       description:
         "Cosegregation with disease in multiple affected family members in a gene definitively known to cause the disease (Strong evidence).",
@@ -108,13 +108,13 @@ const ACMGVariantQuery: React.FC<ACMGVariantQueryProops> = ({ data }) => {
         "Assumed de novo, but without confirmation of paternity and maternity.",
     },
     {
-      status: data?.PP1_moderate,
+      status: data?.PP1_Moderate,
       criteria: "PP1 Moderate",
       description:
         "Cosegregation with disease in multiple affected family members in a gene definitively known to cause the disease (Moderate evidence).",
     },
     {
-      status: data?.PP1,
+      status: data?.PP1_Cosegregation,
       criteria: "PP1",
       description:
         "Cosegregation with disease in multiple affected family members in a gene definitively known to cause the disease.",
@@ -233,7 +233,7 @@ const ACMGVariantQuery: React.FC<ACMGVariantQueryProops> = ({ data }) => {
         <div className="flex flex-row gap-3 items-center">
           <p className="font-semibold text-xl">ACMG Classification : </p>
           <div className={`border rounded-sm px-2 py-1 ${getBadgeColor()}`}>
-            <p className="font-semibold text-lg">{data?.class}</p>
+            <p className="font-semibold text-lg">{data?.acmg_class}</p>
           </div>
         </div>
       </div>
@@ -284,7 +284,6 @@ const ACMGVariantQuery: React.FC<ACMGVariantQueryProops> = ({ data }) => {
           ))}
         </TableBody>
       </Table>
-      History
     </div>
   );
 };

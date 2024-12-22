@@ -13,9 +13,9 @@ const PatientItem: React.FC<PatientItemsProops> = ({ id, name }) => {
       <span className="mr-2">
         <Accessibility />
       </span>
-      <div className="flex flex-col text-left">
-        <p className="text-[12px] text-black-900">{name}</p>
-        <p className="text-[10px] text-gray-500">{id}</p>
+      <div className="flex flex-col text-left border-l-4 rounded-lg pl-2 border-blue-600">
+        <p className="text-xl text-black-900">{name}</p>
+        <p className="text-lg text-gray-500">{id}</p>
       </div>
     </div>
   );

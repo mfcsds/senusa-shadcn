@@ -48,6 +48,7 @@ export default function VariantUpdateForm(props) {
     readposrank: "",
     sor: "",
     fraction: "",
+    zygosity: "",
   };
   const [chrom, setChrom] = React.useState(initialValues.chrom);
   const [pos, setPos] = React.useState(initialValues.pos);
@@ -74,6 +75,7 @@ export default function VariantUpdateForm(props) {
   );
   const [sor, setSor] = React.useState(initialValues.sor);
   const [fraction, setFraction] = React.useState(initialValues.fraction);
+  const [zygosity, setZygosity] = React.useState(initialValues.zygosity);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = variantRecord
@@ -102,6 +104,7 @@ export default function VariantUpdateForm(props) {
     setReadposrank(cleanValues.readposrank);
     setSor(cleanValues.sor);
     setFraction(cleanValues.fraction);
+    setZygosity(cleanValues.zygosity);
     setErrors({});
   };
   const [variantRecord, setVariantRecord] = React.useState(variantModelProp);
@@ -144,6 +147,7 @@ export default function VariantUpdateForm(props) {
     readposrank: [],
     sor: [],
     fraction: [],
+    zygosity: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -194,6 +198,7 @@ export default function VariantUpdateForm(props) {
           readposrank: readposrank ?? null,
           sor: sor ?? null,
           fraction: fraction ?? null,
+          zygosity: zygosity ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -277,6 +282,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.chrom ?? value;
@@ -323,6 +329,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.pos ?? value;
@@ -369,6 +376,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.ref ?? value;
@@ -415,6 +423,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.alt ?? value;
@@ -461,6 +470,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.qual ?? value;
@@ -507,6 +517,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.filter ?? value;
@@ -553,6 +564,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.info ?? value;
@@ -599,6 +611,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.hgvs ?? value;
@@ -645,6 +658,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.id_var ?? value;
@@ -691,6 +705,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.id_patient ?? value;
@@ -737,6 +752,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.id_vcf ?? value;
@@ -783,6 +799,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.acmg ?? value;
@@ -833,6 +850,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.ac ?? value;
@@ -883,6 +901,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.af ?? value;
@@ -933,6 +952,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.an ?? value;
@@ -983,6 +1003,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.dp ?? value;
@@ -1033,6 +1054,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.fs ?? value;
@@ -1083,6 +1105,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.mq ?? value;
@@ -1133,6 +1156,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.mqranksum ?? value;
@@ -1183,6 +1207,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.qd ?? value;
@@ -1233,6 +1258,7 @@ export default function VariantUpdateForm(props) {
               readposrank: value,
               sor,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.readposrank ?? value;
@@ -1283,6 +1309,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor: value,
               fraction,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.sor ?? value;
@@ -1333,6 +1360,7 @@ export default function VariantUpdateForm(props) {
               readposrank,
               sor,
               fraction: value,
+              zygosity,
             };
             const result = onChange(modelFields);
             value = result?.fraction ?? value;
@@ -1346,6 +1374,53 @@ export default function VariantUpdateForm(props) {
         errorMessage={errors.fraction?.errorMessage}
         hasError={errors.fraction?.hasError}
         {...getOverrideProps(overrides, "fraction")}
+      ></TextField>
+      <TextField
+        label="Zygosity"
+        isRequired={false}
+        isReadOnly={false}
+        value={zygosity}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              chrom,
+              pos,
+              ref,
+              alt,
+              qual,
+              filter,
+              info,
+              hgvs,
+              id_var,
+              id_patient,
+              id_vcf,
+              acmg,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
+              zygosity: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.zygosity ?? value;
+          }
+          if (errors.zygosity?.hasError) {
+            runValidationTasks("zygosity", value);
+          }
+          setZygosity(value);
+        }}
+        onBlur={() => runValidationTasks("zygosity", zygosity)}
+        errorMessage={errors.zygosity?.errorMessage}
+        hasError={errors.zygosity?.hasError}
+        {...getOverrideProps(overrides, "zygosity")}
       ></TextField>
       <Flex
         justifyContent="space-between"

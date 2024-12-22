@@ -9,8 +9,8 @@ interface LabelDescProops {
 const LabelAndDescription: React.FC<LabelDescProops> = ({ label, desc }) => {
   return (
     <div className="flex flex-col gap-1">
-      <Label>{label}</Label>
-      <p className="text-xs text-gray-500">{desc}</p>
+      <Label className="text-lg">{label}</Label>
+      <p className="text-lg text-gray-500">{desc}</p>
     </div>
   );
 };

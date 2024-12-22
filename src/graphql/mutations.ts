@@ -45,6 +45,7 @@ export const createAcmgAnnotation = /* GraphQL */ `mutation CreateAcmgAnnotation
     BS3
     BS4
     BA1
+    acmg_class
     createdAt
     updatedAt
     __typename
@@ -91,6 +92,7 @@ export const updateAcmgAnnotation = /* GraphQL */ `mutation UpdateAcmgAnnotation
     BS3
     BS4
     BA1
+    acmg_class
     createdAt
     updatedAt
     __typename
@@ -137,6 +139,7 @@ export const deleteAcmgAnnotation = /* GraphQL */ `mutation DeleteAcmgAnnotation
     BS3
     BS4
     BA1
+    acmg_class
     createdAt
     updatedAt
     __typename
@@ -517,6 +520,7 @@ export const createVariant = /* GraphQL */ `mutation CreateVariant(
     readposrank
     sor
     fraction
+    zygosity
     createdAt
     updatedAt
     __typename
@@ -555,6 +559,7 @@ export const updateVariant = /* GraphQL */ `mutation UpdateVariant(
     readposrank
     sor
     fraction
+    zygosity
     createdAt
     updatedAt
     __typename
@@ -593,6 +598,7 @@ export const deleteVariant = /* GraphQL */ `mutation DeleteVariant(
     readposrank
     sor
     fraction
+    zygosity
     createdAt
     updatedAt
     __typename

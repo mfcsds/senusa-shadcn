@@ -94,7 +94,7 @@ const ACMGAnnotation = () => {
     },
     {
       status: true,
-      criteria: "PP1",
+      criteria: "PP1 Cosegregation",
       description:
         "Cosegregation with disease in multiple affected family members in a gene definitively known to cause the disease.",
     },
@@ -257,7 +257,7 @@ const ACMGAnnotation = () => {
           <p className="font-semibold text-xl">{acmgClass}</p>
         </div>
       </div>
-      <Table className="min-w-full border border-gray-200 min-h-40">
+      <Table className="min-w-full border border-gray-200 min-h-40 ">
         <TableHeader>
           <TableRow className="bg-gray-100 sticky top-0 z-10">
             <TableHead className="px-4 py-2 text-left text-xl font-semibold text-gray-700">
