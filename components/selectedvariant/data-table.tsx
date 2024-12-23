@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 
 import {
   ColumnDef,
@@ -42,6 +42,7 @@ import {
   ChevronRightIcon,
   Download,
   FileCode,
+  FileJson,
   Logs,
 } from "lucide-react";
 import {
@@ -119,6 +120,9 @@ export function DataTable<TData, TValue>({
   const [acmgFilter, setACMGFilter] = useState<string | null>(null);
 
   const [fiVis, setFiVis] = useState(false);
+
+  const [activeDownloadCSV, setActiveDownloadCSV] = useState(false);
+  const [activeDownloadJSON, setActiveDownloadJSON] = useState(false);
 
   const handleZygosityChange = (value: string) => {
     setZygosityFilter(value);
@@ -215,38 +219,158 @@ export function DataTable<TData, TValue>({
     // Clean up
     URL.revokeObjectURL(url);
   };
-  const generateCSV = () => {
-    const headers = table.getAllColumns().map((column) => column.id);
+  const fetchAPIData = async (hgvs: string) => {
+    const requestBody = {
+      body: JSON.stringify({ variants: [hgvs] }),
+    };
 
-    const rows = table.getFilteredRowModel().rows.map((row) =>
-      row.getAllCells().map((cell) => {
-        let value = cell.getValue();
+    const response = await fetch(
+      "https://iti7fmrlmj.execute-api.us-east-1.amazonaws.com/Dev/variant_extract",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      }
+    );
 
-        // Jika objek, ubah menjadi string JSON
-        if (typeof value === "object" && value !== null) {
-          value = JSON.stringify(value); // Mengonversi objek menjadi string JSON
-        }
+    const result = await response.json();
+    const apiData = JSON.parse(result.body);
+    return apiData[0]; // Ambil hanya data pertama
+  };
 
-        // Format CSV
-        return typeof value === "string"
-          ? `"${value.replace(/"/g, '""')}"`
-          : value;
+  const mergeDataWithAPI = async () => {
+    // Pastikan data tersedia
+    if (!data || data.length === 0) {
+      console.error("Data kosong atau tidak ditemukan.");
+      return;
+    }
+
+    const updatedData = await Promise.all(
+      data.map(async (item: any) => {
+        const apiInfo = await fetchAPIData(item.hgvs || "N/A");
+
+        return {
+          ...item,
+          api_clin_sig: apiInfo?.colocated_variants[0]?.clin_sig || [],
+          api_frequencies: apiInfo?.colocated_variants[0]?.frequencies || {},
+          api_variant_class: apiInfo?.variant_class || "N/A",
+          api_consequence: apiInfo?.most_severe_consequence || "N/A",
+          api_gene_symbol:
+            apiInfo?.transcript_consequences?.[0]?.gene_symbol || "N/A",
+          api_gene_id: apiInfo?.transcript_consequences?.[0]?.gene_id || "N/A",
+          api_impact: apiInfo?.transcript_consequences?.[0]?.impact || "N/A",
+          api_protein_id:
+            apiInfo?.transcript_consequences?.[0]?.protein_id || "N/A",
+          api_hgvsc: apiInfo?.transcript_consequences?.[0]?.hgvsc || "N/A",
+          api_hgvsp: apiInfo?.transcript_consequences?.[0]?.hgvsp || "N/A",
+        };
       })
     );
 
-    const csvContent = [
-      headers.join(","),
-      ...rows.map((row) => row.join(",")),
-    ].join("\n");
+    return updatedData;
+  };
 
-    const blob = new Blob([csvContent], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `sample.csv`;
-    link.click();
+  const generateCSV = async () => {
+    setActiveDownloadCSV(true);
+    try {
+      const updatedData = await mergeDataWithAPI();
 
-    URL.revokeObjectURL(url);
+      // Header kolom CSV
+      const headers = [
+        "id",
+        "id_patient",
+        "id_report",
+        "chrom",
+        "pos",
+        "ref",
+        "alt",
+        "hgvs",
+        "api_clin_sig",
+        "api_frequencies",
+        "api_variant_class",
+        "api_consequence",
+        "api_gene_symbol",
+        "api_gene_id",
+        "api_impact",
+        "api_protein_id",
+        "api_hgvsc",
+        "api_hgvsp",
+      ];
+
+      if (!updatedData || !Array.isArray(updatedData)) {
+        console.error("Data tidak valid atau kosong.");
+        return;
+      }
+
+      // Format ulang data menjadi array untuk CSV
+      const csvRows: string[] = updatedData.map((item: any) => {
+        return [
+          item.id || "N/A",
+          item.id_patient || "N/A",
+          item.id_report || "N/A",
+          item.chrom || "N/A",
+          item.pos || "N/A",
+          item.ref || "N/A",
+          item.alt || "N/A",
+          item.hgvs || "N/A",
+          (item.api_clin_sig || []).join("; "), // Gabungkan array menjadi string
+          JSON.stringify(item.api_frequencies) || "N/A",
+          item.api_variant_class || "N/A",
+          item.api_consequence || "N/A",
+          item.api_gene_symbol || "N/A",
+          item.api_gene_id || "N/A",
+          item.api_impact || "N/A",
+          item.api_protein_id || "N/A",
+          item.api_hgvsc || "N/A",
+          item.api_hgvsp || "N/A",
+        ].join(",");
+      });
+
+      // Gabungkan header dan data
+      const csvContent = [headers.join(","), ...csvRows].join("\n");
+
+      // Membuat file CSV
+      const blob = new Blob([csvContent], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+
+      // Membuat link untuk unduhan
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "variant-data.csv"; // Nama file unduhan
+      link.click();
+
+      // Bersihkan URL blob setelah digunakan
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Cannot generate CSV");
+    } finally {
+      setActiveDownloadCSV(false);
+    }
+  };
+
+  const generateJSON = async () => {
+    setActiveDownloadJSON(true);
+    try {
+      const updatedData = await mergeDataWithAPI();
+
+      // Membuat file JSON
+      const blob = new Blob([JSON.stringify(updatedData, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+
+      // Membuat link untuk unduhan
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "variant-data.json"; // Nama file unduhan
+      link.click();
+
+      // Bersihkan URL blob setelah digunakan
+      URL.revokeObjectURL(url);
+    } catch (error) {
+    } finally {
+      setActiveDownloadJSON(false);
+    }
   };
 
   const [gene_id, setGeneID] = useState("");
@@ -483,9 +607,28 @@ export function DataTable<TData, TValue>({
             </div>
             <div className="flex flex-col gap-2">
               <Label className="text-lg">Download Type</Label>
-              <div className="flex flex-row">
-                <Button variant={"outline"} onClick={(e) => generateCSV()}>
-                  <Logs> </Logs>CSV
+              <div className="flex flex-row gap-1">
+                <Button
+                  className={
+                    activeDownloadCSV ? "bg-gray-200 cursor-not-allowed" : ""
+                  }
+                  variant={"outline"}
+                  onClick={(e) => generateCSV()}
+                  disabled={activeDownloadCSV}
+                >
+                  <Logs> </Logs>
+                  {activeDownloadCSV ? "Processing.." : "CSV"}
+                </Button>
+                <Button
+                  className={
+                    activeDownloadJSON ? "bg-gray-200 cursor-not-allowed" : ""
+                  }
+                  variant={"outline"}
+                  onClick={(e) => generateJSON()}
+                  disabled={activeDownloadJSON}
+                >
+                  <FileJson></FileJson>
+                  {activeDownloadJSON ? "Processing.." : "JSON"}
                 </Button>
                 <Button
                   variant={"outline"}
