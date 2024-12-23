@@ -348,12 +348,19 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
   };
 
   useEffect(() => {
-    fetchConclusion();
-    fetchRecommendation();
-    fecthSelectedVariant();
-    fetchPatient();
-    fetchVariantInterpretation();
-    fetchVariantReport();
+    const fetchData = async () => {
+      try {
+        await fetchConclusion();
+        await fetchRecommendation();
+        await fecthSelectedVariant();
+        await fetchPatient();
+        await fetchVariantInterpretation();
+        await fetchVariantReport();
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
+      }
+    };
+
     const fetchEnsemblVersion = async () => {
       try {
         const response = await fetch(
@@ -380,12 +387,14 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
         const data = await response.json();
         setEnsembleRestVersion(data.release); // Assuming the "release" key contains the version
       } catch (error) {
-        console.error("Error fetching Ensembl version:", error);
+        console.error("Error fetching Ensembl Rest version:", error);
       }
     };
-    fetchEnsemblVersion();
-    fetchEnsemblRestVersion();
-  });
+
+    fetchData(); // Call all data fetching functions
+    fetchEnsemblVersion(); // Call Ensembl version
+    fetchEnsemblRestVersion(); // Call Ensembl REST version
+  }, []);
 
   return (
     <div className="flex flex-col w-full">
