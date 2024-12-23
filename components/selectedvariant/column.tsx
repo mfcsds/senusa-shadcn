@@ -1,6 +1,8 @@
 "use client";
 
 import { ColumnDef, Row } from "@tanstack/react-table";
+import { useToast } from "../ui/use-toast";
+
 import { Button } from "../ui/button";
 import { ArrowUpDown, Edit2, PlusCircle, TableOfContents } from "lucide-react";
 import {
@@ -57,7 +59,7 @@ import { generateClient } from "aws-amplify/api";
 import awsconfig from "@/src/amplifyconfiguration.json";
 import { Amplify } from "aws-amplify";
 import { generateUserID } from "@/utils/function";
-import { Toast } from "../ui/toast";
+import { Toast, ToastAction } from "../ui/toast";
 
 Amplify.configure(awsconfig);
 
@@ -624,6 +626,7 @@ export const columns: ColumnDef<Variant>[] = [
       };
 
       const client = generateClient();
+      const { toast } = useToast();
       const saveSelectedVariant = async () => {
         try {
           const result = await client.graphql({
@@ -683,7 +686,14 @@ export const columns: ColumnDef<Variant>[] = [
           <Button
             variant={"ghost"}
             className="hover:bg-red-500 hover:text-white"
-            onClick={saveSelectedVariant}
+            onClick={() => {
+              saveSelectedVariant();
+              toast({
+                title: "Success adding Variant",
+                description: `${item.hgvs}  Added to Analysis`,
+                action: <ToastAction altText="Try again">Undo?</ToastAction>,
+              });
+            }}
           >
             <small>
               <PlusCircle className="h-4 w-4"></PlusCircle>
