@@ -124,11 +124,8 @@ const ACMGVariantReport: React.FC<ACMGVariantQueryProops> = ({
       });
       const items = (await result).data.listAcmgAnnotations
         .items as AcmgCriteria[];
-      console.log("Coba Masuk sini");
       if (items.length === 0) {
         // Ambil langsung ke database
-        console.log("Database Kosong");
-        console.log(`${theVariant?.hgvs}`);
         const apiUrl =
           "https://yyj4sdbsd6.execute-api.us-east-1.amazonaws.com/dev-acmg/classification";
 
@@ -152,9 +149,11 @@ const ACMGVariantReport: React.FC<ACMGVariantQueryProops> = ({
 
         const data = await response.json();
         const acmgResults = JSON.parse(data.body);
-        console.log(acmgResults);
         if (acmgResults && acmgResults.length > 0) {
           const acmgData = acmgResults[0];
+
+          console.log("Masuk sini", acmgData);
+          console.log("Label ACMG", acmgData.acmg);
           const acmgCriteria: AcmgCriteria = {
             id_variant: id_variantku,
             PVS1: acmgData?.PVS1 || false,
@@ -187,10 +186,10 @@ const ACMGVariantReport: React.FC<ACMGVariantQueryProops> = ({
             BS3: acmgData?.BS3 || false,
             BS4: acmgData?.BS4 || false,
             BA1: acmgData?.BA1 || false,
-            acmg_class: acmgData?.acmg_class || "",
+            acmg_class: acmgData?.acmg || "",
           };
 
-          setDataACMG(acmgData);
+          setDataACMG(acmgCriteria);
           console.log(dataACMG?.acmg_class);
           // Store ACMG Criteria if variant is saved
           const acmgResult = await client.graphql({
