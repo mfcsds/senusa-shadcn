@@ -168,7 +168,7 @@ The interpretation should include the clinical significance, potential impacts, 
                   </small>
                 </Button>
                 <Separator orientation="vertical" className="h-5"></Separator>
-                <TooltipProvider>
+                {/* <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
@@ -188,7 +188,7 @@ The interpretation should include the clinical significance, potential impacts, 
                       </p>
                     </TooltipContent>
                   </Tooltip>
-                </TooltipProvider>
+                </TooltipProvider> */}
               </div>
             </TableCell>
           </TableRow>

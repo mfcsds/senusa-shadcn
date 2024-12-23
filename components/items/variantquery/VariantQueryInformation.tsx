@@ -8,6 +8,7 @@ import VariantAlellel from "../VariantAlellel";
 import VariantComputationalPrediction from "../VariantComputationalPrediction";
 import FunctionalAnnotations from "../FunctionalAnnotations";
 import DownloadVariant from "../download/DownloadVariant";
+import { Badge } from "@/components/ui/badge";
 
 interface VariantQueryInformationProops {
   acmgdata?: AcmgCriteria;
@@ -27,7 +28,11 @@ const VariantQueryInformation: React.FC<VariantQueryInformationProops> = ({
       comp: <ACMGVariantQuery data={acmgdata} />,
     },
     {
-      tab: "AI Variant Prediction",
+      tab: (
+        <p>
+          AI Variant Prediction <Badge>Beta</Badge>
+        </p>
+      ),
       value: "AI",
       comp: (
         <div className="flex flex-col w-full border rounded-lg items-center p-10">

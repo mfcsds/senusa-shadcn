@@ -542,9 +542,9 @@ The conclusion make it easy to understand, make it efficient, and short, no more
                               <Button
                                 variant={"ghost"}
                                 className="hover:bg-green-500 hover:text-white"
-                                onClick={(e) =>
-                                  handleAIPreTextConclusion(conc.id)
-                                }
+                                // onClick={(e) =>
+                                //   handleAIPreTextConclusion(conc.id)
+                                // }
                               >
                                 <small>
                                   <Lightbulb className="w-4 h-4"></Lightbulb>
@@ -652,11 +652,11 @@ The conclusion make it easy to understand, make it efficient, and short, no more
                                       <Button
                                         variant={"ghost"}
                                         className="hover:bg-green-600 hover:text-white"
-                                        onClick={(e) =>
-                                          handleAIPreTextRecommendation(
-                                            rec.id ?? ""
-                                          )
-                                        }
+                                        // onClick={(e) =>
+                                        //   handleAIPreTextRecommendation(
+                                        //     rec.id ?? ""
+                                        //   )
+                                        // }
                                         disabled={isLoading}
                                       >
                                         <small>
