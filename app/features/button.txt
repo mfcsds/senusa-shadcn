@@ -1,0 +1,6 @@
+<div className="flex flex-col gap-4 items-center p-8">
+      <Button label="Create New Accounts" variant="primary"/>
+      <Button label="+ New Patient" variant="secondary" />
+      <Button label="Cancel" variant="danger" />
+      <Button label="Save" variant="save" size="small"/>
+    </div>

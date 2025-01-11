@@ -1,9 +1,8 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "@/components/update/ui/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,18 +17,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={
-          "${inter.className} flex h-screen items-start justify-between"
-        }
+        className={`${inter.className} flex h-full overflow-hidden`}
       >
-        <div className="flex flex-col items-start flex-1">
-          <main className="flex-column justify-content items-center w-full ">
-            {children}
-          </main>
-        </div>
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          
+            <main className="flex flex-col justify-center items-center w-full h-full">
+              {children}
+            </main>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

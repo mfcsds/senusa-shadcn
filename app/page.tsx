@@ -23,7 +23,7 @@ import { toast, useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 
 import logo from "@/public/logo-senusa.png";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/components/update/ui/Separator";
 
 Amplify.configure(awsconfig);
 
