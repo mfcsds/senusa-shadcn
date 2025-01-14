@@ -78,7 +78,7 @@ export interface GeneticsConselor {
   variantReportID: string;
 }
 
-export interface Patient {
+export interface DataPatients {
   id: string;
   sex: string;
   name: string;

@@ -30,7 +30,7 @@ import {
   TableRow,
 } from "../ui/table";
 import { Button } from "../ui/button";
-import { Separator } from "../ui/separator";
+import { Separator } from "../update/ui/Separator";
 import {
   Select,
   SelectContent,
@@ -45,7 +45,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/tooltip";
+} from "../update/ui/Tooltip";
 import {
   Conclusion,
   Patient,

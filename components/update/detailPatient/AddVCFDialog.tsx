@@ -24,13 +24,8 @@ import Dropdown from "@/components/update/input/Dropdown";
 import DragAndDropInput from "@/components/update/input/DragAndDropInput";
 
 const AddVCFDialog: React.FC = () => {
-  const [levelAccount, setLevelAccount] = useState("");
   const [roleAccount, setRoleAccount] = useState("");
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

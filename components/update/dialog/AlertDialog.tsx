@@ -106,7 +106,7 @@ AlertDialogDescription.displayName =
     ref={ref}
     className={cn(
       buttonVariants(),
-      "px-4 py-2 bg-primary hover:bg-secondary text-text-action",
+      "px-4 py-2 bg-blue-primary hover:bg-blue-secondary text-text-action",
       className
     )}
     {...props}

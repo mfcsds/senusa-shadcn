@@ -17,7 +17,13 @@ import {
 
 export default function ManageAccountsPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [viewMode, setViewMode] = useState<"card" | "list">("card");
+  const [viewMode, setViewMode] = useState<"card" | "list">(() => {
+    return (localStorage.getItem("viewMode") as "card" | "list") || "card";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("viewMode", viewMode);
+  }, [viewMode]);
 
   const data = [
     {
@@ -35,7 +41,7 @@ export default function ManageAccountsPage() {
       reportId: "R-BGHNJL9TG8XZ",
       phenotypes: "HP:0004322 - Hypertension, HP:0001250 - Seizures",
       medicalHistory: "Diabetes",
-      currentDiagnosis: "Hypertension",
+      currentDiagnosis: "Heart Attack",
       sampleCollection: "2024-09-10",
       statusReport: "Complete",
     },

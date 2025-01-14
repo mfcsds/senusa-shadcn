@@ -9,14 +9,16 @@ import CardView from "@/components/update/managePatients/CardView";
 import ListView from "@/components/update/managePatients/ListView";
 import AddPatientDialog from "@/components/update/managePatients/AddPatientDialog";
 import PaginationPatient from "@/components/update/managePatients/PaginationPatient";
-import { fetchPatients, PatientData } from "@/hooks/managePatients/usePatients";
+import { fetchPatients } from "@/hooks/managePatients/usePatients";
+import { DataPatients } from "@/utils/object";
 
 export default function ManageAccountsPage() {
-  const [patientID, setPatientID] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [viewMode, setViewMode] = useState<"card" | "list">("card");
+  const [viewMode, setViewMode] = useState<"card" | "list">(() => {
+    return (localStorage.getItem("viewMode") as "card" | "list") || "card";
+  });
 
-  const [patients, setPatients] = useState<PatientData[]>([]);
+  const [patients, setPatients] = useState<DataPatients[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -34,6 +36,10 @@ export default function ManageAccountsPage() {
 
     loadPatients();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("viewMode", viewMode);
+  }, [viewMode]);
 
   return (
     <div className="p-8 min-h-screen">
@@ -90,15 +96,15 @@ export default function ManageAccountsPage() {
       {loading ? (
         <Spinner />
       ) : viewMode === "card" ? (
-        <CardView patients={patients} />
+        <CardView initialPatients={patients} />
       ) : (
-        <ListView patients={patients} />
+        <ListView initialPatients={patients} />
       )}
 
       {loading ? (
         <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
-        Fetching your data...
-      </p>
+          Fetching your data...
+        </p>
       ) : (
         <div className="flex justify-between items-center mt-8">
           <PaginationPatient />

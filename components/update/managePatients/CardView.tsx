@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { SquarePen, Trash2, Accessibility } from "lucide-react";
 import Button from "@/components/update/button/Button";
 import { useRouter } from "next/navigation";
-import { removePatient, PatientData } from "@/hooks/managePatients/usePatients";
+import { removePatient } from "@/hooks/managePatients/usePatients";
+import { DataPatients } from "@/utils/object"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,19 +15,48 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/update/dialog/AlertDialog";
+import Swal from "sweetalert2";
 
 interface CardViewProps {
-  patients: PatientData[];
+  initialPatients: DataPatients[];
 }
 
-const CardView: React.FC<CardViewProps> = ({ patients }) => {
+const CardView: React.FC<CardViewProps> = ({ initialPatients }) => {
   const router = useRouter();
-  const navigateTo = (path: string) => {
-    router.push(path);
+  const [patients, setPatients] = useState<DataPatients[]>(initialPatients);
+
+  const handleDelete = async (id: string) => {
+    try {
+      await removePatient(id);
+      Swal.fire({
+        title: "Success",
+        text: "Patient has been deleted.",
+        icon: "success",
+        background: "bg-background", 
+        color: "text-text-primary", 
+        timer: 3000,
+        customClass: {
+          popup: "bg-background text-text-primary", 
+          title: "text-2xl font-bold", 
+          confirmButton: "bg-primary text-text-action hover:bg-secondary rounded-lg px-4 py-2", 
+          cancelButton: "bg-red-primary text-text-action hover:bg-red-secondary rounded-lg px-4 py-2",  
+        },
+        confirmButtonText: "Oke",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+      window.location.reload();
+    } catch (error) {
+      console.error("Error deleting patient:", error);
+      alert("Failed to delete patient.");
+    }
   };
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {patients.map((patient, index) => (
+      {patients.map((patient) => (
         <div
           key={patient.id}
           className="bg-foreground shadow-lg rounded-lg flex flex-row sm:flex-row items-center sm:items-start pr-6"
@@ -42,7 +73,9 @@ const CardView: React.FC<CardViewProps> = ({ patients }) => {
                 variant="outlineSecondary"
                 size="small"
                 icon={<SquarePen className="w-4 h-4" />}
-                onClick={() => {router.push(`/features/manage-patients/${patient.id}`)}}
+                onClick={() =>
+                  router.push(`/features/manage-patients/${patient.id}`)
+                }
               />
               <AlertDialog>
                 <AlertDialogTrigger asChild>
@@ -54,20 +87,22 @@ const CardView: React.FC<CardViewProps> = ({ patients }) => {
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>
-                    Are you sure you want to delete this patient data?
+                      Are you sure you want to delete this patient data?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                    Note: All associated data, including reports, VCF files, and variant samples linked to this patient, will be permanently deleted. This action cannot be undone.
+                      Note: All associated data, including reports, VCF files,
+                      and variant samples linked to this patient, will be
+                      permanently deleted. This action cannot be undone.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => removePatient(patient.id)}>Continue</AlertDialogAction>
+                    <AlertDialogAction onClick={() => handleDelete(patient.id)}>
+                      Continue
+                    </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-
-              
             </div>
           </div>
         </div>

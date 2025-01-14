@@ -1,19 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchPatients, PatientData } from "@/hooks/managePatients/usePatients";
+import { fetchPatients } from "@/hooks/managePatients/usePatients";
 import Button from "@/components/update/button/Button";
 import Dropdown from "@/components/update/input/Dropdown";
 import DropDownSelectPatient from "@/components/update/managePatients/DropDownSelectPatient";
 import AddVCFDialog from "@/components/update/detailPatient/AddVCFDialog";
-import TableVariant from "@/components/update/detailPatient/TableVariant";
+import TableVariants from "@/components/update/detailPatient/TableVariants";
+import { DataPatients } from "@/utils/object"
 import {
   Plus,
   ArrowLeft,
   Info,
   Accessibility,
 } from "lucide-react";
-
+import { useRouter } from "next/navigation";
+import { fetchVCFData } from "@/hooks/managePatients/usePatientVariants"; 
+import { VcfData } from "@/utils/object";
 
 interface PageProps {
   params: {
@@ -21,11 +24,12 @@ interface PageProps {
   };
 }
 
-export default function DetailAccountsPage({ params }: PageProps) {
+export default function DetailPatientPage({ params }: PageProps) {
   const { id } = params;
-
-  const [patients, setPatients] = useState<PatientData[]>([]);
+  const router = useRouter();
+  const [patients, setPatients] = useState<DataPatients[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
+  const [vcfData, setVcfData] = useState<VcfData[]>([]);
 
   useEffect(() => {
     const loadPatients = async () => {
@@ -38,6 +42,20 @@ export default function DetailAccountsPage({ params }: PageProps) {
     };
 
     loadPatients();
+  });
+
+  useEffect(() => {
+    const loadVCFData = async () => {
+      try {
+        const data = await fetchVCFData(id);
+        setVcfData(data);
+      } catch (error) {
+        console.error("Failed to fetch variants:", error);
+      }
+      
+    };
+    loadVCFData();
+
   });
 
   const [roleAccount, setRoleAccount] = useState("");
@@ -56,57 +74,6 @@ export default function DetailAccountsPage({ params }: PageProps) {
     { label: "Clinical Pathology", value: "Clinical Pathology" },
   ];
 
-  const accounts = [
-    {
-      id: "P-56SJDLLSNJJX9",
-      genomReference: "GRCH37",
-      sampleColectionDate: "Tue Dec 03 2024",
-      numberOfVariant: "550",
-      uploadDate: "2024-12-20",
-    },
-    {
-      id: "P-56SJDLLSNJJX9",
-      genomReference: "GRCH37",
-      sampleColectionDate: "Tue Dec 03 2024",
-      numberOfVariant: "550",
-      uploadDate: "2024-12-20",
-    },
-    {
-      id: "P-56SJDLLSNJJX9",
-      genomReference: "GRCH37",
-      sampleColectionDate: "Tue Dec 03 2024",
-      numberOfVariant: "550",
-      uploadDate: "2024-12-20",
-    },
-    {
-      id: "P-56SJDLLSNJJX9",
-      genomReference: "GRCH37",
-      sampleColectionDate: "Tue Dec 03 2024",
-      numberOfVariant: "550",
-      uploadDate: "2024-12-20",
-    },
-    {
-      id: "P-56SJDLLSNJJX9",
-      genomReference: "GRCH37",
-      sampleColectionDate: "Tue Dec 03 2024",
-      numberOfVariant: "550",
-      uploadDate: "2024-12-20",
-    },
-    {
-      id: "P-56SJDLLSNJJX9",
-      genomReference: "GRCH37",
-      sampleColectionDate: "Tue Dec 03 2024",
-      numberOfVariant: "550",
-      uploadDate: "2024-12-20",
-    },
-    {
-      id: "P-56SJDLLSNJJX9",
-      genomReference: "GRCH37",
-      sampleColectionDate: "Tue Dec 03 2024",
-      numberOfVariant: "550",
-      uploadDate: "2024-12-20",
-    },
-  ];
 
   return (
     <div className="p-8 min-h-screen">
@@ -162,6 +129,7 @@ export default function DetailAccountsPage({ params }: PageProps) {
                 size="large"
                 icon={<ArrowLeft className="w-8 h-8" />}
                 className="bg-foreground"
+                onClick={() => {router.push(`/features/manage-patients`)}}
               />
               <h1 className="text-2xl font-semibold text-text-primary">
                 Patient Variant Data
@@ -177,7 +145,7 @@ export default function DetailAccountsPage({ params }: PageProps) {
           </div>
         </div>
 
-        <TableVariant variants={patients}/>
+        <TableVariants patientID={id} initialVariants={vcfData}/>
       </div>
     </div>
   );

@@ -1,31 +1,27 @@
 import { Progress } from "@/components/update/progress/Progress";
 import Button from "@/components/update/button/Button";
 import { HospitalIcon, Eye, Trash2 } from "lucide-react";
+import { Institution } from "@/utils/object"
 
 interface ListViewProps {
-  data: Array<{
-    name: string;
-    id: string;
-    usedStorage: number;
-    totalStorage: number;
-  }>;
+  intialInstitution: Institution[];
 }
 
-const ListView: React.FC<ListViewProps> = ({ data }) => {
+const ListView: React.FC<ListViewProps> = ({ intialInstitution }) => {
   return (
     <div className="space-y-4">
-      {data.map((item, index) => (
+      {intialInstitution.map((institution) => (
         <div
-          key={index}
+          key={institution.id}
           className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 bg-foreground shadow rounded-lg relative"
         >
           <div className="flex items-center w-full md:w-auto">
             <HospitalIcon className="w-10 h-10 text-primary" />
             <div className="ml-4">
               <h2 className="text-lg font-semibold text-text-primary">
-                {item.name}
+                {institution.name}
               </h2>
-              <p className="text-text-secondary text-sm">{item.id}</p>
+              <p className="text-text-secondary text-sm">{institution.id}</p>
             </div>
           </div>
 
@@ -36,12 +32,12 @@ const ListView: React.FC<ListViewProps> = ({ data }) => {
                   Storage Quota
                 </p>
                 <p className="text-sm text-text-primary font-semibold ml-4">
-                  {item.usedStorage} / {item.totalStorage}GB
+                  {institution.currentStorageQuota} / {institution.storageQuota}GB
                 </p>
               </div>
               <div className="flex items-center justify-between w-full">
                 <Progress
-                  value={(item.usedStorage / item.totalStorage) * 100}
+                value={(institution.currentStorageQuota / institution.currentStorageQuota) * 100}
                   className="w-full md:w-40"
                 />
               </div>
@@ -54,14 +50,14 @@ const ListView: React.FC<ListViewProps> = ({ data }) => {
                 Subscription Type
               </h2>
               <p className="text-text-secondary text-sm font-semibold">
-                1 Months
+              {institution.subscription_type} Months
               </p>
             </div>
           </div>
 
           <div className="flex flex-col md:flex-row items-start md:items-center w-full md:w-auto mt-4 md:mt-0">
             <div className="border-2 text-primary border-primary px-4 py-1 rounded-lg text-sm">
-              Active
+            {institution.accountStatus ? "Active" : "Inactive"}
             </div>
           </div>
 

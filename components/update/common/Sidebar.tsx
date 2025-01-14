@@ -24,6 +24,8 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/update/ui/Sidebar";
+import { useRouter } from "next/navigation";
+import { signOut } from "aws-amplify/auth";
 
 // Menu settings items.
 const settings = [
@@ -45,6 +47,18 @@ const generals = [
 
 export function AppSidebar() {
   const currentPath = usePathname();
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      // router.push("/login");
+      router.push("/");
+      console.log("log out");
+    } catch (error) {
+      console.log("gagal log out");
+      console.log(error);
+    }
+  };
 
   return (
     <Sidebar collapsible="icon">

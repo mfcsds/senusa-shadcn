@@ -64,7 +64,7 @@ import { generateReportID } from "@/utils/function";
 import { getDateToday, ReportStatus } from "@/utils/DateHelperFunction";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TableReportList from "@/components/table/TableReportList";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/components/update/ui/Separator";
 import PatientNameItem from "@/components/items/PatientNameItem";
 
 Amplify.configure(config2);

@@ -5,12 +5,28 @@ import { Switch } from "../../ui/switch";
 import { Mail, LogOut, RectangleEllipsis } from "lucide-react";
 import { DividerVerticalIcon } from "@radix-ui/react-icons";
 import { SidebarTrigger } from "@/components/update/ui/Sidebar";
+import { useRouter } from "next/navigation";
+
+import { signOut } from "aws-amplify/auth";
 
 const Navbar = () => {
   const [dropDownOpen, setDropDownOpen] = useState(false);
 
   const toggleDropdown = () => {
     setDropDownOpen(!dropDownOpen);
+  };
+
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      // router.push("/login");
+      router.push("/");
+      console.log("log out");
+    } catch (error) {
+      console.log("gagal log out");
+      console.log(error);
+    }
   };
 
   return (
@@ -46,10 +62,12 @@ const Navbar = () => {
                 <RectangleEllipsis className="mr-2 w-4 h-4 text-primary" />
                 Change Password
               </a>
+              <button onClick={handleLogout} className="w-full"> 
               <a className="flex items-center px-4 py-2 text-sm text-text-primary hover:bg-accent">
                 <LogOut className="mr-2 w-4 h-4 text-primary" />
                 Logout
               </a>
+              </button>
             </div>
           )}
         </div>

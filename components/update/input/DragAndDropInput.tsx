@@ -7,14 +7,14 @@ interface DragAndDropInputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   accept?: string;
   className?: string;
-  children?: ReactNode; // Tambahkan properti children untuk fleksibilitas konten
+  children?: ReactNode; 
 }
 
 const DragAndDropInput: React.FC<DragAndDropInputProps> = ({
   onChange,
   accept = "",
   className = "",
-  children, // Destructure children
+  children, 
 }) => {
   const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();

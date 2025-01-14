@@ -25,6 +25,7 @@ interface ListViewProps {
 
 const ListView: React.FC<ListViewProps> = ({ data }) => {
   return (
+    <div className="bg-foreground shadow rounded-lg p-6 space-y-4 mt-6">
     <Table>
       <TableHeader>
         <TableRow>
@@ -63,6 +64,7 @@ const ListView: React.FC<ListViewProps> = ({ data }) => {
         ))}
       </TableBody>
     </Table>
+    </div>
   );
 };
 

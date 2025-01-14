@@ -11,23 +11,56 @@ import {
 import { Accessibility, IdCard, Save, X, Plus } from "lucide-react";
 import Button from "@/components/update/button/Button";
 import Input from "@/components/update/input/Input";
+import { generatePatientID } from "@/utils/GenerateID";
+import { addNewPatient, fetchPatients } from "@/hooks/managePatients/usePatients";
 
 const AddPatientDialog: React.FC = () => {
-  const [patientID, setPatientID] = useState("");
+  const [idReference, setIDReference] = useState("");
+  const [errorIDReference, setErrorIDReference] = useState("");
+  const [open, setOpen] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleCloseDialog = () => {
+    setOpen(false);
+    setErrorIDReference(""); 
+  };
+
+  const handleAddNewPatient = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ patientID });
+
+    if (!idReference.trim()) {
+      setErrorIDReference("Patient ID Reference is required.");
+      return;
+    }
+
+    const newPatient = {
+      id: generatePatientID(),
+      name: "-",
+      sex: "-",
+      id_reference: idReference,
+      phone_number: "-",
+    };
+
+    try {
+      await addNewPatient(newPatient);
+      setErrorIDReference(""); 
+      setIDReference(""); 
+      setOpen(false); 
+      window.location.reload();
+    } catch (error) {
+      console.error("Error adding patient:", error);
+      setErrorIDReference("Failed to add new patient. Please try again.");
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           label="New Patient"
           variant="primary"
           size="large"
           icon={<Plus className="w-4 h-4" />}
+          onClick={() => setOpen(true)}
         />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[400px] max-h-[500px] overflow-y-auto">
@@ -38,7 +71,7 @@ const AddPatientDialog: React.FC = () => {
           </DialogTitle>
           <DialogDescription>Adding Patient Information.</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="grid gap-4 mt-2">
+        <form onSubmit={handleAddNewPatient} className="grid gap-4 mt-2">
           <div>
             <div className="flex items-center space-x-2">
               <IdCard className="w-6 h-6 text-blue-primary mb-1" />
@@ -49,17 +82,18 @@ const AddPatientDialog: React.FC = () => {
                 ID or Patient Reference Number
               </label>
             </div>
-            <p className="text-xs text-text-secondary mb-4">
-              Patient Identifier.
-            </p>
+            <p className="text-xs text-text-secondary mb-4">Patient Identifier.</p>
             <Input
               id="patienID"
               type="text"
-              value={patientID}
-              onChange={(e) => setPatientID(e.target.value)}
+              value={idReference}
+              onChange={(e) => setIDReference(e.target.value)}
               placeholder="Enter Patient ID"
               className="w-full bg-foreground"
             />
+            {errorIDReference && (
+              <p className="text-red-primary text-xs mt-2">{errorIDReference}</p>
+            )}
           </div>
           <DialogFooter className="mt-4 gap-4">
             <Button
@@ -67,12 +101,14 @@ const AddPatientDialog: React.FC = () => {
               variant="outlineDanger"
               size="large"
               icon={<X className="w-4 h-4" />}
+              onClick={handleCloseDialog}
             />
             <Button
               label="Save"
               variant="outlineSecondary"
               size="large"
               icon={<Save className="w-4 h-4" />}
+              type="submit"
             />
           </DialogFooter>
         </form>

@@ -9,6 +9,7 @@ interface ButtonProps {
   iconClassName?: string;
   ariaLabel?: string; 
   onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset'; 
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -20,6 +21,7 @@ const Button: React.FC<ButtonProps> = ({
   iconClassName = '',
   ariaLabel,
   onClick,
+  type = 'button', // Default type menjadi 'button'
 }) => {
   const baseStyles =
     "font-medium rounded-lg transition duration-300 ease-in-out flex items-center justify-center gap-2";
@@ -54,6 +56,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
+      type={type} // Properti type ditambahkan di sini
       onClick={onClick}
       className={`${baseStyles} ${sizeStyles[size]} ${variants[variant]} ${className}`}
       aria-label={ariaLabel}
