@@ -60,6 +60,7 @@ import { text } from "stream/consumers";
 import { Tooltip, TooltipContent } from "../ui/tooltip";
 import { TooltipProvider } from "../ui/tooltip";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
+import RecommendationEditor from "../variantinterpretation/RecommendationEditor";
 
 Amplify.configure(config);
 
@@ -510,6 +511,7 @@ The conclusion make it easy to understand, make it efficient, and short, no more
                       </TableRow>
                     </TableHeader>
                   </Table>
+                  {/* <RecommendationEditor ></RecommendationEditor> */}
                 </div>
                 <div className="flex flex-col h-[200px] overflow-y-auto">
                   <Table>

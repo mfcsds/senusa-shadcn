@@ -46,6 +46,8 @@ export declare type VariantCreateFormInputValues = {
     sor?: number;
     fraction?: number;
     zygosity?: string;
+    gene_id?: string;
+    gene_symbol?: string;
 };
 export declare type VariantCreateFormValidationValues = {
     chrom?: ValidationFunction<string>;
@@ -72,6 +74,8 @@ export declare type VariantCreateFormValidationValues = {
     sor?: ValidationFunction<number>;
     fraction?: ValidationFunction<number>;
     zygosity?: ValidationFunction<string>;
+    gene_id?: ValidationFunction<string>;
+    gene_symbol?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type VariantCreateFormOverridesProps = {
@@ -100,6 +104,8 @@ export declare type VariantCreateFormOverridesProps = {
     sor?: PrimitiveOverrideProps<TextFieldProps>;
     fraction?: PrimitiveOverrideProps<TextFieldProps>;
     zygosity?: PrimitiveOverrideProps<TextFieldProps>;
+    gene_id?: PrimitiveOverrideProps<TextFieldProps>;
+    gene_symbol?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type VariantCreateFormProps = React.PropsWithChildren<{
     overrides?: VariantCreateFormOverridesProps | undefined | null;

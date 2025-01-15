@@ -196,7 +196,7 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
                   {`${item.gene_symbol} (${item.gene_id}): ${item.hgvs}`}
                 </Text>
                 <Text style={[styles.tableCell, styles.centered]}>
-                  {item.zigosity}
+                  {item.zygosity}
                 </Text>
                 <Text style={[styles.tableCell, styles.centered]}>
                   {item.acmg}

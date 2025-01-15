@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   ColumnDef,
@@ -19,9 +19,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -37,7 +34,6 @@ import { Button } from "../ui/button";
 import { Separator } from "@radix-ui/react-separator";
 import {
   ChevronDown,
-  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   Download,
@@ -58,21 +54,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "../ui/dialog";
-import VariantInformationModal from "../items/VariantInformationModal";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+
+import GenePanelPopover from "../genepanel/GenePanelPopover";
+
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../ui/accordion";
+  GENE_PANEL_25,
+  GENE_PANEL_50,
+  GENE_PANEL_75,
+  GENE_PANEL_113,
+} from "@/utils/Contanst";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -112,6 +104,46 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
     { id: "acmg", value: "Pathogenic" },
   ]);
+
+  const [selectedGenePanel, setSelectedGenePanel] = useState<number>(25);
+
+  const containsAnyFilterFn = (
+    row: Row<any>,
+    columnId: string,
+    filterValues: string[]
+  ) => {
+    const cellValue = row.getValue<string>(columnId);
+    return filterValues.some((filterValue) =>
+      cellValue?.toLowerCase().includes(filterValue.toLowerCase())
+    );
+  };
+
+  // Dynamically get the gene panel list based on the selected panel
+  const getGenePanel = (panelNumber: number) => {
+    switch (panelNumber) {
+      case 25:
+        return GENE_PANEL_25;
+      case 50:
+        return GENE_PANEL_50;
+      case 75:
+        return GENE_PANEL_75;
+      case 113:
+        return GENE_PANEL_113;
+      default:
+        return [];
+    }
+  };
+
+  // // Update filters dynamically based on the selected gene panel
+  // useEffect(() => {
+  //   const genePanel = getGenePanel(selectedGenePanel);
+
+  //   // Update column filters with gene symbols
+  //   setColumnFilters((prevFilters) => [
+  //     ...prevFilters.filter((filter) => filter.id !== "gene_symbol"), // Remove existing `gene_symbol` filter
+  //     { id: "gene_symbol", value: genePanel.join(",") }, // Add new filter with the selected gene panel
+  //   ]);
+  // }, [selectedGenePanel]);
 
   const [selectedVariant, setSelectedVariant] = useState<TData | null>(null);
   const [rowSelection, setRowSelection] = useState({});
@@ -399,6 +431,53 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center p-4">
         <div className="flex flex-row justify-between items-center w-full">
           <div className="flex flex-row gap-5">
+            <div className="flex flex-col gap-2">
+              <Label className="text-lg">Gene Panel</Label>
+              <div className="flex flex-row">
+                <Select
+                  onValueChange={(value) => {
+                    const selectedValue = parseInt(value);
+                    let genePanel: string[] = [];
+                    switch (selectedValue) {
+                      case 25:
+                        genePanel = GENE_PANEL_25;
+                        break;
+                      case 50:
+                        genePanel = GENE_PANEL_50;
+                        break;
+                      case 75:
+                        genePanel = GENE_PANEL_75;
+                        break;
+                      case 113:
+                        genePanel = GENE_PANEL_113;
+                        break;
+                    }
+
+                    // This is the important part:
+                    // pass the array to the "gene_symbol" filter.
+                    table.getColumn("gene_symbol")?.setFilterValue(genePanel);
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue
+                      placeholder={"Select Gene Panel"}
+                    ></SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="25">Gene Panel 25</SelectItem>
+                      <SelectItem value="50">Gene Panel 50</SelectItem>
+                      <SelectItem value="75">Gene Panel 75</SelectItem>
+                      <SelectItem value="113">Gene Panel 113</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                <GenePanelPopover
+                  selectedGenePanel={selectedGenePanel}
+                ></GenePanelPopover>
+              </div>
+            </div>
             <div className="flex flex-col gap-2">
               <Label className="text-lg">Gene ID</Label>
               <Input

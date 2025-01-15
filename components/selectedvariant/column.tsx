@@ -2,13 +2,14 @@
 
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { Button } from "../ui/button";
-import { ArrowUpDown, Edit2, PlusCircle, TableOfContents } from "lucide-react";
 import {
-  createSelectedVariant,
-  createVariantInterpretation,
-} from "@/src/graphql/mutations";
-
-import { useState } from "react";
+  ArrowUpDown,
+  Edit,
+  Edit2,
+  PlusCircle,
+  TableOfContents,
+} from "lucide-react";
+import { updateVariant } from "@/src/graphql/mutations";
 
 import {
   HoverCard,
@@ -58,6 +59,10 @@ import awsconfig from "@/src/amplifyconfiguration.json";
 import { Amplify } from "aws-amplify";
 import { generateUserID } from "@/utils/function";
 import { Toast, ToastAction } from "../ui/toast";
+import BAddSelectedVariant from "../button/BAddSelectedVariant";
+import { ZYGOSITY_HETEROZYGOUS, ZYGOSITY_HOMOZYGOUS } from "@/utils/Contanst";
+import ACMGVariantReport from "../items/variantquery/ACMGVariantReport";
+import handleGeneratePDF from "../HandleGeneratePDF";
 
 Amplify.configure(awsconfig);
 
@@ -75,8 +80,42 @@ const numberRangeFilterFn = (
   return true;
 };
 
+function geneSymbolFilterFn(
+  row: Row<any>,
+  columnId: string,
+  filterValue: string | string[]
+) {
+  // The actual gene_symbol in the row
+  const rowValue = row.getValue<string>(columnId);
+  if (!rowValue) return false; // or `true` if you prefer passing empty rows
+
+  // No filter => show everything
+  if (!filterValue) return true;
+
+  // If filterValue is an array (from a selected gene panel),
+  // keep the row if its gene_symbol is in that array.
+  if (Array.isArray(filterValue)) {
+    return filterValue.includes(rowValue);
+  }
+
+  // If filterValue is a string, do a substring match
+  if (typeof filterValue === "string") {
+    return rowValue.toLowerCase().includes(filterValue.toLowerCase());
+  }
+
+  // Fallback (if something unexpected)
+  return true;
+}
+
 export const columns: ColumnDef<Variant>[] = [
-  { accessorKey: "gene_symbol", header: "Gene Symbol" },
+  {
+    accessorKey: "gene_symbol",
+    header: "Gene Symbol",
+    cell: ({ row }) => {
+      return row.original.gene_symbol;
+    },
+    filterFn: geneSymbolFilterFn,
+  },
   {
     accessorKey: "gene_id",
     header: ({ column }) => {
@@ -301,7 +340,23 @@ export const columns: ColumnDef<Variant>[] = [
       );
     },
     cell: ({ row }) => {
-      return <p className="text-lg">{row.original.zygosity}</p>;
+      function getBorder(zygosity: string) {
+        switch (zygosity) {
+          case ZYGOSITY_HETEROZYGOUS:
+            return "bg-blue-50 border-blue-600";
+          case ZYGOSITY_HOMOZYGOUS:
+            return "bg-red-50 border-red-600";
+        }
+      }
+      return (
+        <p
+          className={`text-lg p-2 border-2 ${getBorder(
+            row.original.zygosity ?? ""
+          )} rounded text-center`}
+        >
+          {row.original.zygosity}
+        </p>
+      );
     },
   },
 
@@ -338,71 +393,6 @@ export const columns: ColumnDef<Variant>[] = [
     cell: ({ row }) => {
       const item = row.original;
 
-      // // Function to determine ACMG classification based on API response
-      // const classifyVariant = (acmg: AcmgCriteria) => {
-      //   if (acmg.PVS1 || acmg.PS1 || acmg.PS4) {
-      //     // Strong evidence of pathogenicity
-      //     return "Pathogenic";
-      //   }
-      //   if (
-      //     acmg.PS3 ||
-      //     acmg.PM1 ||
-      //     acmg.PM2 ||
-      //     acmg.PM5 ||
-      //     acmg.PP1 ||
-      //     acmg.PP2
-      //   ) {
-      //     // Moderate evidence of pathogenicity
-      //     return "Likely Pathogenic";
-      //   }
-      //   if (acmg.BA1) {
-      //     // Strong evidence of benign
-      //     return "Benign";
-      //   }
-      //   if (acmg.BS1 || acmg.BS2 || acmg.BP1 || acmg.BP2) {
-      //     // Moderate evidence of benign
-      //     return "Likely Benign";
-      //   }
-      //   // If no strong or moderate evidence exists
-      //   return "VUS";
-      // };
-
-      // // Fetch the ACMG criteria from the API
-      // const fetchAcmgCriteria = async () => {
-      //   try {
-      //     const response = await fetch(
-      //       "https://yyj4sdbsd6.execute-api.us-east-1.amazonaws.com/dev-acmg/classification",
-      //       {
-      //         method: "POST",
-      //         headers: {
-      //           "Content-Type": "application/json",
-      //         },
-      //         body: JSON.stringify({ variants: [item.hgvs] }), // Pass the HGVS notation
-      //       }
-      //     );
-
-      //     if (!response.ok) {
-      //       console.error(
-      //         `Error fetching ACMG criteria: ${response.statusText}`
-      //       );
-      //       item.acmg = "VUS"; // Default to VUS if API fails
-      //       return;
-      //     }
-
-      //     const responseData = await response.json();
-      //     const acmgCriteria = JSON.parse(responseData.body)[0]; // Extract the first ACMG criteria object
-
-      //     // Map ACMG criteria to classification
-      //     item.acmg = classifyVariant(acmgCriteria);
-      //   } catch (error) {
-      //     console.error("Error fetching ACMG criteria:", error);
-      //     item.acmg = "VUS"; // Default to VUS in case of error
-      //   }
-      // };
-      // fetchAcmgCriteria();
-
-      // Fetch ACMG criteria and determine classification
-
       const getBadgeColor = () => {
         switch (item.acmg) {
           case "Pathogenic":
@@ -420,10 +410,33 @@ export const columns: ColumnDef<Variant>[] = [
         }
       };
       return (
-        <div
-          className={`flex flex-row items-center gap-2 justify-center rounded-md px-3 py-1 border-2 ${getBadgeColor()}`}
-        >
-          <p className="text-lg font-medium">{item.acmg}</p>
+        <div className="flex flex-row justify-between gap-3">
+          <div
+            className={`flex flex-row items-center gap-2 justify-center rounded-md px-3 py-1 border-2 ${getBadgeColor()}`}
+          >
+            <p className="text-lg font-medium">{item.acmg}</p>
+          </div>
+
+          <Dialog>
+            <DialogTrigger>
+              <Button
+                variant={"ghost"}
+                className="border rounded-md hover:border-green-800 hover:bg-green-200 group-hover:text-black"
+              >
+                <Edit className="w-4 h-4"></Edit>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-[90%] max-h-[90%] w-auto h-auto p-4 m-5">
+              <ACMGVariantReport
+                id_variantku={item.id}
+                hgvs={item.hgvs}
+                onUpdateVariant={(e) => {}}
+              ></ACMGVariantReport>
+              <DialogFooter>
+                <Button>Save</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       );
     },
@@ -593,70 +606,11 @@ export const columns: ColumnDef<Variant>[] = [
     cell: ({ row }) => {
       const item = row.original;
 
-      const itemTemp: SelectedVariant = {
-        id_report: item.id_report,
-        id_patient: item.id_patient,
-        id: item.id, // ID type is represented as string in TypeScript
-        id_vcf: item.id_vcf,
-        gene_id: item.gene_id,
-        gene_symbol: item.gene_symbol,
-        chrom: item.chrom,
-        pos: item.pos,
-        id_var: item.id_var,
-        ref: item.ref,
-        alt: item.alt,
-        qual: item.qual,
-        zigosity: item.zygosity,
-        global_allele: item.globalallele, // Float type in TypeScript is represented as number
-        functional_impact: item.functional_impact,
-        acmg: item.acmg,
-        reviewer_class: "",
-        clinical_sign: item.clinicalSign,
-        hgvs: item.hgvs,
-        severe_consequence: item.severeconsequence,
-        sift_score: item.sift_score,
-        sift_prediction: item.sift_prediction,
-        phenotypes: item.phenotypes,
-        rsID: item.rsID,
-        gnomade: item.gnomade,
-        gnomadg: item.gnomadg,
-        alldesc: item.alldesc,
+      const handleVariantUpdate = (id: string, updatedACMGClass: string) => {
+        // Update the variantItem state in the parent DataTable
+        item.acmg = updatedACMGClass;
       };
 
-      const client = generateClient();
-      const saveSelectedVariant = async () => {
-        try {
-          const result = await client.graphql({
-            query: createSelectedVariant,
-            variables: { input: itemTemp },
-          });
-          if (result.data) {
-            try {
-              const tempVarInter: VariantInterpretation = {
-                id: generateUserID(),
-                hgvs: itemTemp.hgvs ?? "",
-                id_report: itemTemp.id_report ?? "",
-                id_patient: itemTemp.id_patient ?? "",
-                text: "",
-                id_varsample: itemTemp.id_var ?? "",
-                alldesc: itemTemp.alldesc ?? "",
-                gene_id: itemTemp.gene_id ?? "",
-                gene_symbol: itemTemp.gene_symbol ?? "",
-              };
-              const re = await client.graphql({
-                query: createVariantInterpretation,
-                variables: { input: tempVarInter },
-              });
-              console.log("Berhasil Menambahkan");
-            } catch (error) {
-              console.log("Gagal Menambahkan");
-            }
-          }
-        } catch (error) {
-          console.log(`Error adding ${item.hgvs} ${error}`);
-          console.log(error);
-        }
-      };
       return (
         <div className="flex flex-row items-center justify-center p-2 gap-2">
           <Dialog>
@@ -673,24 +627,14 @@ export const columns: ColumnDef<Variant>[] = [
             <DialogContent className="w-full max-w-[1800px]">
               <VariantInformationModal
                 hgvsNotation={item.hgvs}
-                id_variant={itemTemp.id}
+                id_variant={item.id}
               ></VariantInformationModal>
               <DialogFooter>
                 <Button type="submit">Save changes</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
-          <Button
-            variant={"ghost"}
-            className="hover:bg-red-500 hover:text-white"
-            onClick={() => {
-              saveSelectedVariant();
-            }}
-          >
-            <small>
-              <PlusCircle className="h-4 w-4"></PlusCircle>
-            </small>
-          </Button>
+          <BAddSelectedVariant dataVariant={item}></BAddSelectedVariant>
         </div>
       );
     },

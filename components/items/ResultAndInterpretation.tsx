@@ -44,27 +44,10 @@ import {
 import config from "@/src/amplifyconfiguration.json";
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
-import { Button } from "../ui/button";
-import { MessageCircle, Save, TableOfContents, X } from "lucide-react";
-import { Separator } from "../ui/separator";
-import LabelAndDescription from "./LabelAndDescription";
 import { SelectedVariant, VariantInterpretation } from "@/utils/object";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { Skeleton } from "../ui/skeleton";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../ui/accordion";
+
+import VariantEditor from "../variantinterpretation/VariantEditor";
+import { useToast } from "../ui/use-toast";
 
 Amplify.configure(config);
 
@@ -73,75 +56,11 @@ interface ResultAndInterpretationProops {
   id_report: string | null;
 }
 
-const getGeneColor = (item: SelectedVariant) => {
-  switch (item.gene_symbol) {
-    case "BRCA1":
-    case "BRCA2":
-    case "TP53":
-    case "PTEN":
-    case "CDH1":
-    case "STK11":
-    case "CHEK2":
-    case "PALB2":
-    case "ATM":
-    case "MLH1":
-    case "MSH2":
-    case "MSH6":
-    case "PMS2":
-    case "RAD51C":
-    case "RAD51D":
-    case "BARD1":
-      return "border-red-600 ";
-    default:
-      return "border-gray-300"; // Default color if value doesn't match
-  }
-};
-const getTextGeneColor = (item: SelectedVariant) => {
-  switch (item.gene_symbol) {
-    case "BRCA1":
-    case "BRCA2":
-    case "TP53":
-    case "PTEN":
-    case "CDH1":
-    case "STK11":
-    case "CHEK2":
-    case "PALB2":
-    case "ATM":
-    case "MLH1":
-    case "MSH2":
-    case "MSH6":
-    case "PMS2":
-    case "RAD51C":
-    case "RAD51D":
-    case "BARD1":
-      return "text-red-600 font-semibold ";
-    default:
-      return "text-gray-600"; // Default color if value doesn't match
-  }
-};
-
 const getPhenotypesList = (item: SelectedVariant) => {
   const phenotypesList = item.phenotypes
     ? Array.from(new Set(item.phenotypes.split(";")))
     : [];
   return phenotypesList;
-};
-
-const getBadgeColor = (item: SelectedVariant) => {
-  switch (item.acmg) {
-    case "Pathogenic":
-      return "border-red-300 bg-red-50 text-gray-700";
-    case "Likely Pathogenic":
-      return "border-red-300 bg-red-50 text-gray-700";
-    case "Likely Benign":
-      return "border-green-300 bg-green-50"; // Red for pathogenic
-    case "Benign":
-      return "border-green-300 bg-green-50"; // Green for benign
-    case "VUS":
-      return "border-yellow-200 bg-yellow-50"; // Yellow for VUS
-    default:
-      return "border-gray-500"; // Default color if value doesn't match
-  }
 };
 
 const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
@@ -165,6 +84,35 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
   const client = generateClient();
 
   const [chooseClass, setChooseClass] = useState("");
+
+  const { toast } = useToast();
+
+  const handleDeleteSelectedVariant = async (idvar: string) => {
+    try {
+      // Delete the variant from the database
+      await client.graphql({
+        query: deleteSelectedVariant,
+        variables: { input: { id: idvar } },
+      });
+
+      // Update the UI by filtering out the deleted variant
+      setSelectedVariant((prevFiles) =>
+        prevFiles.filter((file) => file.id !== idvar)
+      );
+
+      toast({
+        title: "Delete Variant",
+        description: "The variant has been deleted successfully.",
+      });
+    } catch (error) {
+      console.error("Error deleting variant:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete the variant.",
+      });
+    }
+  };
 
   const fecthSelectedVariant = async () => {
     const result = await client.graphql({
@@ -212,7 +160,7 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
       ref: sel?.ref ?? "",
       alt: sel?.alt ?? "",
       qual: sel?.qual ?? "",
-      zigosity: sel?.zigosity ?? "",
+      zygosity: sel?.zygosity ?? "",
       global_allele: sel?.global_allele ?? 0, // Assuming 0 as a default for number fields
       functional_impact: sel?.functional_impact ?? "",
       acmg: sel?.acmg ?? "",
@@ -250,46 +198,38 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
     fetchVariantInterpretation();
   }, []);
 
-  const handleDeleteSelectedVariant = async (idvar: string) => {
-    try {
-      const item = selectedVariantItemList.find((item) => item.id == idvar);
-      const itemInter = variantInterpretations.find((item) => item.id == idvar);
-      if (item) {
-        const result = await client.graphql({
-          query: deleteSelectedVariant,
-          variables: { input: { id: item?.id ?? "" } },
-        });
-        await setSelectedVariant((prevFiles) =>
-          prevFiles.filter((file) => file.id != idvar)
-        );
-      }
-
-      if (itemInter) {
-        const result = await client.graphql({
-          query: deleteVariantInterpretation,
-          variables: { input: { id: itemInter?.id ?? "" } },
-        });
-
-        await fetchVariantInterpretation();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-screen">
       <Card className="w-full border-none h-screen">
         <CardHeader>
           <CardTitle>Result and Interpretation</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col w-full gap-3">
-            <div className="flexflex-col">
-              <p className="font-semibold text-pretty text-sm gap-2">
-                Selected Variant for Analysis
-              </p>
-              <div className="h-[300px] min-h-[300px] overflow-y-auto">
+            <div className="flex flex-col overflow-y-auto">
+              <div className="flex flex-col ">
+                {selectedVariantItemList.map((item, index) => (
+                  <VariantEditor
+                    key={index}
+                    variantData={item}
+                    onDeleteVariant={handleDeleteSelectedVariant}
+                  ></VariantEditor>
+                ))}
+              </div>
+              {/* <Separator></Separator>
+              <div className="flex flex-col mt-4">
+                <p className="text-xl font-semibold">Variant Interpretation</p>
+              </div>
+              <div className="flex flex-col h-[450px] min-h-[450px] overflow-y-auto gap-1">
+                {variantInterpretations.length > 0 &&
+                  variantInterpretations.map((item, index) => (
+                    <VariantAnalysisResult
+                      key={index}
+                      varInterpretation={item}
+                    ></VariantAnalysisResult>
+                  ))}
+              </div> */}
+              {/* <div className="h-[300px] min-h-[300px] overflow-y-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -468,20 +408,7 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
                     ))}
                   </TableBody>
                 </Table>
-              </div>
-            </div>
-            <Separator></Separator>
-            <div className="flex flex-col mt-4">
-              <p className="text-xl font-semibold">Variant Interpretation</p>
-            </div>
-            <div className="flex flex-col h-[450px] min-h-[450px] overflow-y-auto gap-1">
-              {variantInterpretations.length > 0 &&
-                variantInterpretations.map((item, index) => (
-                  <VariantAnalysisResult
-                    key={index}
-                    varInterpretation={item}
-                  ></VariantAnalysisResult>
-                ))}
+              </div> */}
             </div>
           </div>
         </CardContent>

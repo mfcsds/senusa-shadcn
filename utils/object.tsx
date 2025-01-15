@@ -40,9 +40,7 @@ export interface Variant {
   readposrank: number;
   sor: number;
   fraction: number;
-  variantReportID: string;
   zygosity: string | null;
-  globalallele: number | null;
   functional_impact: string | null;
   acmg: string;
   clinicalSign: string | null;
@@ -147,13 +145,15 @@ export interface VariantRawData {
   dp?: number;
   fs?: number;
   mq?: number;
-  zigosity?: string;
+  zygosity?: string;
   mqranksum?: number;
   qd?: number;
   readposrank?: number;
   sor?: number;
   fraction?: number;
   acmg?: string | null;
+  gene_id?: string | null;
+  gene_symbol?: string | null;
 }
 
 // TypeScript Interface for SelectedVariant
@@ -170,7 +170,6 @@ export interface SelectedVariant {
   ref: string | null;
   alt: string | null;
   qual: string | null;
-  zigosity: string | null;
   global_allele: number | null; // Float type in TypeScript is represented as number
   functional_impact: string | null;
   acmg: string | null;
@@ -185,10 +184,12 @@ export interface SelectedVariant {
   gnomade: number | null;
   gnomadg: number | null;
   alldesc: string | null;
+  zygosity?: string | null;
+  text_interpretatio?: string | null;
 }
 
 export interface VariantInterpretation {
-  id: string | null;
+  id?: string | null;
   hgvs: string | "No Data";
   text: string | "No Interpretation";
   id_patient: string | "";
@@ -309,6 +310,13 @@ export interface Domain {
 }
 
 export interface FamilyDiseaseData {
+  id?: string;
+  id_patient: string;
+  hpo_code: string;
+  hpo_desc: string;
+}
+
+export interface PatientDiseaseData {
   id?: string;
   id_patient: string;
   hpo_code: string;

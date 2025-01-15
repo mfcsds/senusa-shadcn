@@ -34,7 +34,6 @@ export default function SelectedVariantCreateForm(props) {
     ref: "",
     alt: "",
     qual: "",
-    zigosity: "",
     global_allele: "",
     functional_impact: "",
     acmg: "",
@@ -60,6 +59,8 @@ export default function SelectedVariantCreateForm(props) {
     readposrank: "",
     sor: "",
     fraction: "",
+    zygosity: "",
+    text_interpretation: "",
   };
   const [id_patient, setId_patient] = React.useState(initialValues.id_patient);
   const [id_vcf, setId_vcf] = React.useState(initialValues.id_vcf);
@@ -74,7 +75,6 @@ export default function SelectedVariantCreateForm(props) {
   const [ref, setRef] = React.useState(initialValues.ref);
   const [alt, setAlt] = React.useState(initialValues.alt);
   const [qual, setQual] = React.useState(initialValues.qual);
-  const [zigosity, setZigosity] = React.useState(initialValues.zigosity);
   const [global_allele, setGlobal_allele] = React.useState(
     initialValues.global_allele
   );
@@ -114,6 +114,10 @@ export default function SelectedVariantCreateForm(props) {
   );
   const [sor, setSor] = React.useState(initialValues.sor);
   const [fraction, setFraction] = React.useState(initialValues.fraction);
+  const [zygosity, setZygosity] = React.useState(initialValues.zygosity);
+  const [text_interpretation, setText_interpretation] = React.useState(
+    initialValues.text_interpretation
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setId_patient(initialValues.id_patient);
@@ -127,7 +131,6 @@ export default function SelectedVariantCreateForm(props) {
     setRef(initialValues.ref);
     setAlt(initialValues.alt);
     setQual(initialValues.qual);
-    setZigosity(initialValues.zigosity);
     setGlobal_allele(initialValues.global_allele);
     setFunctional_impact(initialValues.functional_impact);
     setAcmg(initialValues.acmg);
@@ -153,6 +156,8 @@ export default function SelectedVariantCreateForm(props) {
     setReadposrank(initialValues.readposrank);
     setSor(initialValues.sor);
     setFraction(initialValues.fraction);
+    setZygosity(initialValues.zygosity);
+    setText_interpretation(initialValues.text_interpretation);
     setErrors({});
   };
   const validations = {
@@ -167,7 +172,6 @@ export default function SelectedVariantCreateForm(props) {
     ref: [],
     alt: [],
     qual: [],
-    zigosity: [],
     global_allele: [],
     functional_impact: [],
     acmg: [],
@@ -193,6 +197,8 @@ export default function SelectedVariantCreateForm(props) {
     readposrank: [],
     sor: [],
     fraction: [],
+    zygosity: [],
+    text_interpretation: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -231,7 +237,6 @@ export default function SelectedVariantCreateForm(props) {
           ref,
           alt,
           qual,
-          zigosity,
           global_allele,
           functional_impact,
           acmg,
@@ -257,6 +262,8 @@ export default function SelectedVariantCreateForm(props) {
           readposrank,
           sor,
           fraction,
+          zygosity,
+          text_interpretation,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -330,7 +337,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -356,6 +362,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.id_patient ?? value;
@@ -390,7 +398,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -416,6 +423,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.id_vcf ?? value;
@@ -450,7 +459,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -476,6 +484,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.id_report ?? value;
@@ -510,7 +520,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -536,6 +545,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.gene_id ?? value;
@@ -570,7 +581,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -596,6 +606,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.gene_symbol ?? value;
@@ -630,7 +642,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -656,6 +667,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.chrom ?? value;
@@ -690,7 +703,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -716,6 +728,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.pos ?? value;
@@ -750,7 +764,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -776,6 +789,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.id_var ?? value;
@@ -810,7 +825,6 @@ export default function SelectedVariantCreateForm(props) {
               ref: value,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -836,6 +850,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.ref ?? value;
@@ -870,7 +886,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt: value,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -896,6 +911,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.alt ?? value;
@@ -930,7 +947,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual: value,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -956,6 +972,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.qual ?? value;
@@ -969,66 +987,6 @@ export default function SelectedVariantCreateForm(props) {
         errorMessage={errors.qual?.errorMessage}
         hasError={errors.qual?.hasError}
         {...getOverrideProps(overrides, "qual")}
-      ></TextField>
-      <TextField
-        label="Zigosity"
-        isRequired={false}
-        isReadOnly={false}
-        value={zigosity}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              id_patient,
-              id_vcf,
-              id_report,
-              gene_id,
-              gene_symbol,
-              chrom,
-              pos,
-              id_var,
-              ref,
-              alt,
-              qual,
-              zigosity: value,
-              global_allele,
-              functional_impact,
-              acmg,
-              reviewer_class,
-              clinical_sign,
-              hgvs,
-              severe_consequence,
-              sift_score,
-              sift_prediction,
-              phenotypes,
-              rsID,
-              gnomade,
-              gnomadg,
-              alldesc,
-              ac,
-              af,
-              an,
-              dp,
-              fs,
-              mq,
-              mqranksum,
-              qd,
-              readposrank,
-              sor,
-              fraction,
-            };
-            const result = onChange(modelFields);
-            value = result?.zigosity ?? value;
-          }
-          if (errors.zigosity?.hasError) {
-            runValidationTasks("zigosity", value);
-          }
-          setZigosity(value);
-        }}
-        onBlur={() => runValidationTasks("zigosity", zigosity)}
-        errorMessage={errors.zigosity?.errorMessage}
-        hasError={errors.zigosity?.hasError}
-        {...getOverrideProps(overrides, "zigosity")}
       ></TextField>
       <TextField
         label="Global allele"
@@ -1054,7 +1012,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele: value,
               functional_impact,
               acmg,
@@ -1080,6 +1037,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.global_allele ?? value;
@@ -1114,7 +1073,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact: value,
               acmg,
@@ -1140,6 +1098,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.functional_impact ?? value;
@@ -1176,7 +1136,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg: value,
@@ -1202,6 +1161,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.acmg ?? value;
@@ -1236,7 +1197,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -1262,6 +1222,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.reviewer_class ?? value;
@@ -1296,7 +1258,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -1322,6 +1283,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.clinical_sign ?? value;
@@ -1356,7 +1319,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -1382,6 +1344,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.hgvs ?? value;
@@ -1416,7 +1380,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -1442,6 +1405,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.severe_consequence ?? value;
@@ -1482,7 +1447,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -1508,6 +1472,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.sift_score ?? value;
@@ -1542,7 +1508,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -1568,6 +1533,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.sift_prediction ?? value;
@@ -1602,7 +1569,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -1628,6 +1594,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.phenotypes ?? value;
@@ -1662,7 +1630,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -1688,6 +1655,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.rsID ?? value;
@@ -1726,7 +1695,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -1752,6 +1720,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.gnomade ?? value;
@@ -1790,7 +1760,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -1816,6 +1785,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.gnomadg ?? value;
@@ -1850,7 +1821,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -1876,6 +1846,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.alldesc ?? value;
@@ -1914,7 +1886,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -1940,6 +1911,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.ac ?? value;
@@ -1978,7 +1951,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -2004,6 +1976,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.af ?? value;
@@ -2042,7 +2016,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -2068,6 +2041,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.an ?? value;
@@ -2106,7 +2081,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -2132,6 +2106,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.dp ?? value;
@@ -2170,7 +2146,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -2196,6 +2171,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.fs ?? value;
@@ -2234,7 +2211,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -2260,6 +2236,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.mq ?? value;
@@ -2298,7 +2276,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -2324,6 +2301,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.mqranksum ?? value;
@@ -2362,7 +2341,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -2388,6 +2366,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.qd ?? value;
@@ -2426,7 +2406,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -2452,6 +2431,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank: value,
               sor,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.readposrank ?? value;
@@ -2490,7 +2471,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -2516,6 +2496,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor: value,
               fraction,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.sor ?? value;
@@ -2554,7 +2536,6 @@ export default function SelectedVariantCreateForm(props) {
               ref,
               alt,
               qual,
-              zigosity,
               global_allele,
               functional_impact,
               acmg,
@@ -2580,6 +2561,8 @@ export default function SelectedVariantCreateForm(props) {
               readposrank,
               sor,
               fraction: value,
+              zygosity,
+              text_interpretation,
             };
             const result = onChange(modelFields);
             value = result?.fraction ?? value;
@@ -2593,6 +2576,130 @@ export default function SelectedVariantCreateForm(props) {
         errorMessage={errors.fraction?.errorMessage}
         hasError={errors.fraction?.hasError}
         {...getOverrideProps(overrides, "fraction")}
+      ></TextField>
+      <TextField
+        label="Zygosity"
+        isRequired={false}
+        isReadOnly={false}
+        value={zygosity}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
+              zygosity: value,
+              text_interpretation,
+            };
+            const result = onChange(modelFields);
+            value = result?.zygosity ?? value;
+          }
+          if (errors.zygosity?.hasError) {
+            runValidationTasks("zygosity", value);
+          }
+          setZygosity(value);
+        }}
+        onBlur={() => runValidationTasks("zygosity", zygosity)}
+        errorMessage={errors.zygosity?.errorMessage}
+        hasError={errors.zygosity?.hasError}
+        {...getOverrideProps(overrides, "zygosity")}
+      ></TextField>
+      <TextField
+        label="Text interpretation"
+        isRequired={false}
+        isReadOnly={false}
+        value={text_interpretation}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
+              zygosity,
+              text_interpretation: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.text_interpretation ?? value;
+          }
+          if (errors.text_interpretation?.hasError) {
+            runValidationTasks("text_interpretation", value);
+          }
+          setText_interpretation(value);
+        }}
+        onBlur={() =>
+          runValidationTasks("text_interpretation", text_interpretation)
+        }
+        errorMessage={errors.text_interpretation?.errorMessage}
+        hasError={errors.text_interpretation?.hasError}
+        {...getOverrideProps(overrides, "text_interpretation")}
       ></TextField>
       <Flex
         justifyContent="space-between"

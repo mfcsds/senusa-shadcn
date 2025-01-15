@@ -2,6 +2,85 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
+export type CreatePatientHistoryDiseaseInput = {
+  id?: string | null,
+  id_patient?: string | null,
+  hpo_code?: string | null,
+  hpo_desc?: string | null,
+};
+
+export type ModelPatientHistoryDiseaseConditionInput = {
+  id_patient?: ModelStringInput | null,
+  hpo_code?: ModelStringInput | null,
+  hpo_desc?: ModelStringInput | null,
+  and?: Array< ModelPatientHistoryDiseaseConditionInput | null > | null,
+  or?: Array< ModelPatientHistoryDiseaseConditionInput | null > | null,
+  not?: ModelPatientHistoryDiseaseConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelStringInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
+export enum ModelAttributeTypes {
+  binary = "binary",
+  binarySet = "binarySet",
+  bool = "bool",
+  list = "list",
+  map = "map",
+  number = "number",
+  numberSet = "numberSet",
+  string = "string",
+  stringSet = "stringSet",
+  _null = "_null",
+}
+
+
+export type ModelSizeInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+};
+
+export type PatientHistoryDisease = {
+  __typename: "PatientHistoryDisease",
+  id: string,
+  id_patient?: string | null,
+  hpo_code?: string | null,
+  hpo_desc?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdatePatientHistoryDiseaseInput = {
+  id: string,
+  id_patient?: string | null,
+  hpo_code?: string | null,
+  hpo_desc?: string | null,
+};
+
+export type DeletePatientHistoryDiseaseInput = {
+  id: string,
+};
+
 export type CreateAcmgAnnotationInput = {
   id?: string | null,
   id_variant?: string | null,
@@ -76,46 +155,6 @@ export type ModelAcmgAnnotationConditionInput = {
   not?: ModelAcmgAnnotationConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
-};
-
-export type ModelStringInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
-};
-
-export enum ModelAttributeTypes {
-  binary = "binary",
-  binarySet = "binarySet",
-  bool = "bool",
-  list = "list",
-  map = "map",
-  number = "number",
-  numberSet = "numberSet",
-  string = "string",
-  stringSet = "stringSet",
-  _null = "_null",
-}
-
-
-export type ModelSizeInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
 };
 
 export type ModelBooleanInput = {
@@ -315,7 +354,6 @@ export type CreateSelectedVariantInput = {
   ref?: string | null,
   alt?: string | null,
   qual?: string | null,
-  zigosity?: string | null,
   global_allele?: number | null,
   functional_impact?: string | null,
   acmg?: string | null,
@@ -341,6 +379,8 @@ export type CreateSelectedVariantInput = {
   readposrank?: number | null,
   sor?: number | null,
   fraction?: number | null,
+  zygosity?: string | null,
+  text_interpretation?: string | null,
 };
 
 export type ModelSelectedVariantConditionInput = {
@@ -355,7 +395,6 @@ export type ModelSelectedVariantConditionInput = {
   ref?: ModelStringInput | null,
   alt?: ModelStringInput | null,
   qual?: ModelStringInput | null,
-  zigosity?: ModelStringInput | null,
   global_allele?: ModelFloatInput | null,
   functional_impact?: ModelStringInput | null,
   acmg?: ModelStringInput | null,
@@ -381,6 +420,8 @@ export type ModelSelectedVariantConditionInput = {
   readposrank?: ModelFloatInput | null,
   sor?: ModelFloatInput | null,
   fraction?: ModelFloatInput | null,
+  zygosity?: ModelStringInput | null,
+  text_interpretation?: ModelStringInput | null,
   and?: Array< ModelSelectedVariantConditionInput | null > | null,
   or?: Array< ModelSelectedVariantConditionInput | null > | null,
   not?: ModelSelectedVariantConditionInput | null,
@@ -414,7 +455,6 @@ export type SelectedVariant = {
   ref?: string | null,
   alt?: string | null,
   qual?: string | null,
-  zigosity?: string | null,
   global_allele?: number | null,
   functional_impact?: string | null,
   acmg?: string | null,
@@ -440,6 +480,8 @@ export type SelectedVariant = {
   readposrank?: number | null,
   sor?: number | null,
   fraction?: number | null,
+  zygosity?: string | null,
+  text_interpretation?: string | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -457,7 +499,6 @@ export type UpdateSelectedVariantInput = {
   ref?: string | null,
   alt?: string | null,
   qual?: string | null,
-  zigosity?: string | null,
   global_allele?: number | null,
   functional_impact?: string | null,
   acmg?: string | null,
@@ -483,6 +524,8 @@ export type UpdateSelectedVariantInput = {
   readposrank?: number | null,
   sor?: number | null,
   fraction?: number | null,
+  zygosity?: string | null,
+  text_interpretation?: string | null,
 };
 
 export type DeleteSelectedVariantInput = {
@@ -578,6 +621,8 @@ export type CreateVariantInput = {
   sor?: number | null,
   fraction?: number | null,
   zygosity?: string | null,
+  gene_id?: string | null,
+  gene_symbol?: string | null,
 };
 
 export type ModelVariantConditionInput = {
@@ -605,6 +650,8 @@ export type ModelVariantConditionInput = {
   sor?: ModelFloatInput | null,
   fraction?: ModelFloatInput | null,
   zygosity?: ModelStringInput | null,
+  gene_id?: ModelStringInput | null,
+  gene_symbol?: ModelStringInput | null,
   and?: Array< ModelVariantConditionInput | null > | null,
   or?: Array< ModelVariantConditionInput | null > | null,
   not?: ModelVariantConditionInput | null,
@@ -639,6 +686,8 @@ export type Variant = {
   sor?: number | null,
   fraction?: number | null,
   zygosity?: string | null,
+  gene_id?: string | null,
+  gene_symbol?: string | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -669,6 +718,8 @@ export type UpdateVariantInput = {
   sor?: number | null,
   fraction?: number | null,
   zygosity?: string | null,
+  gene_id?: string | null,
+  gene_symbol?: string | null,
 };
 
 export type DeleteVariantInput = {
@@ -953,6 +1004,7 @@ export type CreatePatientInput = {
   dob?: string | null,
   id_reference?: string | null,
   id_institution?: string | null,
+  health_desc?: string | null,
 };
 
 export type ModelPatientConditionInput = {
@@ -962,6 +1014,7 @@ export type ModelPatientConditionInput = {
   dob?: ModelStringInput | null,
   id_reference?: ModelStringInput | null,
   id_institution?: ModelStringInput | null,
+  health_desc?: ModelStringInput | null,
   and?: Array< ModelPatientConditionInput | null > | null,
   or?: Array< ModelPatientConditionInput | null > | null,
   not?: ModelPatientConditionInput | null,
@@ -978,6 +1031,7 @@ export type Patient = {
   dob?: string | null,
   id_reference?: string | null,
   id_institution?: string | null,
+  health_desc?: string | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -990,6 +1044,7 @@ export type UpdatePatientInput = {
   dob?: string | null,
   id_reference?: string | null,
   id_institution?: string | null,
+  health_desc?: string | null,
 };
 
 export type DeletePatientInput = {
@@ -1151,6 +1206,24 @@ export type DeleteInstitutionInput = {
   id: string,
 };
 
+export type ModelPatientHistoryDiseaseFilterInput = {
+  id?: ModelIDInput | null,
+  id_patient?: ModelStringInput | null,
+  hpo_code?: ModelStringInput | null,
+  hpo_desc?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelPatientHistoryDiseaseFilterInput | null > | null,
+  or?: Array< ModelPatientHistoryDiseaseFilterInput | null > | null,
+  not?: ModelPatientHistoryDiseaseFilterInput | null,
+};
+
+export type ModelPatientHistoryDiseaseConnection = {
+  __typename: "ModelPatientHistoryDiseaseConnection",
+  items:  Array<PatientHistoryDisease | null >,
+  nextToken?: string | null,
+};
+
 export type ModelAcmgAnnotationFilterInput = {
   id?: ModelIDInput | null,
   id_variant?: ModelStringInput | null,
@@ -1252,7 +1325,6 @@ export type ModelSelectedVariantFilterInput = {
   ref?: ModelStringInput | null,
   alt?: ModelStringInput | null,
   qual?: ModelStringInput | null,
-  zigosity?: ModelStringInput | null,
   global_allele?: ModelFloatInput | null,
   functional_impact?: ModelStringInput | null,
   acmg?: ModelStringInput | null,
@@ -1278,6 +1350,8 @@ export type ModelSelectedVariantFilterInput = {
   readposrank?: ModelFloatInput | null,
   sor?: ModelFloatInput | null,
   fraction?: ModelFloatInput | null,
+  zygosity?: ModelStringInput | null,
+  text_interpretation?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelSelectedVariantFilterInput | null > | null,
@@ -1338,6 +1412,8 @@ export type ModelVariantFilterInput = {
   sor?: ModelFloatInput | null,
   fraction?: ModelFloatInput | null,
   zygosity?: ModelStringInput | null,
+  gene_id?: ModelStringInput | null,
+  gene_symbol?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelVariantFilterInput | null > | null,
@@ -1472,6 +1548,7 @@ export type ModelPatientFilterInput = {
   dob?: ModelStringInput | null,
   id_reference?: ModelStringInput | null,
   id_institution?: ModelStringInput | null,
+  health_desc?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelPatientFilterInput | null > | null,
@@ -1532,6 +1609,47 @@ export type ModelInstitutionConnection = {
   nextToken?: string | null,
 };
 
+export type ModelSubscriptionPatientHistoryDiseaseFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  id_patient?: ModelSubscriptionStringInput | null,
+  hpo_code?: ModelSubscriptionStringInput | null,
+  hpo_desc?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionPatientHistoryDiseaseFilterInput | null > | null,
+  or?: Array< ModelSubscriptionPatientHistoryDiseaseFilterInput | null > | null,
+};
+
+export type ModelSubscriptionIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  in?: Array< string | null > | null,
+  notIn?: Array< string | null > | null,
+};
+
+export type ModelSubscriptionStringInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  in?: Array< string | null > | null,
+  notIn?: Array< string | null > | null,
+};
+
 export type ModelSubscriptionAcmgAnnotationFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   id_variant?: ModelSubscriptionStringInput | null,
@@ -1570,36 +1688,6 @@ export type ModelSubscriptionAcmgAnnotationFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionAcmgAnnotationFilterInput | null > | null,
   or?: Array< ModelSubscriptionAcmgAnnotationFilterInput | null > | null,
-};
-
-export type ModelSubscriptionIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  in?: Array< string | null > | null,
-  notIn?: Array< string | null > | null,
-};
-
-export type ModelSubscriptionStringInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  in?: Array< string | null > | null,
-  notIn?: Array< string | null > | null,
 };
 
 export type ModelSubscriptionBooleanInput = {
@@ -1647,7 +1735,6 @@ export type ModelSubscriptionSelectedVariantFilterInput = {
   ref?: ModelSubscriptionStringInput | null,
   alt?: ModelSubscriptionStringInput | null,
   qual?: ModelSubscriptionStringInput | null,
-  zigosity?: ModelSubscriptionStringInput | null,
   global_allele?: ModelSubscriptionFloatInput | null,
   functional_impact?: ModelSubscriptionStringInput | null,
   acmg?: ModelSubscriptionStringInput | null,
@@ -1673,6 +1760,8 @@ export type ModelSubscriptionSelectedVariantFilterInput = {
   readposrank?: ModelSubscriptionFloatInput | null,
   sor?: ModelSubscriptionFloatInput | null,
   fraction?: ModelSubscriptionFloatInput | null,
+  zygosity?: ModelSubscriptionStringInput | null,
+  text_interpretation?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionSelectedVariantFilterInput | null > | null,
@@ -1743,6 +1832,8 @@ export type ModelSubscriptionVariantFilterInput = {
   sor?: ModelSubscriptionFloatInput | null,
   fraction?: ModelSubscriptionFloatInput | null,
   zygosity?: ModelSubscriptionStringInput | null,
+  gene_id?: ModelSubscriptionStringInput | null,
+  gene_symbol?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionVariantFilterInput | null > | null,
@@ -1828,6 +1919,7 @@ export type ModelSubscriptionPatientFilterInput = {
   dob?: ModelSubscriptionStringInput | null,
   id_reference?: ModelSubscriptionStringInput | null,
   id_institution?: ModelSubscriptionStringInput | null,
+  health_desc?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionPatientFilterInput | null > | null,
@@ -1871,6 +1963,57 @@ export type ModelSubscriptionInstitutionFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionInstitutionFilterInput | null > | null,
   or?: Array< ModelSubscriptionInstitutionFilterInput | null > | null,
+};
+
+export type CreatePatientHistoryDiseaseMutationVariables = {
+  input: CreatePatientHistoryDiseaseInput,
+  condition?: ModelPatientHistoryDiseaseConditionInput | null,
+};
+
+export type CreatePatientHistoryDiseaseMutation = {
+  createPatientHistoryDisease?:  {
+    __typename: "PatientHistoryDisease",
+    id: string,
+    id_patient?: string | null,
+    hpo_code?: string | null,
+    hpo_desc?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdatePatientHistoryDiseaseMutationVariables = {
+  input: UpdatePatientHistoryDiseaseInput,
+  condition?: ModelPatientHistoryDiseaseConditionInput | null,
+};
+
+export type UpdatePatientHistoryDiseaseMutation = {
+  updatePatientHistoryDisease?:  {
+    __typename: "PatientHistoryDisease",
+    id: string,
+    id_patient?: string | null,
+    hpo_code?: string | null,
+    hpo_desc?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeletePatientHistoryDiseaseMutationVariables = {
+  input: DeletePatientHistoryDiseaseInput,
+  condition?: ModelPatientHistoryDiseaseConditionInput | null,
+};
+
+export type DeletePatientHistoryDiseaseMutation = {
+  deletePatientHistoryDisease?:  {
+    __typename: "PatientHistoryDisease",
+    id: string,
+    id_patient?: string | null,
+    hpo_code?: string | null,
+    hpo_desc?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
 };
 
 export type CreateAcmgAnnotationMutationVariables = {
@@ -2148,7 +2291,6 @@ export type CreateSelectedVariantMutation = {
     ref?: string | null,
     alt?: string | null,
     qual?: string | null,
-    zigosity?: string | null,
     global_allele?: number | null,
     functional_impact?: string | null,
     acmg?: string | null,
@@ -2174,6 +2316,8 @@ export type CreateSelectedVariantMutation = {
     readposrank?: number | null,
     sor?: number | null,
     fraction?: number | null,
+    zygosity?: string | null,
+    text_interpretation?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2199,7 +2343,6 @@ export type UpdateSelectedVariantMutation = {
     ref?: string | null,
     alt?: string | null,
     qual?: string | null,
-    zigosity?: string | null,
     global_allele?: number | null,
     functional_impact?: string | null,
     acmg?: string | null,
@@ -2225,6 +2368,8 @@ export type UpdateSelectedVariantMutation = {
     readposrank?: number | null,
     sor?: number | null,
     fraction?: number | null,
+    zygosity?: string | null,
+    text_interpretation?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2250,7 +2395,6 @@ export type DeleteSelectedVariantMutation = {
     ref?: string | null,
     alt?: string | null,
     qual?: string | null,
-    zigosity?: string | null,
     global_allele?: number | null,
     functional_impact?: string | null,
     acmg?: string | null,
@@ -2276,6 +2420,8 @@ export type DeleteSelectedVariantMutation = {
     readposrank?: number | null,
     sor?: number | null,
     fraction?: number | null,
+    zygosity?: string | null,
+    text_interpretation?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2374,6 +2520,8 @@ export type CreateVariantMutation = {
     sor?: number | null,
     fraction?: number | null,
     zygosity?: string | null,
+    gene_id?: string | null,
+    gene_symbol?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2412,6 +2560,8 @@ export type UpdateVariantMutation = {
     sor?: number | null,
     fraction?: number | null,
     zygosity?: string | null,
+    gene_id?: string | null,
+    gene_symbol?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2450,6 +2600,8 @@ export type DeleteVariantMutation = {
     sor?: number | null,
     fraction?: number | null,
     zygosity?: string | null,
+    gene_id?: string | null,
+    gene_symbol?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2791,6 +2943,7 @@ export type CreatePatientMutation = {
     dob?: string | null,
     id_reference?: string | null,
     id_institution?: string | null,
+    health_desc?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2811,6 +2964,7 @@ export type UpdatePatientMutation = {
     dob?: string | null,
     id_reference?: string | null,
     id_institution?: string | null,
+    health_desc?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2831,6 +2985,7 @@ export type DeletePatientMutation = {
     dob?: string | null,
     id_reference?: string | null,
     id_institution?: string | null,
+    health_desc?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3022,6 +3177,44 @@ export type DeleteInstitutionMutation = {
     currentStorageQuota?: number | null,
     createdAt: string,
     updatedAt: string,
+  } | null,
+};
+
+export type GetPatientHistoryDiseaseQueryVariables = {
+  id: string,
+};
+
+export type GetPatientHistoryDiseaseQuery = {
+  getPatientHistoryDisease?:  {
+    __typename: "PatientHistoryDisease",
+    id: string,
+    id_patient?: string | null,
+    hpo_code?: string | null,
+    hpo_desc?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListPatientHistoryDiseasesQueryVariables = {
+  filter?: ModelPatientHistoryDiseaseFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListPatientHistoryDiseasesQuery = {
+  listPatientHistoryDiseases?:  {
+    __typename: "ModelPatientHistoryDiseaseConnection",
+    items:  Array< {
+      __typename: "PatientHistoryDisease",
+      id: string,
+      id_patient?: string | null,
+      hpo_code?: string | null,
+      hpo_desc?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
   } | null,
 };
 
@@ -3226,7 +3419,6 @@ export type GetSelectedVariantQuery = {
     ref?: string | null,
     alt?: string | null,
     qual?: string | null,
-    zigosity?: string | null,
     global_allele?: number | null,
     functional_impact?: string | null,
     acmg?: string | null,
@@ -3252,6 +3444,8 @@ export type GetSelectedVariantQuery = {
     readposrank?: number | null,
     sor?: number | null,
     fraction?: number | null,
+    zygosity?: string | null,
+    text_interpretation?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3280,7 +3474,6 @@ export type ListSelectedVariantsQuery = {
       ref?: string | null,
       alt?: string | null,
       qual?: string | null,
-      zigosity?: string | null,
       global_allele?: number | null,
       functional_impact?: string | null,
       acmg?: string | null,
@@ -3306,6 +3499,8 @@ export type ListSelectedVariantsQuery = {
       readposrank?: number | null,
       sor?: number | null,
       fraction?: number | null,
+      zygosity?: string | null,
+      text_interpretation?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -3389,6 +3584,8 @@ export type GetVariantQuery = {
     sor?: number | null,
     fraction?: number | null,
     zygosity?: string | null,
+    gene_id?: string | null,
+    gene_symbol?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3430,6 +3627,8 @@ export type ListVariantsQuery = {
       sor?: number | null,
       fraction?: number | null,
       zygosity?: string | null,
+      gene_id?: string | null,
+      gene_symbol?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -3689,6 +3888,7 @@ export type GetPatientQuery = {
     dob?: string | null,
     id_reference?: string | null,
     id_institution?: string | null,
+    health_desc?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3712,6 +3912,7 @@ export type ListPatientsQuery = {
       dob?: string | null,
       id_reference?: string | null,
       id_institution?: string | null,
+      health_desc?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -3838,6 +4039,54 @@ export type ListInstitutionsQuery = {
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
+  } | null,
+};
+
+export type OnCreatePatientHistoryDiseaseSubscriptionVariables = {
+  filter?: ModelSubscriptionPatientHistoryDiseaseFilterInput | null,
+};
+
+export type OnCreatePatientHistoryDiseaseSubscription = {
+  onCreatePatientHistoryDisease?:  {
+    __typename: "PatientHistoryDisease",
+    id: string,
+    id_patient?: string | null,
+    hpo_code?: string | null,
+    hpo_desc?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdatePatientHistoryDiseaseSubscriptionVariables = {
+  filter?: ModelSubscriptionPatientHistoryDiseaseFilterInput | null,
+};
+
+export type OnUpdatePatientHistoryDiseaseSubscription = {
+  onUpdatePatientHistoryDisease?:  {
+    __typename: "PatientHistoryDisease",
+    id: string,
+    id_patient?: string | null,
+    hpo_code?: string | null,
+    hpo_desc?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeletePatientHistoryDiseaseSubscriptionVariables = {
+  filter?: ModelSubscriptionPatientHistoryDiseaseFilterInput | null,
+};
+
+export type OnDeletePatientHistoryDiseaseSubscription = {
+  onDeletePatientHistoryDisease?:  {
+    __typename: "PatientHistoryDisease",
+    id: string,
+    id_patient?: string | null,
+    hpo_code?: string | null,
+    hpo_desc?: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -4106,7 +4355,6 @@ export type OnCreateSelectedVariantSubscription = {
     ref?: string | null,
     alt?: string | null,
     qual?: string | null,
-    zigosity?: string | null,
     global_allele?: number | null,
     functional_impact?: string | null,
     acmg?: string | null,
@@ -4132,6 +4380,8 @@ export type OnCreateSelectedVariantSubscription = {
     readposrank?: number | null,
     sor?: number | null,
     fraction?: number | null,
+    zygosity?: string | null,
+    text_interpretation?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4156,7 +4406,6 @@ export type OnUpdateSelectedVariantSubscription = {
     ref?: string | null,
     alt?: string | null,
     qual?: string | null,
-    zigosity?: string | null,
     global_allele?: number | null,
     functional_impact?: string | null,
     acmg?: string | null,
@@ -4182,6 +4431,8 @@ export type OnUpdateSelectedVariantSubscription = {
     readposrank?: number | null,
     sor?: number | null,
     fraction?: number | null,
+    zygosity?: string | null,
+    text_interpretation?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4206,7 +4457,6 @@ export type OnDeleteSelectedVariantSubscription = {
     ref?: string | null,
     alt?: string | null,
     qual?: string | null,
-    zigosity?: string | null,
     global_allele?: number | null,
     functional_impact?: string | null,
     acmg?: string | null,
@@ -4232,6 +4482,8 @@ export type OnDeleteSelectedVariantSubscription = {
     readposrank?: number | null,
     sor?: number | null,
     fraction?: number | null,
+    zygosity?: string | null,
+    text_interpretation?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4326,6 +4578,8 @@ export type OnCreateVariantSubscription = {
     sor?: number | null,
     fraction?: number | null,
     zygosity?: string | null,
+    gene_id?: string | null,
+    gene_symbol?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4363,6 +4617,8 @@ export type OnUpdateVariantSubscription = {
     sor?: number | null,
     fraction?: number | null,
     zygosity?: string | null,
+    gene_id?: string | null,
+    gene_symbol?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4400,6 +4656,8 @@ export type OnDeleteVariantSubscription = {
     sor?: number | null,
     fraction?: number | null,
     zygosity?: string | null,
+    gene_id?: string | null,
+    gene_symbol?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4722,6 +4980,7 @@ export type OnCreatePatientSubscription = {
     dob?: string | null,
     id_reference?: string | null,
     id_institution?: string | null,
+    health_desc?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4741,6 +5000,7 @@ export type OnUpdatePatientSubscription = {
     dob?: string | null,
     id_reference?: string | null,
     id_institution?: string | null,
+    health_desc?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4760,6 +5020,7 @@ export type OnDeletePatientSubscription = {
     dob?: string | null,
     id_reference?: string | null,
     id_institution?: string | null,
+    health_desc?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,

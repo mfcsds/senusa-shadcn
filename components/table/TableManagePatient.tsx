@@ -61,6 +61,7 @@ interface Patient {
   sex?: string;
   phone_number?: string;
   dob?: string;
+  health_desc?: string;
 }
 
 const TableManagePatient = () => {
@@ -165,7 +166,8 @@ const TableManagePatient = () => {
         <TableCaption>User Accounts Details.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="text-xl w-10/12">ID / Reference</TableHead>
+            <TableHead className="text-xl w-5/12">ID / Reference</TableHead>
+            <TableHead className="text-xl w-5/12">Patient Status</TableHead>
             {/* <TableHead>Sex</TableHead>
             <TableHead>Phone Number</TableHead>
             <TableHead>Date of Birth</TableHead> */}
@@ -181,8 +183,8 @@ const TableManagePatient = () => {
                   name={patients.name}
                 ></PatientItem>
               </TableCell>
-              {/* <TableCell>{patients.sex || ""}</TableCell>
-              <TableCell>{patients.phone_number || ""}</TableCell>
+              <TableCell>{patients.health_desc || ""}</TableCell>
+              {/* <TableCell>{patients.phone_number || ""}</TableCell>
               <TableCell>{patients.dob || ""}</TableCell> */}
 
               <TableCell className="text-center">

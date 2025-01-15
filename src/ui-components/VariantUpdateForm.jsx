@@ -49,6 +49,8 @@ export default function VariantUpdateForm(props) {
     sor: "",
     fraction: "",
     zygosity: "",
+    gene_id: "",
+    gene_symbol: "",
   };
   const [chrom, setChrom] = React.useState(initialValues.chrom);
   const [pos, setPos] = React.useState(initialValues.pos);
@@ -76,6 +78,10 @@ export default function VariantUpdateForm(props) {
   const [sor, setSor] = React.useState(initialValues.sor);
   const [fraction, setFraction] = React.useState(initialValues.fraction);
   const [zygosity, setZygosity] = React.useState(initialValues.zygosity);
+  const [gene_id, setGene_id] = React.useState(initialValues.gene_id);
+  const [gene_symbol, setGene_symbol] = React.useState(
+    initialValues.gene_symbol
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = variantRecord
@@ -105,6 +111,8 @@ export default function VariantUpdateForm(props) {
     setSor(cleanValues.sor);
     setFraction(cleanValues.fraction);
     setZygosity(cleanValues.zygosity);
+    setGene_id(cleanValues.gene_id);
+    setGene_symbol(cleanValues.gene_symbol);
     setErrors({});
   };
   const [variantRecord, setVariantRecord] = React.useState(variantModelProp);
@@ -148,6 +156,8 @@ export default function VariantUpdateForm(props) {
     sor: [],
     fraction: [],
     zygosity: [],
+    gene_id: [],
+    gene_symbol: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -199,6 +209,8 @@ export default function VariantUpdateForm(props) {
           sor: sor ?? null,
           fraction: fraction ?? null,
           zygosity: zygosity ?? null,
+          gene_id: gene_id ?? null,
+          gene_symbol: gene_symbol ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -283,6 +295,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.chrom ?? value;
@@ -330,6 +344,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.pos ?? value;
@@ -377,6 +393,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.ref ?? value;
@@ -424,6 +442,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.alt ?? value;
@@ -471,6 +491,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.qual ?? value;
@@ -518,6 +540,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.filter ?? value;
@@ -565,6 +589,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.info ?? value;
@@ -612,6 +638,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.hgvs ?? value;
@@ -659,6 +687,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.id_var ?? value;
@@ -706,6 +736,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.id_patient ?? value;
@@ -753,6 +785,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.id_vcf ?? value;
@@ -800,6 +834,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.acmg ?? value;
@@ -851,6 +887,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.ac ?? value;
@@ -902,6 +940,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.af ?? value;
@@ -953,6 +993,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.an ?? value;
@@ -1004,6 +1046,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.dp ?? value;
@@ -1055,6 +1099,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.fs ?? value;
@@ -1106,6 +1152,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.mq ?? value;
@@ -1157,6 +1205,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.mqranksum ?? value;
@@ -1208,6 +1258,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.qd ?? value;
@@ -1259,6 +1311,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.readposrank ?? value;
@@ -1310,6 +1364,8 @@ export default function VariantUpdateForm(props) {
               sor: value,
               fraction,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.sor ?? value;
@@ -1361,6 +1417,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction: value,
               zygosity,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.fraction ?? value;
@@ -1408,6 +1466,8 @@ export default function VariantUpdateForm(props) {
               sor,
               fraction,
               zygosity: value,
+              gene_id,
+              gene_symbol,
             };
             const result = onChange(modelFields);
             value = result?.zygosity ?? value;
@@ -1421,6 +1481,104 @@ export default function VariantUpdateForm(props) {
         errorMessage={errors.zygosity?.errorMessage}
         hasError={errors.zygosity?.hasError}
         {...getOverrideProps(overrides, "zygosity")}
+      ></TextField>
+      <TextField
+        label="Gene id"
+        isRequired={false}
+        isReadOnly={false}
+        value={gene_id}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              chrom,
+              pos,
+              ref,
+              alt,
+              qual,
+              filter,
+              info,
+              hgvs,
+              id_var,
+              id_patient,
+              id_vcf,
+              acmg,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
+              zygosity,
+              gene_id: value,
+              gene_symbol,
+            };
+            const result = onChange(modelFields);
+            value = result?.gene_id ?? value;
+          }
+          if (errors.gene_id?.hasError) {
+            runValidationTasks("gene_id", value);
+          }
+          setGene_id(value);
+        }}
+        onBlur={() => runValidationTasks("gene_id", gene_id)}
+        errorMessage={errors.gene_id?.errorMessage}
+        hasError={errors.gene_id?.hasError}
+        {...getOverrideProps(overrides, "gene_id")}
+      ></TextField>
+      <TextField
+        label="Gene symbol"
+        isRequired={false}
+        isReadOnly={false}
+        value={gene_symbol}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              chrom,
+              pos,
+              ref,
+              alt,
+              qual,
+              filter,
+              info,
+              hgvs,
+              id_var,
+              id_patient,
+              id_vcf,
+              acmg,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
+              zygosity,
+              gene_id,
+              gene_symbol: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.gene_symbol ?? value;
+          }
+          if (errors.gene_symbol?.hasError) {
+            runValidationTasks("gene_symbol", value);
+          }
+          setGene_symbol(value);
+        }}
+        onBlur={() => runValidationTasks("gene_symbol", gene_symbol)}
+        errorMessage={errors.gene_symbol?.errorMessage}
+        hasError={errors.gene_symbol?.hasError}
+        {...getOverrideProps(overrides, "gene_symbol")}
       ></TextField>
       <Flex
         justifyContent="space-between"

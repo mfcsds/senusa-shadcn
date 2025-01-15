@@ -173,7 +173,7 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
         return `
           <Variant>
             <Detail>${variant.gene_symbol} (${variant.gene_id}): ${variant.hgvs}</Detail>
-            <Zygosity>${variant.zigosity}</Zygosity>
+            <Zygosity>${variant.zygosity}</Zygosity>
             <ACMG>${variant.acmg}</ACMG>
             <Interpretation>${interpretation}</Interpretation>
           </Variant>`;
@@ -208,7 +208,7 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
 
       return [
         `${variant.gene_symbol} (${variant.gene_id}): ${variant.hgvs}`,
-        variant.zigosity,
+        variant.zygosity,
         variant.acmg,
         interpretation,
       ];
@@ -647,7 +647,7 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                       <TableCell>
                         {`${item.gene_symbol}(${item.gene_id}):${item.hgvs}`}
                       </TableCell>
-                      <TableCell>{item.zigosity}</TableCell>
+                      <TableCell>{item.zygosity}</TableCell>
                       <TableCell>{item.acmg}</TableCell>
                     </TableRow>
                   ))}
@@ -655,16 +655,17 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
               </Table>
 
               <p className="font-semibold pl-3">Variant Interpretation</p>
-              <ul className="list-disc pl-5 text-gray-700 gap-1">
-                {variantInter.map((item, idx) => (
+
+              <ul>
+                {listSelVariants.map((item, index) => (
                   <li
-                    key={idx}
+                    key={index}
                     className="text-balance font-sans font-light text-justify my-3 mx-2 text-xm "
                   >
                     <strong className="font-extrabold">
                       {`(${item.gene_symbol}):${item.hgvs}`}:{" "}
                     </strong>
-                    {item.text}
+                    {item.text_interpretatio}
                   </li>
                 ))}
               </ul>

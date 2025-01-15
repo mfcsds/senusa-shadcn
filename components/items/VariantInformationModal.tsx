@@ -258,12 +258,12 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
       <div className="flex flex-col w-full items-start ">
         <Tabs defaultValue="acmg" className="w-full items-start justify-start">
           <TabsList className=" flex items-start mb-4 h-[80px] bg-white border-b-2 w-full justify-start">
-            <TabsTrigger
+            {/* <TabsTrigger
               value="acmg"
               className="text-md hover:border-b-4 hover:border-violet-900 rounded-none data-[state=active]:border-b-4 data-[state=active]:border-violet-900 "
             >
               ACMG
-            </TabsTrigger>
+            </TabsTrigger> */}
             <TabsTrigger
               value="general"
               className="text-md hover:border-b-4 hover:border-violet-900 rounded-none data-[state=active]:border-b-4 data-[state=active]:border-violet-900"
@@ -280,13 +280,13 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
               value="computational"
               className="text-md hover:border-b-4 hover:border-violet-900 rounded-none data-[state=active]:border-b-4 data-[state=active]:border-violet-900 "
             >
-              Computational Predictions
+              Functional Annotations
             </TabsTrigger>
             <TabsTrigger
               value="functional"
               className="text-md hover:border-b-4 hover:border-violet-900 rounded-none data-[state=active]:border-b-4 data-[state=active]:border-violet-900 "
             >
-              Functional Annotations
+              Computational Predictions
             </TabsTrigger>
             <TabsTrigger
               value="transcripts"
@@ -304,12 +304,13 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
 
           {/* ACMG Classification */}
 
-          <TabsContent value="acmg">
+          {/* <TabsContent value="acmg">
             <ACMGVariantReport
               id_variantku={id_variant}
               hgvs={hgvsNotation}
+              onUpdateVariant={onUpdateVariant}
             ></ACMGVariantReport>
-          </TabsContent>
+          </TabsContent> */}
 
           {/* General Information Tab */}
           <TabsContent value="general">

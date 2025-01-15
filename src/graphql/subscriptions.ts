@@ -8,6 +8,57 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreatePatientHistoryDisease = /* GraphQL */ `subscription OnCreatePatientHistoryDisease(
+  $filter: ModelSubscriptionPatientHistoryDiseaseFilterInput
+) {
+  onCreatePatientHistoryDisease(filter: $filter) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreatePatientHistoryDiseaseSubscriptionVariables,
+  APITypes.OnCreatePatientHistoryDiseaseSubscription
+>;
+export const onUpdatePatientHistoryDisease = /* GraphQL */ `subscription OnUpdatePatientHistoryDisease(
+  $filter: ModelSubscriptionPatientHistoryDiseaseFilterInput
+) {
+  onUpdatePatientHistoryDisease(filter: $filter) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdatePatientHistoryDiseaseSubscriptionVariables,
+  APITypes.OnUpdatePatientHistoryDiseaseSubscription
+>;
+export const onDeletePatientHistoryDisease = /* GraphQL */ `subscription OnDeletePatientHistoryDisease(
+  $filter: ModelSubscriptionPatientHistoryDiseaseFilterInput
+) {
+  onDeletePatientHistoryDisease(filter: $filter) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeletePatientHistoryDiseaseSubscriptionVariables,
+  APITypes.OnDeletePatientHistoryDiseaseSubscription
+>;
 export const onCreateAcmgAnnotation = /* GraphQL */ `subscription OnCreateAcmgAnnotation(
   $filter: ModelSubscriptionAcmgAnnotationFilterInput
 ) {
@@ -279,7 +330,6 @@ export const onCreateSelectedVariant = /* GraphQL */ `subscription OnCreateSelec
     ref
     alt
     qual
-    zigosity
     global_allele
     functional_impact
     acmg
@@ -305,6 +355,8 @@ export const onCreateSelectedVariant = /* GraphQL */ `subscription OnCreateSelec
     readposrank
     sor
     fraction
+    zygosity
+    text_interpretation
     createdAt
     updatedAt
     __typename
@@ -330,7 +382,6 @@ export const onUpdateSelectedVariant = /* GraphQL */ `subscription OnUpdateSelec
     ref
     alt
     qual
-    zigosity
     global_allele
     functional_impact
     acmg
@@ -356,6 +407,8 @@ export const onUpdateSelectedVariant = /* GraphQL */ `subscription OnUpdateSelec
     readposrank
     sor
     fraction
+    zygosity
+    text_interpretation
     createdAt
     updatedAt
     __typename
@@ -381,7 +434,6 @@ export const onDeleteSelectedVariant = /* GraphQL */ `subscription OnDeleteSelec
     ref
     alt
     qual
-    zigosity
     global_allele
     functional_impact
     acmg
@@ -407,6 +459,8 @@ export const onDeleteSelectedVariant = /* GraphQL */ `subscription OnDeleteSelec
     readposrank
     sor
     fraction
+    zygosity
+    text_interpretation
     createdAt
     updatedAt
     __typename
@@ -497,6 +551,8 @@ export const onCreateVariant = /* GraphQL */ `subscription OnCreateVariant($filt
     sor
     fraction
     zygosity
+    gene_id
+    gene_symbol
     createdAt
     updatedAt
     __typename
@@ -533,6 +589,8 @@ export const onUpdateVariant = /* GraphQL */ `subscription OnUpdateVariant($filt
     sor
     fraction
     zygosity
+    gene_id
+    gene_symbol
     createdAt
     updatedAt
     __typename
@@ -569,6 +627,8 @@ export const onDeleteVariant = /* GraphQL */ `subscription OnDeleteVariant($filt
     sor
     fraction
     zygosity
+    gene_id
+    gene_symbol
     createdAt
     updatedAt
     __typename
@@ -902,6 +962,7 @@ export const onCreatePatient = /* GraphQL */ `subscription OnCreatePatient($filt
     dob
     id_reference
     id_institution
+    health_desc
     createdAt
     updatedAt
     __typename
@@ -920,6 +981,7 @@ export const onUpdatePatient = /* GraphQL */ `subscription OnUpdatePatient($filt
     dob
     id_reference
     id_institution
+    health_desc
     createdAt
     updatedAt
     __typename
@@ -938,6 +1000,7 @@ export const onDeletePatient = /* GraphQL */ `subscription OnDeletePatient($filt
     dob
     id_reference
     id_institution
+    health_desc
     createdAt
     updatedAt
     __typename

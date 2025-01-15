@@ -19,10 +19,12 @@ import { Save, SaveAll } from "lucide-react";
 import { createAcmgAnnotation } from "@/src/graphql/mutations";
 import { generateACMGID } from "@/utils/function";
 import { Variant } from "@/src/API";
+import { updateVariant } from "@/src/graphql/mutations";
 
 interface ACMGVariantQueryProops {
   id_variantku?: string;
   hgvs?: string;
+  onUpdateVariant: (id: string, updatedACMGClass: string) => void;
 }
 
 interface AcmgData {
@@ -98,6 +100,7 @@ function evaluateACMGClass(dataACMG: AcmgCriteria) {
 const ACMGVariantReport: React.FC<ACMGVariantQueryProops> = ({
   id_variantku,
   hgvs,
+  onUpdateVariant,
 }) => {
   const client = generateClient();
   const [dataACMG, setDataACMG] = useState<AcmgCriteria>();
@@ -495,6 +498,11 @@ const ACMGVariantReport: React.FC<ACMGVariantQueryProops> = ({
         variables: { input: newRecord },
       });
 
+      // Notify parent about the ACMG update
+      if (onUpdateVariant && id_variantku) {
+        onUpdateVariant(id_variantku, dataACMG?.acmg_class || "");
+      }
+
       // Update history and reset save state
       setHistoryListACMG((prev) => [
         ...prev,
@@ -507,7 +515,7 @@ const ACMGVariantReport: React.FC<ACMGVariantQueryProops> = ({
   };
 
   return (
-    <div className="flex flex-col w-[1400px] overflow-x-auto h-[600px] gap-3">
+    <div className="flex flex-col w-[1400px] overflow-x-auto h-[600px] gap-3 p-5">
       <div className="flex flex-col border rounded-sm p-5">
         <div className="flex flex-row gap-3 items-center justify-between">
           <div className="flex flex-row items-center justify-center gap-3">

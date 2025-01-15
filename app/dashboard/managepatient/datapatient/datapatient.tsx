@@ -22,6 +22,7 @@ import {
   Icon,
   Plus,
   PlusCircle,
+  Save,
   Search,
   SidebarCloseIcon,
   SquareX,
@@ -32,7 +33,7 @@ import {
 
 import axios from "axios";
 
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 import config from "@/src/amplifyconfiguration.json";
@@ -77,6 +78,7 @@ import {
   createAcmgAnnotation,
   createVariant,
   createVcfdata,
+  updatePatient,
 } from "@/src/graphql/mutations";
 import {
   Select,
@@ -97,6 +99,10 @@ import VCFRawTable from "@/components/items/VCFRawTable";
 import ButtonAddFamilyDisease from "@/components/button/ButtonAddFamilyDisease";
 import VariantRawTable from "@/components/items/VariantRawTable";
 import { Console } from "console";
+import ButtonAddPatientDisease from "@/components/button/ButtonAddPatientDisease";
+import PatientStatusCheckbox from "@/components/checkbox/PatientStatusChecbox";
+import { useToast } from "@/components/ui/use-toast";
+import { title } from "process";
 
 Amplify.configure(config);
 
@@ -129,6 +135,7 @@ interface VariantRawData {
 }
 
 const DataPatientPage = () => {
+  const { toast } = useToast();
   const client = generateClient();
   const useParams = useSearchParams();
 
@@ -163,6 +170,34 @@ const DataPatientPage = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       setFile(event.target.files[0]);
+    }
+  };
+
+  const [patientStatusDesc, setPatientStatusDesc] = useState("");
+
+  const updatePatientStatus = async (id_patient: string) => {
+    try {
+      const result = client.graphql({
+        query: updatePatient,
+        variables: {
+          input: {
+            id: idPatient,
+            health_desc: patientStatusDesc ?? "",
+          },
+        },
+      });
+      if ((await result).data) {
+        toast({
+          title: "Success update patient",
+          description: "Sucessfull update patient status",
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Failed update patient",
+        description: "Can not update patient status",
+      });
     }
   };
 
@@ -247,7 +282,10 @@ const DataPatientPage = () => {
             sor: item.SOR || 0,
             fraction: item.FractionInformativeReads || 0,
             hgvs: generateHGVS2(item.chrom, item.pos, item.ref, item.alts), // Placeholder HGVS
-            acmg: "Benign", // Placeholder for ACMG, populate if available
+            acmg: "Benign",
+            gene_id: "BARU",
+            gene_symbol: "BARU",
+            // Placeholder for ACMG, populate if available
           })
         );
         await setReadVariantFromText(parsedVariant);
@@ -267,7 +305,6 @@ const DataPatientPage = () => {
   // Function to read VCF file and parse its contents
   const handlePreviewVCFFile = (file: File) => {
     const reader = new FileReader();
-
     reader.onload = async (e) => {
       const vcfText = e.target?.result as string;
 
@@ -314,7 +351,6 @@ const DataPatientPage = () => {
     reader.onerror = () => {
       console.error("Error reading the file. Please try again.");
     };
-
     reader.readAsText(file);
   };
 
@@ -322,23 +358,69 @@ const DataPatientPage = () => {
     setShowModalVCFData(!showModalVCFData);
   };
 
-  const obtainPatient = async () => {
-    const onePatient = await client.graphql({
-      query: getPatient,
-      variables: { id: idPatient ?? "" },
-    });
-    await setPatient(onePatient.data.getPatient as CreatePatientInput);
-  };
-  obtainPatient();
+  // Fetch patient data
+  useEffect(() => {
+    let isMounted = true;
 
-  const listVCFData = async () => {
-    const getlist = await client.graphql({
-      query: listVcfdata,
-      variables: { filter: { id_patient: { eq: idPatient } } },
-    });
-    await setVCFFiles(getlist.data.listVcfdata.items as VcfData[]);
-  };
-  listVCFData();
+    const fetchPatient = async () => {
+      try {
+        const onePatient = await client.graphql({
+          query: getPatient,
+          variables: { id: idPatient ?? "" },
+        });
+        if (isMounted) {
+          setPatient(onePatient.data.getPatient as CreatePatientInput);
+        }
+      } catch (error) {
+        console.error("Error fetching patient data:", error);
+      }
+    };
+    fetchPatient();
+    return () => {
+      isMounted = false;
+    };
+  }, [idPatient, client]);
+  // const obtainPatient = async () => {
+  //   const onePatient = await client.graphql({
+  //     query: getPatient,
+  //     variables: { id: idPatient ?? "" },
+  //   });
+  //   await setPatient(onePatient.data.getPatient as CreatePatientInput);
+  // };
+  // obtainPatient();
+
+  // const listVCFData = async () => {
+  //   const getlist = await client.graphql({
+  //     query: listVcfdata,
+  //     variables: { filter: { id_patient: { eq: idPatient } } },
+  //   });
+  //   await setVCFFiles(getlist.data.listVcfdata.items as VcfData[]);
+  // };
+  // listVCFData();
+  // Fetch VCF data
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchVCFData = async () => {
+      try {
+        const getlist = await client.graphql({
+          query: listVcfdata,
+          variables: { filter: { id_patient: { eq: idPatient } } },
+        });
+        if (isMounted) {
+          setVCFFiles(getlist.data.listVcfdata.items as VcfData[]);
+        }
+      } catch (error) {
+        console.error("Error fetching VCF data:", error);
+      }
+    };
+
+    fetchVCFData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [idPatient, client]);
 
   const handleDeleteVCFData = async (vcfDataId: string, filePath: string) => {
     try {
@@ -406,21 +488,6 @@ const DataPatientPage = () => {
         const acmgData = acmgResults[0];
         variant.acmg = acmgData.acmg;
 
-        // // // Store the variant only if ACMG is filled
-        // if (variant.acmg) {
-        //   const variantResult = await client.graphql({
-        //     query: createVariant,
-        //     variables: { input: variant },
-        //   });
-        //   console.log("Variant saved successfully", variantResult);
-        //   // 3. Confirm variant is saved successfully
-        //   const savedVariant = variantResult.data?.createVariant;
-        //   if (!savedVariant) {
-        //     throw new Error("Failed to save variant to database.");
-        //   }
-
-        //   console.log("Variant saved successfully:", savedVariant);
-
         const acmgCriteria: AcmgCriteria = {
           id_variant: variant.id ?? "",
           PVS1: acmgData.PVS1 || false,
@@ -473,11 +540,65 @@ const DataPatientPage = () => {
     }
   };
 
+  // const saveSampleVariant = async (variant: CreateVariantInput) => {
+  //   try {
+  //     const apiUrl =
+  //       selectedReferenceType === "GRCH37"
+  //         ? "https://pr2yknfpne.execute-api.us-east-1.amazonaws.com/dev/acmg_grch37"
+  //         : "https://yyj4sdbsd6.execute-api.us-east-1.amazonaws.com/dev-acmg/classification";
+
+  //     // Fetch ACMG classification from the API
+  //     const response = await fetch(apiUrl, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Accept: "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         body: JSON.stringify({
+  //           variants: [variant.hgvs],
+  //         }),
+  //       }),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch ACMG classification");
+  //     }
+
+  //     const data = await response.json();
+  //     const acmgResults = JSON.parse(data.body);
+
+  //     if (acmgResults && acmgResults.length > 0) {
+  //       const acmgData = acmgResults[0];
+  //       variant.acmg = acmgData.acmg;
+
+  //       // // Store the variant only if ACMG is filled
+  //       if (variant.acmg) {
+  //         const variantResult = await client.graphql({
+  //           query: createVariant,
+  //           variables: { input: variant },
+  //         });
+  //         console.log("Variant saved successfully", variantResult);
+  //         // 3. Confirm variant is saved successfully
+  //         const savedVariant = variantResult.data?.createVariant;
+  //         if (!savedVariant) {
+  //           throw new Error("Failed to save variant to database.");
+  //         }
+
+  //         console.log("Variant saved successfully:", savedVariant);
+  //       } else {
+  //         throw new Error("ACMG classification missing; cannot save variant");
+  //       }
+  //     } else {
+  //       throw new Error("ACMG classification not found in response");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error saving variant and ACMG criteria:", error);
+  //   }
+  // };
+
   const saveSampleVariant = async (variant: CreateVariantInput) => {
     try {
-      // const variantId = generateVariantSampleID(); // Generate ID once
-      // variant.id = variantId; // Assign the generated ID
-
       const apiUrl =
         selectedReferenceType === "GRCH37"
           ? "https://pr2yknfpne.execute-api.us-east-1.amazonaws.com/dev/acmg_grch37"
@@ -506,71 +627,24 @@ const DataPatientPage = () => {
 
       if (acmgResults && acmgResults.length > 0) {
         const acmgData = acmgResults[0];
-        variant.acmg = acmgData.acmg;
 
-        // // Store the variant only if ACMG is filled
-        if (variant.acmg) {
-          const variantResult = await client.graphql({
-            query: createVariant,
-            variables: { input: variant },
-          });
-          console.log("Variant saved successfully", variantResult);
-          // 3. Confirm variant is saved successfully
-          const savedVariant = variantResult.data?.createVariant;
-          if (!savedVariant) {
-            throw new Error("Failed to save variant to database.");
-          }
+        // If acmgData.acmg is missing or null, default to "VUS"
+        variant.acmg = acmgData.acmg ?? "VUS";
 
-          console.log("Variant saved successfully:", savedVariant);
+        // Store the variant (now acmg will never be undefined)
+        const variantResult = await client.graphql({
+          query: createVariant,
+          variables: { input: variant },
+        });
+        console.log("Variant saved successfully", variantResult);
 
-          // const acmgCriteria: AcmgCriteria = {
-          //   id: generateACMGID(),
-          //   id_variant: savedVariant.id,
-          //   PVS1: acmgData.PVS1 || false,
-          //   PS1: acmgData.PS1 || false,
-          //   PS2: acmgData.PS2 || false,
-          //   PS3: acmgData.PS3 || false,
-          //   PS4: acmgData.PS4 || false,
-          //   PP1_Strong: acmgData.PP1_Strong || false,
-          //   PM1: acmgData.PM1 || false,
-          //   PM2: acmgData.PM2 || false,
-          //   PM3: acmgData.PM3 || false,
-          //   PM4: acmgData.PM4 || false,
-          //   PM5: acmgData.PM5 || false,
-          //   PM6: acmgData.PM6 || false,
-          //   PP1_Moderate: acmgData.PP1_Moderate || false,
-          //   PP1_Cosegregation: acmgData.PP1_Cosegregation || false,
-          //   PP2: acmgData.PP2 || false,
-          //   PP3: acmgData.PP3 || false,
-          //   PP4: acmgData.PP4 || false,
-          //   PP5: acmgData.PP5 || false,
-          //   BP1: acmgData.BP1 || false,
-          //   BP2: acmgData.BP2 || false,
-          //   BP3: acmgData.BP3 || false,
-          //   BP4: acmgData.BP4 || false,
-          //   BP5: acmgData.BP5 || false,
-          //   BP6: acmgData.BP6 || false,
-          //   BP7: acmgData.BP7 || false,
-          //   BS1: acmgData.BS1 || false,
-          //   BS2: acmgData.BS2 || false,
-          //   BS3: acmgData.BS3 || false,
-          //   BS4: acmgData.BS4 || false,
-          //   BA1: acmgData.BA1 || false,
-          //   acmg_class: acmgData.acmg || "",
-          // };
-
-          // // Store ACMG Criteria if variant is saved
-          // const acmgResult = await client.graphql({
-          //   query: createAcmgAnnotation,
-          //   variables: { input: acmgCriteria },
-          // });
-          // console.log("ACMG Criteria saved successfully", acmgResult);
-          // console.log(
-          //   `${variant.id} and acmg criteria id ${acmgCriteria.id_variant}`
-          // );
-        } else {
-          throw new Error("ACMG classification missing; cannot save variant");
+        // Confirm variant is saved successfully
+        const savedVariant = variantResult.data?.createVariant;
+        if (!savedVariant) {
+          throw new Error("Failed to save variant to database.");
         }
+
+        console.log("Variant saved successfully:", savedVariant);
       } else {
         throw new Error("ACMG classification not found in response");
       }
@@ -627,14 +701,7 @@ const DataPatientPage = () => {
       };
       await saveData();
       setVCFFiles((vcfData) => [...vcfData, newVCFFile]);
-      // Save variants and update progress
 
-      // console.log("Jumlah Variant", totalVariants);
-      // for (let i = 0; i < totalVariants; i++) {
-      //   await saveSampleVariant(readVariantFromText[i]);
-      //   // await saveACMGCriteria(readVariantFromText[i]);
-      //   setSavingProgress(Math.round(((i + 1) / totalVariants) * 100)); // Update progress
-      // }
       let completed = 0;
       const totalVariants = readVariantFromText.length;
       await Promise.all(
@@ -678,6 +745,68 @@ const DataPatientPage = () => {
           <div>:</div>
           <p className="ml-4 text-lg">{patient?.id}</p>
         </div>
+
+        {/* Family Disease History */}
+        <div className="flex flex-row w-full p-2 justify-between items-center">
+          <div className="flex flex-row gap-5 w-full">
+            <div className="w-[200px]">
+              <p className="font-semibold text-xl">Status</p>
+            </div>
+            <div>:</div>
+            <Select
+              onValueChange={(value) => {
+                setPatientStatusDesc(value);
+              }}
+            >
+              <SelectTrigger className="w-[380px]">
+                <SelectValue placeholder="Select Patient State" />
+              </SelectTrigger>
+              <SelectContent
+                side="bottom"
+                align="start"
+                position="popper"
+                className="bg-white border"
+              >
+                <SelectGroup>
+                  <SelectLabel>Patient History Options</SelectLabel>
+                  <SelectItem value="No personal or familial history of cancer">
+                    No personal or familial history of cancer
+                  </SelectItem>
+                  <SelectItem value="Healthy with a family history of cancer">
+                    Healthy with a family history of cancer
+                  </SelectItem>
+                  <SelectItem value="Personal history of cancer, no family history">
+                    Personal history of cancer, no family history
+                  </SelectItem>
+                  <SelectItem value="Personal and family history of cancer">
+                    Personal and family history of cancer
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <Button
+              variant={"ghost"}
+              onClick={(e) => updatePatientStatus(idPatient)}
+            >
+              <Save className="w-4 h-4"></Save>
+            </Button>
+          </div>
+        </div>
+
+        {/* Patient Disease History */}
+        <div className="flex flex-row w-full p-2 justify-between items-center">
+          <div className="flex flex-row gap-5">
+            <div className="w-[200px]">
+              <p className="font-semibold text-xl">Patient Disease History</p>
+            </div>
+            <div>:</div>
+            {/* <p className="ml-4">-</p> */}
+            <ButtonAddPatientDisease
+              patient_id={idPatient}
+            ></ButtonAddPatientDisease>
+          </div>
+        </div>
+        {/* Family Disease History */}
         <div className="flex flex-row w-full p-2 justify-between items-center">
           <div className="flex flex-row gap-5">
             <div className="w-[200px]">
@@ -690,6 +819,7 @@ const DataPatientPage = () => {
             ></ButtonAddFamilyDisease>
           </div>
         </div>
+
         <Separator className="mt-10"></Separator>
       </div>
       <div className="flex flex-col">
