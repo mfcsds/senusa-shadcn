@@ -46,8 +46,8 @@ const ListView: React.FC<CardViewProps> = ({ initialPatients }) => {
         if (result.isConfirmed) {
           window.location.reload();
         }
+        window.location.reload();
       });
-      window.location.reload();
     } catch (error) {
       console.error("Error deleting patient:", error);
       alert("Failed to delete patient.");

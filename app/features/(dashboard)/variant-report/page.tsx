@@ -14,16 +14,27 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/update/ui/tabs";
+import { CreateVariantReportInput } from "@/src/API";
+import { fetchVariantReport } from "@/hooks/variantReport/useVariantReport";
 
 export default function ManageAccountsPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [viewMode, setViewMode] = useState<"card" | "list">(() => {
-    return (localStorage.getItem("viewMode") as "card" | "list") || "card";
-  });
+  const [viewMode, setViewMode] = useState<"card" | "list">("card");
+  const [varReports, setVarReports] = useState<CreateVariantReportInput[]>([]);
 
   useEffect(() => {
-    localStorage.setItem("viewMode", viewMode);
-  }, [viewMode]);
+    const loadVariants = async () => {
+      try {
+        const fetchedPatients = await fetchVariantReport();
+        setVarReports(fetchedPatients);
+        console.log(varReports)
+      } catch (error) {
+        console.error("Failed to fetch patients:", error);
+      }
+    };
+
+    loadVariants();
+  }, []);
 
   const data = [
     {
@@ -92,7 +103,7 @@ export default function ManageAccountsPage() {
               className="border-2 bg-foreground"
             />
             <Button
-              variant="innerIcon"
+              variant="iconPrimary"
               size="innerSize"
               icon={<SearchIcon className="w-5 h-5 " />}
             />
@@ -101,8 +112,8 @@ export default function ManageAccountsPage() {
           <Button
             variant={
               viewMode === "card"
-                ? "iconActiveComponentSeccondary"
-                : "iconComponentSeccondary"
+                ? "iconCardViewActive"
+                : "iconCardView"
             }
             onClick={() => setViewMode("card")}
             icon={<LayoutDashboard className="w-6 h-6" />}
@@ -110,8 +121,8 @@ export default function ManageAccountsPage() {
           <Button
             variant={
               viewMode === "list"
-                ? "iconActiveComponentDanger"
-                : "iconComponentDanger"
+                ? "iconListViewActive"
+                : "iconListView"
             }
             onClick={() => setViewMode("list")}
             icon={<LayoutList className="w-6 h-6" />}
@@ -120,8 +131,9 @@ export default function ManageAccountsPage() {
       </div>
 
       <div className="mb-6 w-auto">
-        <Tabs defaultValue="statusReport">
+        <Tabs defaultValue="allStatus">
           <TabsList>
+          <TabsTrigger value="allStatus">All</TabsTrigger>
             <TabsTrigger value="draft">Draft</TabsTrigger>
             <TabsTrigger value="inProccess">In Process</TabsTrigger>
             <TabsTrigger value="waitingForApproval">
@@ -129,30 +141,37 @@ export default function ManageAccountsPage() {
             </TabsTrigger>
             <TabsTrigger value="completed">Completed</TabsTrigger>
           </TabsList>
+          <TabsContent value="allStatus">
+            {viewMode === "card" ? (
+              <CardView initialVariants={varReports} />
+            ) : (
+              <ListView data={data} />
+            )}
+          </TabsContent>
           <TabsContent value="draft">
             {viewMode === "card" ? (
-              <CardView data={data} />
+              <CardView initialVariants={varReports} />
             ) : (
               <ListView data={data} />
             )}
           </TabsContent>
           <TabsContent value="inProccess">
             {viewMode === "card" ? (
-              <CardView data={data} />
+              <CardView initialVariants={varReports} />
             ) : (
               <ListView data={data} />
             )}
           </TabsContent>
           <TabsContent value="waitingForApproval">
             {viewMode === "card" ? (
-              <CardView data={data} />
+              <CardView initialVariants={varReports} />
             ) : (
               <ListView data={data} />
             )}
           </TabsContent>
           <TabsContent value="completed">
             {viewMode === "card" ? (
-              <CardView data={data} />
+              <CardView initialVariants={varReports} />
             ) : (
               <ListView data={data} />
             )}

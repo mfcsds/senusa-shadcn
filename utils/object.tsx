@@ -308,6 +308,16 @@ export interface Domain {
   end?: number; // End position of the domain
 }
 
+export interface Patient {
+  id: string;
+  sex: string;
+  name: string;
+  phone_number?: string;
+  dob: string;
+  institutionID?: string;
+}
+
+
 export interface FamilyDiseaseData {
   id?: string;
   id_patient: string;

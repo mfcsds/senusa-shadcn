@@ -14,10 +14,7 @@ import { DataPatients } from "@/utils/object";
 
 export default function ManageAccountsPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [viewMode, setViewMode] = useState<"card" | "list">(() => {
-    return (localStorage.getItem("viewMode") as "card" | "list") || "card";
-  });
-
+  const [viewMode, setViewMode] = useState<"card" | "list">("card");
   const [patients, setPatients] = useState<DataPatients[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -36,10 +33,6 @@ export default function ManageAccountsPage() {
 
     loadPatients();
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("viewMode", viewMode);
-  }, [viewMode]);
 
   return (
     <div className="p-8 min-h-screen">
@@ -66,7 +59,7 @@ export default function ManageAccountsPage() {
               className="border-2 bg-foreground"
             />
             <Button
-              variant="innerIcon"
+              variant="iconPrimary"
               size="innerSize"
               icon={<SearchIcon className="w-5 h-5 " />}
             />
@@ -75,8 +68,8 @@ export default function ManageAccountsPage() {
           <Button
             variant={
               viewMode === "card"
-                ? "iconActiveComponentSeccondary"
-                : "iconComponentSeccondary"
+                ? "iconCardViewActive"
+                : "iconCardView"
             }
             onClick={() => setViewMode("card")}
             icon={<LayoutDashboard className="w-6 h-6" />}
@@ -84,8 +77,8 @@ export default function ManageAccountsPage() {
           <Button
             variant={
               viewMode === "list"
-                ? "iconActiveComponentDanger"
-                : "iconComponentDanger"
+                ? "iconListViewActive"
+                : "iconListView"
             }
             onClick={() => setViewMode("list")}
             icon={<LayoutList className="w-6 h-6" />}
@@ -103,7 +96,7 @@ export default function ManageAccountsPage() {
 
       {loading ? (
         <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
-          Fetching your data...
+          Loading...
         </p>
       ) : (
         <div className="flex justify-between items-center mt-8">

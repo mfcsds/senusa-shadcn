@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, ReactNode } from "react";
+import React, { useCallback, useState, ReactNode } from "react";
 import clsx from "clsx";
 
 interface DragAndDropInputProps {
@@ -16,20 +16,33 @@ const DragAndDropInput: React.FC<DragAndDropInputProps> = ({
   className = "",
   children, 
 }) => {
+  const [fileName, setFileName] = useState<string | null>(null);
+
   const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-      const event = { target: { files } } as unknown as React.ChangeEvent<HTMLInputElement>;
-      onChange(event);
+  const handleDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        const event = { target: { files } } as unknown as React.ChangeEvent<HTMLInputElement>;
+        setFileName(files[0].name); // Menyimpan nama file yang diunggah
+        onChange(event);
+      }
+    },
+    [onChange]
+  );
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFileName(e.target.files[0].name); // Menyimpan nama file yang diunggah
+      onChange(e);
     }
-  }, [onChange]);
+  };
 
   return (
     <div
@@ -43,7 +56,7 @@ const DragAndDropInput: React.FC<DragAndDropInputProps> = ({
       <input
         type="file"
         className="hidden"
-        onChange={onChange}
+        onChange={handleFileChange}
         accept={accept}
         id="file-upload"
       />
@@ -51,11 +64,15 @@ const DragAndDropInput: React.FC<DragAndDropInputProps> = ({
         htmlFor="file-upload"
         className="block text-sm text-text-secondary cursor-pointer"
       >
-        {children ? children : (
-          <>
-            <p>Drag n drop some files here, or click to select files</p>
-            <p className="text-xs text-text-secondary">(Only *.vcf, *.tbi will be accepted)</p>
-          </>
+        {fileName ? ( 
+          <p className="text-xs text-text-secondary">File uploaded: {fileName}</p>
+        ) : (
+          children ? children : (
+            <>
+              <p className="text-xs text-text-secondary">Drag n drop some files here, or click to select files</p>
+              <p className="text-xs text-text-secondary">(Only *.vcf, *.tbi will be accepted)</p>
+            </>
+          )
         )}
       </label>
     </div>

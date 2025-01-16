@@ -17,11 +17,12 @@ import { addNewPatient, fetchPatients } from "@/hooks/managePatients/usePatients
 const AddPatientDialog: React.FC = () => {
   const [idReference, setIDReference] = useState("");
   const [errorIDReference, setErrorIDReference] = useState("");
-  const [open, setOpen] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
 
-  const handleCloseDialog = () => {
-    setOpen(false);
+  const handleCancelDialog = () => {
+    setOpenDialog(false);
     setErrorIDReference(""); 
+    setIDReference("");
   };
 
   const handleAddNewPatient = async (e: React.FormEvent) => {
@@ -44,7 +45,7 @@ const AddPatientDialog: React.FC = () => {
       await addNewPatient(newPatient);
       setErrorIDReference(""); 
       setIDReference(""); 
-      setOpen(false); 
+      setOpenDialog(false); 
       window.location.reload();
     } catch (error) {
       console.error("Error adding patient:", error);
@@ -53,14 +54,14 @@ const AddPatientDialog: React.FC = () => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
         <Button
           label="New Patient"
           variant="primary"
           size="large"
           icon={<Plus className="w-4 h-4" />}
-          onClick={() => setOpen(true)}
+          onClick={() => setOpenDialog(true)}
         />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[400px] max-h-[500px] overflow-y-auto">
@@ -101,7 +102,7 @@ const AddPatientDialog: React.FC = () => {
               variant="outlineDanger"
               size="large"
               icon={<X className="w-4 h-4" />}
-              onClick={handleCloseDialog}
+              onClick={handleCancelDialog}
             />
             <Button
               label="Save"

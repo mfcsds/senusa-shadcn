@@ -30,7 +30,7 @@ const CardView: React.FC<CardViewProps> = ({ initialPatients }) => {
       await removePatient(id);
       Swal.fire({
         title: "Success",
-        text: "Patient has been deleted.",
+        text: "Patient has been deleted!",
         icon: "success",
         background: "bg-background", 
         color: "text-text-primary", 
@@ -46,8 +46,8 @@ const CardView: React.FC<CardViewProps> = ({ initialPatients }) => {
         if (result.isConfirmed) {
           window.location.reload();
         }
+        window.location.reload();
       });
-      window.location.reload();
     } catch (error) {
       console.error("Error deleting patient:", error);
       alert("Failed to delete patient.");

@@ -3,20 +3,15 @@
 import { useEffect, useState } from "react";
 import { fetchPatients } from "@/hooks/managePatients/usePatients";
 import Button from "@/components/update/button/Button";
-import Dropdown from "@/components/update/input/Dropdown";
 import DropDownSelectPatient from "@/components/update/managePatients/DropDownSelectPatient";
 import AddVCFDialog from "@/components/update/detailPatient/AddVCFDialog";
-import TableVariants from "@/components/update/detailPatient/TableVariants";
-import { DataPatients } from "@/utils/object"
-import {
-  Plus,
-  ArrowLeft,
-  Info,
-  Accessibility,
-} from "lucide-react";
+import TableVCF from "@/components/update/detailPatient/TableVCF";
+import { DataPatients } from "@/utils/object";
+import { Plus, ArrowLeft, Info, Accessibility } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { fetchVCFData } from "@/hooks/managePatients/usePatientVariants"; 
+import { fetchVCFData } from "@/hooks/managePatients/usePatientVariants";
 import { VcfData } from "@/utils/object";
+import ButtonAddFamilyDisease from "@/components/update/detailPatient/ButtonAddFamilyDisease";
 
 interface PageProps {
   params: {
@@ -30,6 +25,7 @@ export default function DetailPatientPage({ params }: PageProps) {
   const [patients, setPatients] = useState<DataPatients[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
   const [vcfData, setVcfData] = useState<VcfData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const loadPatients = async () => {
@@ -42,94 +38,100 @@ export default function DetailPatientPage({ params }: PageProps) {
     };
 
     loadPatients();
-  });
+  }, []);
 
   useEffect(() => {
     const loadVCFData = async () => {
       try {
+        setLoading(true);
         const data = await fetchVCFData(id);
         setVcfData(data);
       } catch (error) {
         console.error("Failed to fetch variants:", error);
+      } finally {
+        setLoading(false);
       }
-      
     };
     loadVCFData();
-
-  });
-
-  const [roleAccount, setRoleAccount] = useState("");
-
-  const userLevel = [
-    { label: "Level 1", value: "level 1" },
-    { label: "Level 2", value: "level 2" },
-  ];
-
-  const userRole = [
-    { label: "Admin Lab", value: "Admin Lab" },
-    { label: "User Lab", value: "User Lab" },
-    { label: "Bioinformatician", value: "Bioinformatician" },
-    { label: "Head Lab", value: "Head Lab" },
-    { label: "Genetic Cousellor", value: "Genetic Cousellor" },
-    { label: "Clinical Pathology", value: "Clinical Pathology" },
-  ];
-
+  }, [id]);
 
   return (
-    <div className="p-8 min-h-screen">
-      <div className="flex flex-col md:flex-row rounded-lg items-start md:items-center gap-6">
-        <div className="flex flex-col md:flex-row items-start md:items-center bg-foreground shadow-md rounded-lg pr-0 md:pr-6 w-full md:flex-1">
+    <div className="p-4 sm:p-8 min-h-screen grid grid-cols-1 gap-4 sm:grid-cols-2">
+      {/* Information Patient */}
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col md:flex-row items-start md:items-center bg-foreground shadow-md rounded-lg w-full">
           <div className="flex items-center justify-center bg-accent text-primary w-full md:w-20 h-24 rounded-t-lg md:rounded-lg">
             <Accessibility className="w-10 h-10" />
           </div>
-          <div className="flex flex-col flex-1 p-4 md:p-0 md:ml-4 text-left md:text-left">
+          <div className="flex flex-col flex-1 p-4 md:ml-4 text-left">
             <h4 className="font-semibold text-lg text-text-primary">
               Patient ID
             </h4>
             <p className="text-lg font-medium text-text-secondary">{id}</p>
           </div>
-          <div className="flex flex-row items-center justify-between gap-4 w-full px-4 md:px-0 md:ml-auto md:w-auto mb-6 md:mb-0 md:pr-8 pr-0">
-            <Dropdown
-              options={userRole}
-              selectedValue={roleAccount}
-              onChange={setRoleAccount}
-              placeholder="Family Disease History"
-              size="medium"
-              variant="primary"
-            />
-            <Button
-              variant="borderSecondary"
-              size="small"
-              icon={<Plus className="w-5 h-5" />}
-            />
-          </div>
-          <div className="flex flex-row items-center justify-between gap-4 w-full px-4 md:px-0 md:ml-auto md:w-auto mb-6 md:mb-0 ">
-            <label
-              htmlFor="patient-select"
-              className="font-medium text-sm text-text-primary"
-            >
-              Select Patient ID
-            </label>
+          <div className="flex items-center justify-between gap-4 w-full md:w-auto px-4 md:px-4 ml-auto">
             <DropDownSelectPatient
               options={patients}
               selectedValue={id}
               onChange={setSelectedPatient}
-              placeholder="Select a Role"
+              placeholder="Select a Patient"
             />
+          </div>
+        </div>
+
+        {/* Status Patient State   */}
+        <div className="bg-foreground shadow rounded-lg p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4">
+            <label
+              htmlFor="family-disease"
+              className="font-medium text-sm text-text-primary"
+            >
+              Family Disease History
+            </label>
+            <ButtonAddFamilyDisease patient_id={id} />
+          </div>
+        </div>
+
+        {/* Family Disease History */}
+        <div className="bg-foreground shadow rounded-lg p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4">
+            <label
+              htmlFor="family-disease"
+              className="font-medium text-sm text-text-primary"
+            >
+              Patient Disease History
+            </label>
+            <ButtonAddFamilyDisease patient_id={id} />
+          </div>
+        </div>
+
+        {/* Patient Disease History */}
+        <div className="bg-foreground shadow rounded-lg p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4">
+            <label
+              htmlFor="patient-disease"
+              className="font-medium text-sm text-text-primary"
+            >
+              Family Disease History
+            </label>
+            <ButtonAddFamilyDisease patient_id={id} />
           </div>
         </div>
       </div>
 
-      <div className="bg-foreground shadow rounded-lg p-6 space-y-4 mt-10">
+      {/* Data Table */}
+      <div className="bg-foreground shadow rounded-lg p-4 sm:p-6 space-y-4 h-auto">
         <div className="mb-4 sm:mb-10">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8">
             <div className="flex items-center space-x-4">
               <Button
                 variant="iconPrimary"
                 size="large"
                 icon={<ArrowLeft className="w-8 h-8" />}
                 className="bg-foreground"
-                onClick={() => {router.push(`/features/manage-patients`)}}
+                onClick={() => {
+                  router.push("/features/manage-patients");
+                }}
               />
               <h1 className="text-2xl font-semibold text-text-primary">
                 Patient Variant Data
@@ -141,11 +143,18 @@ export default function DetailPatientPage({ params }: PageProps) {
                 className="bg-foreground"
               />
             </div>
-            <AddVCFDialog />
+            <AddVCFDialog patientID={id} />
           </div>
         </div>
-
-        <TableVariants patientID={id} initialVariants={vcfData}/>
+        {loading ? (
+          <p className="text-sm text-center mt-10 text-primary font-semibold animate-pulse">
+            Loading...
+          </p>
+        ) : (
+          <div className="flex flex-col sm:flex-row justify-between items-center mt-8">
+            <TableVCF initialVCFData={vcfData} />
+          </div>
+        )}
       </div>
     </div>
   );
