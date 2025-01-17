@@ -185,7 +185,7 @@ export interface SelectedVariant {
   gnomadg: number | null;
   alldesc: string | null;
   zygosity?: string | null;
-  text_interpretatio?: string | null;
+  text_interpretation?: string | null;
 }
 
 export interface VariantInterpretation {

@@ -569,6 +569,16 @@ export function DataTable<TData, TValue>({
                   >
                     Heterozygous
                   </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    onCheckedChange={(isChecked) => {
+                      const value = isChecked ? "Reference / Unknown" : null;
+                      setZygosityFilter(value);
+                      table.getColumn("zygosity")?.setFilterValue(value);
+                    }}
+                    checked={zygosityFilter === "Reference /Unknown"}
+                  >
+                    Reference / Unknown
+                  </DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

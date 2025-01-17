@@ -202,15 +202,11 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
 
     // Map the data to rows
     const rows = listSelVariants.map((variant) => {
-      const interpretation =
-        variantInter.find((inter) => inter.gene_symbol === variant.gene_symbol)
-          ?.text || "No interpretation available";
-
       return [
         `${variant.gene_symbol} (${variant.gene_id}): ${variant.hgvs}`,
         variant.zygosity,
         variant.acmg,
-        interpretation,
+        variant.text_interpretation,
       ];
     });
 
@@ -665,7 +661,7 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                     <strong className="font-extrabold">
                       {`(${item.gene_symbol}):${item.hgvs}`}:{" "}
                     </strong>
-                    {item.text_interpretatio}
+                    {item.text_interpretation}
                   </li>
                 ))}
               </ul>

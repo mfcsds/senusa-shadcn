@@ -67,7 +67,7 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
   const client = generateClient();
 
   const [contentText, setContentText] = useState<string>(
-    variantData?.text_interpretatio ?? "<p>Start editing here...</p>"
+    variantData?.text_interpretation ?? "<p>Start editing here...</p>"
   );
 
   const [isEditableVariantEditor, setEditableVariantEditor] = useState(false);
@@ -105,20 +105,20 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
     fetchVariantData();
   }, [variantData]);
 
-  // ➊ Gunakan useEffect untuk memonitor perubahan pada variantData?.text_interpretatio
+  // ➊ Gunakan useEffect untuk memonitor perubahan pada variantData?.text_interpretation
   useEffect(() => {
     if (!editor) return;
 
     // Jika text_interpretatio dari server berbeda dengan contentText saat ini
     // maka update contentText dan isi editor
     if (
-      variantData?.text_interpretatio &&
-      variantData.text_interpretatio !== contentText
+      variantData?.text_interpretation &&
+      variantData.text_interpretation !== contentText
     ) {
-      setContentText(variantData.text_interpretatio);
-      editor.commands.setContent(variantData.text_interpretatio);
+      setContentText(variantData.text_interpretation);
+      editor.commands.setContent(variantData.text_interpretation);
     }
-  }, [variantData?.text_interpretatio, contentText, editor]);
+  }, [variantData?.text_interpretation, contentText, editor]);
 
   // ➋ Update 'editable' setiap kali isEditableVariantEditor berubah
   useEffect(() => {
@@ -136,7 +136,7 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
   const handleSaveVariantAnalysis = async () => {
     if (editor?.getText() && variantData?.id) {
       const editorContent = editor.getHTML();
-      variantData.text_interpretatio = editorContent;
+      variantData.text_interpretation = editorContent;
       try {
         const result = await client.graphql({
           query: updateSelectedVariant,
