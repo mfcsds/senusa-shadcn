@@ -16,6 +16,8 @@ export { default as InstitutionCreateForm } from "./InstitutionCreateForm";
 export { default as InstitutionUpdateForm } from "./InstitutionUpdateForm";
 export { default as PatientDocumentsCreateForm } from "./PatientDocumentsCreateForm";
 export { default as PatientDocumentsUpdateForm } from "./PatientDocumentsUpdateForm";
+export { default as PatientHistoryDiseaseCreateForm } from "./PatientHistoryDiseaseCreateForm";
+export { default as PatientHistoryDiseaseUpdateForm } from "./PatientHistoryDiseaseUpdateForm";
 export { default as PhenotypeCreateForm } from "./PhenotypeCreateForm";
 export { default as PhenotypeUpdateForm } from "./PhenotypeUpdateForm";
 export { default as RecommendationCreateForm } from "./RecommendationCreateForm";

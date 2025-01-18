@@ -20,6 +20,19 @@ export const fetchInstitutions = async (): Promise<Institution[]> => {
   }
 };
 
+export const fetchDetailInstitution = async (InstitutionID: string): Promise<Institution[]> => {
+  try {
+    const result = await client.graphql({
+      query: listInstitutions,
+      variables: { filter: { id: { eq: InstitutionID } } },
+    });
+    return result.data.listInstitutions.items as Institution[];
+  } catch (error) {
+    console.error("Error fetching VCF data:", error);
+    return [];
+  }
+};
+
 export const addNewInstitution = async (
   institutionData: CreateInstitutionInput
 ): Promise<void> => {

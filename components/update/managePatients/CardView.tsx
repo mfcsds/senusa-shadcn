@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { SquarePen, Trash2, Accessibility } from "lucide-react";
 import Button from "@/components/update/button/Button";
 import { useRouter } from "next/navigation";
-import { removePatient } from "@/hooks/managePatients/usePatients";
+import { removePatient } from "@/hooks/usePatients";
 import { DataPatients } from "@/utils/object"
 import {
   AlertDialog,

@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.className} flex h-full overflow-hidden`}
       >
@@ -27,10 +27,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          
-            <main className="flex flex-col justify-center items-center w-full h-full">
-              {children}
-            </main>
+          <main className="flex flex-col justify-center items-center w-full h-full">
+            {children}
+          </main>
           <Toaster />
         </ThemeProvider>
       </body>

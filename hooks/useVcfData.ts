@@ -5,7 +5,6 @@ import graphqlOperation, { Amplify } from "aws-amplify";
 import config from "@/src/amplifyconfiguration.json";
 import { VcfData, VariantRawData } from "@/utils/object";
 import { remove } from "aws-amplify/storage";
-import { DataPatients } from "@/utils/object";
 import { listVariants } from "@/src/graphql/queries";
 import {
   createAcmgAnnotation,
@@ -16,19 +15,6 @@ import {
 Amplify.configure(config);
 
 const client = generateClient();
-
-export const fetchDetailPatient = async (patientId: string): Promise<DataPatients[]> => {
-  try {
-    const result = await client.graphql({
-      query: listPatients,
-      variables: { filter: { id: { eq: patientId } } },
-    });
-    return result.data.listPatients.items as DataPatients[];
-  } catch (error) {
-    console.error("Error fetching VCF data:", error);
-    return [];
-  }
-};
 
 export const fetchVCFData = async (patientId: string): Promise<VcfData[]> => {
   try {

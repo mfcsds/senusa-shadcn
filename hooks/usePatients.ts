@@ -20,6 +20,19 @@ export const fetchPatients = async (): Promise<DataPatients[]> => {
   }
 };
 
+export const fetchDetailPatient = async (patientId: string): Promise<DataPatients[]> => {
+  try {
+    const result = await client.graphql({
+      query: listPatients,
+      variables: { filter: { id: { eq: patientId } } },
+    });
+    return result.data.listPatients.items as DataPatients[];
+  } catch (error) {
+    console.error("Error fetching VCF data:", error);
+    return [];
+  }
+};
+
 export const removePatient = async (patientId: string): Promise<void> => {
   try {
     await client.graphql({

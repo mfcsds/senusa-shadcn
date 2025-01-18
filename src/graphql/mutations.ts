@@ -8,6 +8,60 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const createPatientHistoryDisease = /* GraphQL */ `mutation CreatePatientHistoryDisease(
+  $input: CreatePatientHistoryDiseaseInput!
+  $condition: ModelPatientHistoryDiseaseConditionInput
+) {
+  createPatientHistoryDisease(input: $input, condition: $condition) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreatePatientHistoryDiseaseMutationVariables,
+  APITypes.CreatePatientHistoryDiseaseMutation
+>;
+export const updatePatientHistoryDisease = /* GraphQL */ `mutation UpdatePatientHistoryDisease(
+  $input: UpdatePatientHistoryDiseaseInput!
+  $condition: ModelPatientHistoryDiseaseConditionInput
+) {
+  updatePatientHistoryDisease(input: $input, condition: $condition) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdatePatientHistoryDiseaseMutationVariables,
+  APITypes.UpdatePatientHistoryDiseaseMutation
+>;
+export const deletePatientHistoryDisease = /* GraphQL */ `mutation DeletePatientHistoryDisease(
+  $input: DeletePatientHistoryDiseaseInput!
+  $condition: ModelPatientHistoryDiseaseConditionInput
+) {
+  deletePatientHistoryDisease(input: $input, condition: $condition) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeletePatientHistoryDiseaseMutationVariables,
+  APITypes.DeletePatientHistoryDiseaseMutation
+>;
 export const createAcmgAnnotation = /* GraphQL */ `mutation CreateAcmgAnnotation(
   $input: CreateAcmgAnnotationInput!
   $condition: ModelAcmgAnnotationConditionInput
@@ -289,7 +343,6 @@ export const createSelectedVariant = /* GraphQL */ `mutation CreateSelectedVaria
     ref
     alt
     qual
-    zigosity
     global_allele
     functional_impact
     acmg
@@ -315,6 +368,8 @@ export const createSelectedVariant = /* GraphQL */ `mutation CreateSelectedVaria
     readposrank
     sor
     fraction
+    zygosity
+    text_interpretation
     createdAt
     updatedAt
     __typename
@@ -341,7 +396,6 @@ export const updateSelectedVariant = /* GraphQL */ `mutation UpdateSelectedVaria
     ref
     alt
     qual
-    zigosity
     global_allele
     functional_impact
     acmg
@@ -367,6 +421,8 @@ export const updateSelectedVariant = /* GraphQL */ `mutation UpdateSelectedVaria
     readposrank
     sor
     fraction
+    zygosity
+    text_interpretation
     createdAt
     updatedAt
     __typename
@@ -393,7 +449,6 @@ export const deleteSelectedVariant = /* GraphQL */ `mutation DeleteSelectedVaria
     ref
     alt
     qual
-    zigosity
     global_allele
     functional_impact
     acmg
@@ -419,6 +474,8 @@ export const deleteSelectedVariant = /* GraphQL */ `mutation DeleteSelectedVaria
     readposrank
     sor
     fraction
+    zygosity
+    text_interpretation
     createdAt
     updatedAt
     __typename
@@ -521,6 +578,8 @@ export const createVariant = /* GraphQL */ `mutation CreateVariant(
     sor
     fraction
     zygosity
+    gene_id
+    gene_symbol
     createdAt
     updatedAt
     __typename
@@ -560,6 +619,8 @@ export const updateVariant = /* GraphQL */ `mutation UpdateVariant(
     sor
     fraction
     zygosity
+    gene_id
+    gene_symbol
     createdAt
     updatedAt
     __typename
@@ -599,6 +660,8 @@ export const deleteVariant = /* GraphQL */ `mutation DeleteVariant(
     sor
     fraction
     zygosity
+    gene_id
+    gene_symbol
     createdAt
     updatedAt
     __typename
@@ -959,6 +1022,7 @@ export const createPatient = /* GraphQL */ `mutation CreatePatient(
     dob
     id_reference
     id_institution
+    health_desc
     createdAt
     updatedAt
     __typename
@@ -980,6 +1044,7 @@ export const updatePatient = /* GraphQL */ `mutation UpdatePatient(
     dob
     id_reference
     id_institution
+    health_desc
     createdAt
     updatedAt
     __typename
@@ -1001,6 +1066,7 @@ export const deletePatient = /* GraphQL */ `mutation DeletePatient(
     dob
     id_reference
     id_institution
+    health_desc
     createdAt
     updatedAt
     __typename

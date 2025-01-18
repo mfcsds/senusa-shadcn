@@ -8,6 +8,48 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getPatientHistoryDisease = /* GraphQL */ `query GetPatientHistoryDisease($id: ID!) {
+  getPatientHistoryDisease(id: $id) {
+    id
+    id_patient
+    hpo_code
+    hpo_desc
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetPatientHistoryDiseaseQueryVariables,
+  APITypes.GetPatientHistoryDiseaseQuery
+>;
+export const listPatientHistoryDiseases = /* GraphQL */ `query ListPatientHistoryDiseases(
+  $filter: ModelPatientHistoryDiseaseFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listPatientHistoryDiseases(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      id_patient
+      hpo_code
+      hpo_desc
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListPatientHistoryDiseasesQueryVariables,
+  APITypes.ListPatientHistoryDiseasesQuery
+>;
 export const getAcmgAnnotation = /* GraphQL */ `query GetAcmgAnnotation($id: ID!) {
   getAcmgAnnotation(id: $id) {
     id
@@ -212,7 +254,6 @@ export const getSelectedVariant = /* GraphQL */ `query GetSelectedVariant($id: I
     ref
     alt
     qual
-    zigosity
     global_allele
     functional_impact
     acmg
@@ -238,6 +279,8 @@ export const getSelectedVariant = /* GraphQL */ `query GetSelectedVariant($id: I
     readposrank
     sor
     fraction
+    zygosity
+    text_interpretation
     createdAt
     updatedAt
     __typename
@@ -266,7 +309,6 @@ export const listSelectedVariants = /* GraphQL */ `query ListSelectedVariants(
       ref
       alt
       qual
-      zigosity
       global_allele
       functional_impact
       acmg
@@ -292,6 +334,8 @@ export const listSelectedVariants = /* GraphQL */ `query ListSelectedVariants(
       readposrank
       sor
       fraction
+      zygosity
+      text_interpretation
       createdAt
       updatedAt
       __typename
@@ -375,6 +419,8 @@ export const getVariant = /* GraphQL */ `query GetVariant($id: ID!) {
     sor
     fraction
     zygosity
+    gene_id
+    gene_symbol
     createdAt
     updatedAt
     __typename
@@ -416,6 +462,8 @@ export const listVariants = /* GraphQL */ `query ListVariants(
       sor
       fraction
       zygosity
+      gene_id
+      gene_symbol
       createdAt
       updatedAt
       __typename
@@ -675,6 +723,7 @@ export const getPatient = /* GraphQL */ `query GetPatient($id: ID!) {
     dob
     id_reference
     id_institution
+    health_desc
     createdAt
     updatedAt
     __typename
@@ -698,6 +747,7 @@ export const listPatients = /* GraphQL */ `query ListPatients(
       dob
       id_reference
       id_institution
+      health_desc
       createdAt
       updatedAt
       __typename

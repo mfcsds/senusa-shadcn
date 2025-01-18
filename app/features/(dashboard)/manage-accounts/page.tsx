@@ -8,9 +8,10 @@ import PaginationVariantReport from "@/components/update/manageAccounts/Paginati
 import CardView from "@/components/update/manageAccounts/CardView";
 import ListView from "@/components/update/manageAccounts/ListView";
 import CreateAccountDialog from "@/components/update/manageAccounts/CreateAccountDialog";
-import { fetchInstitutions } from "@/hooks/manageAccounts/useAccounts";
+import { fetchInstitutions } from "@/hooks/useAccounts";
 import { Institution } from "@/utils/object"
 import Spinner from "@/components/update/ui/Spinner";
+import { get } from "http";
 
 export default function ManageAccountsPage() {
   const [searchQuery, setSearchQuery] = useState("");

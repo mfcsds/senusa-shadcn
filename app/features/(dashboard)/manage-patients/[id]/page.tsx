@@ -1,31 +1,51 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchPatients } from "@/hooks/managePatients/usePatients";
+import { fetchPatients } from "@/hooks/usePatients";
 import Button from "@/components/update/button/Button";
 import DropDownSelectPatient from "@/components/update/managePatients/DropDownSelectPatient";
 import AddVCFDialog from "@/components/update/detailPatient/AddVCFDialog";
 import TableVCF from "@/components/update/detailPatient/TableVCF";
 import { DataPatients } from "@/utils/object";
-import { Plus, ArrowLeft, Info, Accessibility } from "lucide-react";
+import { ArrowLeft, Info, Accessibility } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { fetchVCFData } from "@/hooks/managePatients/usePatientVariants";
+import { fetchVCFData } from "@/hooks/useVcfData";
 import { VcfData } from "@/utils/object";
-import ButtonAddFamilyDisease from "@/components/update/detailPatient/ButtonAddFamilyDisease";
+import Dropdown from "@/components/update/input/Dropdown";
+import ButtonAddFamilyDisease from "@/components/update/button/ButtonAddFamilyDisease";
+import ButtonAddPatientDisease from "@/components/update/button/ButtonAddPatientDisease";
+import React from "react";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default function DetailPatientPage({ params }: PageProps) {
-  const { id } = params;
+  const [id, setId] = useState<string | null>(null);
   const router = useRouter();
   const [patients, setPatients] = useState<DataPatients[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
   const [vcfData, setVcfData] = useState<VcfData[]>([]);
+  const [statusPasien, setStatusPasien] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const resolveParams = async () => {
+      try {
+        const resolvedParams = await params;
+        if (resolvedParams.id) {
+          setId(resolvedParams.id);
+        } else {
+          console.error("Patient ID is not available in params.");
+        }
+      } catch (error) {
+        console.error("Failed to resolve params:", error);
+      }
+    };
+    resolveParams();
+  }, [params]);
 
   useEffect(() => {
     const loadPatients = async () => {
@@ -36,24 +56,43 @@ export default function DetailPatientPage({ params }: PageProps) {
         console.error("Failed to fetch patients:", error);
       }
     };
-
     loadPatients();
   }, []);
 
   useEffect(() => {
+    if (!id) return;
     const loadVCFData = async () => {
       try {
         setLoading(true);
         const data = await fetchVCFData(id);
         setVcfData(data);
       } catch (error) {
-        console.error("Failed to fetch variants:", error);
+        console.error("Failed to fetch VCF data:", error);
       } finally {
         setLoading(false);
       }
     };
     loadVCFData();
   }, [id]);
+
+  const status = [
+    {
+      label: "No personal or familial history of cancer",
+      value: "No personal or familial history of cancer",
+    },
+    {
+      label: "Healthy with a family history of cancer",
+      value: "Healthy with a family history of cancer",
+    },
+    {
+      label: "Personal and family history of cancer",
+      value: "Personal and family history of cancer",
+    },
+    {
+      label: "Personal history of cancer, no family history",
+      value: "Personal history of cancer, no family history",
+    },
+  ];
 
   return (
     <div className="p-4 sm:p-8 min-h-screen grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -69,26 +108,35 @@ export default function DetailPatientPage({ params }: PageProps) {
             </h4>
             <p className="text-lg font-medium text-text-secondary">{id}</p>
           </div>
-          <div className="flex items-center justify-between gap-4 w-full md:w-auto px-4 md:px-4 ml-auto">
+          <div className="flex items-center justify-between gap-4 w-full md:mt-0 mb-4 md:w-auto px-4 md:px-4 ml-auto">
             <DropDownSelectPatient
               options={patients}
-              selectedValue={id}
+              selectedValue={selectedPatient || ""}
               onChange={setSelectedPatient}
-              placeholder="Select a Patient"
+              placeholder="Select Patient State"
             />
           </div>
         </div>
 
-        {/* Status Patient State   */}
+        {/* Status Patient State */}
         <div className="bg-foreground shadow rounded-lg p-4 sm:p-6">
           <div className="flex items-center justify-between mb-4">
             <label
               htmlFor="family-disease"
               className="font-medium text-sm text-text-primary"
             >
-              Family Disease History
+              Status
             </label>
-            <ButtonAddFamilyDisease patient_id={id} />
+            <div className="ml-auto w-[55%]">
+              <Dropdown
+                options={status}
+                selectedValue={statusPasien || ""}
+                onChange={setStatusPasien}
+                placeholder="Select User Level"
+                variant="default"
+                className="w-full"
+              />
+            </div>
           </div>
         </div>
 
@@ -101,7 +149,7 @@ export default function DetailPatientPage({ params }: PageProps) {
             >
               Patient Disease History
             </label>
-            <ButtonAddFamilyDisease patient_id={id} />
+            <ButtonAddPatientDisease patient_id={id} />
           </div>
         </div>
 
@@ -143,7 +191,7 @@ export default function DetailPatientPage({ params }: PageProps) {
                 className="bg-foreground"
               />
             </div>
-            <AddVCFDialog patientID={id} />
+            <AddVCFDialog patientID={id!} />
           </div>
         </div>
         {loading ? (

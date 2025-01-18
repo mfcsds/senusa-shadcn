@@ -17,7 +17,7 @@ import { TableDetailVCF } from "@/components/update/detailPatient/TableDetailVCF
 import Button from "@/components/update/button/Button";
 import { Amplify } from "aws-amplify";
 import config from "@/src/amplifyconfiguration.json";
-import { fetchDetailVCF } from "@/hooks/managePatients/usePatientVariants";
+import { fetchDetailVCF } from "@/hooks/useVcfData";
 
 Amplify.configure(config);
 
@@ -59,7 +59,7 @@ const DetailVCFDialog: React.FC<VCFId> = ({ id_vcf }) => {
           icon={<List className="w-5 h-5" />}
         />
       </DialogTrigger>
-      <DialogContent className="w-full max-w-[90%] max-h-[80vh] overflow-y-auto bg-foreground">
+      <DialogContent className="w-full max-w-[90%] max-h-[90%] overflow-y-auto bg-foreground">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2 mb-4">
             <span className="text-text-primary">Detail Variant Call Data</span>

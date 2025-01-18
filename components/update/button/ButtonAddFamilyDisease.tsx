@@ -2,16 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
-import { ButtonAdd } from "./ButtonAdd";
+import { ButtonAdd } from "@/components/update/button/ButtonAdd";
 import { Plus, SearchIcon, Trash2 } from "lucide-react";
 import Input from "@/components/update/input/Input";
 import axios from "axios";
 import Button from "@/components/update/button/Button";
-import {
-  createFamilyHistoryDisease,
-  deleteFamilyHistoryDisease,
-} from "@/src/graphql/mutations";
-import { listFamilyHistoryDiseases } from "@/src/graphql/queries";
 import { Amplify } from "aws-amplify";
 import config from "@/src/amplifyconfiguration.json";
 import { generateClient } from "aws-amplify/api";
@@ -21,7 +16,12 @@ import {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "../../ui/accordion";
+} from "@/components/update/ui/according";
+import {
+  fetchFamilyDisease,
+  removeFamilyDisease,
+  addNewFamilyDisease,
+} from "@/hooks/useHistoryFamilyDisease";
 
 Amplify.configure(config);
 
@@ -43,18 +43,8 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        const result = await client.graphql({
-          query: listFamilyHistoryDiseases,
-          variables: {
-            filter: {
-              id_patient: { eq: patient_id },
-            },
-          },
-        });
-
-        const initialData = result.data.listFamilyHistoryDiseases
-          .items as FamilyDiseaseData[];
-        setSelectedPhenotypes(initialData);
+        const fetchedFamilyDisease = await fetchFamilyDisease(patient_id!);
+        setSelectedPhenotypes(fetchedFamilyDisease);
       } catch (error) {
         console.error("Error loading family history data:", error);
       }
@@ -73,10 +63,7 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
     };
 
     try {
-      const result = await client.graphql({
-        query: createFamilyHistoryDisease,
-        variables: { input: newPhenotype },
-      });
+      const result = await addNewFamilyDisease(newPhenotype);
 
       setSelectedPhenotypes((prev) => [...prev, newPhenotype]);
     } catch (error) {
@@ -86,12 +73,7 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
 
   const deletePhenotype = async (id: string) => {
     try {
-      await client.graphql({
-        query: deleteFamilyHistoryDisease,
-        variables: { input: { id } }, // Gunakan id, bukan hpo_code
-      });
-
-      // Hapus item dari state lokal berdasarkan id
+      await removeFamilyDisease(id);
       setSelectedPhenotypes((prev) => prev.filter((p) => p.id !== id));
     } catch (error) {
       console.error("Error deleting family history:", error);
@@ -136,7 +118,7 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
   }, [phenotypeQuery]);
 
   return (
-    <div className="flex flex-row gap-2 p-2 items-center justify-center w-[300px]">
+    <div className="flex flex-row gap-2 items-center justify-end w-[300px]">
       <Accordion
         type="single"
         collapsible
@@ -171,11 +153,14 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
       </Accordion>
       <Popover>
         <PopoverTrigger asChild>
-          <ButtonAdd variant={"outline"} className="ml-2 border-2 border-foreground hover:border-primary hover:bg-foreground py-2 px-2">
-            <Plus className="w-5 h-5 text-blue-primary"/>
+          <ButtonAdd
+            variant={"outline"}
+            className="ml-2 bg-foreground border-2 border-foreground hover:border-blue-primary hover:bg-background py-2 px-2"
+          >
+            <Plus className="w-5 h-5 text-blue-primary" />
           </ButtonAdd>
         </PopoverTrigger>
-        <PopoverContent className="-translate-x-60 -translate-y-10 w-[400px]">
+        <PopoverContent className="sm:-translate-x-20 -translate-x-5 sm-translate-y-10 -translate-y-30 w-[380px]">
           <div className="flex flex-col w-full p-2">
             <div className="flex flex-row items-center justify-between gap-2">
               <Input

@@ -12,7 +12,7 @@ import { Accessibility, IdCard, Save, X, Plus } from "lucide-react";
 import Button from "@/components/update/button/Button";
 import Input from "@/components/update/input/Input";
 import { generatePatientID } from "@/utils/GenerateID";
-import { addNewPatient, fetchPatients } from "@/hooks/managePatients/usePatients";
+import { addNewPatient } from "@/hooks/usePatients";
 
 const AddPatientDialog: React.FC = () => {
   const [idReference, setIDReference] = useState("");

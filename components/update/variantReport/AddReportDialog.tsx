@@ -49,7 +49,7 @@ const AddPatientDialog: React.FC = () => {
           icon={<Plus className="w-4 h-4" />}
         />
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[750px] max-h-[500px] overflow-y-auto">
+      <DialogContent className="sm:max-w-[80%] max-h-[90%] overflow-y-auto bg-foreground">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <ClipboardPlus className="w-8 h-8 text-primary" />

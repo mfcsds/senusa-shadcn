@@ -5,7 +5,7 @@ import Navbar from "@/components/update/common/Navbar";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const cookieStore = cookies();
-  const defaultOpen = cookieStore.get("sidebar:state")?.value === "true";
+  const defaultOpen = (await cookieStore).get("sidebar:state")?.value === "true";
 
   return (
     <div

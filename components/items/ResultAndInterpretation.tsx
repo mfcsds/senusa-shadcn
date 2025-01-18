@@ -172,8 +172,8 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
       variables: { filter: { id_report: { eq: id_report } } },
     });
 
-    await setSelectedVariant(
-      result.data.listSelectedVariants.items as SelectedVariant[]
+    setSelectedVariant(
+      result.data.listSelectedVariants.items as unknown as SelectedVariant[]
     );
   };
 

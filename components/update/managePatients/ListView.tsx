@@ -1,6 +1,6 @@
 import { SquarePen, Trash2, Accessibility } from "lucide-react";
 import Button from "@/components/update/button/Button";
-import { removePatient, fetchPatients } from "@/hooks/managePatients/usePatients";
+import { removePatient, fetchPatients } from "@/hooks/usePatients";
 import { useRouter } from "next/navigation";
 import { DataPatients } from "@/utils/object"
 import { useState, useEffect } from "react";

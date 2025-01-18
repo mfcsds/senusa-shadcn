@@ -14,69 +14,31 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/update/ui/tabs";
+import Spinner from "@/components/update/ui/Spinner";
 import { CreateVariantReportInput } from "@/src/API";
-import { fetchVariantReport } from "@/hooks/variantReport/useVariantReport";
+import { fetchVariantReport } from "@/hooks/useVariantReport";
 
-export default function ManageAccountsPage() {
+export default function VariantReportPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"card" | "list">("card");
   const [varReports, setVarReports] = useState<CreateVariantReportInput[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const loadVariants = async () => {
       try {
-        const fetchedPatients = await fetchVariantReport();
-        setVarReports(fetchedPatients);
-        console.log(varReports)
+        setLoading(true);
+        const fetchedVariants = await fetchVariantReport();
+        setVarReports(fetchedVariants);
       } catch (error) {
         console.error("Failed to fetch patients:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     loadVariants();
   }, []);
-
-  const data = [
-    {
-      patientId: "P-7GRULXLAAFV6",
-      reportId: "R-GLMHMH7TG8FP",
-      phenotypes:
-        "HP:0003003 - Colon cancer, HP:0001674 - Complete atrioventricular canal defect",
-      medicalHistory: "Breast Cancer",
-      currentDiagnosis: "Breast Cancer",
-      sampleCollection: "2024-10-15",
-      statusReport: "Complete",
-    },
-    {
-      patientId: "P-1FHULY8AAFG4",
-      reportId: "R-BGHNJL9TG8XZ",
-      phenotypes: "HP:0004322 - Hypertension, HP:0001250 - Seizures",
-      medicalHistory: "Diabetes",
-      currentDiagnosis: "Heart Attack",
-      sampleCollection: "2024-09-10",
-      statusReport: "Complete",
-    },
-    {
-      patientId: "P-3XRULFLAAV7",
-      reportId: "R-KLMHNW8TG9YP",
-      phenotypes:
-        "HP:0001627 - Myocardial infarction, HP:0002014 - Short stature",
-      medicalHistory: "Heart Attack",
-      currentDiagnosis: "Heart Disease",
-      sampleCollection: "2024-08-22",
-      statusReport: "Complete",
-    },
-    {
-      patientId: "P-3XRULFLAAV7",
-      reportId: "R-KLMHNW8TG9YP",
-      phenotypes:
-        "HP:0001627 - Myocardial infarction, HP:0002014 - Short stature",
-      medicalHistory: "Heart Attack",
-      currentDiagnosis: "Heart Disease",
-      sampleCollection: "2024-08-22",
-      statusReport: "Complete",
-    },
-  ];
 
   return (
     <div className="p-8 min-h-screen">
@@ -111,18 +73,14 @@ export default function ManageAccountsPage() {
           <AddReportDialog />
           <Button
             variant={
-              viewMode === "card"
-                ? "iconCardViewActive"
-                : "iconCardView"
+              viewMode === "card" ? "iconCardViewActive" : "iconCardView"
             }
             onClick={() => setViewMode("card")}
             icon={<LayoutDashboard className="w-6 h-6" />}
           />
           <Button
             variant={
-              viewMode === "list"
-                ? "iconListViewActive"
-                : "iconListView"
+              viewMode === "list" ? "iconListViewActive" : "iconListView"
             }
             onClick={() => setViewMode("list")}
             icon={<LayoutList className="w-6 h-6" />}
@@ -133,7 +91,7 @@ export default function ManageAccountsPage() {
       <div className="mb-6 w-auto">
         <Tabs defaultValue="allStatus">
           <TabsList>
-          <TabsTrigger value="allStatus">All</TabsTrigger>
+            <TabsTrigger value="allStatus">All</TabsTrigger>
             <TabsTrigger value="draft">Draft</TabsTrigger>
             <TabsTrigger value="inProccess">In Process</TabsTrigger>
             <TabsTrigger value="waitingForApproval">
@@ -142,47 +100,63 @@ export default function ManageAccountsPage() {
             <TabsTrigger value="completed">Completed</TabsTrigger>
           </TabsList>
           <TabsContent value="allStatus">
-            {viewMode === "card" ? (
+            {loading ? (
+              <Spinner />
+            ) : viewMode === "card" ? (
               <CardView initialVariants={varReports} />
             ) : (
-              <ListView data={data} />
+              <ListView initialVariants={varReports} />
             )}
           </TabsContent>
           <TabsContent value="draft">
-            {viewMode === "card" ? (
+            {loading ? (
+              <Spinner />
+            ) : viewMode === "card" ? (
               <CardView initialVariants={varReports} />
             ) : (
-              <ListView data={data} />
+              <ListView initialVariants={varReports} />
             )}
           </TabsContent>
           <TabsContent value="inProccess">
-            {viewMode === "card" ? (
+            {loading ? (
+              <Spinner />
+            ) : viewMode === "card" ? (
               <CardView initialVariants={varReports} />
             ) : (
-              <ListView data={data} />
+              <ListView initialVariants={varReports} />
             )}
           </TabsContent>
           <TabsContent value="waitingForApproval">
-            {viewMode === "card" ? (
+            {loading ? (
+              <Spinner />
+            ) : viewMode === "card" ? (
               <CardView initialVariants={varReports} />
             ) : (
-              <ListView data={data} />
+              <ListView initialVariants={varReports} />
             )}
           </TabsContent>
           <TabsContent value="completed">
-            {viewMode === "card" ? (
+            {loading ? (
+              <Spinner />
+              
+            ) : viewMode === "card" ? (
               <CardView initialVariants={varReports} />
             ) : (
-              <ListView data={data} />
+              <ListView initialVariants={varReports} />
             )}
           </TabsContent>
         </Tabs>
       </div>
 
-      <div></div>
-      <div className="flex justify-between items-center mt-8">
-        <PaginationVariantReport />
-      </div>
+      {loading ? (
+        <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
+          Loading...
+        </p>
+      ) : (
+        <div className="flex justify-between items-center mt-8">
+          <PaginationVariantReport />
+        </div>
+      )}
     </div>
   );
 }

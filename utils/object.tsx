@@ -325,6 +325,13 @@ export interface FamilyDiseaseData {
   hpo_desc: string;
 }
 
+export interface PatientDiseaseData {
+  id?: string;
+  id_patient: string;
+  hpo_code: string;
+  hpo_desc: string;
+}
+
 // 33 Feature
 export interface AcmgCriteria {
   id?: string;

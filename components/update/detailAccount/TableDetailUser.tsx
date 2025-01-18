@@ -13,6 +13,7 @@ import {
 
 interface DetailUserProps {
   data: Array<{
+    id: string;
     fullName: string;
     userLevel: string;
     userRole: string;
@@ -38,7 +39,7 @@ const TableDetailUser: React.FC<DetailUserProps> = ({ data }) => {
           </TableHeader>
           <TableBody>
             {data.map((item) => (
-              <TableRow key={item.fullName}>
+              <TableRow key={item.id}>
                 <TableCell className="font-medium">
                   {item.fullName}
                 </TableCell>

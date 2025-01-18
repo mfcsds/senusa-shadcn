@@ -40,8 +40,8 @@ const CreateUserDialog: React.FC = () => {
   };
   
   const userLevel = [
-    { label: "Level 1", value: "level 1" },
-    { label: "Level 2", value: "level 2" },
+    { label: "Level 1", value: "Level 1" },
+    { label: "Level 2", value: "Level 2" },
   ];
 
   const userRole = [
@@ -64,7 +64,7 @@ const CreateUserDialog: React.FC = () => {
           icon={<Plus className="w-4 h-4" />}
         />
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[1100px] max-h-[500px] overflow-y-auto">
+      <DialogContent className="sm:max-w-[80%] max-h-[90%] overflow-y-auto bg-foreground">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <UserRoundPlus className="w-8 h-8 text-primary" />

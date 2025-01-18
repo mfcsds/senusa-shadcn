@@ -19,3 +19,17 @@ export const fetchVariantReport = async (): Promise<CreateVariantReportInput[]> 
       return [];
     }
   };
+
+  export const fetchDetailVariantReport = async (variantId: string): Promise<CreateVariantReportInput[]> => {
+    try {
+      const result = await client.graphql({
+        query: listVariantReports,
+        variables: { filter: { id: { eq: variantId } } },
+      });
+      return result.data.listVariantReports.items as CreateVariantReportInput[];
+    } catch (error) {
+      console.error("Error fetching detail variant data:", error);
+      return [];
+    }
+  };
+  

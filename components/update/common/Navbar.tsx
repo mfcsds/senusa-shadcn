@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Switch } from "../../ui/switch";
+import { Switch } from "@/components/update/ui/Switch";
 import { Mail, LogOut, RectangleEllipsis } from "lucide-react";
 import { DividerVerticalIcon } from "@radix-ui/react-icons";
 import { SidebarTrigger } from "@/components/update/ui/Sidebar";

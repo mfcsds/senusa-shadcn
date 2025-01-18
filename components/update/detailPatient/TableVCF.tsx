@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Eye, Trash2 } from "lucide-react";
 import Button from "@/components/update/button/Button";
 import { useRouter } from "next/navigation";
-import { removeVCFData } from "@/hooks/managePatients/usePatientVariants"; 
+import { removeVCFData } from "@/hooks/useVcfData"; 
 import  DetailVCFDialog  from "@/components/update/detailPatient/DetailVCFDialog";
 import {
   Table,

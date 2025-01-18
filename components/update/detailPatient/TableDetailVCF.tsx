@@ -46,7 +46,7 @@ export function TableDetailVCF<TData, TValue>({
   return (
     <div className="rounded-md border w-full">
       <div className="flex flex-col gap-4">
-        <Table className="overflow-y-auto h-full w-[350px] md:w-[1100px] block">
+        <Table className="overflow-y-auto h-full w-[350px] md:w-[95%] block">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>

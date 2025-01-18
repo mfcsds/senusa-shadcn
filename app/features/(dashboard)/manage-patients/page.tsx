@@ -9,7 +9,7 @@ import CardView from "@/components/update/managePatients/CardView";
 import ListView from "@/components/update/managePatients/ListView";
 import AddPatientDialog from "@/components/update/managePatients/AddPatientDialog";
 import PaginationPatient from "@/components/update/managePatients/PaginationPatient";
-import { fetchPatients } from "@/hooks/managePatients/usePatients";
+import { fetchPatients } from "@/hooks/usePatients";
 import { DataPatients } from "@/utils/object";
 
 export default function ManageAccountsPage() {
@@ -19,19 +19,18 @@ export default function ManageAccountsPage() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const loadPatients = async () => {
-      try {
-        setLoading(true);
-        const fetchedPatients = await fetchPatients();
-        setPatients(fetchedPatients);
-      } catch (error) {
-        console.error("Failed to fetch patients:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadPatients();
+      const loadPatients = async () => {
+        try {
+          setLoading(true);
+          const fetchedPatients = await fetchPatients();
+          setPatients(fetchedPatients);
+        } catch (error) {
+          console.error("Failed to fetch patients:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      loadPatients();
   }, []);
 
   return (
@@ -67,18 +66,14 @@ export default function ManageAccountsPage() {
           <AddPatientDialog />
           <Button
             variant={
-              viewMode === "card"
-                ? "iconCardViewActive"
-                : "iconCardView"
+              viewMode === "card" ? "iconCardViewActive" : "iconCardView"
             }
             onClick={() => setViewMode("card")}
             icon={<LayoutDashboard className="w-6 h-6" />}
           />
           <Button
             variant={
-              viewMode === "list"
-                ? "iconListViewActive"
-                : "iconListView"
+              viewMode === "list" ? "iconListViewActive" : "iconListView"
             }
             onClick={() => setViewMode("list")}
             icon={<LayoutList className="w-6 h-6" />}

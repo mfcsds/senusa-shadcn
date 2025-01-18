@@ -22,23 +22,42 @@ import {
 import { Progress } from "@/components/update/progress/Progress";
 import CreateUserDialog from "@/components/update/detailAccount/CreateUserDialog";
 import TableDetailUser from "@/components/update/detailAccount/TableDetailUser";
-import { fetchDetailInstitution } from "@/hooks/manageAccounts/useDetailAccount";
+import { fetchDetailInstitution } from "@/hooks/useAccounts";
 import { Institution } from "@/utils/object";
 import Spinner from "@/components/update/ui/Spinner";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
+
 export default function DetailAccountsPage({ params }: PageProps) {
-  const { id } = params;
+  const [id, setId] = useState<string | null>(null);
   const router = useRouter();
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const resolveParams = async () => {
+      try {
+        const resolvedParams = await params;
+        if (resolvedParams.id) {
+          setId(resolvedParams.id);
+        } else {
+          console.error("Patient ID is not available in params.");
+        }
+      } catch (error) {
+        console.error("Failed to resolve params:", error);
+      }
+    };
+    resolveParams();
+  }, [params]);
+
+  useEffect(() => {
+    if (!id) return;
+
     const loadInstitutions = async () => {
       try {
         setLoading(true);
@@ -52,17 +71,17 @@ export default function DetailAccountsPage({ params }: PageProps) {
     };
 
     loadInstitutions();
-  }, []);
+  }, [id]);
 
   const data = [
-    { fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-    { fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-    { fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-    { fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-    { fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-    { fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-    { fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-    { fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
+    { id: "1", fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
+    { id: "2",fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
+    { id: "3",fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
+    { id: "4",fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
+    { id: "5",fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
+    { id: "6",fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
+    { id: "7",fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
+    { id: "8",fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
   ];
 
   return (
@@ -92,7 +111,9 @@ export default function DetailAccountsPage({ params }: PageProps) {
       </div>
 
       {loading ? (
-        <Spinner />
+        <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
+        Loading...
+      </p>
       ) : (
         institutions.map((institution) => (
           <div key={institution.id} className="grid grid-cols-1 gap-4 sm:grid-cols-3">
