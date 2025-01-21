@@ -148,7 +148,7 @@ export interface VariantRawData {
   dp?: number;
   fs?: number;
   mq?: number;
-  zigosity?: string;
+  zygosity?: string;
   mqranksum?: number;
   qd?: number;
   readposrank?: number;

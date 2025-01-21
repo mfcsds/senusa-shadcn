@@ -102,7 +102,7 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
             readposrank: item.readposrank ?? 0,
             sor: item.sor ?? 0,
             fraction: item.fraction ?? 0,
-            zygosity: item.zigosity ?? "", // Set to null to indicate loading state
+            zygosity: item.zygosity ?? "", // Set to null to indicate loading state
             functional_impact: "",
             acmg: item.acmg ?? "VUS",
             clinicalSign: "", // Set to null to indicate loading state
