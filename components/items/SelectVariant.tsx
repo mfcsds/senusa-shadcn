@@ -140,7 +140,7 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
           sor: item.sor ?? 0,
           fraction: item.fraction ?? 0,
           variantReportID: id_report ?? "",
-          zygosity: item.zigosity ?? "",
+          zygosity: item.zygosity ?? "",
           globalallele: null, // Set to null to indicate loading state
           functional_impact: "",
           acmg: item.acmg ?? "VUS",

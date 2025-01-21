@@ -173,7 +173,7 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
         return `
           <Variant>
             <Detail>${variant.gene_symbol} (${variant.gene_id}): ${variant.hgvs}</Detail>
-            <Zygosity>${variant.zigosity}</Zygosity>
+            <Zygosity>${variant.zygosity}</Zygosity>
             <ACMG>${variant.acmg}</ACMG>
             <Interpretation>${interpretation}</Interpretation>
           </Variant>`;
@@ -208,7 +208,7 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
 
       return [
         `${variant.gene_symbol} (${variant.gene_id}): ${variant.hgvs}`,
-        variant.zigosity,
+        variant.zygosity,
         variant.acmg,
         interpretation,
       ];
@@ -647,7 +647,7 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                       <TableCell>
                         {`${item.gene_symbol}(${item.gene_id}):${item.hgvs}`}
                       </TableCell>
-                      <TableCell>{item.zigosity}</TableCell>
+                      <TableCell>{item.zygosity}</TableCell>
                       <TableCell>{item.acmg}</TableCell>
                     </TableRow>
                   ))}
