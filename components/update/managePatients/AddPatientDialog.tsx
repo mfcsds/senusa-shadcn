@@ -13,11 +13,14 @@ import Button from "@/components/update/button/Button";
 import Input from "@/components/update/input/Input";
 import { generatePatientID } from "@/utils/GenerateID";
 import { addNewPatient } from "@/hooks/usePatients";
+import { useToast } from "@/components/ui/use-toast";
 
-const AddPatientDialog: React.FC = () => {
+
+const AddPatientDialog = ({ onUpdatePatients }: { onUpdatePatients: () => Promise<void> }) => {
   const [idReference, setIDReference] = useState("");
   const [errorIDReference, setErrorIDReference] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
+  const { toast } = useToast();
 
   const handleCancelDialog = () => {
     setOpenDialog(false);
@@ -25,14 +28,17 @@ const AddPatientDialog: React.FC = () => {
     setIDReference("");
   };
 
-  const handleAddNewPatient = async (e: React.FormEvent) => {
+  const handleAddNewPatient = async (
+    e: React.FormEvent,
+    onUpdatePatients: () => Promise<void>
+  ) => {
     e.preventDefault();
-
+  
     if (!idReference.trim()) {
       setErrorIDReference("Patient ID Reference is required.");
       return;
     }
-
+  
     const newPatient = {
       id: generatePatientID(),
       name: "-",
@@ -40,18 +46,33 @@ const AddPatientDialog: React.FC = () => {
       id_reference: idReference,
       phone_number: "-",
     };
-
+  
     try {
       await addNewPatient(newPatient);
+  
+      // Reset input dan error state
       setErrorIDReference(""); 
       setIDReference(""); 
       setOpenDialog(false); 
-      window.location.reload();
+  
+      // Panggil fungsi untuk refresh data
+      await onUpdatePatients();
+  
+      toast({
+        title: "Success add patient",
+        description: "Patient added successfully",
+      });
     } catch (error) {
       console.error("Error adding patient:", error);
-      setErrorIDReference("Failed to add new patient. Please try again.");
+      toast({
+        variant: "destructive",
+        title: "Failed to add patient",
+        description: "Failed to add new patient. Please try again.",
+      });
     }
   };
+  
+  
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
@@ -72,7 +93,7 @@ const AddPatientDialog: React.FC = () => {
           </DialogTitle>
           <DialogDescription>Adding Patient Information.</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleAddNewPatient} className="grid gap-4 mt-2">
+        <form onSubmit={(e) => handleAddNewPatient(e, onUpdatePatients)} className="grid gap-4 mt-2">
           <div>
             <div className="flex items-center space-x-2">
               <IdCard className="w-6 h-6 text-blue-primary mb-1" />

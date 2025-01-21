@@ -17,9 +17,21 @@ import InformationApprovalReport from "@/components/update/detailVariantReport/I
 import SelectVariant from "@/components/update/detailVariantReport/SelectVariant";
 import { fetchDetailVariantReport } from "@/hooks/useVariantReport";
 import { CreateVariantReportInput } from "@/src/API";
-import { VcfData } from "@/utils/object";
-import ResultAndInterpretation from "@/components/items/ResultAndInterpretation";
+import { VariantRawData, VcfData } from "@/utils/object";
+import ResultAndInterpretation from "@/components/update/detailVariantReport/ResultAndInterpretation";
 import { fetchVCFData } from "@/hooks/useVcfData";
+import { useToast } from "@/components/ui/use-toast";
+import { generateClient } from "aws-amplify/api";
+import { listVariants } from "@/src/graphql/queries";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface PageProps {
   params: Promise<{
@@ -35,6 +47,13 @@ export default function DetailVariantReport({ params }: PageProps) {
     CreateVariantReportInput[]
   >([]);
   const [vcfData, setVcfData] = useState<VcfData[]>([]);
+
+  const [listVariant, setListVariant] = useState<VariantRawData[]>([]);
+  const [loadingVariant, setLoadingVariant] = useState(false);
+  const [listVCF, setVCF] = useState<VcfData[]>([]);
+  const [selectedVCF, setSelectedVCF] = useState<string | null>(null);
+  const client = generateClient();
+  const { toast } = useToast();
 
   useEffect(() => {
     const resolveParams = async () => {
@@ -58,9 +77,9 @@ export default function DetailVariantReport({ params }: PageProps) {
       try {
         setLoading(true);
         const data = await fetchDetailVariantReport(id);
-        {data.map((report) => ( 
-          setPatientId(report.idPatient!)
-        ))}
+        {
+          data.map((report) => setPatientId(report.idPatient!));
+        }
         setVariantReport(data);
       } catch (error) {
         console.error("Error loading detail variant report:", error);
@@ -90,74 +109,162 @@ export default function DetailVariantReport({ params }: PageProps) {
 
   const [levelAccount, setLevelAccount] = useState("");
   const optionVCFData = vcfData.map((item) => ({
-    label: item.id!, 
-    value: item.id!,  
+    label: item.id!,
+    value: item.id!,
   }));
 
   const variantReportData = variantReport.map((item) => ({
-    label: item.id!, 
-    value: item.id!,  
+    label: item.id!,
+    value: item.id!,
   }));
+
+  const handleUpdateVariant = (id: string, updatedACMGClass: string) => {
+    setListVariant((prevVariants) =>
+      prevVariants.map((variant) =>
+        variant.id === id ? { ...variant, acmg: updatedACMGClass } : variant
+      )
+    );
+  };
+
+  const fetchListVariant = async (vcfID: string) => {
+    setListVariant([]); // Clear previous data
+    setLoadingVariant(true);
+    let allVariants: VariantRawData[] = []; // Array to hold all fetched items
+    let nextToken: string | null = null; // Token to fetch the next page
+    try {
+      do {
+        const result = (await client.graphql({
+          query: listVariants,
+          variables: {
+            filter: { id_vcf: { eq: vcfID } },
+            limit: 100,
+            nextToken,
+          },
+        })) as {
+          data: {
+            listVariants: { items: VariantRawData[]; nextToken: string | null };
+          };
+        };
+        // Concatenate the new items to the allVariants array
+        allVariants = allVariants.concat(result.data.listVariants.items);
+        nextToken = result.data.listVariants.nextToken; // Update nextToken for the next iteration
+      } while (nextToken); // Continue until there's no more data to fetch
+      setListVariant(allVariants);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Load Sample Variant",
+        description: `Failed load all sample ${error}`,
+      });
+    } finally {
+      setLoadingVariant(false);
+      toast({
+        title: "Load Sample Variant",
+        description: `${listVariant.length} variants are successfully loaded`,
+      });
+    }
+  };
 
   return (
     <div className="p-8 min-h-screen">
       {loading ? (
         <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
-        Loading...
-      </p>
+          Loading...
+        </p>
       ) : (
         <div className="p-8 bg-foreground shadow-lg">
-           {variantReport.map((report) => ( 
-          <div key={report.id} className="flex flex-wrap justify-between items-start gap-6">
-            <div className="flex flex-col gap-4 justify-end w-full sm:w-auto">
-              <div className="flex items-center gap-4">
+          {variantReport.map((report) => (
+            <div
+              key={report.id}
+              className="flex flex-wrap justify-between items-start gap-6"
+            >
+              <div className="flex flex-col gap-4 justify-end w-full sm:w-auto">
+                <div className="flex items-center gap-4">
+                  <div>
+                    <FileText className="text-primary w-12 h-12" />
+                  </div>
+                  <div className="space-y-1 ml-2">
+                    <p className="font-semibold text-lg text-text-primary">
+                      Report ID
+                    </p>
+                    <p className="text-text-secondary">{report.id}</p>
+                  </div>
+                </div>
+
                 <div>
-                  <FileText className="text-primary w-12 h-12" />
-                </div>
-                <div className="space-y-1 ml-2">
-                  <p className="font-semibold text-lg text-text-primary">
-                    Report ID
-                  </p>
-                  <p className="text-text-secondary">{report.id}</p>
+                  <div className="border-2 text-primary border-primary py-1 rounded-lg text-sm">
+                    <p className="text-center">
+                      {ReportStatus(report.status ?? 4)}
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              <div>
-                <div className="border-2 text-primary border-primary py-1 rounded-lg text-sm">
-                  <p className="text-center">{ReportStatus(report.status ?? 4)}</p>
+              <div className="flex flex-col gap-4 justify-end w-full sm:w-auto">
+                <div className="flex items-center gap-4">
+                  <div>
+                    <Accessibility className="text-primary w-12 h-12" />
+                  </div>
+                  <div className="space-y-1 ml-2">
+                    <p className="font-semibold text-md text-text-primary">
+                      Patient ID
+                    </p>
+                    <p className="text-text-secondary">{report.idPatient}</p>
+                  </div>
                 </div>
+
+                <div className="flex flex-row">
+                  <Select
+                    disabled={loadingVariant}
+                    onValueChange={(value) => {
+                      const selectVCF = vcfData.find((vcf) => vcf.id === value); // Find selected VCF
+                      if (selectVCF) {
+                        console.log(`${selectVCF.id} is selected`); // Log selected VCF ID
+                        fetchListVariant(selectVCF.id ?? ""); // Uncomment this to fetch variants
+                        setSelectedVCF(selectVCF.id);
+                      }
+                    }}
+                  >
+                    <SelectTrigger className="w-[280px]">
+                      <SelectValue placeholder="Select VCF Data" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Select VCF</SelectLabel>
+                        {vcfData.map((item) => (
+                          <SelectItem key={item.id} value={`${item.id}`}>
+                            {" "}
+                            {/* Use item.id here */}
+                            {item.id} {/* Display item.id */}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  
+
+                  {/* {loadingVariant ? (
+                    <div className="flex items-center gap-2">
+                      <div className="animate-spin h-4 w-4 border-2 border-blue-500 rounded-full border-t-transparent"></div>
+                      <p className="text-sm text-blue-600 font-semibold">
+                        Loading variants...
+                      </p>
+                    </div>
+                  ) : selectedVCF ? (
+                    <p className="text-sm text-green-600 font-semibold">
+                      Selected VCF: {selectedVCF}
+                    </p>
+                  ) : (
+                    <p className="text-sm text-gray-500">No VCF selected.</p>
+                  )} */}
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-4 justify-end w-full sm:w-auto">
+                <ButtonAddPatientDisease patient_id={report.idPatient!} />
+                <ButtonAddFamilyDisease patient_id={report.idPatient!} />
               </div>
             </div>
-
-            <div className="flex flex-col gap-4 justify-end w-full sm:w-auto">
-              <div className="flex items-center gap-4">
-                <div>
-                  <Accessibility className="text-primary w-12 h-12" />
-                </div>
-                <div className="space-y-1 ml-2">
-                  <p className="font-semibold text-md text-text-primary">
-                    Patient ID
-                  </p>
-                  <p className="text-text-secondary">{report.idPatient}</p>
-                </div>
-              </div>
-
-              <div>
-                <Dropdown
-                  options={optionVCFData}
-                  selectedValue={levelAccount}
-                  onChange={setLevelAccount}
-                  placeholder="Select VCF Data"
-                  variant="default"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-4 justify-end w-full sm:w-auto">
-              <ButtonAddPatientDisease patient_id={report.idPatient!} />
-              <ButtonAddFamilyDisease patient_id={report.idPatient!} />
-            </div>
-          </div>
           ))}
         </div>
       )}
@@ -182,14 +289,19 @@ export default function DetailVariantReport({ params }: PageProps) {
           </TabsContent>
 
           <TabsContent value="select-variant">
-            <SelectVariant />
+            <SelectVariant
+              patientid={patientId}
+              id_report={id}
+              data={listVariant}
+              onUpdateVariant={handleUpdateVariant}
+            />
           </TabsContent>
 
           <TabsContent value="result-interpretation">
-          <ResultAndInterpretation
-          patientid={patientId}
-          id_report={id}
-        ></ResultAndInterpretation>
+            <ResultAndInterpretation
+              patientid={patientId}
+              id_report={id}
+            ></ResultAndInterpretation>
           </TabsContent>
 
           <TabsContent value="recommendation">

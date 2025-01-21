@@ -7,14 +7,14 @@ const DropDownSelectPatient = ({ options, selectedValue, onChange, placeholder }
 
   const handleChange = (value: string) => {
     onChange(value); 
-    router.push(`/features//manage-patients/${value}`);
+    router.push(`/features/manage-patients/${value}`);
   };
 
   return (
     <select
       value={selectedValue}
       onChange={(e) => handleChange(e.target.value)}
-      className={`bg-background text-text-primary border-border focus:border-primary focus:ring-primary text-sm h-10 px-4`}
+      className={`bg-background text-text-primary border-border focus:border-primary border-2 focus:ring-primary text-sm h-10 px-4`}
     >
       <option value="" disabled>
         {placeholder}

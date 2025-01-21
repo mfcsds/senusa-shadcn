@@ -85,6 +85,7 @@ export interface DataPatients {
   phone_number?: string;
   dob: string;
   institutionID?: string;
+  health_desc?: string;
 }
 
 export interface DataUser {
@@ -170,7 +171,6 @@ export interface SelectedVariant {
   ref: string | null;
   alt: string | null;
   qual: string | null;
-  zigosity: string | null;
   global_allele: number | null; // Float type in TypeScript is represented as number
   functional_impact: string | null;
   acmg: string | null;
@@ -185,6 +185,8 @@ export interface SelectedVariant {
   gnomade: number | null;
   gnomadg: number | null;
   alldesc: string | null;
+  zygosity?: string | null;
+  text_interpretation?: string | null;
 }
 
 export interface VariantInterpretation {

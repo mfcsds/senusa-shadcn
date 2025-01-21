@@ -21,7 +21,7 @@ interface CardViewProps {
 const ListView: React.FC<CardViewProps> = ({ initialVariants }) => {
   const router = useRouter();
   return (
-    <div className="bg-foreground shadow rounded-lg p-6 space-y-4 mt-6">
+    <div className="bg-foreground shadow-xl rounded-lg p-6 space-y-4 mt-6">
     <Table>
       <TableHeader>
         <TableRow>

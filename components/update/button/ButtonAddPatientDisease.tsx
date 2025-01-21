@@ -117,7 +117,7 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
   }, [phenotypeQuery]);
 
   return (
-    <div className="flex flex-row gap-2 items-center justify-end w-[300px]">
+    <div className="flex flex-row gap-2 items-center justify-start w-[300px]">
       <Accordion
         type="single"
         collapsible

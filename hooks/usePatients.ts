@@ -1,6 +1,6 @@
 import { generateClient } from "aws-amplify/api";
 import { listPatients } from "@/src/graphql/queries";
-import { createPatient, deletePatient } from "@/src/graphql/mutations";
+import { createPatient, deletePatient, updatePatient } from "@/src/graphql/mutations";
 import graphqlOperation, { Amplify } from "aws-amplify";
 import config from "@/src/amplifyconfiguration.json";
 import { DataPatients } from "@/utils/object";
@@ -50,6 +50,22 @@ export const addNewPatient = async (DataPatients: any): Promise<void> => {
     await client.graphql({
       query: createPatient,
       variables: { input: DataPatients },
+    });
+  } catch (error) {
+    console.error("Error adding patient:", error);
+  }
+};
+
+export const updateDataPatient = async (idPatient: string, patientStatusDesc: string): Promise<void> => {
+  try {
+    await client.graphql({
+      query: updatePatient,
+      variables: {
+        input: {
+          id: idPatient,
+          health_desc: patientStatusDesc ?? "",
+        },
+      },
     });
   } catch (error) {
     console.error("Error adding patient:", error);

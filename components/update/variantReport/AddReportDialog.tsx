@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -20,11 +20,39 @@ import {
   FileUp,
 } from "lucide-react";
 import Button from "@/components/update/button/Button";
+import {ButtonAdd} from "@/components/update/button/ButtonAdd";
 import Input from "@/components/update/input/Input";
 import DragAndDropInput from "@/components/update/input/DragAndDropInput";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { Patient } from "@/utils/object";
+import { DataPatients } from "@/utils/object";
+import { fetchPatients } from "@/hooks/usePatients";
+import axios from "axios";
+import { cn } from "@/lib/utils";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 
 const AddPatientDialog: React.FC = () => {
   const [patientID, setPatientID] = useState("");
+  const [patients, setPatients] = useState<DataPatients[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [phenotypeQuery, setPhenotypeQuery] = useState("");
+  const [suggestions, setSuggestions] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const [open, setOpen] = React.useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,6 +67,51 @@ const AddPatientDialog: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    const loadPatients = async () => {
+      try {
+        setLoading(true);
+        const fetchedPatients = await fetchPatients();
+        setPatients(fetchedPatients);
+      } catch (error) {
+        console.error("Failed to fetch patients:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadPatients();
+}, []);
+
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (phenotypeQuery.length > 2) {
+        try {
+          const response = await axios.get(
+            "https://ontology.jax.org/api/hp/search",
+            {
+              params: {
+                q: phenotypeQuery,
+                page: 0,
+                limit: 10,
+              },
+            }
+          );
+          const terms = response.data.terms || [];
+          setSuggestions(
+            terms.map((term: any) => ({ id: term.id, name: term.name }))
+          );
+        } catch (error) {
+          console.error("Error fetching phenotype suggestions:", error);
+        }
+      } else {
+        setSuggestions([]);
+      }
+    };
+
+    fetchSuggestions();
+  }, [phenotypeQuery]);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -49,7 +122,7 @@ const AddPatientDialog: React.FC = () => {
           icon={<Plus className="w-4 h-4" />}
         />
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[80%] max-h-[90%] overflow-y-auto bg-foreground">
+      <DialogContent className="sm:max-w-[50%] max-h-[90%] overflow-y-auto bg-foreground">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <ClipboardPlus className="w-8 h-8 text-primary" />
@@ -58,7 +131,7 @@ const AddPatientDialog: React.FC = () => {
           <DialogDescription>Adding Variant Report.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="grid gap-4 mt-2">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
             <div>
               <div className="flex items-center space-x-2">
                 <Accessibility className="w-6 h-6 text-blue-primary mb-1" />
@@ -73,14 +146,59 @@ const AddPatientDialog: React.FC = () => {
                 Choose the patient by id for whom you want to create this
                 variant report.
               </p>
-              <Input
-                id="patienID"
-                type="text"
-                value={patientID}
-                onChange={(e) => setPatientID(e.target.value)}
-                placeholder="Enter Patient ID"
-                className="w-full bg-foreground"
-              />
+              <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <ButtonAdd
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={open}
+                          className="bg-foreground border-2 border-primary hover:border-secondary w-full justify-between rounded hover:bg-secondary text-primary hover:text-text-action"
+                        >
+                          {selectedPatient
+                            ? selectedPatient.name
+                            : "Select Patient"}
+                          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </ButtonAdd>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[500px] p-0">
+                        <Command>
+                          <CommandInput
+                            placeholder="Search ID Patient"
+                            className="h-9"
+                          />
+                          <CommandList>
+                            <CommandEmpty>No patient found.</CommandEmpty>
+                            <CommandGroup>
+                              {patients.map((patient) => (
+                                <CommandItem
+                                  key={patient.id}
+                                  value={patient.id}
+                                  onSelect={(currentValue) => {
+                                    const selected = patients.find(
+                                      (p) => p.id === currentValue
+                                    );
+                                    if (selected) {
+                                      setSelectedPatient(selected);
+                                    }
+                                    setOpen(false);
+                                  }}
+                                >
+                                  {patient.name} (ID: {patient.id})
+                                  <CheckIcon
+                                    className={cn(
+                                      "ml-auto h-4 w-4",
+                                      selectedPatient?.id === patient.id
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
             </div>
 
             <div>
@@ -107,57 +225,6 @@ const AddPatientDialog: React.FC = () => {
                 className="w-full bg-foreground"
               />
             </div>
-          </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
-              <div className="flex items-center space-x-2">
-                <History className="w-6 h-6 text-blue-primary mb-1" />
-                <label
-                  htmlFor="patienID"
-                  className="block text-sm font-medium text-text-primary"
-                >
-                  Medical History
-                </label>
-              </div>
-              <p className="text-xs text-text-secondary mb-4">
-                Enter the current diagnosis that has been confirmed for this
-                patient (e.g., Breast Cancer, Type 2 Diabetes).
-              </p>
-              <Input
-                id="patienID"
-                type="text"
-                value={patientID}
-                onChange={(e) => setPatientID(e.target.value)}
-                placeholder="Enter Patient ID"
-                className="w-full bg-foreground"
-              />
-            </div>
-
-            <div>
-              <div className="flex items-center space-x-2">
-                <BookHeart className="w-6 h-6 text-blue-primary mb-1" />
-                <label
-                  htmlFor="patienID"
-                  className="block text-sm font-medium text-text-primary"
-                >
-                  Current Diagnosis
-                </label>
-              </div>
-              <p className="text-xs text-text-secondary mb-4">
-                Enter the current diagnosis that has been identified for this
-                patient.
-              </p>
-              <Input
-                id="patienID"
-                type="text"
-                value={patientID}
-                onChange={(e) => setPatientID(e.target.value)}
-                placeholder="Type of Search"
-                className="w-full bg-foreground"
-              />
-            </div>
-          </div>
-          <div>
             <div className="flex items-center space-x-2">
               <FileUp className="w-6 h-6 text-blue-primary mb-1" />
               <label
@@ -181,6 +248,7 @@ const AddPatientDialog: React.FC = () => {
               </p>
             </DragAndDropInput>
           </div>
+          
           <DialogFooter className="mt-4 gap-4">
             <Button
               label="Cancel"
