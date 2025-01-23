@@ -199,6 +199,7 @@ export default function VariantReportCreateForm(props) {
     phenotype: [],
     sample_collection: "",
     idPatient: "",
+    testing_description: "",
   };
   const [status, setStatus] = React.useState(initialValues.status);
   const [isApproved, setIsApproved] = React.useState(initialValues.isApproved);
@@ -217,6 +218,9 @@ export default function VariantReportCreateForm(props) {
     initialValues.sample_collection
   );
   const [idPatient, setIdPatient] = React.useState(initialValues.idPatient);
+  const [testing_description, setTesting_description] = React.useState(
+    initialValues.testing_description
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setStatus(initialValues.status);
@@ -229,6 +233,7 @@ export default function VariantReportCreateForm(props) {
     setCurrentPhenotypeValue("");
     setSample_collection(initialValues.sample_collection);
     setIdPatient(initialValues.idPatient);
+    setTesting_description(initialValues.testing_description);
     setErrors({});
   };
   const [currentPhenotypeValue, setCurrentPhenotypeValue] = React.useState("");
@@ -243,6 +248,7 @@ export default function VariantReportCreateForm(props) {
     phenotype: [],
     sample_collection: [],
     idPatient: [],
+    testing_description: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -279,6 +285,7 @@ export default function VariantReportCreateForm(props) {
           phenotype,
           sample_collection,
           idPatient,
+          testing_description,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -354,6 +361,7 @@ export default function VariantReportCreateForm(props) {
               phenotype,
               sample_collection,
               idPatient,
+              testing_description,
             };
             const result = onChange(modelFields);
             value = result?.status ?? value;
@@ -386,6 +394,7 @@ export default function VariantReportCreateForm(props) {
               phenotype,
               sample_collection,
               idPatient,
+              testing_description,
             };
             const result = onChange(modelFields);
             value = result?.isApproved ?? value;
@@ -418,6 +427,7 @@ export default function VariantReportCreateForm(props) {
               phenotype,
               sample_collection,
               idPatient,
+              testing_description,
             };
             const result = onChange(modelFields);
             value = result?.medical_history ?? value;
@@ -450,6 +460,7 @@ export default function VariantReportCreateForm(props) {
               phenotype,
               sample_collection,
               idPatient,
+              testing_description,
             };
             const result = onChange(modelFields);
             value = result?.current_diagnosis ?? value;
@@ -484,6 +495,7 @@ export default function VariantReportCreateForm(props) {
               phenotype,
               sample_collection,
               idPatient,
+              testing_description,
             };
             const result = onChange(modelFields);
             value = result?.institutionID ?? value;
@@ -517,6 +529,7 @@ export default function VariantReportCreateForm(props) {
               phenotype,
               sample_collection,
               idPatient,
+              testing_description,
             };
             const result = onChange(modelFields);
             value = result?.createAt ?? value;
@@ -545,6 +558,7 @@ export default function VariantReportCreateForm(props) {
               phenotype: values,
               sample_collection,
               idPatient,
+              testing_description,
             };
             const result = onChange(modelFields);
             values = result?.phenotype ?? values;
@@ -602,6 +616,7 @@ export default function VariantReportCreateForm(props) {
               phenotype,
               sample_collection: value,
               idPatient,
+              testing_description,
             };
             const result = onChange(modelFields);
             value = result?.sample_collection ?? value;
@@ -636,6 +651,7 @@ export default function VariantReportCreateForm(props) {
               phenotype,
               sample_collection,
               idPatient: value,
+              testing_description,
             };
             const result = onChange(modelFields);
             value = result?.idPatient ?? value;
@@ -649,6 +665,41 @@ export default function VariantReportCreateForm(props) {
         errorMessage={errors.idPatient?.errorMessage}
         hasError={errors.idPatient?.hasError}
         {...getOverrideProps(overrides, "idPatient")}
+      ></TextField>
+      <TextField
+        label="Testing description"
+        isRequired={false}
+        isReadOnly={false}
+        value={testing_description}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              status,
+              isApproved,
+              medical_history,
+              current_diagnosis,
+              institutionID,
+              createAt,
+              phenotype,
+              sample_collection,
+              idPatient,
+              testing_description: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.testing_description ?? value;
+          }
+          if (errors.testing_description?.hasError) {
+            runValidationTasks("testing_description", value);
+          }
+          setTesting_description(value);
+        }}
+        onBlur={() =>
+          runValidationTasks("testing_description", testing_description)
+        }
+        errorMessage={errors.testing_description?.errorMessage}
+        hasError={errors.testing_description?.hasError}
+        {...getOverrideProps(overrides, "testing_description")}
       ></TextField>
       <Flex
         justifyContent="space-between"

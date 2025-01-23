@@ -100,6 +100,7 @@ type SelectedVariant @model @auth(rules: [{allow: public}]) {
   fraction: Float
   zygosity: String
   text_interpretation: String
+  id_variant: String
 }
 
 type Vcfdata @model @auth(rules: [{allow: public}]) {
@@ -178,6 +179,7 @@ type VariantReport @model @auth(rules: [{allow: public}]) {
   phenotype: [String]
   sample_collection: String
   idPatient: String
+  testing_description: String
 }
 
 type PatientDocuments @model @auth(rules: [{allow: public}]) {

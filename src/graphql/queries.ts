@@ -281,6 +281,7 @@ export const getSelectedVariant = /* GraphQL */ `query GetSelectedVariant($id: I
     fraction
     zygosity
     text_interpretation
+    id_variant
     createdAt
     updatedAt
     __typename
@@ -336,6 +337,7 @@ export const listSelectedVariants = /* GraphQL */ `query ListSelectedVariants(
       fraction
       zygosity
       text_interpretation
+      id_variant
       createdAt
       updatedAt
       __typename
@@ -634,6 +636,7 @@ export const getVariantReport = /* GraphQL */ `query GetVariantReport($id: ID!) 
     phenotype
     sample_collection
     idPatient
+    testing_description
     createdAt
     updatedAt
     __typename
@@ -660,6 +663,7 @@ export const listVariantReports = /* GraphQL */ `query ListVariantReports(
       phenotype
       sample_collection
       idPatient
+      testing_description
       createdAt
       updatedAt
       __typename

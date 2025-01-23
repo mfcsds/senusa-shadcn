@@ -61,6 +61,7 @@ export declare type SelectedVariantUpdateFormInputValues = {
     fraction?: number;
     zygosity?: string;
     text_interpretation?: string;
+    id_variant?: string;
 };
 export declare type SelectedVariantUpdateFormValidationValues = {
     id_patient?: ValidationFunction<string>;
@@ -101,6 +102,7 @@ export declare type SelectedVariantUpdateFormValidationValues = {
     fraction?: ValidationFunction<number>;
     zygosity?: ValidationFunction<string>;
     text_interpretation?: ValidationFunction<string>;
+    id_variant?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type SelectedVariantUpdateFormOverridesProps = {
@@ -143,6 +145,7 @@ export declare type SelectedVariantUpdateFormOverridesProps = {
     fraction?: PrimitiveOverrideProps<TextFieldProps>;
     zygosity?: PrimitiveOverrideProps<TextFieldProps>;
     text_interpretation?: PrimitiveOverrideProps<TextFieldProps>;
+    id_variant?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type SelectedVariantUpdateFormProps = React.PropsWithChildren<{
     overrides?: SelectedVariantUpdateFormOverridesProps | undefined | null;
