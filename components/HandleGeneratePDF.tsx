@@ -36,43 +36,43 @@ const handleGeneratePDF = ({
 
   const root = ReactDOM.createRoot(container);
 
-  root.render(
-    <BlobProvider
-      document={
-        <MyPDFDocument
-          patient={patient}
-          listConc={listConc}
-          listRec={listRec}
-          listSelVariants={listSelVariants}
-          variantInter={variantInter}
-          ensembleVersion={ensembleVersion}
-          ensembleRestVersion={ensembleRestVersion}
-        />
-      }
-    >
-      {({ url, loading }: { url: string | null; loading: boolean }) => {
-        if (loading) {
-          console.log("Generating PDF...");
-          return null;
-        }
+  // root.render(
+  //   <BlobProvider
+  //     document={
+  //       <MyPDFDocument
+  //         patient={patient}
+  //         listConc={listConc}
+  //         listRec={listRec}
+  //         listSelVariants={listSelVariants}
+  //         variantInter={variantInter}
+  //         ensembleVersion={ensembleVersion}
+  //         ensembleRestVersion={ensembleRestVersion}
+  //       />
+  //     }
+  //   >
+  //     {({ url, loading }: { url: string | null; loading: boolean }) => {
+  //       if (loading) {
+  //         console.log("Generating PDF...");
+  //         return null;
+  //       }
 
-        if (url) {
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = "variant_analysis_report.pdf";
-          link.click();
+  //       if (url) {
+  //         const link = document.createElement("a");
+  //         link.href = url;
+  //         link.download = "variant_analysis_report.pdf";
+  //         link.click();
 
-          // Clean up the container after the PDF is downloaded
-          setTimeout(() => {
-            root.unmount();
-            document.body.removeChild(container);
-          }, 0);
-        }
+  //         // Clean up the container after the PDF is downloaded
+  //         setTimeout(() => {
+  //           root.unmount();
+  //           document.body.removeChild(container);
+  //         }, 0);
+  //       }
 
-        return null;
-      }}
-    </BlobProvider>
-  );
+  //       return null;
+  //     }}
+  //   </BlobProvider>
+  // );
 };
 
 export default handleGeneratePDF;

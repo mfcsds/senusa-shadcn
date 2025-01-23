@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import Underline from "@tiptap/extension-underline";
 import StarterKit from "@tiptap/starter-kit";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Trash,
   UserPlus,
@@ -16,25 +16,17 @@ import {
   Save,
   Edit,
 } from "lucide-react";
-import VariantItem from "../variant/VariantItem";
-import ACMGLabel from "../variant/ACMGLabel";
-import ZygosityLabel from "../variant/ZygosityLabel";
-import { ZYGOSITY_HETEROZYGOUS, ZYGOSITY_HOMOZYGOUS } from "@/utils/Contanst";
-import {
-  deleteSelectedVariant,
-  updateSelectedVariant,
-} from "@/src/graphql/mutations";
 
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/tooltip";
-import { Separator } from "../ui/separator";
+} from "@/components/ui/tooltip";
+import { Separator } from "@/components/ui/separator";
 
 import { generateClient } from "aws-amplify/api";
-import { toast, useToast } from "../ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,14 +37,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../ui/alert-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "../ui/dialog";
-import VariantInformationModal from "../items/VariantInformationModal";
+} from "@/components/ui/alert-dialog";
 
 interface RecommendationEditorProops {
   report_id?: string;

@@ -606,7 +606,7 @@ export const columns: ColumnDef<Variant>[] = [
         ref: item.ref,
         alt: item.alt,
         qual: item.qual,
-        zigosity: item.zygosity,
+        zygosity: item.zygosity,
         global_allele: item.globalallele, // Float type in TypeScript is represented as number
         functional_impact: item.functional_impact,
         acmg: item.acmg,
