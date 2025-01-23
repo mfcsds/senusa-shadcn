@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Eye, Trash2 } from "lucide-react";
 import Button from "@/components/update/button/Button";
 import { useRouter } from "next/navigation";
-import { removeVCFData } from "@/hooks/useVcfData"; 
-import  DetailVCFDialog  from "@/components/update/detailPatient/DetailVCFDialog";
+import { removeVCFData } from "@/hooks/useVcfData";
+import DetailVCFDialog from "@/components/update/detailPatient/DetailVCFDialog";
 import {
   Table,
   TableBody,
@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/update/ui/table";
-import { VcfData } from "@/utils/object"; 
+import { VcfData } from "@/utils/object";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,55 +26,37 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/update/dialog/AlertDialog";
-import Swal from "sweetalert2";
+import { useToast } from "@/components/ui/use-toast";
 
 interface TabelVariantsProps {
-  initialVCFData: VcfData[]; 
+  initialVCFData: VcfData[];
 }
 
 const TabelVariants: React.FC<TabelVariantsProps> = ({ initialVCFData }) => {
   const router = useRouter();
-
-  // const handleDelete = async (vcfDataId: string, filePath: string) => {
-  //   if (confirm("Are you sure you want to delete this file?")) {
-  //     await removeVCFData(vcfDataId, filePath);
-  //     setVcfData((prevData) =>
-  //       prevData.filter((data) => data.id !== vcfDataId)
-  //     );
-  //   }
-  // };
+  const { toast } = useToast();
+  const [vcfData, setVcfData] = useState<VcfData[]>(initialVCFData);
 
   const handleDelete = async (vcfDataId: string, filePath: string) => {
     try {
       await removeVCFData(vcfDataId, filePath);
-      Swal.fire({
-        title: "Success",
-        text: "Data VCF has been deleted!",
-        icon: "success",
-        background: "bg-background", 
-        color: "text-text-primary", 
-        timer: 3000,
-        customClass: {
-          popup: "bg-background text-text-primary", 
-          title: "text-2xl font-bold", 
-          confirmButton: "bg-primary text-text-action hover:bg-secondary rounded-lg px-4 py-2", 
-          cancelButton: "bg-red-primary text-text-action hover:bg-red-secondary rounded-lg px-4 py-2",  
-        },
-        confirmButtonText: "Oke",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
-        window.location.reload();
+      toast({
+        title: "Delete Successfully",
+        description: "VCF has been deleted successfully.",
       });
+      setVcfData((prevData) => prevData.filter((vcf) => vcf.id !== vcfDataId));
     } catch (error) {
-      console.error("Error deleting patient:", error);
-      alert("Failed to delete patient.");
-    } 
+      console.error("Error deleting VCF:", error);
+      toast({
+        variant: "destructive",
+        title: "Failed to delete VCF",
+        description: "Can not update VCF status",
+      });
+    }
   };
 
   return (
-      <Table className="h-full w-full overflow-y-auto">
+    <Table className="h-full w-full overflow-y-auto">
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">ID</TableHead>
@@ -86,8 +68,8 @@ const TabelVariants: React.FC<TabelVariantsProps> = ({ initialVCFData }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {initialVCFData.length > 0 ? (
-          initialVCFData.map((vcf) => (
+        {vcfData.length > 0 ? (
+          vcfData.map((vcf) => (
             <TableRow key={vcf.id}>
               <TableCell className="font-medium">{vcf.id}</TableCell>
               <TableCell>{vcf.genome_reference}</TableCell>
@@ -96,29 +78,12 @@ const TabelVariants: React.FC<TabelVariantsProps> = ({ initialVCFData }) => {
               <TableCell>{vcf.uploadAt}</TableCell>
               <TableCell className="flex gap-4">
                 <DetailVCFDialog id_vcf={vcf.id!} />
-                <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="iconBorderDanger"
-                    icon={<Trash2 className="w-5 h-5" />}
-                  />
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Are you sure you want to delete this VCF data?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => handleDelete(vcf.id!, vcf.pathfile!)}>
-                      Continue
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+                <Button
+                  variant="iconBorderDanger"
+                  size="small"
+                  icon={<Trash2 className="w-4 h-4" />}
+                  onClick={() => handleDelete(vcf.id!, vcf.pathfile!)}
+                />
               </TableCell>
             </TableRow>
           ))

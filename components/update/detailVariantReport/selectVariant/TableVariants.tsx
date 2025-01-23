@@ -30,17 +30,15 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/update/ui/table";
-import { Button } from "../../ui/button";
 import { ButtonAdd } from "@/components/update/button/ButtonAdd";
-import { Separator } from "@radix-ui/react-separator";
+
 import {
   ChevronDown,
   ChevronLeftIcon,
   ChevronRightIcon,
-  Download,
   FileCode,
   FileJson,
-  Logs,
+  FileSpreadsheet ,
 } from "lucide-react";
 import {
   DoubleArrowLeftIcon,
@@ -146,6 +144,7 @@ export function TableVariants<TData, TValue>({
 
   const [activeDownloadCSV, setActiveDownloadCSV] = useState(false);
   const [activeDownloadJSON, setActiveDownloadJSON] = useState(false);
+  const [activeDownloadXML, setActiveDownloadXML] = useState(false);
 
   const handleZygosityChange = (value: string) => {
     setZygosityFilter(value);
@@ -203,6 +202,7 @@ export function TableVariants<TData, TValue>({
   });
 
   const generateXML = (id_report: string, id_patient: string) => {
+    setActiveDownloadXML(true)
     // XML Header
     const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
     const rootStart = `<VariantReport reportId="${id_report}" patientId="${id_patient}">`;
@@ -241,6 +241,9 @@ export function TableVariants<TData, TValue>({
 
     // Clean up
     URL.revokeObjectURL(url);
+
+    setActiveDownloadXML(false);
+
   };
   const fetchAPIData = async (hgvs: string) => {
     const requestBody = {
@@ -423,7 +426,7 @@ export function TableVariants<TData, TValue>({
       <div className="grid grid-cols-1 md:grid-cols-10 gap-6">
         {/* Bagian Form */}
         <div className="md:col-span-3 bg-foreground p-6 rounded-lg shadow-lg">
-          <div className="space-y-4 text-text-primary">
+          <div className="space-y-6 text-text-primary">
             {/* Dropdown Gene Panel */}
             <div className="space-y-2">
               <Label className="text-md">Gene Panel</Label>
@@ -446,9 +449,7 @@ export function TableVariants<TData, TValue>({
                         genePanel = GENE_PANEL_113;
                         break;
                     }
-
-                    // This is the important part:
-                    // pass the array to the "gene_symbol" filter.
+                    setSelectedGenePanel(selectedValue)
                     table.getColumn("gene_symbol")?.setFilterValue(genePanel);
                   }}
                 >
@@ -528,7 +529,7 @@ export function TableVariants<TData, TValue>({
                 <DropdownMenuTrigger asChild>
                   <ButtonAdd
                     variant="outline"
-                    className="w-full text-left bg-foreground border-2 border-primary hover:border-secondary rounded hover:bg-secondary text-primary hover:text-text-action"
+                    className="w-full text-left bg-foreground border-2 border-primary hover:border-secondary rounded-lg hover:bg-secondary text-primary hover:text-text-action"
                   >
                     Select Zygosity
                     <ChevronDown className="ml-2 h-4 w-4" />
@@ -575,7 +576,7 @@ export function TableVariants<TData, TValue>({
                 <DropdownMenuTrigger asChild>
                   <ButtonAdd
                     variant="outline"
-                    className="w-full text-left bg-foreground border-2 border-primary hover:border-secondary rounded hover:bg-secondary text-primary hover:text-text-action"
+                    className="w-full text-left bg-foreground border-2 border-primary hover:border-secondary rounded-lg hover:bg-secondary text-primary hover:text-text-action"
                   >
                     ACMG Classification
                     <ChevronDown className="ml-2 h-4 w-4" />
@@ -598,6 +599,7 @@ export function TableVariants<TData, TValue>({
                     onCheckedChange={(isChecked) => {
                       const value = isChecked ? "Likely Pathogenic" : null;
                       setACMGFilter(value);
+                      table.getColumn("acmg")?.setFilterValue(value);
                     }}
                     checked={acmgFilter === "Likely Pathogenic"}
                   >
@@ -611,6 +613,7 @@ export function TableVariants<TData, TValue>({
                     onCheckedChange={(isChecked) => {
                       const value = isChecked ? "VUS" : null;
                       setACMGFilter(value);
+                      table.getColumn("acmg")?.setFilterValue(value);
                     }}
                     checked={acmgFilter === "VUS"}
                   >
@@ -623,6 +626,7 @@ export function TableVariants<TData, TValue>({
                     onCheckedChange={(isChecked) => {
                       const value = isChecked ? "Likely Benign" : null;
                       setACMGFilter(value);
+                      table.getColumn("acmg")?.setFilterValue(value);
                     }}
                     checked={acmgFilter === "Likely Benign"}
                   >
@@ -634,6 +638,7 @@ export function TableVariants<TData, TValue>({
                     onCheckedChange={(isChecked) => {
                       const value = isChecked ? "Benign" : null;
                       setACMGFilter(value);
+                      table.getColumn("acmg")?.setFilterValue(value);
                     }}
                     checked={acmgFilter === "Benign"}
                   >
@@ -651,7 +656,7 @@ export function TableVariants<TData, TValue>({
                 <DropdownMenuTrigger asChild>
                 <ButtonAdd
                     variant="outline"
-                    className="w-full text-left bg-foreground border-2 border-primary hover:border-secondary rounded hover:bg-secondary text-primary hover:text-text-action"
+                    className="w-full text-left bg-foreground border-2 border-primary hover:border-secondary rounded-lg hover:bg-secondary text-primary hover:text-text-action"
                   >
                     Select Column to Show
                     <ChevronDown className="ml-2 h-4 w-4" />
@@ -680,6 +685,44 @@ export function TableVariants<TData, TValue>({
                     })}
                 </DropdownMenuContent>
               </DropdownMenu>
+            </div>
+
+            <div className="space-y-4">
+              <Label className="text-lg">Download Type</Label>
+              <div className="grid grid-row gap-4">
+                <ButtonAdd
+                  className={
+                    activeDownloadCSV ? "rounded-lg bg-foreground border-2 border-primary hover:border-secondary hover:bg-secondary text-primary hover:text-text-action cursor-not-allowed" : "rounded-lg bg-foreground border-2 border-primary hover:border-secondary hover:bg-secondary text-primary hover:text-text-action"
+                  }
+                  variant={"outline"}
+                  onClick={(e) => generateCSV()}
+                  disabled={activeDownloadCSV}
+                >
+                  <FileSpreadsheet > </FileSpreadsheet >
+                  {activeDownloadCSV ? "..." : "CSV"}
+                </ButtonAdd>
+                <ButtonAdd
+                  className={
+                    activeDownloadJSON ? "rounded-lg bg-foreground border-2 border-blue-primary hover:border-blue-secondary hover:bg-blue-secondary text-blue-primary hover:text-text-action cursor-not-allowed" : "rounded-lg bg-foreground border-2 border-blue-primary hover:border-blue-secondary hover:bg-blue-secondary text-blue-primary hover:text-text-action"
+                  }
+                  variant={"outline"}
+                  onClick={(e) => generateJSON()}
+                  disabled={activeDownloadJSON}
+                >
+                  <FileJson></FileJson>
+                  {activeDownloadJSON ? "..." : "JSON"}
+                </ButtonAdd>
+                <ButtonAdd
+                className={
+                  activeDownloadXML ? "rounded-lg bg-foreground border-2 border-red-primary hover:border-red-secondary hover:bg-red-secondary text-red-primary hover:text-text-action cursor-not-allowed" : "rounded-lg bg-foreground border-2 border-red-primary hover:border-red-secondary hover:bg-red-secondary text-red-primary hover:text-text-action"
+                }
+                  variant={"outline"}
+                  onClick={(e) => generateXML("ID_RECORD", "ID_PATIENT")}
+                >
+                  <FileCode> </FileCode>
+                  {activeDownloadXML ? "..." : "XML"}
+                </ButtonAdd>
+              </div>
             </div>
           </div>
         </div>
@@ -722,7 +765,7 @@ export function TableVariants<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="h-8 text-xs px-2 md:px-4"
+                      className="h-8 text-xs px-2 md:px-4 text-md"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -780,7 +823,7 @@ export function TableVariants<TData, TValue>({
                 {table.getPageCount()}
               </div>
               <div className="flex items-center space-x-2">
-                <Button
+                <ButtonAdd
                   variant="outline"
                   className="hidden h-8 w-8 p-0 lg:flex text-text-secondary hover:text-text-primary"
                   onClick={() => table.setPageIndex(0)}
@@ -788,8 +831,8 @@ export function TableVariants<TData, TValue>({
                 >
                   <span className="sr-only">Go to first page</span>
                   <DoubleArrowLeftIcon className="h-4 w-4" />
-                </Button>
-                <Button
+                </ButtonAdd>
+                <ButtonAdd
                   variant="outline"
                   className="h-8 w-8 p-0 text-text-secondary hover:text-text-primary"
                   onClick={() => table.previousPage()}
@@ -797,8 +840,8 @@ export function TableVariants<TData, TValue>({
                 >
                   <span className="sr-only">Go to previous page</span>
                   <ChevronLeftIcon className="h-4 w-4" />
-                </Button>
-                <Button
+                </ButtonAdd>
+                <ButtonAdd
                   variant="outline"
                   className="h-8 w-8 p-0 text-text-secondary hover:text-text-primary"
                   onClick={() => table.nextPage()}
@@ -806,8 +849,8 @@ export function TableVariants<TData, TValue>({
                 >
                   <span className="sr-only">Go to next page</span>
                   <ChevronRightIcon className="h-4 w-4" />
-                </Button>
-                <Button
+                </ButtonAdd>
+                <ButtonAdd
                   variant="outline"
                   className="hidden h-8 w-8 p-0 lg:flex text-text-secondary hover:text-text-primary"
                   onClick={() => table.setPageIndex(table.getPageCount() - 1)}
@@ -815,7 +858,7 @@ export function TableVariants<TData, TValue>({
                 >
                   <span className="sr-only">Go to last page</span>
                   <DoubleArrowRightIcon className="h-4 w-4" />
-                </Button>
+                </ButtonAdd>
               </div>
             </div>
           </div>

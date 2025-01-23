@@ -15,7 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/update/dialog/AlertDialog";
-import Swal from "sweetalert2";
+import { useToast } from "@/components/ui/use-toast";
 
 interface CardViewProps {
   initialPatients: DataPatients[];
@@ -24,35 +24,24 @@ interface CardViewProps {
 const ListView: React.FC<CardViewProps> = ({ initialPatients }) => {
   const router = useRouter();
   const [patients, setPatients] = useState<DataPatients[]>(initialPatients);
-
+  const { toast } = useToast();
+  
   const handleDelete = async (id: string) => {
     try {
       await removePatient(id);
-      Swal.fire({
-        title: "Success",
-        text: "Patient has been deleted.",
-        icon: "success",
-        background: "bg-background",
-        color: "text-text-primary",
-        timer: 3000,
-        customClass: {
-          popup: "bg-background text-text-primary",
-          title: "text-2xl font-bold",
-          confirmButton:
-            "bg-primary text-text-action hover:bg-secondary rounded-lg px-4 py-2",
-          cancelButton:
-            "bg-red-primary text-text-action hover:bg-red-secondary rounded-lg px-4 py-2",
-        },
-        confirmButtonText: "Oke",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
-        window.location.reload();
+      const updatedPatients = await fetchPatients();
+      setPatients(updatedPatients);
+      toast({
+        title: "Delete Successfully",
+        description: "Patient has been deleted successfully.",
       });
     } catch (error) {
       console.error("Error deleting patient:", error);
-      alert("Failed to delete patient.");
+      toast({
+        variant: "destructive",
+        title: "Failed to delete patient",
+        description: "Unable to delete the patient data.",
+      });
     }
   };
 

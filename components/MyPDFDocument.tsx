@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
 
 // Define Props
 interface MyPDFDocumentProps {
-  patient: Patient;
+  id_patient: string;
   listConc: Conclusion[];
   listRec: Recommendation[];
   listSelVariants: SelectedVariant[];
@@ -127,7 +127,7 @@ interface MyPDFDocumentProps {
 
 // PDF Document Component
 const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
-  patient,
+  id_patient,
   listConc,
   listRec,
   listSelVariants,
@@ -164,7 +164,7 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
         <View style={styles.section}>
           <Text style={styles.subtitle}>Patient Information</Text>
           <View>
-            <Text style={styles.text}>ID/Reference: {patient.id}</Text>
+            <Text style={styles.text}>ID/Reference: {id_patient}</Text>
           </View>
         </View>
 
@@ -196,7 +196,7 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
                   {`${item.gene_symbol} (${item.gene_id}): ${item.hgvs}`}
                 </Text>
                 <Text style={[styles.tableCell, styles.centered]}>
-                  {item.zigosity}
+                  {item.zygosity}
                 </Text>
                 <Text style={[styles.tableCell, styles.centered]}>
                   {item.acmg}

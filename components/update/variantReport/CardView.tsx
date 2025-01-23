@@ -25,25 +25,14 @@ const CardView: React.FC<CardViewProps> = ({ initialVariants }) => {
             <p className="text-sm text-text-secondary mb-4">
               <strong>Patient Phenotypes:</strong> {variant.phenotype}
             </p>
-            <div className="flex items-center justify-between mb-4">
+            <div className="grid gap-2 items-center justify-between mb-4">
+            <p className="text-sm text-text-secondary">
+              <strong>Status Report:</strong>
+            </p>
               <div className="border-2 text-primary text-center border-primary px-4 py-1 rounded-lg text-sm">
               {ReportStatus(variant.status ?? 4)}
               </div>
-              <div className="flex gap-2">
-                <Button
-                  variant="outlineSecondary"
-                  size="small"
-                  icon={<SquarePen className="w-4 h-4" />}
-                  onClick={() =>
-                    router.push(`/features/variant-report/${variant.id}`)
-                  }
-                />
-                <Button
-                  variant="outlineDanger"
-                  size="small"
-                  icon={<Trash2 className="w-4 h-4" />}
-                />
-              </div>
+              
             </div>
             <div className="flex justify-between gap-2 border-t pt-2">
               <div className="flex flex-col gap-2">
@@ -59,6 +48,21 @@ const CardView: React.FC<CardViewProps> = ({ initialVariants }) => {
                 <p className="text-sm text-text-secondary">{variant.sample_collection}</p>
               </div>
             </div>
+            <div className="flex gap-4 justify-end mt-6">
+                <Button
+                  variant="outlineSecondary"
+                  size="large"
+                  icon={<SquarePen className="w-4 h-4" />}
+                  onClick={() =>
+                    router.push(`/features/variant-report/${variant.id}`)
+                  }
+                />
+                <Button
+                  variant="outlineDanger"
+                  size="large"
+                  icon={<Trash2 className="w-4 h-4" />}
+                />
+              </div>
           </CardContent>
         </Card>
       ))}

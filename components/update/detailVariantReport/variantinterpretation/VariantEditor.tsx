@@ -34,7 +34,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 import { generateClient } from "aws-amplify/api";
-import { toast, useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -65,7 +65,7 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
   onDeleteVariant,
 }) => {
   const client = generateClient();
-
+  const { toast } = useToast();
   const [contentText, setContentText] = useState<string>(
     variantData?.text_interpretation ?? "<p>Start editing here...</p>"
   );
@@ -150,7 +150,7 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
           },
         });
         toast({
-          title: "Update Variant",
+          title: "Update Successfully",
           description: "Successfully updated variant interpretation.",
         });
         setEditableVariantEditor(true);
@@ -320,6 +320,7 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
                         <Button
                           variant="iconSecondary"
                           size="md"
+                          onClick={() => handleSaveVariantAnalysis()}
                           icon={<Save className="w-4 h-4" />}
                         />
                       </TooltipTrigger>

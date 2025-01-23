@@ -55,6 +55,7 @@ const config = {
 			'text-primary': 'hsl(var( --text-primary))',
 			'text-secondary': 'hsl(var( --text-secondary))',
 			'text-action': 'hsl(var( --text-action))',
+			'text-secret': 'hsl(var( --text-secret))',
 			'blue-primary': 'hsl(var(--blue-primary))',
 			'blue-secondary': 'hsl(var(--blue-secondary))',
 			'red-primary': 'hsl(var(--red-primary))',

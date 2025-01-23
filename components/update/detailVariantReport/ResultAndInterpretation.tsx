@@ -83,7 +83,7 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
       );
 
       toast({
-        title: "Delete Variant",
+        title: "Delete Successfully",
         description: "The variant has been deleted successfully.",
       });
     } catch (error) {

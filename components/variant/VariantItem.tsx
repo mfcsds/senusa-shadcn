@@ -27,7 +27,7 @@ const getGeneColor = (item?: SelectedVariant) => {
   ];
   return highRiskGenes.includes(item?.gene_symbol || "")
     ? "border-red-600"
-    : "border-gray-500 dark:border-grey-300"; // Default color
+    : "border-gray-500"; // Default color
 };
 
 // Function to Get Gene Text Color
@@ -52,7 +52,7 @@ const getTextGeneColor = (item?: SelectedVariant) => {
   ];
   return highRiskGenes.includes(item?.gene_symbol || "")
     ? "text-red-600 font-semibold"
-    : "text-gray-500"; // Default color
+    : "text-gray-500 font-semiboldS"; // Default color
 };
 
 const VariantItem: React.FC<VariantItemProops> = ({ variantData }) => {

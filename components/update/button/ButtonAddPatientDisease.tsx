@@ -41,6 +41,7 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
   const client = generateClient();
 
   useEffect(() => {
+    console.log("patient_id: " + patient_id)
     const loadInitialData = async () => {
       try {
         const fetchedPatientDisease = await fetchPatientDisease(patient_id!);

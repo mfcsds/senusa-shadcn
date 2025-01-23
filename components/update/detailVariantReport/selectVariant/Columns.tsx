@@ -5,17 +5,8 @@ import { Button } from "../../ui/button";
 import {
   ArrowUpDown,
   Edit,
-  Edit2,
-  PlusCircle,
   TableOfContents,
 } from "lucide-react";
-import { updateVariant } from "@/src/graphql/mutations";
-
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import { Badge } from "../../../ui/badge";
 import {
   AcmgCriteria,
@@ -31,8 +22,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../../ui/dialog";
-import VariantInformationModal from "../../../items/VariantInformationModal";
+} from "@/components/update/dialog/Dialog";
+import VariantInformationModal from "./VariantInformationModal";
 import React from "react";
 import { Label } from "../../../ui/label";
 import { Input } from "../../../ui/input";
@@ -59,9 +50,9 @@ import awsconfig from "@/src/amplifyconfiguration.json";
 import { Amplify } from "aws-amplify";
 import { generateUserID } from "@/utils/function";
 import { Toast, ToastAction } from "../../../ui/toast";
-import BAddSelectedVariant from "@/components/button/BAddSelectedVariant";
+import BAddSelectedVariant from "@/components/update/button/BAddSelectedVariant";
 import { ZYGOSITY_HETEROZYGOUS, ZYGOSITY_HOMOZYGOUS } from "@/utils/Contanst";
-import ACMGVariantReport from "../../../items/variantquery/ACMGVariantReport";
+import ACMGVariantReport from "./ACMGVariantReport";
 import handleGeneratePDF from "../../../HandleGeneratePDF";
 
 Amplify.configure(awsconfig);
@@ -119,7 +110,7 @@ export const Columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "gene_id",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">Variant Detail</p>;
+      return <p className="text-md font-sans ml-5">Variant Detail</p>;
     },
     cell: ({ row }) => {
       const item = row.original;
@@ -143,7 +134,7 @@ export const Columns: ColumnDef<Variant>[] = [
           case "BARD1":
             return "border-red-600 ";
           default:
-            return "border-gray-300"; // Default color if value doesn't match
+            return "border-gray-500"; // Default color if value doesn't match
         }
       };
       const getTextGeneColor = () => {
@@ -166,7 +157,7 @@ export const Columns: ColumnDef<Variant>[] = [
           case "BARD1":
             return "text-red-600 font-semibold ";
           default:
-            return "text-gray-600"; // Default color if value doesn't match
+            return "text-text-primary font-semibold"; // Default color if value doesn't match
         }
       };
 
@@ -177,7 +168,7 @@ export const Columns: ColumnDef<Variant>[] = [
           >
             <div className=" px-2 rounded-md border-gray-500 border-2">
               {item.gene_symbol ? (
-                <p className={`text-lg font-medium ${getTextGeneColor()}`}>
+                <p className={`text-md font-medium ${getTextGeneColor()}`}>
                   {item.gene_symbol}
                 </p>
               ) : (
@@ -188,7 +179,7 @@ export const Columns: ColumnDef<Variant>[] = [
               )}
             </div>
             {item.gene_id ? (
-              <p className="text-lg font-medium text-gray-400 ">
+              <p className="text-md font-medium text-text-secondary ">
                 {item.gene_id}
               </p>
             ) : (
@@ -199,9 +190,9 @@ export const Columns: ColumnDef<Variant>[] = [
             )}
           </div>
           <div className="flex flex-col">
-            <p className="text-lg">{item.hgvs}</p>
+            <p className="text-md">{item.hgvs}</p>
             {item.rsID ? (
-              <p className="text-lg font-sans text-gray-500 ">{`RSID: ${item.rsID?.toUpperCase()}`}</p>
+              <p className="text-md font-sans text-text-secondary ">{`RSID: ${item.rsID?.toUpperCase()}`}</p>
             ) : (
               <Skeleton vocab="Loading" className="h-6 w-[100px] bg-gray-300" />
             )}
@@ -214,7 +205,7 @@ export const Columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "AC",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">AC</p>;
+      return <p className="text-md font-sans ml-5">AC</p>;
     },
     cell: ({ row }) => {
       const ac = row.original.ac;
@@ -229,99 +220,99 @@ export const Columns: ColumnDef<Variant>[] = [
         displayValue = ac || "N/A";
       }
 
-      return <p className="text-lg">{displayValue}</p>;
+      return <p className="text-md">{displayValue}</p>;
     },
   },
   {
     accessorKey: "AF",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">AF</p>;
+      return <p className="text-md text-text-primary font-sans ml-5">AF</p>;
     },
     cell: ({ row }) => {
-      return <p className="text-lg">{row.original.af}</p>;
+      return <p className="text-md text-text-primary">{row.original.af}</p>;
     },
   },
   {
     accessorKey: "AN",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">AN</p>;
+      return <p className="text-md text-text-primary font-sans ml-5">AN</p>;
     },
     cell: ({ row }) => {
-      return <p className="text-lg">{row.original.an}</p>;
+      return <p className="text-md text-text-primary">{row.original.an}</p>;
     },
   },
   {
     accessorKey: "DP",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">DP</p>;
+      return <p className="text-md text-text-primary font-sans ml-5">DP</p>;
     },
     cell: ({ row }) => {
-      return <p className="text-lg">{row.original.dp}</p>;
+      return <p className="text-md text-text-primary">{row.original.dp}</p>;
     },
   },
   {
     accessorKey: "FS",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">FS</p>;
+      return <p className="text-md text-text-primary font-sans ml-5">FS</p>;
     },
     cell: ({ row }) => {
-      return <p className="text-lg">{row.original.fs}</p>;
+      return <p className="text-md text-text-primary">{row.original.fs}</p>;
     },
   },
   {
     accessorKey: "MQ",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">MQ</p>;
+      return <p className="text-md text-text-primary font-sans ml-5">MQ</p>;
     },
     cell: ({ row }) => {
-      return <p className="text-lg">{row.original.mq}</p>;
+      return <p className="text-md text-text-primary">{row.original.mq}</p>;
     },
   },
   {
     accessorKey: "MQRankSum",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">MQRankSum</p>;
+      return <p className="text-md text-text-primary font-sans ml-5">MQRankSum</p>;
     },
     cell: ({ row }) => {
-      return <p className="text-lg">{row.original.mqranksum}</p>;
+      return <p className="text-md text-text-primary">{row.original.mqranksum}</p>;
     },
   },
   {
     accessorKey: "QD",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">QD</p>;
+      return <p className="text-md text-text-primary font-sans ml-5">QD</p>;
     },
     cell: ({ row }) => {
-      return <p className="text-lg">{row.original.qd}</p>;
+      return <p className="text-md text-text-primary">{row.original.qd}</p>;
     },
   },
 
   {
     accessorKey: "ReadPosRank",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">ReadPosRank</p>;
+      return <p className="text-md text-text-primary font-sans ml-5">ReadPosRank</p>;
     },
     cell: ({ row }) => {
-      return <p className="text-lg">{row.original.readposrank}</p>;
+      return <p className="text-md text-text-primary">{row.original.readposrank}</p>;
     },
   },
   {
     accessorKey: "Fraction",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">Fraction</p>;
+      return <p className="text-md text-text-primary font-sans ml-5">Fraction</p>;
     },
     cell: ({ row }) => {
-      return <p className="text-lg">{row.original.fraction}</p>;
+      return <p className="text-md text-text-primary">{row.original.fraction}</p>;
     },
   },
 
   {
     accessorKey: "SOR",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">SOR</p>;
+      return <p className="text-md text-text-primary font-sans ml-5">SOR</p>;
     },
     cell: ({ row }) => {
-      return <p className="text-lg">{row.original.sor}</p>;
+      return <p className="text-md text-text-primary">{row.original.sor}</p>;
     },
   },
 
@@ -330,7 +321,7 @@ export const Columns: ColumnDef<Variant>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-lg hover:bg-transparent"
+          className="text-md hover:bg-transparent"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -343,14 +334,15 @@ export const Columns: ColumnDef<Variant>[] = [
       function getBorder(zygosity: string) {
         switch (zygosity) {
           case ZYGOSITY_HETEROZYGOUS:
-            return "bg-blue-50 border-blue-600";
+            return "border-blue-primary bg-blue-secondary text-black";
           case ZYGOSITY_HOMOZYGOUS:
-            return "bg-red-50 border-red-600";
+            return "border-red-primary bg-red-secondary text-black";
         }
+        return "border-gray-500 bg-foreground text-red-primary";
       }
       return (
         <p
-          className={`text-lg p-2 border-2 ${getBorder(
+          className={`text-md p-2 border-2 ${getBorder(
             row.original.zygosity ?? ""
           )} rounded text-center`}
         >
@@ -365,7 +357,7 @@ export const Columns: ColumnDef<Variant>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-xs hover:bg-black hover:text-white"
+          className="text-sm hover:bg-black hover:text-white"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -380,7 +372,7 @@ export const Columns: ColumnDef<Variant>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-lg hover:bg-transparent hover:text-black"
+          className="text-md hover:bg-transparent hover:text-text-primary"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -396,17 +388,17 @@ export const Columns: ColumnDef<Variant>[] = [
       const getBadgeColor = () => {
         switch (item.acmg) {
           case "Pathogenic":
-            return "border-red-300 bg-red-50 text-gray-700";
+            return "border-red-600 bg-red-primary text-black";
           case "Likely Pathogenic":
-            return "border-red-300 bg-red-50 text-gray-700";
+            return "border-red-600 bg-red-secondary text-black";
           case "Likely Benign":
-            return "border-green-300 bg-green-50"; // Red for pathogenic
+            return "border-primary bg-secondary text-black"; // Red for pathogenic
           case "Benign":
-            return "border-green-300 bg-green-50"; // Green for benign
+            return "border-primary bg-accent text-black"; // Green for benign
           case "VUS":
-            return "border-yellow-200 bg-yellow-50"; // Yellow for VUS
+            return "border-yellow-primary bg-yellow-secondary text-black"; // Yellow for VUS
           default:
-            return "border-gray-500"; // Default color if value doesn't match
+            return "border-gray-500 "; // Default color if value doesn't match
         }
       };
       return (
@@ -414,29 +406,8 @@ export const Columns: ColumnDef<Variant>[] = [
           <div
             className={`flex flex-row items-center gap-2 justify-center rounded-md px-3 py-1 border-2 ${getBadgeColor()}`}
           >
-            <p className="text-lg font-medium">{item.acmg}</p>
+            <p className="text-md font-medium">{item.acmg}</p>
           </div>
-
-          <Dialog>
-            <DialogTrigger>
-              <Button
-                variant={"ghost"}
-                className="border rounded-md hover:border-green-800 hover:bg-green-200 group-hover:text-black"
-              >
-                <Edit className="w-4 h-4"></Edit>
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-[90%] max-h-[90%] w-auto h-auto p-4 m-5">
-              <ACMGVariantReport
-                id_variantku={item.id}
-                hgvs={item.hgvs}
-                onUpdateVariant={(e) => {}}
-              ></ACMGVariantReport>
-              <DialogFooter>
-                <Button>Save</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
         </div>
       );
     },
@@ -447,7 +418,7 @@ export const Columns: ColumnDef<Variant>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-lg hover:text-black hover:bg-transparent"
+          className="text-md hover:text-black hover:bg-transparent"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -459,7 +430,7 @@ export const Columns: ColumnDef<Variant>[] = [
     cell: ({ row }) => {
       const item = row.original;
       return (
-        <p className="text-lg">
+        <p className="text-md">
           {item.clinicalSign?.replace("_", " ").toUpperCase()}
         </p>
       );
@@ -471,7 +442,7 @@ export const Columns: ColumnDef<Variant>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-lg hover:text-black hover:bg-transparent"
+          className="text-md hover:text-black hover:bg-transparent"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -483,7 +454,7 @@ export const Columns: ColumnDef<Variant>[] = [
     cell: ({ row }) => {
       const item = row.original;
       return (
-        <p className="text-lg">
+        <p className="text-md">
           {item.severeconsequence?.toUpperCase().replaceAll("_", " ")}
         </p>
       );
@@ -536,7 +507,7 @@ export const Columns: ColumnDef<Variant>[] = [
                 <div className="flex flex-row items-center gap-3">
                   <Button
                     variant="link"
-                    className="text-lg text-gray-500"
+                    className="text-md text-text-primary"
                   >{`${phenotypesList.length} Found`}</Button>
                 </div>
               </AccordionTrigger>
@@ -544,13 +515,13 @@ export const Columns: ColumnDef<Variant>[] = [
                 {phenotypesList.length > 0 ? (
                   <ul className="list-disc pl-5">
                     {phenotypesList.map((phenotype, index) => (
-                      <li key={index} className="text-gray-700 text-sm">
+                      <li key={index} className="text-text-secondary text-sm">
                         {phenotype}
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-500">No phenotypes available</p>
+                  <p className="text-text-primary">No phenotypes available</p>
                 )}
               </AccordionContent>
             </AccordionItem>
@@ -563,7 +534,7 @@ export const Columns: ColumnDef<Variant>[] = [
     accessorKey: "rsID",
     header: "RSID",
     cell: ({ row }) => {
-      return <p className="text-lg">{row.original.rsID?.toUpperCase()}</p>;
+      return <p className="text-md">{row.original.rsID?.toUpperCase()}</p>;
     },
   },
   {
@@ -612,19 +583,36 @@ export const Columns: ColumnDef<Variant>[] = [
       };
 
       return (
-        <div className="flex flex-row items-center justify-center p-2 gap-2">
+        <div className="flex flex-row gap-4">
+          <Dialog>
+            <DialogTrigger>
+            <Button variant="outline" className="rounded-lg bg-foreground border-2 border-primary hover:border-secondary hover:bg-secondary text-primary hover:text-text-action">
+                <small>
+                  <Edit className="h-4 w-4"></Edit>
+                </small>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[90%] max-h-[90%] overflow-y-auto bg-foreground">
+              <ACMGVariantReport
+                id_variantku={item.id}
+                hgvs={item.hgvs}
+                onUpdateVariant={(e) => {}}
+              ></ACMGVariantReport>
+            </DialogContent>
+          </Dialog>
+
           <Dialog>
             <DialogHeader>
               <DialogTitle></DialogTitle>
             </DialogHeader>
             <DialogTrigger asChild>
-              <Button variant="outline">
+              <Button variant="outline" className="rounded-lg bg-foreground border-2 border-blue-primary hover:border-blue-secondary hover:bg-blue-secondary text-blue-primary hover:text-text-action">
                 <small>
                   <TableOfContents className="h-4 w-4"></TableOfContents>
                 </small>
               </Button>
             </DialogTrigger>
-            <DialogContent className="w-full max-w-[1800px]">
+            <DialogContent className="sm:max-w-[90%] max-h-[90%] overflow-y-auto bg-foreground">
               <VariantInformationModal
                 hgvsNotation={item.hgvs}
                 id_variant={item.id}
@@ -634,6 +622,7 @@ export const Columns: ColumnDef<Variant>[] = [
               </DialogFooter>
             </DialogContent>
           </Dialog>
+
           <BAddSelectedVariant dataVariant={item}></BAddSelectedVariant>
         </div>
       );

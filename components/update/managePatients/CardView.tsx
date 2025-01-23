@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { SquarePen, Trash2, Accessibility } from "lucide-react";
 import Button from "@/components/update/button/Button";
 import { useRouter } from "next/navigation";
-import { removePatient } from "@/hooks/usePatients";
-import { DataPatients } from "@/utils/object"
+import { removePatient, fetchPatients } from "@/hooks/usePatients";
+import { DataPatients } from "@/utils/object";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,9 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/update/dialog/AlertDialog";
-import Swal from "sweetalert2";
-import { useToast } from "@/components/ui/use-toast";
-import { fetchPatients } from "@/hooks/usePatients";
+import { useToast } from "@/components/update/ui/use-toast";
 
 interface CardViewProps {
   initialPatients: DataPatients[];
@@ -27,26 +25,25 @@ const CardView: React.FC<CardViewProps> = ({ initialPatients }) => {
   const router = useRouter();
   const [patients, setPatients] = useState<DataPatients[]>(initialPatients);
   const { toast } = useToast();
-  
+
   const handleDelete = async (id: string) => {
     try {
       await removePatient(id);
-      const updatedPatients = await fetchPatients(); 
-      setPatients(updatedPatients); 
+      const updatedPatients = await fetchPatients();
+      setPatients(updatedPatients);
       toast({
-        title: "Success delete patient",
-        description: "Patient has been deleted",
+        title: "Delete Successfully",
+        description: "Patient has been deleted successfully.",
       });
     } catch (error) {
       console.error("Error deleting patient:", error);
       toast({
         variant: "destructive",
         title: "Failed to delete patient",
-        description: "Can not update patient status",
+        description: "Unable to delete the patient data.",
       });
     }
   };
-  
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

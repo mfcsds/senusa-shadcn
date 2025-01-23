@@ -22,11 +22,11 @@ function getBorderColor(zygosity: string) {
 function getBackgroundColor(zygosity: string) {
   switch (zygosity) {
     case ZYGOSITY_HETEROZYGOUS:
-      return "bg-blue-secondary";
+      return "bg-blue-secondary text-black";
     case ZYGOSITY_HOMOZYGOUS:
-      return "bg-red-secondary";
+      return "bg-red-secondary text-black";
   }
-  return "bg-foreground";
+  return "bg-foreground text-red-primary";
 }
 
 interface ZygosityLabelProops {
@@ -35,7 +35,7 @@ interface ZygosityLabelProops {
 const ZygosityLabel: React.FC<ZygosityLabelProops> = ({ label }) => {
   return (
     <p
-      className={`p-2 border-2 rounded-sm text-sm text-black ${getBackgroundColor(
+      className={`p-2 border-2 rounded-sm text-sm  ${getBackgroundColor(
         label
       )} ${getBorderColor(label)} text-center`}
     >

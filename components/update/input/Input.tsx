@@ -35,7 +35,7 @@ const Input: React.FC<InputProps> = ({
       value={value}
       onChange={onChange}
       className={clsx(
-        `w-full border rounded-lg text-text-secondary focus:outline-primary focus:ring-ring bg-background border-border ${className}`,
+        `w-full border rounded-lg text-text-secondary focus:outline-primary focus:ring-primary bg-background border-border ${className}`,
         sizeClasses[size],  
       )}
       placeholder={placeholder}

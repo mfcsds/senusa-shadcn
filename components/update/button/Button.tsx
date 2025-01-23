@@ -50,7 +50,7 @@ const Button: React.FC<ButtonProps> = ({
     borderPrimary: 'bg-foreground border-2 border-primary hover:border-secondary rounded hover:bg-secondary text-primary hover:text-text-action',
     borderSecondary: 'bg-foreground border-2 border-blue-primary hover:border-blue-secondary rounded hover:bg-blue-secondary text-blue-primary hover:text-text-action',
     borderDanger: 'bg-foreground border-2 border-red-primary hover:border-red-secondary rounded hover:bg-red-secondary text-red-primary hover:text-text-action',
-    iconPrimary: 'text-primary hover:text-secondary',
+    iconPrimary: 'text-primary hover:text-text-secondary',
     iconSecondary: 'text-blue-primary hover:text-text-secondary',
     iconDanger: 'text-red-primary hover:text-text-secondary',
     iconBorderPrimary: 'border-2 border-foreground text-primary hover:border-2 hover:border-primary',

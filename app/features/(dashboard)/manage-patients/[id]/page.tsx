@@ -90,8 +90,8 @@ export default function DetailPatientPage({ params }: PageProps) {
     try {
       await updateDataPatient(id!, patientStatusDesc);
       toast({
-        title: "Success update patient",
-        description: "Sucessfull update patient status",
+        title: "Update Successfully",
+        description: "The patient status has been update successfully.",
       });
     } catch (error) {
       toast({
@@ -160,7 +160,7 @@ export default function DetailPatientPage({ params }: PageProps) {
           </Select>
           <Button
               label="Save"
-              variant="iconBorderSecondary"
+              variant="borderSecondary"
               size="medium"
               className="w-full"
               icon={<Save className="w-3 h-3" />}

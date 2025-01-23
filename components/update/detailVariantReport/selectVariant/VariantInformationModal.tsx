@@ -5,14 +5,14 @@ import { getAcmgAnnotation, listAcmgAnnotations } from "@/src/graphql/queries";
 import { generateClient } from "aws-amplify/api";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"; // Adjust import based on your setup
 import axios from "axios";
-import VariantGeneralInfo from "./VariantGeneralInfo";
-import VariantAlellel from "./VariantAlellel";
+import VariantGeneralInfo from "../../../items/VariantGeneralInfo";
+import VariantAlellel from "../../../items/VariantAlellel";
 import { AcmgCriteria, VariantData } from "@/utils/object";
-import VariantComputationalPrediction from "./VariantComputationalPrediction";
-import ACMGAnnotation from "./ACMGAnnotation";
-import FunctionalAnnotations from "./FunctionalAnnotations";
-import Transcripts from "./Transcripts";
-import ConservationScores from "./ConservationScores";
+import VariantComputationalPrediction from "../../../items/VariantComputationalPrediction";
+import ACMGAnnotation from "../../../items/ACMGAnnotation";
+import FunctionalAnnotations from "../../../items/FunctionalAnnotations";
+import Transcripts from "../../../items/Transcripts";
+import ConservationScores from "../../../items/ConservationScores";
 import {
   Table,
   TableBody,
@@ -20,10 +20,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
-import ACMGVariantQuery from "./variantquery/ACMGVariantQuery";
+} from "@/components/update/ui/table";
+import ACMGVariantQuery from "../../../items/variantquery/ACMGVariantQuery";
 import { equal } from "assert";
-import ACMGVariantReport from "./variantquery/ACMGVariantReport";
+import ACMGVariantReport from "../../../items/variantquery/ACMGVariantReport";
+import Spinner from "@/components/update/ui/Spinner";
 
 interface VariantInformation {
   hgvsNotation: string | "";
@@ -188,8 +189,8 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
   if (loading) {
     return (
       <div className="text-center py-10">
-        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"></div>
-        <p className="text-gray-500 ">
+        <Spinner />
+        <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
           Loading... fetching data for {hgvsNotation}
         </p>
       </div>

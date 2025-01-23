@@ -32,6 +32,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Spinner from "@/components/update/ui/Spinner";
+import RecommendationAndConclusion from "@/components/update/detailVariantReport/RecommendationAndConclusion";
 
 interface PageProps {
   params: Promise<{
@@ -93,6 +95,7 @@ export default function DetailVariantReport({ params }: PageProps) {
 
   useEffect(() => {
     if (!patientId) return;
+    console.log(patientId);
     const loadVCFData = async () => {
       try {
         setLoading(true);
@@ -106,17 +109,6 @@ export default function DetailVariantReport({ params }: PageProps) {
     };
     loadVCFData();
   }, [patientId]);
-
-  const [levelAccount, setLevelAccount] = useState("");
-  const optionVCFData = vcfData.map((item) => ({
-    label: item.id!,
-    value: item.id!,
-  }));
-
-  const variantReportData = variantReport.map((item) => ({
-    label: item.id!,
-    value: item.id!,
-  }));
 
   const handleUpdateVariant = (id: string, updatedACMGClass: string) => {
     setListVariant((prevVariants) =>
@@ -168,9 +160,7 @@ export default function DetailVariantReport({ params }: PageProps) {
   return (
     <div className="p-8 min-h-screen">
       {loading ? (
-        <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
-          Loading...
-        </p>
+        <Spinner />
       ) : (
         <div className="p-8 bg-foreground shadow-lg">
           {variantReport.map((report) => (
@@ -241,22 +231,6 @@ export default function DetailVariantReport({ params }: PageProps) {
                       </SelectGroup>
                     </SelectContent>
                   </Select>
-                  
-
-                  {/* {loadingVariant ? (
-                    <div className="flex items-center gap-2">
-                      <div className="animate-spin h-4 w-4 border-2 border-blue-500 rounded-full border-t-transparent"></div>
-                      <p className="text-sm text-blue-600 font-semibold">
-                        Loading variants...
-                      </p>
-                    </div>
-                  ) : selectedVCF ? (
-                    <p className="text-sm text-green-600 font-semibold">
-                      Selected VCF: {selectedVCF}
-                    </p>
-                  ) : (
-                    <p className="text-sm text-gray-500">No VCF selected.</p>
-                  )} */}
                 </div>
               </div>
 
@@ -268,47 +242,64 @@ export default function DetailVariantReport({ params }: PageProps) {
           ))}
         </div>
       )}
-      <div className="mt-8 w-auto">
-        {/* Tabs */}
-        <Tabs defaultValue="information-approvel">
-          <TabsList>
-            <TabsTrigger value="information-approvel">
-              Information Approvel Report
-            </TabsTrigger>
-            <TabsTrigger value="select-variant">Select Variant</TabsTrigger>
-            <TabsTrigger value="result-interpretation">
-              Result and Interpretation
-            </TabsTrigger>
-            <TabsTrigger value="recommendation">
-              Recommendation and Conclusion
-            </TabsTrigger>
-          </TabsList>
 
-          <TabsContent value="information-approvel">
-            <InformationApprovalReport />
-          </TabsContent>
+      {loadingVariant ? (
+        <div className="mt-4 w-auto">
+          <Spinner />
+          <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
+            Loading...
+          </p>
+        </div>
+      ) : selectedVCF ? (
+        <div className="mt-8 w-auto">
+          {/* Tabs */}
+          <Tabs defaultValue="select-variant">
+            <TabsList>
+              <TabsTrigger value="information-approvel">
+                Information Approvel Report
+              </TabsTrigger>
+              <TabsTrigger value="select-variant">Select Variant</TabsTrigger>
+              <TabsTrigger value="result-interpretation">
+                Result and Interpretation
+              </TabsTrigger>
+              <TabsTrigger value="recommendation">
+                Recommendation and Conclusion
+              </TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="select-variant">
-            <SelectVariant
-              patientid={patientId}
-              id_report={id}
-              data={listVariant}
-              onUpdateVariant={handleUpdateVariant}
-            />
-          </TabsContent>
+            <TabsContent value="information-approvel">
+              <InformationApprovalReport id_patient={patientId} id_report={id!}/>
+            </TabsContent>
 
-          <TabsContent value="result-interpretation">
-            <ResultAndInterpretation
-              patientid={patientId}
-              id_report={id}
-            ></ResultAndInterpretation>
-          </TabsContent>
+            <TabsContent value="select-variant">
+              <SelectVariant
+                patientid={patientId}
+                id_report={id}
+                data={listVariant}
+                onUpdateVariant={handleUpdateVariant}
+              />
+            </TabsContent>
 
-          <TabsContent value="recommendation">
-            <p>Content for Recommendation and Conclusion...</p>
-          </TabsContent>
-        </Tabs>
-      </div>
+            <TabsContent value="result-interpretation">
+              <ResultAndInterpretation
+                patientid={patientId}
+                id_report={id}
+              ></ResultAndInterpretation>
+            </TabsContent>
+
+            <TabsContent value="recommendation">
+            <RecommendationAndConclusion
+          id_patient={patientId}
+          id_report={id}
+        ></RecommendationAndConclusion>
+            </TabsContent>
+          </Tabs>
+        </div>
+      ) : (
+        <div className="text-center mt-12">
+          <p className="text-md font-semibold text-primary">No VCF selected.</p>
+        </div>
+      )}
     </div>
   );
 }

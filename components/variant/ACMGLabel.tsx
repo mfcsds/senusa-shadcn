@@ -10,15 +10,15 @@ import React from "react";
 function getBorderColor(acmgclass: string) {
   switch (acmgclass) {
     case ACMG_PATHOGENIC:
-      return "border-red-600";
+      return "border-2 border-red-600";
     case ACMG_LIKELY_PATHOGENIC:
-      return "border-red-600";
+      return "border-2 border-red-600";
     case ACMG_LIKELY_BENIGN:
-      return "border-primary";
+      return "border-2 border-primary";
     case ACMG_BENIGN:
-      return "border-primary";
+      return "border-2 border-primary";
     case ACMG_VUS:
-      return "border-yellow-primary";
+      return "border-2 border-yellow-primary";
   }
   return "border-gray-500";
 }
