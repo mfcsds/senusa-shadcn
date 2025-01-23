@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { getAcmgAnnotation, listAcmgAnnotations } from "@/src/graphql/queries";
 import { generateClient } from "aws-amplify/api";
+import { Save, X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"; // Adjust import based on your setup
 import axios from "axios";
 import VariantGeneralInfo from "../../../items/VariantGeneralInfo";
@@ -21,6 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/update/ui/table";
+import Button from "@/components/update/button/Button";
 import ACMGVariantQuery from "../../../items/variantquery/ACMGVariantQuery";
 import { equal } from "assert";
 import ACMGVariantReport from "../../../items/variantquery/ACMGVariantReport";
@@ -188,9 +190,15 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
 
   if (loading) {
     return (
-      <div className="text-center py-10">
-        <Spinner />
-        <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
+      <div className="text-center py-2">
+        <div className="flex flex-col justify-center items-center h-full space-y-4 animate-icon mt-2">
+      <div className="relative w-16 h-16">
+        <div className="absolute inset-0 rounded-full border-4 border-t-primary border-r-transparent border-b-transparent border-l-primary animate-spin"></div>
+        <div className="absolute inset-2 rounded-full border-4 border-t-accent border-r-transparent border-b-transparent border-l-accent animate-spin"></div>
+        <div className="absolute inset-4 bg-secondary rounded-full"></div>
+      </div>
+    </div>
+        <p className="text-lg text-center text-primary font-semibold animate-pulse">
           Loading... fetching data for {hgvsNotation}
         </p>
       </div>
@@ -238,54 +246,76 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
   } = variantData || {};
 
   return (
-    <div className="flex flex-col h-[600px]">
-      <div className="flex flex-col border p-4 mb-5 w-full ">
-        <p className="text-2xl font-semibold text-balance border-l-emerald-500 border-l-4 pl-5">
-          {hgvsNotation}
-        </p>
+    <div className="flex flex-col">
+      <div className="flex bg-foreground flex-col border-2 border-border shadow-xl mt-10 p-4 mb-10 w-full">
+        <div className="grid">
+          <div className="flex items-center gap-8">
+            <img
+              src="/logo-senusa.png"
+              alt="Logo"
+              className="w-12 h-auto object-contain"
+            />
+            <p className="text-2xl text-text-primary font-semibold text-balance border-primary border-l-4 pl-5 flex-grow text-center">
+              {hgvsNotation}
+            </p>
+            <div className="flex gap-4 mt-0">
+              <Button
+                label="Save"
+                variant="outlineSecondary"
+                size="large"
+                icon={<Save className="w-5 h-5" />}
+                type="submit"
+              />
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="flex flex-col w-full items-start ">
-        <Tabs defaultValue="acmg" className="w-full items-start justify-start">
-          <TabsList className=" flex items-start mb-4 h-[80px] bg-white border-b-2 w-full justify-start">
+
+      <div className="flex flex-col w-full bg-foreground items-start">
+        <Tabs
+          defaultValue="acmg"
+          className="w-full items-start bg-foreground justify-start mt-6"
+        >
+          <TabsList className=" flex items-start mb-4 h-[80px]border-b-2 w-full justify-start">
             <TabsTrigger
               value="acmg"
-              className="text-md hover:border-b-4 hover:border-violet-900 rounded-none data-[state=active]:border-b-4 data-[state=active]:border-violet-900 "
+              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-foreground "
             >
               ACMG
             </TabsTrigger>
             <TabsTrigger
               value="general"
-              className="text-md hover:border-b-4 hover:border-violet-900 rounded-none data-[state=active]:border-b-4 data-[state=active]:border-violet-900"
+              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-foreground"
             >
               General Information
             </TabsTrigger>
             <TabsTrigger
               value="allele"
-              className="text-md hover:border-b-4 hover:border-violet-900 rounded-none data-[state=active]:border-b-4 data-[state=active]:border-violet-900 "
+              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-foreground "
             >
               Allele Frequency
             </TabsTrigger>
             <TabsTrigger
               value="computational"
-              className="text-md hover:border-b-4 hover:border-violet-900 rounded-none data-[state=active]:border-b-4 data-[state=active]:border-violet-900 "
+              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-foreground "
             >
               Computational Predictions
             </TabsTrigger>
             <TabsTrigger
               value="functional"
-              className="text-md hover:border-b-4 hover:border-violet-900 rounded-none data-[state=active]:border-b-4 data-[state=active]:border-violet-900 "
+              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-foreground "
             >
               Functional Annotations
             </TabsTrigger>
             <TabsTrigger
               value="transcripts"
-              className="text-md hover:border-b-4 hover:border-violet-900 rounded-none data-[state=active]:border-b-4 data-[state=active]:border-violet-900 "
+              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-foreground "
             >
               Transcripts
             </TabsTrigger>
             <TabsTrigger
               value="conservation"
-              className="text-md hover:border-b-4 hover:border-violet-900 rounded-none data-[state=active]:border-b-4 data-[state=active]:border-violet-900 "
+              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-foreground "
             >
               Conservation Scores
             </TabsTrigger>

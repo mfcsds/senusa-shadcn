@@ -70,7 +70,7 @@ export default function VariantReportPage() {
               icon={<SearchIcon className="w-5 h-5 " />}
             />
           </div>
-          <AddReportDialog />
+          {/* <AddReportDialog /> */}
           <Button
             variant={
               viewMode === "card" ? "iconCardViewActive" : "iconCardView"

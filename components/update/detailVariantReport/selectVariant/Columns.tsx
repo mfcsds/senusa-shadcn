@@ -612,13 +612,12 @@ export const Columns: ColumnDef<Variant>[] = [
                 </small>
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[90%] max-h-[90%] overflow-y-auto bg-foreground">
+            <DialogContent className="sm:max-w-[95%] max-h-[95%] overflow-y-auto bg-foreground">
               <VariantInformationModal
                 hgvsNotation={item.hgvs}
                 id_variant={item.id}
               ></VariantInformationModal>
               <DialogFooter>
-                <Button type="submit">Save changes</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>

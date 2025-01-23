@@ -73,7 +73,7 @@ const Reference: React.FC<ReferenceVariantProps> = ({ ref_code }) => {
                 {refData?.title || "No title available"}
               </a>
             </p>
-            <p className="text-sm border-2 p-2 rounded-md bg-violet-50 border-violet-200">
+            <p className="text-sm border-2 ml-4 p-2 rounded-md text-text-secondary bg-violet-50 border-violet-200">
               {refData?.date}
             </p>
           </div>

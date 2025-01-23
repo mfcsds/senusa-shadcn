@@ -15,7 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/update/dialog/AlertDialog";
-import { useToast } from "@/components/update/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 interface CardViewProps {
   initialPatients: DataPatients[];

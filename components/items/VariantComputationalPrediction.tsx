@@ -7,7 +7,7 @@ import {
   TableHead,
   TableCell,
   TableBody,
-} from "@/components/ui/table";
+} from "@/components/update/ui/table";
 
 interface VariantComputationalPredictionProps {
   data?: TranscriptConsequence[];
@@ -59,7 +59,7 @@ const VariantComputationalPrediction: React.FC<
   );
 
   return (
-    <div className="overflow-auto w-full overflow-x-auto max-h-[500px] overflow-y-auto">
+    <div className="overflow-auto w-full overflow-x-auto max-h-[500px] overflow-y-auto mt-10">
       <Table>
         <thead>
           {/* Group Headers */}
@@ -68,7 +68,7 @@ const VariantComputationalPrediction: React.FC<
               <TableHead
                 key={group.groupName}
                 colSpan={group.features.length}
-                className={`text-center ${group.color} border border-gray-200`}
+                className={`text-center ${group.color} border-2 text-text-primary border-border`}
               >
                 {group.groupName}
               </TableHead>
@@ -79,7 +79,7 @@ const VariantComputationalPrediction: React.FC<
             {allFeatures.map((feature) => (
               <TableHead
                 key={feature.key}
-                className={`${feature.color} border border-gray-200`}
+                className={`${feature.color} border-2 border-border text-text-primary`}
               >
                 {feature.label}
               </TableHead>
@@ -101,7 +101,7 @@ const VariantComputationalPrediction: React.FC<
                 return (
                   <TableCell
                     key={feature.key}
-                    className={`${feature.color} border border-gray-200`}
+                    className={`${feature.color} border border-border text-text-secondary`}
                   >
                     {value !== undefined && value !== null && value !== ""
                       ? value

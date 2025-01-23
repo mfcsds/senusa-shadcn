@@ -13,8 +13,10 @@ import Button from "@/components/update/button/Button";
 import Input from "@/components/update/input/Input";
 import { generatePatientID } from "@/utils/GenerateID";
 import { addNewPatient } from "@/hooks/usePatients";
+import { addVariantReport } from "@/hooks/useVariantReport";
 import { useToast } from "@/components/ui/use-toast";
-
+import { generateReportID } from "@/utils/function";
+import { getDateToday, ReportStatus } from "@/utils/DateHelperFunction";
 
 const AddPatientDialog = ({ onUpdatePatients }: { onUpdatePatients: () => Promise<void> }) => {
   const [idReference, setIDReference] = useState("");
@@ -39,17 +41,28 @@ const AddPatientDialog = ({ onUpdatePatients }: { onUpdatePatients: () => Promis
       return;
     }
   
+    const patientID = generatePatientID();
     const newPatient = {
-      id: generatePatientID(),
+      id: patientID,
       name: "-",
       sex: "-",
       id_reference: idReference,
       phone_number: "-",
     };
+
+    const newReport = {
+      id: generateReportID(),
+      status: 1,
+      medical_history: "-",
+      current_diagnosis: "-",
+      sample_collection: getDateToday(),
+      phenotype: "-",
+      idPatient: patientID,
+    };
   
     try {
       await addNewPatient(newPatient);
-  
+      await addVariantReport(newReport)
       // Reset input dan error state
       setErrorIDReference(""); 
       setIDReference(""); 
@@ -60,7 +73,7 @@ const AddPatientDialog = ({ onUpdatePatients }: { onUpdatePatients: () => Promis
   
       toast({
         title: "Success add patient",
-        description: "Patient added successfully",
+        description: "Patient and variant report added successfully",
       });
     } catch (error) {
       console.error("Error adding patient:", error);

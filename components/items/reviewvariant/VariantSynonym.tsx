@@ -57,7 +57,7 @@ const VariantSynonym: React.FC<VariantSynonynProops> = ({ synonym }) => {
   return (
     <div className="flex flex-col mb-5 border-2 shadow-sm p-5 rounded-lg w-full">
       <div className="flex flex-col mb-2 gap-3">
-        <p className="font-semibold text-lg p-2 pl-5 border-2 rounded-lg border-green-200 bg-green-50">
+        <p className="font-semibold text-lg p-2 pl-5 border-2 rounded-lg border-primary bg-accent">
           Reference Clinvar Variants{" "}
         </p>
         <div className="flex flex-col ml-5">

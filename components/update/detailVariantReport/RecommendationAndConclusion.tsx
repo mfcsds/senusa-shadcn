@@ -548,7 +548,6 @@ The conclusion make it easy to understand, make it efficient, and short, no more
                         <TableHead className="w-1/12">No</TableHead>
                         <TableHead className="w-9/12">Conclusion</TableHead>
                         <TableHead className="w-1/12">Edit</TableHead>
-                        <TableHead className="w-1/12">Actions</TableHead>
                         <TableHead className="w-1/12">Remove</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -576,29 +575,6 @@ The conclusion make it easy to understand, make it efficient, and short, no more
                                 handleOpenEditModalConclusion(conc.id)
                               }
                             />
-                          </TableCell>
-                          <TableCell className="w-1/12">
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <div className="">
-                                    <Button
-                                      variant="iconPrimary"
-                                      size="large"
-                                      icon={<Lightbulb className="w-5 h-5" />}
-                                      onClick={() =>
-                                        handleAIPreTextConclusion(conc.id)
-                                      }
-                                    />
-                                  </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p className="text-balance w-[150px] text-text-secondary">
-                                    AI Pre-text for recommendation analysis
-                                  </p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
                           </TableCell>
                           <TableCell className="w-1/12">
                             <Button
@@ -654,7 +630,6 @@ The conclusion make it easy to understand, make it efficient, and short, no more
                         <TableHead className="w-1/12">No</TableHead>
                         <TableHead className="w-9/12">Recommendation</TableHead>
                         <TableHead className="w-1/12">Edit</TableHead>
-                        <TableHead className="w-1/12">Actions</TableHead>
                         <TableHead className="w-1/12">Remove</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -681,31 +656,6 @@ The conclusion make it easy to understand, make it efficient, and short, no more
                                 handleOpenEditModalRecommendation(rec.id ?? "")
                               }
                             />
-                          </TableCell>
-                          <TableCell className="w-1/12">
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <div className="">
-                                    <Button
-                                      variant="iconPrimary"
-                                      size="large"
-                                      icon={<Lightbulb className="w-5 h-5" />}
-                                      onClick={() =>
-                                        handleAIPreTextRecommendation(
-                                          rec.id ?? ""
-                                        )
-                                      }
-                                    />
-                                  </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p className="text-balance w-[150px] text-text-secondary">
-                                    AI Pre-text for recommendation analysis
-                                  </p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
                           </TableCell>
                           <TableCell className="w-1/12">
                             <Button

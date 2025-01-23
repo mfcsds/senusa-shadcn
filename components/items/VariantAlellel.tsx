@@ -16,7 +16,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
+} from "@/components/update/ui/table";
 import { TableCell } from "@aws-amplify/ui-react";
 import { Separator } from "../ui/separator";
 import VariantSynonym from "./reviewvariant/VariantSynonym";
@@ -38,21 +38,23 @@ const VariantAlellel: React.FC<VariantAlellelProops> = ({ data }) => {
   }
 
   return (
-    <div className="flex flex-col max-h-[500px] overflow-y-auto w-full">
+    <div className="flex flex-col max-h-[500px] text-text-primary overflow-y-auto w-full mt-10">
       <Card className="border-none shadow-none">
         <CardContent>
-          <div className="flex flex-col">
-            <div className="flex flex-col gap-w"></div>
+          <div className="flex flex-col gap-4">
             {data.map((variant, idx) => (
-              <Card key={idx} className="mb-4 border p-5 rounded-lg shadow-sm ">
+              <Card
+                key={idx}
+                className="mb-4 border p-5 rounded-lg shadow-sm flex flex-col"
+              >
                 <CardHeader>
-                  <CardTitle>Colocated Variant {idx + 1} </CardTitle>
+                  <CardTitle>Colocated Variant {idx + 1}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {/* Main table for the colocated variant details */}
-                  <div className="flex flex-row  gap-5 ">
-                    <div className="flex flex-col w-1/2 border rounded-md p-5">
-                      <p className="font-semibold">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Variant Details */}
+                    <div className="flex flex-col border rounded-md p-5">
+                      <p className="font-semibold text-text-primary mb-4">
                         Variant Details and Clinical Significance
                       </p>
                       <Table>
@@ -111,124 +113,92 @@ const VariantAlellel: React.FC<VariantAlellelProops> = ({ data }) => {
                               {variant.clin_sig_allele ?? "-"}
                             </TableCell>
                           </TableRow>
-                          {/* Pubmed References */}
-                          {/* <TableRow>
-                            <TableCell>PubMed References</TableCell>
-                            <TableCell>
-                              {variant.pubmed && variant.pubmed.length > 0
-                                ? variant.pubmed.map((id, index) => (
-                                    <a
-                                      key={index}
-                                      href={`https://pubmed.ncbi.nlm.nih.gov/${id}/`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-500 hover:underline"
-                                    >
-                                      {id}
-                                      {", "}
-                                    </a>
-                                  ))
-                                : "-"}
-                            </TableCell>
-                          </TableRow> */}
                         </TableBody>
                       </Table>
-                      {/* Ini adalah Variant Synonyms */}
-                      {/* Nested table for synonyms if available */}
-                    </div>
-                    {/* Allele Frequenc */}
-                    <div className="flex flex-col border rounded-md p-5 w-1/2">
-                      <p className="font-semibold text-balance">
-                        Allele Frequency Distribution Across Populations
-                      </p>
-                      <div className="flex flex-col">
-                        {/* Nested table for frequencies if available */}
-                        {variant.frequencies && (
-                          <div className="mt-4 overflow-y-auto">
-                            <Table>
-                              <TableHeader>
-                                <TableRow>
-                                  <TableHead>Allele</TableHead>
-                                  <TableHead>Population</TableHead>
-                                  <TableHead>Frequency</TableHead>
-                                </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                {Object.entries(variant.frequencies).map(
-                                  ([allele, populations]) =>
-                                    Object.entries(populations).map(
-                                      ([population, frequency], index) => (
-                                        <TableRow key={index}>
-                                          <TableCell>{allele}</TableCell>
-                                          <TableCell>{population}</TableCell>
-                                          <TableCell>{frequency}</TableCell>
-                                        </TableRow>
-                                      )
-                                    )
-                                )}
-                              </TableBody>
-                            </Table>
-                          </div>
-                        )}
+                      <div className="mt-6">
+                        <p className="font-semibold text-text-primary">
+                          Allele Frequency Distribution Across Populations
+                        </p>
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Allele</TableHead>
+                              <TableHead>Population</TableHead>
+                              <TableHead>Frequency</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {Object.entries(variant.frequencies || {}).map(
+                              ([allele, populations]) =>
+                                Object.entries(populations).map(
+                                  ([population, frequency], index) => (
+                                    <TableRow key={index}>
+                                      <TableCell>{allele}</TableCell>
+                                      <TableCell>{population}</TableCell>
+                                      <TableCell>{frequency}</TableCell>
+                                    </TableRow>
+                                  )
+                                )
+                            )}
+                          </TableBody>
+                        </Table>
                       </div>
+                    </div>
+
+                    {/* Synonyms */}
+                    <div
+                      className="flex flex-col border rounded-md p-5 overflow-y-auto"
+                      style={{ maxHeight: "1300px" }}
+                    >
+                      <p className="font-semibold text-text-primary">
+                        Synonyms
+                      </p>
+                      {variant.var_synonyms && (
+                        <div className="flex flex-col gap-4 mt-4">
+                          {Object.entries(variant.var_synonyms).map(
+                            ([source, synonyms], index) => (
+                              <div
+                                key={index}
+                                className="p-4 rounded-lg border bg-gray-50"
+                              >
+                                <p className="text-base font-medium text-primary">
+                                  {source}
+                                </p>
+                                <div className="mt-2 text-text-secondary">
+                                  {source === "ClinVar" && synonyms ? (
+                                    synonyms.map((synonym, synIndex) => (
+                                      <VariantSynonym
+                                        key={synIndex}
+                                        synonym={synonym}
+                                      />
+                                    ))
+                                  ) : synonyms ? (
+                                    <span>{synonyms.join(", ")}</span>
+                                  ) : (
+                                    <span className="italic">
+                                      No synonyms available
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      )}
+                      
+                    </div>
+                  </div>
+                  <div className="mt-6">
+                    <p className="font-bold">References</p>
+                    <div className="flex flex-wrap gap-4">
+                      {variant.pubmed && variant.pubmed.length > 0
+                        ? variant.pubmed.map((id, index) => (
+                            <Reference key={index} ref_code={id}></Reference>
+                          ))
+                        : "-"}
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter>
-                  <div className="flex flex-col w-full">
-                    <div className="flex flex-col w-full">
-                      {variant.var_synonyms && (
-                        <div className="mt-4 w-full flex flex-col gap-4">
-                          <p className="text-lg font-semibold text-gray-700">
-                            Synonyms
-                          </p>
-                          <div className="flex flex-col gap-4">
-                            {Object.entries(variant.var_synonyms).map(
-                              ([source, synonyms], index) => (
-                                <div key={index} className=" p-4 rounded-lg">
-                                  <p className="text-base font-medium text-violet-600">
-                                    {source}
-                                  </p>
-                                  <div className="mt-2 text-gray-700">
-                                    {source === "ClinVar" && synonyms ? (
-                                      synonyms.map((synonym, synIndex) => (
-                                        <div
-                                          key={synIndex}
-                                          className="flex flex-wrap items-center gap-2"
-                                        >
-                                          <VariantSynonym synonym={synonym} />
-                                        </div>
-                                      ))
-                                    ) : synonyms ? (
-                                      <span>{synonyms.join(", ")}</span>
-                                    ) : (
-                                      <span className="text-gray-500 italic">
-                                        No synonyms available
-                                      </span>
-                                    )}
-                                  </div>
-                                </div>
-                              )
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex flex-col">
-                      <div className="flex flex-col">
-                        <p className="font-bold">Referencess</p>
-                      </div>
-
-                      <div className="flex flex-col gap-4">
-                        {variant.pubmed && variant.pubmed.length > 0
-                          ? variant.pubmed.map((id, index) => (
-                              <Reference key={index} ref_code={id}></Reference>
-                            ))
-                          : "-"}
-                      </div>
-                    </div>
-                  </div>
-                </CardFooter>
               </Card>
             ))}
           </div>
