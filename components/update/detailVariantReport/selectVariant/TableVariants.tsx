@@ -510,15 +510,20 @@ export function TableVariants<TData, TValue>({
             <div className="space-y-2">
               <Label className="text-md">Clinical Significance</Label>
               <Input
-                type="text"
+                type="clinicialSignificance"
                 id="geneID"
-                value={gene_id}
                 className="max-w-sm"
                 placeholder="Clinical Significance"
-                onChange={(event) => {
-                  const value = event.target.value;
-                  setGeneID(value);
-                }}
+                value={
+                  (table
+                    .getColumn("clinicalSign")
+                    ?.getFilterValue() as string) ?? ""
+                }
+                onChange={(event) =>
+                  table
+                    .getColumn("clinicalSign")
+                    ?.setFilterValue(event.target.value)
+                }
               />
             </div>
 

@@ -192,12 +192,12 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
     return (
       <div className="text-center py-2">
         <div className="flex flex-col justify-center items-center h-full space-y-4 animate-icon mt-2">
-      <div className="relative w-16 h-16">
-        <div className="absolute inset-0 rounded-full border-4 border-t-primary border-r-transparent border-b-transparent border-l-primary animate-spin"></div>
-        <div className="absolute inset-2 rounded-full border-4 border-t-accent border-r-transparent border-b-transparent border-l-accent animate-spin"></div>
-        <div className="absolute inset-4 bg-secondary rounded-full"></div>
-      </div>
-    </div>
+          <div className="relative w-16 h-16">
+            <div className="absolute inset-0 rounded-full border-4 border-t-primary border-r-transparent border-b-transparent border-l-primary animate-spin"></div>
+            <div className="absolute inset-2 rounded-full border-4 border-t-accent border-r-transparent border-b-transparent border-l-accent animate-spin"></div>
+            <div className="absolute inset-4 bg-secondary rounded-full"></div>
+          </div>
+        </div>
         <p className="text-lg text-center text-primary font-semibold animate-pulse">
           Loading... fetching data for {hgvsNotation}
         </p>
@@ -333,14 +333,14 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
 
           {/* Computational Predictions Tab */}
           <TabsContent value="computational">
-            <VariantComputationalPrediction
-              data={variantData.transcript_consequences}
-            />
+            <FunctionalAnnotations data={transcript_consequences} />
           </TabsContent>
 
           {/* Functional Annotations Tab */}
           <TabsContent value="functional">
-            <FunctionalAnnotations data={transcript_consequences} />
+          <VariantComputationalPrediction
+              data={variantData.transcript_consequences}
+            />
           </TabsContent>
 
           {/* Transcripts Tab */}
