@@ -67,7 +67,6 @@ const DynamicGeneratePDF: React.FC<DynamicGeneratePDFProps> = ({
               document.body.removeChild(container);
             }, 0);
           }
-
           return null;
         }}
       </BlobProvider>

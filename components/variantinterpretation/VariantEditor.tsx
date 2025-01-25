@@ -54,6 +54,9 @@ import {
 } from "../ui/dialog";
 import VariantInformationModal from "../items/VariantInformationModal";
 import { getSelectedVariant } from "@/src/graphql/queries";
+import ACMGAnnotation from "../items/ACMGAnnotation";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import ACMGVariantInterpretation from "../items/variantquery/ACMGVariantInterpretation";
 
 interface VariantEditorProops {
   variantData?: SelectedVariant;
@@ -70,6 +73,8 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
     variantData?.text_interpretation ?? "<p>Start editing here...</p>"
   );
 
+  const [acmg, setACMG] = useState<string>(variantData?.acmg ?? "");
+
   const [isEditableVariantEditor, setEditableVariantEditor] = useState(false);
 
   const editor = useEditor({
@@ -82,6 +87,27 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
     content: contentText,
     editable: isEditableVariantEditor,
   });
+
+  const updateACMGClassSelectedVariant = async (
+    new_acmg: string,
+    selectedVariant: SelectedVariant
+  ) => {
+    selectedVariant.acmg = new_acmg;
+    try {
+      const result = client.graphql({
+        query: updateSelectedVariant,
+        variables: { input: { id: variantData?.id ?? "", acmg: new_acmg } },
+      });
+
+      toast({ title: "Sucessfully update ACMG" });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Failed Update ACMG Class",
+        description: `Failed update ${variantData?.acmg}`,
+      });
+    }
+  };
 
   useEffect(() => {
     const fetchVariantData = async () => {
@@ -209,8 +235,25 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
             </div>
             <div className="flex flex-col px-3 py-2 rounded shadow-sm gap-2">
               <p className="text-lg font-bold text-gray-400">ACMG</p>
-              <div>
-                <ACMGLabel label={variantData?.acmg ?? ""}></ACMGLabel>
+              <div className="flex flex-row gap-2">
+                <ACMGLabel label={acmg ?? ""}></ACMGLabel>
+                <div className="flex flex-col items-center justify-center">
+                  <Dialog>
+                    <DialogTitle>{""}</DialogTitle>
+                    <DialogTrigger>
+                      <Button variant={"ghost"}>
+                        <Edit className="w-5 h-5 text-gray-400"></Edit>
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-screen-2xl">
+                      <ACMGVariantInterpretation
+                        selectedVariant={variantData}
+                        onUpdateVariant={updateACMGClassSelectedVariant}
+                        setACMGClass={setACMG}
+                      ></ACMGVariantInterpretation>
+                    </DialogContent>
+                  </Dialog>
+                </div>
               </div>
             </div>
             <div className="flex flex-col px-3 py-2 rounded shadow-sm gap-2">
@@ -266,21 +309,37 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
                 className="bg-black"
               ></Separator>
               <div className="flex flex-row gap-1">
+                <Dialog>
+                  <DialogTrigger>
+                    <Button
+                      variant={"outline"}
+                      className="border rounded bg-green-50 border-green-600"
+                    >
+                      <ListCollapse className="w-4 h-5"></ListCollapse>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-screen-2xl">
+                    <DialogTitle>Variant Information</DialogTitle>
+                    <DialogDescription>
+                      {`Here is the detailed information about the ${variantData?.hgvs}`}
+                    </DialogDescription>
+                    {/* Pass the hgvsNotation as a prop to the VariantInformationModal */}
+                    <VariantInformationModal
+                      id_variant={`${variantData?.id}`}
+                      hgvsNotation={`${variantData?.hgvs}`}
+                      // "BAHAYA"
+                    />
+                  </DialogContent>
+                </Dialog>
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className="border rounded bg-green-50 border-green-600"
-                      >
-                        <ListCollapse className="w-4 h-5"></ListCollapse>
-                      </Button>
-                    </TooltipTrigger>
+                    <TooltipTrigger asChild></TooltipTrigger>
                     <TooltipContent>
                       <p>Detail Variant Information</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
+
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -396,21 +455,11 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
 
         <Dialog
           open={isOpenDetailVariantDialog}
-          onOpenChange={() => setIsOpenDetailVariantDialog(false)}
+          onOpenChange={() => setIsOpenDetailVariantDialog(true)}
         >
+          <DialogTrigger></DialogTrigger>
           {/* <div className="fixed inset-0 bg-black bg-opacity-0 pointer-events-none"></div> */}
-          <DialogContent className="max-w-7xl max-h-4xl ">
-            <DialogTitle>Variant Information</DialogTitle>
-            <DialogDescription>
-              {`Here is the detailed information about the ${variantData?.hgvs}`}
-            </DialogDescription>
-            {/* Pass the hgvsNotation as a prop to the VariantInformationModal */}
-            <VariantInformationModal
-              id_variant={`${variantData?.id}`}
-              hgvsNotation={`${variantData?.hgvs}`}
-              // "BAHAYA"
-            />
-          </DialogContent>
+          <DialogContent className="max-w-7xl max-h-4xl "></DialogContent>
         </Dialog>
       </div>
     </div>

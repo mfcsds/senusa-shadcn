@@ -32,6 +32,7 @@ export declare type VariantReportUpdateFormInputValues = {
     phenotype?: string[];
     sample_collection?: string;
     idPatient?: string;
+    testing_description?: string;
 };
 export declare type VariantReportUpdateFormValidationValues = {
     status?: ValidationFunction<number>;
@@ -43,6 +44,7 @@ export declare type VariantReportUpdateFormValidationValues = {
     phenotype?: ValidationFunction<string>;
     sample_collection?: ValidationFunction<string>;
     idPatient?: ValidationFunction<string>;
+    testing_description?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type VariantReportUpdateFormOverridesProps = {
@@ -56,6 +58,7 @@ export declare type VariantReportUpdateFormOverridesProps = {
     phenotype?: PrimitiveOverrideProps<TextFieldProps>;
     sample_collection?: PrimitiveOverrideProps<TextFieldProps>;
     idPatient?: PrimitiveOverrideProps<TextFieldProps>;
+    testing_description?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type VariantReportUpdateFormProps = React.PropsWithChildren<{
     overrides?: VariantReportUpdateFormOverridesProps | undefined | null;

@@ -370,6 +370,7 @@ export const createSelectedVariant = /* GraphQL */ `mutation CreateSelectedVaria
     fraction
     zygosity
     text_interpretation
+    id_variant
     createdAt
     updatedAt
     __typename
@@ -423,6 +424,7 @@ export const updateSelectedVariant = /* GraphQL */ `mutation UpdateSelectedVaria
     fraction
     zygosity
     text_interpretation
+    id_variant
     createdAt
     updatedAt
     __typename
@@ -476,6 +478,7 @@ export const deleteSelectedVariant = /* GraphQL */ `mutation DeleteSelectedVaria
     fraction
     zygosity
     text_interpretation
+    id_variant
     createdAt
     updatedAt
     __typename
@@ -893,6 +896,7 @@ export const createVariantReport = /* GraphQL */ `mutation CreateVariantReport(
     phenotype
     sample_collection
     idPatient
+    testing_description
     createdAt
     updatedAt
     __typename
@@ -917,6 +921,7 @@ export const updateVariantReport = /* GraphQL */ `mutation UpdateVariantReport(
     phenotype
     sample_collection
     idPatient
+    testing_description
     createdAt
     updatedAt
     __typename
@@ -941,6 +946,7 @@ export const deleteVariantReport = /* GraphQL */ `mutation DeleteVariantReport(
     phenotype
     sample_collection
     idPatient
+    testing_description
     createdAt
     updatedAt
     __typename

@@ -357,6 +357,7 @@ export const onCreateSelectedVariant = /* GraphQL */ `subscription OnCreateSelec
     fraction
     zygosity
     text_interpretation
+    id_variant
     createdAt
     updatedAt
     __typename
@@ -409,6 +410,7 @@ export const onUpdateSelectedVariant = /* GraphQL */ `subscription OnUpdateSelec
     fraction
     zygosity
     text_interpretation
+    id_variant
     createdAt
     updatedAt
     __typename
@@ -461,6 +463,7 @@ export const onDeleteSelectedVariant = /* GraphQL */ `subscription OnDeleteSelec
     fraction
     zygosity
     text_interpretation
+    id_variant
     createdAt
     updatedAt
     __typename
@@ -841,6 +844,7 @@ export const onCreateVariantReport = /* GraphQL */ `subscription OnCreateVariant
     phenotype
     sample_collection
     idPatient
+    testing_description
     createdAt
     updatedAt
     __typename
@@ -864,6 +868,7 @@ export const onUpdateVariantReport = /* GraphQL */ `subscription OnUpdateVariant
     phenotype
     sample_collection
     idPatient
+    testing_description
     createdAt
     updatedAt
     __typename
@@ -887,6 +892,7 @@ export const onDeleteVariantReport = /* GraphQL */ `subscription OnDeleteVariant
     phenotype
     sample_collection
     idPatient
+    testing_description
     createdAt
     updatedAt
     __typename

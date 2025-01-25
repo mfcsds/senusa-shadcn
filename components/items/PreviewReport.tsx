@@ -145,17 +145,6 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
 
   const [ensembleRestVersion, setEnsembleRestVersion] = useState<string>("");
 
-  // const generatePDF = async () => {
-  //   DynamicGeneratePDF({
-  //     patient,
-  //     listConc,
-  //     listRec,
-  //     listSelVariants,
-  //     variantInter,
-  //     ensembleVersion: ensembleVersion,
-  //     ensembleRestVersion: ensembleRestVersion,
-  //   });
-  // };
   const generateXML = () => {
     // Create XML root
     const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -277,19 +266,19 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
     }
   };
 
-  const fetchVariantInterpretation = async () => {
-    try {
-      const result = await client.graphql({
-        query: listVariantInterpretations,
-        variables: { filter: { id_report: { eq: id_report } } },
-      });
-      await setVariantInter(
-        result.data.listVariantInterpretations.items as VariantInterpretation[]
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const fetchVariantInterpretation = async () => {
+  //   try {
+  //     const result = await client.graphql({
+  //       query: listVariantInterpretations,
+  //       variables: { filter: { id_report: { eq: id_report } } },
+  //     });
+  //     await setVariantInter(
+  //       result.data.listVariantInterpretations.items as VariantInterpretation[]
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const fetchPatient = async () => {
     try {
@@ -350,7 +339,7 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
         await fetchRecommendation();
         await fecthSelectedVariant();
         await fetchPatient();
-        await fetchVariantInterpretation();
+        // await fetchVariantInterpretation();
         await fetchVariantReport();
       } catch (error) {
         console.error("Error fetching initial data:", error);
