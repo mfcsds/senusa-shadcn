@@ -8,6 +8,63 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateUserNotifications = /* GraphQL */ `subscription OnCreateUserNotifications(
+  $filter: ModelSubscriptionUserNotificationsFilterInput
+) {
+  onCreateUserNotifications(filter: $filter) {
+    id
+    user_id
+    institutionID
+    message
+    id_fromuser
+    id_report
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateUserNotificationsSubscriptionVariables,
+  APITypes.OnCreateUserNotificationsSubscription
+>;
+export const onUpdateUserNotifications = /* GraphQL */ `subscription OnUpdateUserNotifications(
+  $filter: ModelSubscriptionUserNotificationsFilterInput
+) {
+  onUpdateUserNotifications(filter: $filter) {
+    id
+    user_id
+    institutionID
+    message
+    id_fromuser
+    id_report
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateUserNotificationsSubscriptionVariables,
+  APITypes.OnUpdateUserNotificationsSubscription
+>;
+export const onDeleteUserNotifications = /* GraphQL */ `subscription OnDeleteUserNotifications(
+  $filter: ModelSubscriptionUserNotificationsFilterInput
+) {
+  onDeleteUserNotifications(filter: $filter) {
+    id
+    user_id
+    institutionID
+    message
+    id_fromuser
+    id_report
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteUserNotificationsSubscriptionVariables,
+  APITypes.OnDeleteUserNotificationsSubscription
+>;
 export const onCreatePatientHistoryDisease = /* GraphQL */ `subscription OnCreatePatientHistoryDisease(
   $filter: ModelSubscriptionPatientHistoryDiseaseFilterInput
 ) {

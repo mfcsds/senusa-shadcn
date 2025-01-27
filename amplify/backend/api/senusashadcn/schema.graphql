@@ -1,3 +1,12 @@
+type UserNotifications @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  user_id: String
+  institutionID: String
+  message: String
+  id_fromuser: String
+  id_report: String
+}
+
 type PatientHistoryDisease @model @auth(rules: [{allow: public}]) {
   id: ID!
   id_patient: String

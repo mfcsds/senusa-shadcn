@@ -8,6 +8,66 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const createUserNotifications = /* GraphQL */ `mutation CreateUserNotifications(
+  $input: CreateUserNotificationsInput!
+  $condition: ModelUserNotificationsConditionInput
+) {
+  createUserNotifications(input: $input, condition: $condition) {
+    id
+    user_id
+    institutionID
+    message
+    id_fromuser
+    id_report
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateUserNotificationsMutationVariables,
+  APITypes.CreateUserNotificationsMutation
+>;
+export const updateUserNotifications = /* GraphQL */ `mutation UpdateUserNotifications(
+  $input: UpdateUserNotificationsInput!
+  $condition: ModelUserNotificationsConditionInput
+) {
+  updateUserNotifications(input: $input, condition: $condition) {
+    id
+    user_id
+    institutionID
+    message
+    id_fromuser
+    id_report
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateUserNotificationsMutationVariables,
+  APITypes.UpdateUserNotificationsMutation
+>;
+export const deleteUserNotifications = /* GraphQL */ `mutation DeleteUserNotifications(
+  $input: DeleteUserNotificationsInput!
+  $condition: ModelUserNotificationsConditionInput
+) {
+  deleteUserNotifications(input: $input, condition: $condition) {
+    id
+    user_id
+    institutionID
+    message
+    id_fromuser
+    id_report
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteUserNotificationsMutationVariables,
+  APITypes.DeleteUserNotificationsMutation
+>;
 export const createPatientHistoryDisease = /* GraphQL */ `mutation CreatePatientHistoryDisease(
   $input: CreatePatientHistoryDiseaseInput!
   $condition: ModelPatientHistoryDiseaseConditionInput

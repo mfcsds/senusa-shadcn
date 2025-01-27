@@ -35,8 +35,9 @@ const ProfileUserNavbar = () => {
       console.log(`The username: ${username}`);
       console.log(`The userId: ${userId}`);
       console.log(`The signInDetails: ${signInDetails}`);
-      setUsername(username);
-      setUserRole(userId);
+      await setUsername(username);
+      await setUserRole(userId);
+      await getUserProfile();
     } catch (err) {
       console.log(err);
     } finally {
@@ -50,17 +51,15 @@ const ProfileUserNavbar = () => {
   });
   return (
     <div className="relative">
-      <div className="flex flex-row gap-2 items-center justify-center">
-        <Avatar onClick={toggleDropdown} className="w-8 h-8">
+      <div className="flex flex-row gap-5 items-center justify-center">
+        <Avatar onClick={toggleDropdown} className="w-12 h-12">
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
-          <p className="text-sm text-balance font-semibold">
-            {username ?? "Muhamad Fathurahman"}
-          </p>
-          <p className="text-sm text-balance  font-extralight text-gray-500">
-            {userRole ?? "Bioinformatician"}
+          <p className="text-lg font-semibold">{user?.first_name ?? "No"}</p>
+          <p className="text-lg font-extralight text-gray-500">
+            {user?.role ?? "No Data"}
           </p>
         </div>
       </div>

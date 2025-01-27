@@ -53,10 +53,13 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 import VariantInformationModal from "../items/VariantInformationModal";
-import { getSelectedVariant } from "@/src/graphql/queries";
+import { getSelectedVariant, getUser } from "@/src/graphql/queries";
 import ACMGAnnotation from "../items/ACMGAnnotation";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import ACMGVariantInterpretation from "../items/variantquery/ACMGVariantInterpretation";
+import BInviteUser from "../button/BInviteUser";
+import { getCurrentUser } from "aws-amplify/auth";
+import { User } from "@/src/API";
 
 interface VariantEditorProops {
   variantData?: SelectedVariant;
@@ -68,6 +71,8 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
   onDeleteVariant,
 }) => {
   const client = generateClient();
+
+  const [user, setUser] = useState<User>();
 
   const [contentText, setContentText] = useState<string>(
     variantData?.text_interpretation ?? "<p>Start editing here...</p>"
@@ -108,6 +113,27 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
       });
     }
   };
+
+  const [hasFetched, setHasFetched] = useState(false);
+
+  const fetchCurrentUser = async () => {
+    try {
+      const { username, userId, signInDetails } = await getCurrentUser();
+      const result = await client.graphql({
+        query: getUser,
+        variables: { id: userId },
+      });
+      setHasFetched(true);
+
+      await setUser(result.data.getUser as User);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    if (!hasFetched) {
+      fetchCurrentUser();
+    }
+  });
 
   useEffect(() => {
     const fetchVariantData = async () => {
@@ -343,12 +369,7 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className="border rounded bg-green-50 border-green-600"
-                      >
-                        <UserPlus className="w-4 h-5"></UserPlus>
-                      </Button>
+                      {<BInviteUser user={user}></BInviteUser>}
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Invite other user to provide analysis</p>

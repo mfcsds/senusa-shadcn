@@ -6,6 +6,7 @@ import { generateClient } from "aws-amplify/api";
 
 import { DividerVerticalIcon } from "@radix-ui/react-icons";
 import ProfileUserNavbar from "./ProfileUserNavbar";
+import BNotifications from "./button/BNotifications";
 
 const Navbar = () => {
   const [dropDownOpen, setDropDownOpen] = useState(false);
@@ -20,8 +21,8 @@ const Navbar = () => {
         <Switch className="h-2"></Switch>
       </div>
       <DividerVerticalIcon></DividerVerticalIcon>
-
       <ProfileUserNavbar></ProfileUserNavbar>
+      <BNotifications></BNotifications>
       {/* <div className="relative">
         <div className="flex flex-row gap-2 items-center justify-center">
           <Avatar onClick={toggleDropdown} className="w-8 h-8">
