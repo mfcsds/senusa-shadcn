@@ -7,7 +7,7 @@ import { Save, X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"; // Adjust import based on your setup
 import axios from "axios";
 import VariantGeneralInfo from "../../../items/VariantGeneralInfo";
-import VariantAlellel from "../../../items/VariantAlellel";
+import VariantAlellel from "./VariantAlellel";
 import { AcmgCriteria, VariantData } from "@/utils/object";
 import VariantComputationalPrediction from "../../../items/VariantComputationalPrediction";
 import ACMGAnnotation from "../../../items/ACMGAnnotation";
@@ -207,7 +207,7 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
 
   if (!variantData) {
     return (
-      <div className="text-center py-10">
+      <div className="text-center py-10 text-text-primary">
         No data available for {hgvsNotation}
       </div>
     );
@@ -246,8 +246,8 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
   } = variantData || {};
 
   return (
-    <div className="flex flex-col">
-      <div className="flex bg-foreground flex-col border-2 border-border shadow-xl mt-10 p-4 mb-10 w-full">
+    <div className="flex flex-col bg-background">
+      <div className="flex bg-background flex-col border-2 border-border shadow-xl mt-10 p-4 mb-10 w-full">
         <div className="grid">
           <div className="flex items-center gap-8">
             <img
@@ -271,51 +271,45 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
         </div>
       </div>
 
-      <div className="flex flex-col w-full bg-foreground items-start">
+      <div className="flex flex-col w-full bg-background items-start">
         <Tabs
-          defaultValue="acmg"
-          className="w-full items-start bg-foreground justify-start mt-6"
+          defaultValue="allele"
+          className="w-full items-start bg-background justify-start mt-6"
         >
           <TabsList className=" flex items-start mb-4 h-[80px]border-b-2 w-full justify-start">
             <TabsTrigger
-              value="acmg"
-              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-foreground "
-            >
-              ACMG
-            </TabsTrigger>
-            <TabsTrigger
               value="general"
-              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-foreground"
+              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-background"
             >
               General Information
             </TabsTrigger>
             <TabsTrigger
               value="allele"
-              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-foreground "
+              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-background "
             >
               Allele Frequency
             </TabsTrigger>
             <TabsTrigger
               value="computational"
-              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-foreground "
+              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-background "
             >
               Computational Predictions
             </TabsTrigger>
             <TabsTrigger
               value="functional"
-              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-foreground "
+              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-background "
             >
               Functional Annotations
             </TabsTrigger>
             <TabsTrigger
               value="transcripts"
-              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-foreground "
+              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-background "
             >
               Transcripts
             </TabsTrigger>
             <TabsTrigger
               value="conservation"
-              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-foreground "
+              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-background "
             >
               Conservation Scores
             </TabsTrigger>

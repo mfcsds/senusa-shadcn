@@ -3,7 +3,7 @@ import Dropdown from "@/components/update/input/Dropdown";
 import Button from "@/components/update/button/Button";
 import ButtonFormatReport from "@/components/update/detailVariantReport/inrformationReport/ButtonFormatReport";
 import React, { useState, useEffect } from "react";
-import PriviewReportDialog from "./inrformationReport/PriviewReportDialog";
+import PreviewReportDialog from "./inrformationReport/PreviewReportDialog";
 import { generateClient } from "aws-amplify/api";
 import { Amplify } from "aws-amplify";
 import config from "@/src/amplifyconfiguration.json";
@@ -251,7 +251,7 @@ const InformationApprovalReport: React.FC<InformationApprovalReportProops> = ({
               <FilePen className="text-blue-primary w-8 h-8" />
               <h3 className="font-semibold text-md">Update Report Status</h3>
             </div>
-            <PriviewReportDialog
+            <PreviewReportDialog
               name={patient?.name ?? ""}
               sex={patient?.sex ?? ""}
               dob={patient?.id}

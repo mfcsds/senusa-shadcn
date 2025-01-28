@@ -59,8 +59,8 @@ const VariantComputationalPrediction: React.FC<
   );
 
   return (
-    <div className="overflow-auto w-full overflow-x-auto max-h-[500px] overflow-y-auto mt-10">
-      <Table>
+    <div className="max-w-full max-h-[500px] overflow-y-auto mt-10">
+      <Table className="w-[80%]">
         <thead>
           {/* Group Headers */}
           <TableRow className="text-sm">

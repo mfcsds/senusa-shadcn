@@ -109,7 +109,7 @@ export default function ManageAccountsPage() {
           Loading...
         </p>
       ) : (
-        <div className="flex justify-between items-center mt-8">
+        <div className="flex justify-between items-center mt-10">
           <PaginationPatient />
         </div>
       )}

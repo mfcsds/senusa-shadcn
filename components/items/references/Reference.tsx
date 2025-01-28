@@ -1,5 +1,5 @@
 "use client";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/update/ui/Skeleton";
 import { ReferenceVariant } from "@/utils/object";
 import React, { useEffect, useState } from "react";
 
@@ -60,32 +60,40 @@ const Reference: React.FC<ReferenceVariantProps> = ({ ref_code }) => {
   }, [ref_code]); // Dependency ensures it runs whenever ref_code changes
 
   return (
-    <div className="flex flex-col w-full bg-white border rounded-lg p-5 shadow-md">
+    <div className="flex flex-row w-full bg-foreground border-2 rounded-lg p-5 shadow-xl">
       {loading ? (
         <div>
           <Skeleton />
         </div>
       ) : (
         <div>
-          <div className="flex flex-row items-center justify-between">
-            <p className="text-2xl font-semibold text-blue-600">
+          <div className="flex flex-col items-start justify-between">
+            <img
+              src="/variant-image.png"
+              alt="References Image"
+              className="w-full rounded-md mb-4"
+            />
+            <p className="text-md font-semibold text-blue-500 hover:underline">
               <a href={link} target="_blank" rel="noopener noreferrer">
                 {refData?.title || "No title available"}
               </a>
             </p>
-            <p className="text-sm border-2 ml-4 p-2 rounded-md text-text-secondary bg-violet-50 border-violet-200">
+            <p className="text-xs mt-4 p-2 rounded-md text-text-secondary border-2 border-secondary bg-accent font-semibold">
               {refData?.date}
             </p>
           </div>
+
           <div className="flex flex-col">
-            <p className="text-sm italic text-gray-700 mb-3 mt-2">
+            <p className="text-sm italic text-text-secondary mb-2 mt-4">
               {refData?.author || "No authors available"}
             </p>
             <Accordion type="single" collapsible>
               <AccordionItem value="item-1">
-                <AccordionTrigger>See Full Abstract</AccordionTrigger>
+                <AccordionTrigger className="text-text-primary">
+                  See Full Abstract
+                </AccordionTrigger>
                 <AccordionContent>
-                  <p className="text-justify font-sans text-lg text-black italic text-balance">
+                  <p className="text-justify font-sans text-md text-text-primary italic text-balance">
                     {refData?.abstract || "No abstract available"}
                   </p>
                 </AccordionContent>

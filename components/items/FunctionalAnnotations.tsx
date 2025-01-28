@@ -60,7 +60,7 @@ const FunctionalAnnotations: React.FC<VariantFunctionalAnnotationsProops> = ({
   );
 
   return (
-    <div className="overflow-auto w-full overflow-x-auto max-h-[500px] overflow-y-auto mt-10">
+    <div className="overflow-auto max-w-full max-h-[500px] overflow-y-auto mt-10">
       <Table>
         <thead>
           {/* Group Headers */}

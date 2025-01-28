@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "../../ui/dialog";
 
-import VariantInformationModal from "@/components/items/VariantInformationModal";
+import VariantInformationModal from "./selectVariant/VariantInformationModal";
 
 import {
   listSelectedVariants,
@@ -199,24 +199,6 @@ const ResultAndInterpretation: React.FC<ResultAndInterpretationProops> = ({
           </div>
         </div>
       </div>
-
-      {/* Variant Interpretation Modal */}
-      <Dialog
-        open={isOpenDetailVariantDialog}
-        onOpenChange={() => setIsOpenDetailVariantDialog(false)}
-      >
-        <DialogContent className="max-w-7xl max-h-4xl ">
-          <DialogTitle>Variant Information</DialogTitle>
-          <DialogDescription>
-            {`Here is the detailed information about the ${selectedItemVar?.hgvs}`}
-          </DialogDescription>
-          {/* Pass the hgvsNotation as a prop to the VariantInformationModal */}
-          <VariantInformationModal
-            id_variant={`${selectedItemVar?.id}`}
-            hgvsNotation={`${selectedItemVar?.hgvs}`}
-          />
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

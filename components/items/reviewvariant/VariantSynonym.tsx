@@ -55,32 +55,32 @@ const VariantSynonym: React.FC<VariantSynonynProops> = ({ synonym }) => {
   }, [link]);
 
   return (
-    <div className="flex flex-col mb-5 border-2 shadow-sm p-5 rounded-lg w-full">
+    <div className="flex flex-col mb-5 border-2 shadow-xl p-5 rounded-lg w-full">
       <div className="flex flex-col mb-2 gap-3">
-        <p className="font-semibold text-lg p-2 pl-5 border-2 rounded-lg border-primary bg-accent">
+        <p className="font-semibold text-sm p-2 pl-5 border-2 rounded-lg border-primary bg-accent">
           Reference Clinvar Variants{" "}
         </p>
         <div className="flex flex-col ml-5">
           <div className="flex flex-row gap-3 items-center">
-            <p className="font-semibold">Variant Title : </p>
-            <p className="font-semibold text-blue-500 border py-1 px-2 rounded-lg bg-blue-50">
-              <a href={`https://www.ncbi.nlm.nih.gov/clinvar/${synonym}`}>
+            <p className="font-semibold text-sm">Variant Title : </p>
+            <p className="font-semibold text-blue-500 py-1 px-2 rounded-lg">
+              <a href={`https://www.ncbi.nlm.nih.gov/clinvar/${synonym}`} className="text-sm hover:underline">
                 {reviewvariant?.variant_title}
               </a>
             </p>
           </div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-4">
             <div className="flex flex-row">
-              <p className="font-semibold">Germline Classification : </p>
-              <p>{reviewvariant?.germline_classification}</p>
+              <p className="font-semibold text-sm">Germline Classification : </p>
+              <p className="text-sm">{reviewvariant?.germline_classification}</p>
             </div>
             <div className="flex flex-row">
-              <p className="font-semibold">Last Review : </p>
-              <p>{reviewvariant?.last_review}</p>
+              <p className="font-semibold text-sm">Last Review : </p>
+              <p className="text-sm">{reviewvariant?.last_review}</p>
             </div>
             <div className="flex flex-row">
-              <p className="font-semibold">Status : </p>
+              <p className="font-semibold text-sm">Status : </p>
               {/* Render stars based on the status value */}
               {reviewvariant && (
                 <div className="flex flex-row items-center">

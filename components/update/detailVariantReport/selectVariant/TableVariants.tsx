@@ -23,13 +23,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/update/ui/table";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/update/ui/table";
 import { ButtonAdd } from "@/components/update/button/ButtonAdd";
 
 import {
@@ -38,7 +38,7 @@ import {
   ChevronRightIcon,
   FileCode,
   FileJson,
-  FileSpreadsheet ,
+  FileSpreadsheet,
 } from "lucide-react";
 import {
   DoubleArrowLeftIcon,
@@ -57,7 +57,12 @@ import Input from "@/components/update/input/Input";
 import { Label } from "../../../ui/label";
 
 import GenePanelPopover from "./GenePanelPopover";
-
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/update/ui/according";
 import {
   GENE_PANEL_25,
   GENE_PANEL_50,
@@ -133,7 +138,6 @@ export function TableVariants<TData, TValue>({
     }
   };
 
-
   const [selectedVariant, setSelectedVariant] = useState<TData | null>(null);
   const [rowSelection, setRowSelection] = useState({});
   const [zygosityFilter, setZygosityFilter] = useState<string | null>(null);
@@ -202,7 +206,7 @@ export function TableVariants<TData, TValue>({
   });
 
   const generateXML = (id_report: string, id_patient: string) => {
-    setActiveDownloadXML(true)
+    setActiveDownloadXML(true);
     // XML Header
     const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
     const rootStart = `<VariantReport reportId="${id_report}" patientId="${id_patient}">`;
@@ -243,7 +247,6 @@ export function TableVariants<TData, TValue>({
     URL.revokeObjectURL(url);
 
     setActiveDownloadXML(false);
-
   };
   const fetchAPIData = async (hgvs: string) => {
     const requestBody = {
@@ -449,7 +452,7 @@ export function TableVariants<TData, TValue>({
                         genePanel = GENE_PANEL_113;
                         break;
                     }
-                    setSelectedGenePanel(selectedValue)
+                    setSelectedGenePanel(selectedValue);
                     table.getColumn("gene_symbol")?.setFilterValue(genePanel);
                   }}
                 >
@@ -478,7 +481,7 @@ export function TableVariants<TData, TValue>({
             <div className="space-y-2">
               <Label className="text-md">Gene ID</Label>
               <Input
-              id="ganeId"
+                id="ganeId"
                 className="max-w-sm"
                 placeholder="Gene ID"
                 value={gene_id}
@@ -494,7 +497,7 @@ export function TableVariants<TData, TValue>({
             <div className="space-y-2">
               <Label className="text-md">Gene Sysmbol</Label>
               <Input
-              id="goneSysmbol"
+                id="goneSysmbol"
                 className="max-w-sm"
                 placeholder="Gene Symbol"
                 value={gene_symbol}
@@ -659,7 +662,7 @@ export function TableVariants<TData, TValue>({
               <Label className="text-lg">Select Column</Label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                <ButtonAdd
+                  <ButtonAdd
                     variant="outline"
                     className="w-full text-left bg-foreground border-2 border-primary hover:border-secondary rounded-lg hover:bg-secondary text-primary hover:text-text-action"
                   >
@@ -691,107 +694,67 @@ export function TableVariants<TData, TValue>({
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-
-            <div className="space-y-4">
-              <Label className="text-lg">Download Type</Label>
-              <div className="grid grid-row gap-4">
-                <ButtonAdd
-                  className={
-                    activeDownloadCSV ? "rounded-lg bg-foreground border-2 border-primary hover:border-secondary hover:bg-secondary text-primary hover:text-text-action cursor-not-allowed" : "rounded-lg bg-foreground border-2 border-primary hover:border-secondary hover:bg-secondary text-primary hover:text-text-action"
-                  }
-                  variant={"outline"}
-                  onClick={(e) => generateCSV()}
-                  disabled={activeDownloadCSV}
-                >
-                  <FileSpreadsheet > </FileSpreadsheet >
-                  {activeDownloadCSV ? "..." : "CSV"}
-                </ButtonAdd>
-                <ButtonAdd
-                  className={
-                    activeDownloadJSON ? "rounded-lg bg-foreground border-2 border-blue-primary hover:border-blue-secondary hover:bg-blue-secondary text-blue-primary hover:text-text-action cursor-not-allowed" : "rounded-lg bg-foreground border-2 border-blue-primary hover:border-blue-secondary hover:bg-blue-secondary text-blue-primary hover:text-text-action"
-                  }
-                  variant={"outline"}
-                  onClick={(e) => generateJSON()}
-                  disabled={activeDownloadJSON}
-                >
-                  <FileJson></FileJson>
-                  {activeDownloadJSON ? "..." : "JSON"}
-                </ButtonAdd>
-                <ButtonAdd
-                className={
-                  activeDownloadXML ? "rounded-lg bg-foreground border-2 border-red-primary hover:border-red-secondary hover:bg-red-secondary text-red-primary hover:text-text-action cursor-not-allowed" : "rounded-lg bg-foreground border-2 border-red-primary hover:border-red-secondary hover:bg-red-secondary text-red-primary hover:text-text-action"
-                }
-                  variant={"outline"}
-                  onClick={(e) => generateXML("ID_RECORD", "ID_PATIENT")}
-                >
-                  <FileCode> </FileCode>
-                  {activeDownloadXML ? "..." : "XML"}
-                </ButtonAdd>
-              </div>
-            </div>
           </div>
         </div>
 
         {/* Bagian Tabel */}
         <div className="md:col-span-7 bg-foreground p-6 rounded-lg shadow-lg">
-          <div className="overflow-x-auto">
-          <Table className="m-4 rounded-md min-w-full">
-          <TableHeader className="h-[50px]">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow
-                key={headerGroup.id}
-                className=" hover:bg-accent bg-accent border-y-2 border-gray-900 rounded-md"
-              >
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      className="text-gray-90 px-2 md:px-4 h-[70px] text-sm"
+          <div className="overflow-x-auto max-h-[500px]">
+            <Table className="m-4 rounded-md min-w-full overflow-y-auto">
+              <TableHeader className="h-[50px] sticky top-0 bg-background">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow
+                    key={headerGroup.id}
+                    className="hover:bg-accent bg-accent border-y-2 border-border rounded-md"
+                  >
+                    {headerGroup.headers.map((header) => (
+                      <TableHead
+                        key={header.id}
+                        className="text-gray-90 px-2 md:px-4 h-[70px] text-sm"
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
                     >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          className="h-8 text-xs px-2 md:px-4 text-md"
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
                           )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
                     <TableCell
-                      key={cell.id}
-                      className="h-8 text-xs px-2 md:px-4 text-md"
+                      colSpan={columns.length}
+                      className="h-10 text-center"
                     >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      No results.
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-10 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
           </div>
 
           {/* Pagination */}
@@ -802,7 +765,9 @@ export function TableVariants<TData, TValue>({
             </div>
             <div className="flex items-center space-x-6 lg:space-x-8 p-4">
               <div className="flex items-center space-x-2">
-                <p className="text-sm font-medium text-text-secondary">Rows per page</p>
+                <p className="text-sm font-medium text-text-secondary">
+                  Rows per page
+                </p>
                 <Select
                   value={`${table.getState().pagination.pageSize}`}
                   onValueChange={(value) => {
@@ -866,6 +831,57 @@ export function TableVariants<TData, TValue>({
                 </ButtonAdd>
               </div>
             </div>
+          </div>
+          <div className="flex justify-start w-full">
+            <Accordion type="single" collapsible className="w-[400px]">
+              <AccordionItem value="item-1">
+                <AccordionTrigger>Download Format</AccordionTrigger>
+                <AccordionContent>
+                  <div className="flex flex-row gap-2">
+                    <div className="flex flex-row gap-4">
+                      <ButtonAdd
+                        className={
+                          activeDownloadCSV
+                            ? "rounded-lg bg-foreground border-2 border-primary hover:border-secondary hover:bg-secondary text-primary hover:text-text-action cursor-not-allowed"
+                            : "rounded-lg bg-foreground border-2 border-primary hover:border-secondary hover:bg-secondary text-primary hover:text-text-action"
+                        }
+                        variant={"outline"}
+                        onClick={(e) => generateCSV()}
+                        disabled={activeDownloadCSV}
+                      >
+                        <FileSpreadsheet> </FileSpreadsheet>
+                        {activeDownloadCSV ? "Processing" : "CSV"}
+                      </ButtonAdd>
+                      <ButtonAdd
+                        className={
+                          activeDownloadJSON
+                            ? "rounded-lg bg-foreground border-2 border-blue-primary hover:border-blue-secondary hover:bg-blue-secondary text-blue-primary hover:text-text-action cursor-not-allowed"
+                            : "rounded-lg bg-foreground border-2 border-blue-primary hover:border-blue-secondary hover:bg-blue-secondary text-blue-primary hover:text-text-action"
+                        }
+                        variant={"outline"}
+                        onClick={(e) => generateJSON()}
+                        disabled={activeDownloadJSON}
+                      >
+                        <FileJson></FileJson>
+                        {activeDownloadJSON ? "Processing" : "JSON"}
+                      </ButtonAdd>
+                      <ButtonAdd
+                        className={
+                          activeDownloadXML
+                            ? "rounded-lg bg-foreground border-2 border-red-primary hover:border-red-secondary hover:bg-red-secondary text-red-primary hover:text-text-action cursor-not-allowed"
+                            : "rounded-lg bg-foreground border-2 border-red-primary hover:border-red-secondary hover:bg-red-secondary text-red-primary hover:text-text-action"
+                        }
+                        variant={"outline"}
+                        onClick={(e) => generateXML("ID_RECORD", "ID_PATIENT")}
+                      >
+                        <FileCode> </FileCode>
+                        {activeDownloadXML ? "Processing" : "XML"}
+                      </ButtonAdd>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
         </div>
       </div>

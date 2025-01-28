@@ -50,14 +50,14 @@ interface PreviewReportProops {
   ensembleRestVersion: string;
 }
 
-const PriviewReportDialog: React.FC<PreviewReportProops> = ({
+const PreviewReportDialog: React.FC<PreviewReportProops> = ({
     name, sex, dob, listSelVariants, listRecommendation, listConclusion, ensembleVersion, ensembleRestVersion
 }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          label="Priview Report"
+          label="Preview Report"
           variant="underlinePrimary"
           size="large"
         />
@@ -256,4 +256,4 @@ const PriviewReportDialog: React.FC<PreviewReportProops> = ({
   );
 };
 
-export default PriviewReportDialog;
+export default PreviewReportDialog;

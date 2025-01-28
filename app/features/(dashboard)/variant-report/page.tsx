@@ -40,6 +40,22 @@ export default function VariantReportPage() {
     loadVariants();
   }, []);
 
+  const fetchLoadVariantReport = async (): Promise<void> => {
+    const loadVariants = async () => {
+      try {
+        setLoading(true);
+        const fetchedVariants = await fetchVariantReport();
+        setVarReports(fetchedVariants);
+      } catch (error) {
+        console.error("Failed to fetch patients:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadVariants();
+  };
+
   return (
     <div className="p-8 min-h-screen">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8">
@@ -70,7 +86,7 @@ export default function VariantReportPage() {
               icon={<SearchIcon className="w-5 h-5 " />}
             />
           </div>
-          {/* <AddReportDialog /> */}
+          <AddReportDialog onUpdateVariantReport={fetchLoadVariantReport}/>
           <Button
             variant={
               viewMode === "card" ? "iconCardViewActive" : "iconCardView"
@@ -153,7 +169,7 @@ export default function VariantReportPage() {
           Loading...
         </p>
       ) : (
-        <div className="flex justify-between items-center mt-8">
+        <div className="flex justify-between items-center mt-10">
           <PaginationVariantReport />
         </div>
       )}

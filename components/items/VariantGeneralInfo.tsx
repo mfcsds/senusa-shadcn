@@ -34,8 +34,8 @@ const VariantGeneralInfo = ({ data }: GeneralInfoProps) => {
   return (
     <div className="flex flex-col mt-10">
       <p className="text-xl font-bold mb-8 text-text-primary">General Information</p>
-      <Table className="min-w-full divide-y divide-gray-200">
-        <TableBody className="bg-foreground divide-y divide-gray-200 text-text-primary">
+      <Table className="min-w-full divide-y divide-border">
+        <TableBody className="bg-background divide-y divide-border text-text-primary">
           <TableRow>
             <TableCell className="px-6 py-4 font-medium">Variant ID</TableCell>
             <TableCell className="px-6 py-4">{id}</TableCell>

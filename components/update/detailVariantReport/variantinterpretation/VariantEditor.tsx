@@ -32,7 +32,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
-
+import ACMGVariantInterpretation from "./ACMGVariantInterpretation";
 import { generateClient } from "aws-amplify/api";
 import { useToast } from "@/components/ui/use-toast";
 import {
@@ -48,12 +48,16 @@ import {
 } from "@/components/update/dialog/AlertDialog";
 import {
   Dialog,
+  DialogHeader,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from "@/components/ui/dialog";
-import VariantInformationModal from "../../../items/VariantInformationModal";
+  DialogTrigger,
+  DialogFooter
+} from "@/components/update/dialog/Dialog";
+import VariantInformationModal from "../selectVariant/VariantInformationModal";
 import { getSelectedVariant } from "@/src/graphql/queries";
+import { ButtonAdd } from "../../button/ButtonAdd";
 
 interface VariantEditorProops {
   variantData?: SelectedVariant;
@@ -69,7 +73,7 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
   const [contentText, setContentText] = useState<string>(
     variantData?.text_interpretation ?? "<p>Start editing here...</p>"
   );
-
+  const [acmg, setACMG] = useState<string>(variantData?.acmg ?? "");
   const [isEditableVariantEditor, setEditableVariantEditor] = useState(true);
 
   const editor = useEditor({
@@ -199,6 +203,27 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
         break;
     }
   };
+
+  const updateACMGClassSelectedVariant = async (
+    new_acmg: string,
+    selectedVariant: SelectedVariant
+  ) => {
+    selectedVariant.acmg = new_acmg;
+    try {
+      const result = client.graphql({
+        query: updateSelectedVariant,
+        variables: { input: { id: variantData?.id ?? "", acmg: new_acmg } },
+      });
+
+      toast({ title: "Sucessfully update ACMG" });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Failed Update ACMG Class",
+        description: `Failed update ${variantData?.acmg}`,
+      });
+    }
+  };
   return (
     <div className="flex flex-col w-full mb-10 shadow-md bg-foreground">
       <div className="border-2 border-border p-3 rounded">
@@ -213,7 +238,7 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
               <div className="flex flex-col px-3 py-2 gap-2">
                 <p className="text-md font-bold text-text-secondary">ACMG</p>
                 <div>
-                  <ACMGLabel label={variantData?.acmg ?? ""}></ACMGLabel>
+                <ACMGLabel label={acmg ?? ""}></ACMGLabel>
                 </div>
               </div>
               <div className="flex flex-col px-3 py-2 gap-2">
@@ -231,8 +256,27 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
 
           {/* Card 2 */}
           <div className="col-span-2 flex flex-col p-5 border gap-4 bg-background rounded-lg shadow-lg">
-            <div className="p-4">
-              <p className="text-text-secondary font-semibold">Add variant interpretation</p>
+            <div className="p-4 flex items-center justify-between">
+              <p className="text-text-secondary font-semibold">
+                Add variant interpretation
+              </p>
+              <Dialog>
+                <DialogTrigger>
+                  <ButtonAdd
+                    variant="outline"
+                    className="rounded-lg font-semibold text-sm text-primary bg-background hover:bg-background hover:text-primary hover:underline"
+                  >
+                    Edit ACMG
+                  </ButtonAdd>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[90%] max-h-[90%] overflow-y-auto bg-foreground">
+                  <ACMGVariantInterpretation
+                    selectedVariant={variantData}
+                    onUpdateVariant={updateACMGClassSelectedVariant}
+                    setACMGClass={setACMG}
+                  ></ACMGVariantInterpretation>
+                </DialogContent>
+              </Dialog>
             </div>
 
             {/* Toolbar */}
@@ -288,11 +332,27 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button
+                      <Dialog>
+            <DialogHeader>
+              <DialogTitle></DialogTitle>
+            </DialogHeader>
+            <DialogTrigger asChild>
+            <Button
                           variant="iconSecondary"
                           size="md"
                           icon={<ListCollapse className="w-4 h-4" />}
                         />
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[95%] max-h-[95%] overflow-y-auto bg-background">
+              <VariantInformationModal
+                id_variant={`${variantData?.id}`}
+                hgvsNotation={`${variantData?.hgvs}`}
+              ></VariantInformationModal>
+              <DialogFooter>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+                        
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>Detail Variant Information</p>
@@ -331,41 +391,43 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
                   </TooltipProvider>
                   {/* Activate Delete */}
                   <AlertDialog>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <AlertDialogTrigger asChild>
-                          <Button
-                            variant="iconDanger"
-                            size="md"
-                            icon={<Trash className="w-4 h-4" />}
-                          />
-                        </AlertDialogTrigger>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Delete this variant form analysis</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you absolutely sure?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete the variant and remove related data from the
-                        database.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={handleDeleteVariantAnalysis}>
-                        Continue
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              variant="iconDanger"
+                              size="md"
+                              icon={<Trash className="w-4 h-4" />}
+                            />
+                          </AlertDialogTrigger>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Delete this variant form analysis</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete the variant and remove related data from the
+                          database.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={handleDeleteVariantAnalysis}
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
             </div>

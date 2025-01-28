@@ -13,10 +13,10 @@ import Button from "@/components/update/button/Button";
 import Input from "@/components/update/input/Input";
 import { generatePatientID } from "@/utils/GenerateID";
 import { addNewPatient } from "@/hooks/usePatients";
-import { addVariantReport } from "@/hooks/useVariantReport";
+
 import { useToast } from "@/components/ui/use-toast";
-import { generateReportID } from "@/utils/function";
-import { getDateToday, ReportStatus } from "@/utils/DateHelperFunction";
+
+import { getDateToday } from "@/utils/DateHelperFunction";
 
 const AddPatientDialog = ({ onUpdatePatients }: { onUpdatePatients: () => Promise<void> }) => {
   const [idReference, setIDReference] = useState("");
@@ -50,30 +50,18 @@ const AddPatientDialog = ({ onUpdatePatients }: { onUpdatePatients: () => Promis
       phone_number: "-",
     };
 
-    const newReport = {
-      id: generateReportID(),
-      status: 1,
-      medical_history: "-",
-      current_diagnosis: "-",
-      sample_collection: getDateToday(),
-      phenotype: "-",
-      idPatient: patientID,
-    };
-  
+    
     try {
       await addNewPatient(newPatient);
-      await addVariantReport(newReport)
-      // Reset input dan error state
       setErrorIDReference(""); 
       setIDReference(""); 
       setOpenDialog(false); 
   
-      // Panggil fungsi untuk refresh data
       await onUpdatePatients();
   
       toast({
-        title: "Success add patient",
-        description: "Patient and variant report added successfully",
+        title: "Success Add Patient",
+        description: "Patient added successfully",
       });
     } catch (error) {
       console.error("Error adding patient:", error);

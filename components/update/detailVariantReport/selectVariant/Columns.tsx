@@ -52,8 +52,6 @@ import { generateUserID } from "@/utils/function";
 import { Toast, ToastAction } from "../../../ui/toast";
 import BAddSelectedVariant from "@/components/update/button/BAddSelectedVariant";
 import { ZYGOSITY_HETEROZYGOUS, ZYGOSITY_HOMOZYGOUS } from "@/utils/Contanst";
-import ACMGVariantReport from "./ACMGVariantReport";
-import handleGeneratePDF from "../../../HandleGeneratePDF";
 
 Amplify.configure(awsconfig);
 
@@ -584,22 +582,7 @@ export const Columns: ColumnDef<Variant>[] = [
 
       return (
         <div className="flex flex-row gap-4">
-          <Dialog>
-            <DialogTrigger>
-            <Button variant="outline" className="rounded-lg bg-foreground border-2 border-primary hover:border-secondary hover:bg-secondary text-primary hover:text-text-action">
-                <small>
-                  <Edit className="h-4 w-4"></Edit>
-                </small>
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[90%] max-h-[90%] overflow-y-auto bg-foreground">
-              <ACMGVariantReport
-                id_variantku={item.id}
-                hgvs={item.hgvs}
-                onUpdateVariant={(e) => {}}
-              ></ACMGVariantReport>
-            </DialogContent>
-          </Dialog>
+          
 
           <Dialog>
             <DialogHeader>
@@ -612,7 +595,7 @@ export const Columns: ColumnDef<Variant>[] = [
                 </small>
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[95%] max-h-[95%] overflow-y-auto bg-foreground">
+            <DialogContent className="sm:max-w-[95%] max-h-[95%] overflow-y-auto bg-background">
               <VariantInformationModal
                 hgvsNotation={item.hgvs}
                 id_variant={item.id}

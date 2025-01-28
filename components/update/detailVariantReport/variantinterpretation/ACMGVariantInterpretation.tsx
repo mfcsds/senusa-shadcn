@@ -10,20 +10,22 @@ import {
   TableRow,
 } from "@/components/update/ui/table";
 import { Badge } from "@/components/update/ui/badge";
-import { AcmgCriteria } from "@/utils/object";
+import { AcmgCriteria, SelectedVariant } from "@/utils/object";
 import { generateClient } from "aws-amplify/api";
 import { listAcmgAnnotations, getVariant } from "@/src/graphql/queries";
 import Button from "@/components/update/button/Button";
 import { SaveAll } from "lucide-react";
-import { createAcmgAnnotation } from "@/src/graphql/mutations";
+import { createAcmgAnnotation, updateSelectedVariant } from "@/src/graphql/mutations";
 import { generateACMGID } from "@/utils/function";
 import { Variant } from "@/src/API";
 import { updateVariant } from "@/src/graphql/mutations";
+import { AcmgAnnotation } from "@/src/API";
+import { toast } from "@/components/ui/use-toast";
 
-interface ACMGVariantQueryProops {
-  id_variantku?: string;
-  hgvs?: string;
-  onUpdateVariant: (id: string, updatedACMGClass: string) => void;
+interface ACMGVariantInterpretationProops {
+  selectedVariant?: SelectedVariant;
+  onUpdateVariant?: (new_acmg: string, sel_var: SelectedVariant) => void;
+  setACMGClass: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface AcmgData {
@@ -32,7 +34,7 @@ interface AcmgData {
   description: string;
 }
 
-function evaluateACMGClass(dataACMG: AcmgCriteria) {
+function evaluateACMGClass(dataACMG: AcmgAnnotation) {
   const pathogenicCriteria = [
     "PVS1",
     "PS1",
@@ -96,124 +98,141 @@ function evaluateACMGClass(dataACMG: AcmgCriteria) {
   return "VUS"; // Default case
 }
 
-const ACMGVariantReport: React.FC<ACMGVariantQueryProops> = ({
-  id_variantku,
-  hgvs,
-  onUpdateVariant,
+const ACMGVariantInterpretation: React.FC<ACMGVariantInterpretationProops> = ({
+  selectedVariant,
+  setACMGClass,
 }) => {
   const client = generateClient();
-  const [dataACMG, setDataACMG] = useState<AcmgCriteria>();
-  const [theVariant, setVariant] = useState<Variant>();
-  const [historyListACMG, setHistoryListACMG] = useState<AcmgCriteria[]>([]);
+  const [historyListACMG, setHistoryListACMG] = useState<AcmgAnnotation[]>([]);
+  const [hasFetched, setHasFetched] = useState(false);
 
   const [isSaveActive, setIsSaveActive] = useState(true);
+  const [dataACMG, setDataACMG] = useState<AcmgAnnotation>();
+  const [acmgData, setAcmgData] = useState<AcmgData[]>([]);
 
-  const fetchVariant = async () => {
+  const fetchHistoryACMG = async () => {
     try {
-      const result = await client.graphql({
-        query: getVariant,
-        variables: { id: id_variantku ?? "" },
-      });
-      setVariant((await result).data.getVariant as Variant);
-    } catch (error) {}
-  };
-
-  const fetchACMGCriteria = async () => {
-    try {
-      const result = client.graphql({
-        query: listAcmgAnnotations,
-        variables: { filter: { id_variant: { eq: id_variantku } } },
-      });
-      const items = (await result).data.listAcmgAnnotations
-        .items as AcmgCriteria[];
-      if (items.length === 0) {
-        // Ambil langsung ke database
-        const apiUrl =
-          "https://yyj4sdbsd6.execute-api.us-east-1.amazonaws.com/dev-acmg/classification";
-
-        // Fetch ACMG classification from the API
-        const response = await fetch(apiUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            body: JSON.stringify({
-              variants: [hgvs ?? ""],
-            }),
-          }),
+      if (selectedVariant) {
+        const result = client.graphql({
+          query: listAcmgAnnotations,
+          variables: { filter: { id_variant: { eq: selectedVariant.id } } },
         });
+        if ((await result).data.listAcmgAnnotations.items.length > 0) {
+          // Ambil semua items
+          const items = (await result).data.listAcmgAnnotations
+            .items as AcmgAnnotation[];
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch ACMG classification");
-        }
+          // Urutkan berdasarkan 'updatedAt' dari terbaru ke terlama
+          const sortedItems = items.sort(
+            (a, b) =>
+              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+          );
+          // Set data ke state historyListACMG
+          setHistoryListACMG(sortedItems);
+          // Set item terbaru ke state lain (misal setDataACMG)
+          if (sortedItems.length > 0) {
+            setDataACMG(sortedItems[0]);
+          }
+          console.log(items);
+        } else {
+          // No existing annotations: create a default dataACMG with false values
+          // Ambil langsung ke database
+          const apiUrl =
+            "https://yyj4sdbsd6.execute-api.us-east-1.amazonaws.com/dev-acmg/classification";
 
-        const data = await response.json();
-        const acmgResults = JSON.parse(data.body);
-        if (acmgResults && acmgResults.length > 0) {
-          const acmgData = acmgResults[0];
+          // Fetch ACMG classification from the API
+          const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              body: JSON.stringify({
+                variants: [selectedVariant.hgvs ?? ""],
+              }),
+            }),
+          });
 
-          console.log("Masuk sini", acmgData);
-          console.log("Label ACMG", acmgData.acmg);
-          const acmgCriteria: AcmgCriteria = {
-            id_variant: id_variantku,
-            PVS1: acmgData?.PVS1 || false,
-            PS1: acmgData?.PS1 || false,
-            PS2: acmgData?.PS2 || false,
-            PS3: acmgData?.PS3 || false,
-            PS4: acmgData?.PS4 || false,
-            PP1_Strong: acmgData?.PP1_Strong || false,
-            PM1: acmgData?.PM1 || false,
-            PM2: acmgData?.PM2 || false,
-            PM3: acmgData?.PM3 || false,
-            PM4: acmgData?.PM4 || false,
-            PM5: acmgData?.PM5 || false,
-            PM6: acmgData?.PM6 || false,
-            PP1_Moderate: acmgData?.PP1_Moderate || false,
-            PP1_Cosegregation: acmgData?.PP1_Cosegregation || false,
-            PP2: acmgData?.PP2 || false,
-            PP3: acmgData?.PP3 || false,
-            PP4: acmgData?.PP4 || false,
-            PP5: acmgData?.PP5 || false,
-            BP1: acmgData?.BP1 || false,
-            BP2: acmgData?.BP2 || false,
-            BP3: acmgData?.BP3 || false,
-            BP4: acmgData?.BP4 || false,
-            BP5: acmgData?.BP5 || false,
-            BP6: acmgData?.BP6 || false,
-            BP7: acmgData?.BP7 || false,
-            BS1: acmgData?.BS1 || false,
-            BS2: acmgData?.BS2 || false,
-            BS3: acmgData?.BS3 || false,
-            BS4: acmgData?.BS4 || false,
-            BA1: acmgData?.BA1 || false,
-            acmg_class: acmgData?.acmg || "",
-          };
+          if (!response.ok) {
+            throw new Error("Failed to fetch ACMG classification");
+          }
 
-          setDataACMG(acmgCriteria);
-          console.log(dataACMG?.acmg_class);
-          // Store ACMG Criteria if variant is saved
-          const acmgResult = await client.graphql({
-            query: createAcmgAnnotation,
-            variables: { input: acmgCriteria },
+          const data = await response.json();
+          const acmgResults = JSON.parse(data.body);
+          if (acmgResults && acmgResults.length > 0) {
+            const acmgData = acmgResults[0];
+
+            console.log("Masuk sini", acmgData);
+            console.log("Label ACMG", acmgData.acmg);
+            const acmgCriteria: AcmgAnnotation = {
+              id: generateACMGID(),
+              id_variant: selectedVariant.id,
+              PVS1: acmgData?.PVS1 || false,
+              PS1: acmgData?.PS1 || false,
+              PS2: acmgData?.PS2 || false,
+              PS3: acmgData?.PS3 || false,
+              PS4: acmgData?.PS4 || false,
+              PP1_Strong: acmgData?.PP1_Strong || false,
+              PM1: acmgData?.PM1 || false,
+              PM2: acmgData?.PM2 || false,
+              PM3: acmgData?.PM3 || false,
+              PM4: acmgData?.PM4 || false,
+              PM5: acmgData?.PM5 || false,
+              PM6: acmgData?.PM6 || false,
+              PP1_Moderate: acmgData?.PP1_Moderate || false,
+              PP1_Cosegregation: acmgData?.PP1_Cosegregation || false,
+              PP2: acmgData?.PP2 || false,
+              PP3: acmgData?.PP3 || false,
+              PP4: acmgData?.PP4 || false,
+              PP5: acmgData?.PP5 || false,
+              BP1: acmgData?.BP1 || false,
+              BP2: acmgData?.BP2 || false,
+              BP3: acmgData?.BP3 || false,
+              BP4: acmgData?.BP4 || false,
+              BP5: acmgData?.BP5 || false,
+              BP6: acmgData?.BP6 || false,
+              BP7: acmgData?.BP7 || false,
+              BS1: acmgData?.BS1 || false,
+              BS2: acmgData?.BS2 || false,
+              BS3: acmgData?.BS3 || false,
+              BS4: acmgData?.BS4 || false,
+              BA1: acmgData?.BA1 || false,
+              acmg_class: acmgData?.acmg || "",
+              createdAt: "",
+              updatedAt: "",
+              __typename: "AcmgAnnotation",
+            };
+
+            setDataACMG(acmgCriteria);
+          }
+          // Initialize history list as empty
+          setHistoryListACMG([]);
+          // Set the default ACMG data
+          //   setDataACMG(defaultACMG);
+          toast({
+            title: "Masuk Sini Loh",
+            variant: "default",
+            description: `${historyListACMG.length}`,
           });
         }
-      }
-
-      if (items.length > 0) {
-        setDataACMG(items[0]);
-        setHistoryListACMG(items); // Set the current update as the first item in history
+        setHasFetched(true);
+        toast({
+          title: "Sucesss ACMG History",
+          variant: "default",
+          description: `Successfully load ACMG History`,
+        });
       }
     } catch (error) {
-      console.log("Error fetching ACMG Criteria:", error);
+      toast({ title: "Failed load ACMG History", variant: "destructive" });
     }
   };
 
   useEffect(() => {
-    fetchVariant();
-    fetchACMGCriteria();
-  }, [id_variantku]);
+    if (!hasFetched) {
+      fetchHistoryACMG();
+    }
+  });
 
   const getBadgeColor = () => {
     switch (dataACMG?.acmg_class) {
@@ -232,186 +251,185 @@ const ACMGVariantReport: React.FC<ACMGVariantQueryProops> = ({
     }
   };
 
-  const [acmgData, setAcmgData] = useState<AcmgData[]>([]);
 
   useEffect(() => {
     if (dataACMG) {
       const updateDataACMG: AcmgData[] = [
         {
-          status: dataACMG?.PVS1,
+          status: dataACMG?.PVS1!,
           criteria: "PVS1",
           description:
             "Null variant (nonsense, frameshift, canonical ±1 or 2 splice sites, initiation codon, single or multiexon deletion) in a gene where LOF is a known mechanism of disease.",
         },
         {
-          status: dataACMG?.PS1,
+          status: dataACMG?.PS1!,
           criteria: "PS1",
           description:
             "Same amino acid change as a previously established pathogenic variant regardless of nucleotide change.",
         },
         {
-          status: dataACMG?.PS2,
+          status: dataACMG?.PS2!,
           criteria: "PS2",
           description:
             "De novo (both maternity and paternity confirmed) in a patient with the disease and no family history.",
         },
         {
-          status: dataACMG?.PS3,
+          status: dataACMG?.PS3!,
           criteria: "PS3",
           description:
             "Well-established in vitro or in vivo functional studies supportive of a damaging effect on the gene or gene product.",
         },
         {
-          status: dataACMG?.PS4,
+          status: dataACMG?.PS4!,
           criteria: "PS4",
           description:
             "The prevalence of the variant in affected individuals is significantly increased compared with the prevalence in controls.",
         },
         {
-          status: dataACMG?.PP1_Strong,
+          status: dataACMG?.PP1_Strong!,
           criteria: "PP1 Strong",
           description:
             "Cosegregation with disease in multiple affected family members in a gene definitively known to cause the disease (Strong evidence).",
         },
         {
-          status: dataACMG?.PM1,
+          status: dataACMG?.PM1!,
           criteria: "PM1",
           description:
             "Located in a mutational hot spot and/or critical and well-established functional domain (e.g., active site of an enzyme) without benign variation.",
         },
         {
-          status: dataACMG?.PM2,
+          status: dataACMG?.PM2!,
           criteria: "PM2",
           description:
             "Absent from controls (or at extremely low frequency if recessive) in Exome Sequencing Project, 1000 Genomes Project, or Exome Aggregation Consortium.",
         },
         {
-          status: dataACMG?.PM3,
+          status: dataACMG?.PM3!,
           criteria: "PM3",
           description:
             "For recessive disorders, detected in trans with a pathogenic variant.",
         },
         {
-          status: dataACMG?.PM4,
+          status: dataACMG?.PM4!,
           criteria: "PM4",
           description:
             "Protein length changes as a result of in-frame deletions/insertions in a nonrepeat region or stop-loss variants.",
         },
         {
-          status: dataACMG?.PM5,
+          status: dataACMG?.PM5!,
           criteria: "PM5",
           description:
             "Novel missense change at an amino acid residue where a different missense change determined to be pathogenic has been seen before.",
         },
         {
-          status: dataACMG?.PM6,
+          status: dataACMG?.PM6!,
           criteria: "PM6",
           description:
             "Assumed de novo, but without confirmation of paternity and maternity.",
         },
         {
-          status: dataACMG?.PP1_Moderate,
+          status: dataACMG?.PP1_Moderate!,
           criteria: "PP1 Moderate",
           description:
             "Cosegregation with disease in multiple affected family members in a gene definitively known to cause the disease (Moderate evidence).",
         },
         {
-          status: dataACMG?.PP1_Cosegregation,
+          status: dataACMG?.PP1_Cosegregation!,
           criteria: "PP1",
           description:
             "Cosegregation with disease in multiple affected family members in a gene definitively known to cause the disease.",
         },
         {
-          status: dataACMG?.PP2,
+          status: dataACMG?.PP2!,
           criteria: "PP2",
           description:
             "Missense variant in a gene that has a low rate of benign missense variation and in which missense variants are a common mechanism of disease.",
         },
         {
-          status: dataACMG?.PP3,
+          status: dataACMG?.PP3!,
           criteria: "PP3",
           description:
             "Multiple lines of computational evidence support a deleterious effect on the gene or gene product (conservation, evolutionary, splicing impact, etc.).",
         },
         {
-          status: dataACMG?.PP4,
+          status: dataACMG?.PP4!,
           criteria: "PP4",
           description:
             "Patient’s phenotype or family history is highly specific for a disease with a single genetic etiology.",
         },
         {
-          status: dataACMG?.PP5,
+          status: dataACMG?.PP5!,
           criteria: "PP5",
           description:
             "Reputable source recently reports variant as pathogenic, but the evidence is not available to the laboratory to perform an independent evaluation.",
         },
         {
-          status: dataACMG?.BP1,
+          status: dataACMG?.BP1!,
           criteria: "BP1",
           description:
             "Missense variant in a gene for which primarily truncating variants are known to cause disease.",
         },
         {
-          status: dataACMG?.BP2,
+          status: dataACMG?.BP2!,
           criteria: "BP2",
           description:
             "Observed in trans with a pathogenic variant for a fully penetrant dominant gene/disorder or observed in cis with a pathogenic variant in any inheritance pattern.",
         },
         {
-          status: dataACMG?.BP3,
+          status: dataACMG?.BP3!,
           criteria: "BP3",
           description:
             "In-frame deletions/insertions in a repetitive region without a known function.",
         },
         {
-          status: dataACMG?.BP4,
+          status: dataACMG?.BP4!,
           criteria: "BP4",
           description:
             "Multiple lines of computational evidence suggest no impact on gene or gene product (conservation, evolutionary, splicing impact, etc.).",
         },
         {
-          status: dataACMG?.BP5,
+          status: dataACMG?.BP5!,
           criteria: "BP5",
           description:
             "Variant found in a case with an alternate molecular basis for disease.",
         },
         {
-          status: dataACMG?.BP6,
+          status: dataACMG?.BP6!,
           criteria: "BP6",
           description:
             "Reputable source recently reports variant as benign, but the evidence is not available to the laboratory to perform an independent evaluation.",
         },
         {
-          status: dataACMG?.BP7,
+          status: dataACMG?.BP7!,
           criteria: "BP7",
           description:
             "A synonymous (silent) variant for which splicing prediction algorithms predict no impact to the splice consensus sequence nor the creation of a new splice site AND the nucleotide is not highly conserved.",
         },
         {
-          status: dataACMG?.BS1,
+          status: dataACMG?.BS1!,
           criteria: "BS1",
           description:
             "Allele frequency is greater than expected for disorder.",
         },
         {
-          status: dataACMG?.BS2,
+          status: dataACMG?.BS2!,
           criteria: "BS2",
           description:
             "Observed in a healthy adult individual for a recessive (homozygous), dominant (heterozygous), or X-linked (hemizygous) disorder, with full penetrance expected at an early age.",
         },
         {
-          status: dataACMG?.BS3,
+          status: dataACMG?.BS3!,
           criteria: "BS3",
           description:
             "Well-established in vitro or in vivo functional studies show no damaging effect on protein function or splicing.",
         },
         {
-          status: dataACMG?.BS4,
+          status: dataACMG?.BS4!,
           criteria: "BS4",
           description: "Lack of segregation in affected members of a family.",
         },
         {
-          status: dataACMG?.BA1,
+          status: dataACMG?.BA1!,
           criteria: "BA1",
           description:
             "Allele frequency is >5% in Exome Sequencing Project, 1000 Genomes Project, or Exome Aggregation Consortium.",
@@ -444,6 +462,7 @@ const ACMGVariantReport: React.FC<ACMGVariantQueryProops> = ({
         setIsSaveActive(
           JSON.stringify(updatedACMG) !== JSON.stringify(historyListACMG[0])
         );
+        
         return { ...updatedACMG, acmg_class: updatedClass };
       }
       return prevACMG;
@@ -457,8 +476,8 @@ const ACMGVariantReport: React.FC<ACMGVariantQueryProops> = ({
       const newRecord: AcmgCriteria = {
         // ...dataACMG, // Spread existing values
         id: generateACMGID() || "", // Fallback to empty string if undefined
-        id_variant: id_variantku || "", // Ensure id_variant is never undefined
-        acmg_class: dataACMG?.acmg_class || "", // Default to empty string if undefined
+        id_variant: selectedVariant?.id || "", // Ensure id_variant is never undefined
+        acmg_class: dataACMG?.acmg_class || "VUS", // Default to empty string if undefined
         PVS1: dataACMG?.PVS1 ?? false,
         PS1: dataACMG?.PS1 ?? false,
         PS2: dataACMG?.PS2 ?? false,
@@ -491,21 +510,29 @@ const ACMGVariantReport: React.FC<ACMGVariantQueryProops> = ({
         BS4: dataACMG?.BS4 ?? false,
       };
 
+      if (dataACMG) {
+        setACMGClass(dataACMG?.acmg_class ?? "VUS");
+      }
+
       // Save the record via GraphQL mutation
       const result = await client.graphql({
         query: createAcmgAnnotation,
         variables: { input: newRecord },
       });
 
-      // Notify parent about the ACMG update
-      if (onUpdateVariant && id_variantku) {
-        onUpdateVariant(id_variantku, dataACMG?.acmg_class || "");
+      // Save the record via GrapQL mutation
+      if (selectedVariant) {
+        const result2 = await client.graphql({
+          query: updateSelectedVariant,
+          variables: {
+            input: { id: selectedVariant?.id, acmg: dataACMG?.acmg_class },
+          },
+        });
       }
 
-      // Update history and reset save state
       setHistoryListACMG((prev) => [
         ...prev,
-        result.data.createAcmgAnnotation as AcmgCriteria,
+        result.data.createAcmgAnnotation as AcmgAnnotation,
       ]);
       setIsSaveActive(false); // Disable save button
     } catch (error) {
@@ -647,4 +674,4 @@ const ACMGVariantReport: React.FC<ACMGVariantQueryProops> = ({
   );
 };
 
-export default ACMGVariantReport;
+export default ACMGVariantInterpretation;
