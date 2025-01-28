@@ -18,6 +18,8 @@ export const onCreateUserNotifications = /* GraphQL */ `subscription OnCreateUse
     message
     id_fromuser
     id_report
+    markasread
+    id_patient
     createdAt
     updatedAt
     __typename
@@ -37,6 +39,8 @@ export const onUpdateUserNotifications = /* GraphQL */ `subscription OnUpdateUse
     message
     id_fromuser
     id_report
+    markasread
+    id_patient
     createdAt
     updatedAt
     __typename
@@ -56,6 +60,8 @@ export const onDeleteUserNotifications = /* GraphQL */ `subscription OnDeleteUse
     message
     id_fromuser
     id_report
+    markasread
+    id_patient
     createdAt
     updatedAt
     __typename

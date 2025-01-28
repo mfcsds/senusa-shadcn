@@ -16,6 +16,8 @@ export const getUserNotifications = /* GraphQL */ `query GetUserNotifications($i
     message
     id_fromuser
     id_report
+    markasread
+    id_patient
     createdAt
     updatedAt
     __typename
@@ -38,6 +40,8 @@ export const listUserNotifications = /* GraphQL */ `query ListUserNotifications(
       message
       id_fromuser
       id_report
+      markasread
+      id_patient
       createdAt
       updatedAt
       __typename

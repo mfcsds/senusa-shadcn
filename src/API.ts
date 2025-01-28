@@ -9,6 +9,8 @@ export type CreateUserNotificationsInput = {
   message?: string | null,
   id_fromuser?: string | null,
   id_report?: string | null,
+  markasread?: boolean | null,
+  id_patient?: string | null,
 };
 
 export type ModelUserNotificationsConditionInput = {
@@ -17,6 +19,8 @@ export type ModelUserNotificationsConditionInput = {
   message?: ModelStringInput | null,
   id_fromuser?: ModelStringInput | null,
   id_report?: ModelStringInput | null,
+  markasread?: ModelBooleanInput | null,
+  id_patient?: ModelStringInput | null,
   and?: Array< ModelUserNotificationsConditionInput | null > | null,
   or?: Array< ModelUserNotificationsConditionInput | null > | null,
   not?: ModelUserNotificationsConditionInput | null,
@@ -64,6 +68,13 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
 export type UserNotifications = {
   __typename: "UserNotifications",
   id: string,
@@ -72,6 +83,8 @@ export type UserNotifications = {
   message?: string | null,
   id_fromuser?: string | null,
   id_report?: string | null,
+  markasread?: boolean | null,
+  id_patient?: string | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -83,6 +96,8 @@ export type UpdateUserNotificationsInput = {
   message?: string | null,
   id_fromuser?: string | null,
   id_report?: string | null,
+  markasread?: boolean | null,
+  id_patient?: string | null,
 };
 
 export type DeleteUserNotificationsInput = {
@@ -202,13 +217,6 @@ export type ModelAcmgAnnotationConditionInput = {
   not?: ModelAcmgAnnotationConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
-};
-
-export type ModelBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
 };
 
 export type AcmgAnnotation = {
@@ -1268,6 +1276,8 @@ export type ModelUserNotificationsFilterInput = {
   message?: ModelStringInput | null,
   id_fromuser?: ModelStringInput | null,
   id_report?: ModelStringInput | null,
+  markasread?: ModelBooleanInput | null,
+  id_patient?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelUserNotificationsFilterInput | null > | null,
@@ -1693,6 +1703,8 @@ export type ModelSubscriptionUserNotificationsFilterInput = {
   message?: ModelSubscriptionStringInput | null,
   id_fromuser?: ModelSubscriptionStringInput | null,
   id_report?: ModelSubscriptionStringInput | null,
+  markasread?: ModelSubscriptionBooleanInput | null,
+  id_patient?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionUserNotificationsFilterInput | null > | null,
@@ -1727,6 +1739,11 @@ export type ModelSubscriptionStringInput = {
   beginsWith?: string | null,
   in?: Array< string | null > | null,
   notIn?: Array< string | null > | null,
+};
+
+export type ModelSubscriptionBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
 };
 
 export type ModelSubscriptionPatientHistoryDiseaseFilterInput = {
@@ -1778,11 +1795,6 @@ export type ModelSubscriptionAcmgAnnotationFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionAcmgAnnotationFilterInput | null > | null,
   or?: Array< ModelSubscriptionAcmgAnnotationFilterInput | null > | null,
-};
-
-export type ModelSubscriptionBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
 };
 
 export type ModelSubscriptionFamilyHistoryDiseaseFilterInput = {
@@ -2071,6 +2083,8 @@ export type CreateUserNotificationsMutation = {
     message?: string | null,
     id_fromuser?: string | null,
     id_report?: string | null,
+    markasread?: boolean | null,
+    id_patient?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2090,6 +2104,8 @@ export type UpdateUserNotificationsMutation = {
     message?: string | null,
     id_fromuser?: string | null,
     id_report?: string | null,
+    markasread?: boolean | null,
+    id_patient?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2109,6 +2125,8 @@ export type DeleteUserNotificationsMutation = {
     message?: string | null,
     id_fromuser?: string | null,
     id_report?: string | null,
+    markasread?: boolean | null,
+    id_patient?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3348,6 +3366,8 @@ export type GetUserNotificationsQuery = {
     message?: string | null,
     id_fromuser?: string | null,
     id_report?: string | null,
+    markasread?: boolean | null,
+    id_patient?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3370,6 +3390,8 @@ export type ListUserNotificationsQuery = {
       message?: string | null,
       id_fromuser?: string | null,
       id_report?: string | null,
+      markasread?: boolean | null,
+      id_patient?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -4256,6 +4278,8 @@ export type OnCreateUserNotificationsSubscription = {
     message?: string | null,
     id_fromuser?: string | null,
     id_report?: string | null,
+    markasread?: boolean | null,
+    id_patient?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4274,6 +4298,8 @@ export type OnUpdateUserNotificationsSubscription = {
     message?: string | null,
     id_fromuser?: string | null,
     id_report?: string | null,
+    markasread?: boolean | null,
+    id_patient?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4292,6 +4318,8 @@ export type OnDeleteUserNotificationsSubscription = {
     message?: string | null,
     id_fromuser?: string | null,
     id_report?: string | null,
+    markasread?: boolean | null,
+    id_patient?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,

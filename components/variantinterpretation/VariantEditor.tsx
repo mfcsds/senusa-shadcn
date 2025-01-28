@@ -369,7 +369,12 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      {<BInviteUser user={user}></BInviteUser>}
+                      {
+                        <BInviteUser
+                          user={user}
+                          variant_data={variantData}
+                        ></BInviteUser>
+                      }
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Invite other user to provide analysis</p>

@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { UserNotifications } from "../API.ts";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
@@ -28,6 +28,8 @@ export declare type UserNotificationsUpdateFormInputValues = {
     message?: string;
     id_fromuser?: string;
     id_report?: string;
+    markasread?: boolean;
+    id_patient?: string;
 };
 export declare type UserNotificationsUpdateFormValidationValues = {
     user_id?: ValidationFunction<string>;
@@ -35,6 +37,8 @@ export declare type UserNotificationsUpdateFormValidationValues = {
     message?: ValidationFunction<string>;
     id_fromuser?: ValidationFunction<string>;
     id_report?: ValidationFunction<string>;
+    markasread?: ValidationFunction<boolean>;
+    id_patient?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UserNotificationsUpdateFormOverridesProps = {
@@ -44,6 +48,8 @@ export declare type UserNotificationsUpdateFormOverridesProps = {
     message?: PrimitiveOverrideProps<TextFieldProps>;
     id_fromuser?: PrimitiveOverrideProps<TextFieldProps>;
     id_report?: PrimitiveOverrideProps<TextFieldProps>;
+    markasread?: PrimitiveOverrideProps<SwitchFieldProps>;
+    id_patient?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type UserNotificationsUpdateFormProps = React.PropsWithChildren<{
     overrides?: UserNotificationsUpdateFormOverridesProps | undefined | null;

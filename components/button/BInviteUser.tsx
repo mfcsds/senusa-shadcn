@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { listUsers } from "@/src/graphql/queries";
-import { User } from "@/src/API";
+import { User, UserNotifications } from "@/src/API";
 import { generateClient } from "aws-amplify/api";
 import { toast } from "../ui/use-toast";
 import {
@@ -26,15 +26,55 @@ import {
 } from "../ui/table";
 import Profile from "../items/profile/Profile";
 import { UserPlus } from "lucide-react";
+import { createUserNotifications } from "@/src/graphql/mutations";
+import { SelectedVariant } from "@/utils/object";
 
 interface BInviteUserProops {
   user: User | undefined;
+  variant_data?: SelectedVariant;
 }
 
-const BInviteUser: React.FC<BInviteUserProops> = ({ user }) => {
+const BInviteUser: React.FC<BInviteUserProops> = ({ user, variant_data }) => {
   const [listOfUser, setListOfUser] = useState<User[]>([]);
   const client = generateClient();
   const [hasFetched, setHasFetched] = useState(false);
+
+  const [selectedUser, setSelectedUser] = useState<User>();
+
+  const handleInviteUserButton = async (index: number) => {
+    if (!user?.id || !listOfUser.at(index)?.id || !variant_data?.id_report) {
+      console.error("Missing required parameters");
+      return;
+    }
+    try {
+      const notificationInput = {
+        institutionID: user?.institutionID,
+        user_id: listOfUser.at(index)?.id,
+        message: `Hallo, ${
+          listOfUser.at(index)?.first_name
+        } ,this invitation is from ${
+          user?.first_name
+        } to invite you join the analysis on the report ID ${
+          variant_data?.id_report
+        } - ${variant_data.hgvs}`,
+        id_fromuser: user?.id,
+        id_report: variant_data?.id_report,
+        id_patient: variant_data?.id_patient,
+      };
+      const addNotif = client.graphql({
+        query: createUserNotifications,
+        variables: { input: notificationInput },
+      });
+      toast({
+        title: "Successfully Send Invitation",
+        description: `Sucessfully sent invitation to ${
+          listOfUser.at(index)?.first_name
+        }`,
+      });
+    } catch (error) {
+      console.log("error invite user", error);
+    }
+  };
 
   const fetchListOfUser = async () => {
     if (user) {
@@ -92,7 +132,11 @@ const BInviteUser: React.FC<BInviteUserProops> = ({ user }) => {
                     <Profile user={item}></Profile>
                   </TableCell>
                   <TableCell>
-                    <Button variant={"ghost"} className="border">
+                    <Button
+                      variant={"ghost"}
+                      className="border"
+                      onClick={(e) => handleInviteUserButton(index)}
+                    >
                       <small>
                         <UserPlus className="h-4 w-4"></UserPlus>
                       </small>

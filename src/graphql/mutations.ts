@@ -19,6 +19,8 @@ export const createUserNotifications = /* GraphQL */ `mutation CreateUserNotific
     message
     id_fromuser
     id_report
+    markasread
+    id_patient
     createdAt
     updatedAt
     __typename
@@ -39,6 +41,8 @@ export const updateUserNotifications = /* GraphQL */ `mutation UpdateUserNotific
     message
     id_fromuser
     id_report
+    markasread
+    id_patient
     createdAt
     updatedAt
     __typename
@@ -59,6 +63,8 @@ export const deleteUserNotifications = /* GraphQL */ `mutation DeleteUserNotific
     message
     id_fromuser
     id_report
+    markasread
+    id_patient
     createdAt
     updatedAt
     __typename

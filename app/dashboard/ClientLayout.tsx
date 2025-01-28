@@ -17,7 +17,6 @@ export default function ClientLayout({
       try {
         // getCurrentUser => baca token di localStorage
         const { username } = await getCurrentUser();
-        console.log("Current user is:", username);
       } catch (err) {
         // Belum login => redirect
         router.push("/login");

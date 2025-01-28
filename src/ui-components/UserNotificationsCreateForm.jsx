@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
 import { createUserNotifications } from "../graphql/mutations";
@@ -28,6 +34,8 @@ export default function UserNotificationsCreateForm(props) {
     message: "",
     id_fromuser: "",
     id_report: "",
+    markasread: false,
+    id_patient: "",
   };
   const [user_id, setUser_id] = React.useState(initialValues.user_id);
   const [institutionID, setInstitutionID] = React.useState(
@@ -38,6 +46,8 @@ export default function UserNotificationsCreateForm(props) {
     initialValues.id_fromuser
   );
   const [id_report, setId_report] = React.useState(initialValues.id_report);
+  const [markasread, setMarkasread] = React.useState(initialValues.markasread);
+  const [id_patient, setId_patient] = React.useState(initialValues.id_patient);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setUser_id(initialValues.user_id);
@@ -45,6 +55,8 @@ export default function UserNotificationsCreateForm(props) {
     setMessage(initialValues.message);
     setId_fromuser(initialValues.id_fromuser);
     setId_report(initialValues.id_report);
+    setMarkasread(initialValues.markasread);
+    setId_patient(initialValues.id_patient);
     setErrors({});
   };
   const validations = {
@@ -53,6 +65,8 @@ export default function UserNotificationsCreateForm(props) {
     message: [],
     id_fromuser: [],
     id_report: [],
+    markasread: [],
+    id_patient: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -85,6 +99,8 @@ export default function UserNotificationsCreateForm(props) {
           message,
           id_fromuser,
           id_report,
+          markasread,
+          id_patient,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -152,6 +168,8 @@ export default function UserNotificationsCreateForm(props) {
               message,
               id_fromuser,
               id_report,
+              markasread,
+              id_patient,
             };
             const result = onChange(modelFields);
             value = result?.user_id ?? value;
@@ -180,6 +198,8 @@ export default function UserNotificationsCreateForm(props) {
               message,
               id_fromuser,
               id_report,
+              markasread,
+              id_patient,
             };
             const result = onChange(modelFields);
             value = result?.institutionID ?? value;
@@ -208,6 +228,8 @@ export default function UserNotificationsCreateForm(props) {
               message: value,
               id_fromuser,
               id_report,
+              markasread,
+              id_patient,
             };
             const result = onChange(modelFields);
             value = result?.message ?? value;
@@ -236,6 +258,8 @@ export default function UserNotificationsCreateForm(props) {
               message,
               id_fromuser: value,
               id_report,
+              markasread,
+              id_patient,
             };
             const result = onChange(modelFields);
             value = result?.id_fromuser ?? value;
@@ -264,6 +288,8 @@ export default function UserNotificationsCreateForm(props) {
               message,
               id_fromuser,
               id_report: value,
+              markasread,
+              id_patient,
             };
             const result = onChange(modelFields);
             value = result?.id_report ?? value;
@@ -277,6 +303,66 @@ export default function UserNotificationsCreateForm(props) {
         errorMessage={errors.id_report?.errorMessage}
         hasError={errors.id_report?.hasError}
         {...getOverrideProps(overrides, "id_report")}
+      ></TextField>
+      <SwitchField
+        label="Markasread"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={markasread}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              user_id,
+              institutionID,
+              message,
+              id_fromuser,
+              id_report,
+              markasread: value,
+              id_patient,
+            };
+            const result = onChange(modelFields);
+            value = result?.markasread ?? value;
+          }
+          if (errors.markasread?.hasError) {
+            runValidationTasks("markasread", value);
+          }
+          setMarkasread(value);
+        }}
+        onBlur={() => runValidationTasks("markasread", markasread)}
+        errorMessage={errors.markasread?.errorMessage}
+        hasError={errors.markasread?.hasError}
+        {...getOverrideProps(overrides, "markasread")}
+      ></SwitchField>
+      <TextField
+        label="Id patient"
+        isRequired={false}
+        isReadOnly={false}
+        value={id_patient}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              user_id,
+              institutionID,
+              message,
+              id_fromuser,
+              id_report,
+              markasread,
+              id_patient: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.id_patient ?? value;
+          }
+          if (errors.id_patient?.hasError) {
+            runValidationTasks("id_patient", value);
+          }
+          setId_patient(value);
+        }}
+        onBlur={() => runValidationTasks("id_patient", id_patient)}
+        errorMessage={errors.id_patient?.errorMessage}
+        hasError={errors.id_patient?.hasError}
+        {...getOverrideProps(overrides, "id_patient")}
       ></TextField>
       <Flex
         justifyContent="space-between"

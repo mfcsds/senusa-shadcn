@@ -11,17 +11,22 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RefreshCw } from "lucide-react";
+import { Loader2, RefreshCw } from "lucide-react";
 import React, { useState } from "react";
 import { resetPassword } from "aws-amplify/auth";
 import { confirmResetPassword } from "aws-amplify/auth";
 import { toast } from "@/components/ui/use-toast";
 
+import { Amplify } from "aws-amplify";
+import config from "@/src/aws-exports";
+
+Amplify.configure(config);
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [hasReceived, setHasReceived] = useState(false);
+  const [errors, setErrors] = useState("");
 
   // Track loading states
   const [isResetting, setIsResetting] = useState(false);
@@ -34,7 +39,7 @@ const ForgotPasswordForm = () => {
   // Password validation function
   const validatePassword = (password: string) => {
     const passwordPolicy = {
-      minimumLength: 32,
+      minimumLength: 8,
       requireLowercase: true,
       requireNumbers: true,
       requireSymbols: true,
@@ -95,6 +100,7 @@ const ForgotPasswordForm = () => {
 
   const handleChangePassword = async () => {
     const passwordErrors = validatePassword(newPassword);
+    setIsChanging(true);
     if (passwordErrors.length > 0) {
       setErrors(passwordErrors.join(" "));
       return;
@@ -116,6 +122,8 @@ const ForgotPasswordForm = () => {
         title: "Error",
         description: "Failed to reset password. Please try again.",
       });
+    } finally {
+      setIsChanging(false);
     }
   };
 
@@ -135,7 +143,13 @@ const ForgotPasswordForm = () => {
               type="email"
               onChange={(e) => setEmail(e.target.value)}
             ></Input>
-            <Button onClick={doResetPassword}>Reset Password</Button>
+            <Button onClick={doResetPassword} disabled={isResetting}>
+              {isResetting ? (
+                <Loader2 className=" mr-2 h-4 w-4 animate-spin"></Loader2>
+              ) : (
+                "Reset Password"
+              )}
+            </Button>
             <p className="text-balance text-gray-600 text-sm font-light">
               Reset code has been sent to your email
             </p>
@@ -170,7 +184,13 @@ const ForgotPasswordForm = () => {
       <CardFooter>
         <div className="flex flex-row items-end justify-end gap-2 w-full">
           <Button variant={"outline"}>Cancel</Button>
-          <Button onClick={handleChangePassword}>Change Password</Button>
+          <Button onClick={handleChangePassword} disabled={isChanging}>
+            {isChanging ? (
+              <Loader2 className="w-4 h-4 animate-spin"></Loader2>
+            ) : (
+              "Change Password"
+            )}
+          </Button>
         </div>
       </CardFooter>
     </Card>

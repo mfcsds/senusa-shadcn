@@ -5,6 +5,8 @@ type UserNotifications @model @auth(rules: [{allow: public}]) {
   message: String
   id_fromuser: String
   id_report: String
+  markasread: Boolean
+  id_patient: String
 }
 
 type PatientHistoryDisease @model @auth(rules: [{allow: public}]) {
