@@ -116,7 +116,12 @@ const LoginForm = () => {
           <CardFooter className="flex flex-col items-center">
             <Separator />
             <div className="w-full flex justify-center my-2">
-              <Button variant="link">
+              <Button
+                variant="link"
+                onClick={(e) => {
+                  router.push("/forgotpassword");
+                }}
+              >
                 <small>Forgot Password?</small>
               </Button>
             </div>
