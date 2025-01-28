@@ -209,12 +209,12 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
         {/* Variant Interpretation */}
         <View style={styles.section}>
           <Text style={styles.subtitle}>Variant Interpretation</Text>
-          {variantInter.map((item, idx) => (
+          {listSelVariants.map((item, idx) => (
             <Text key={idx} style={styles.textsmall}>
               <Text
                 style={{ fontWeight: "bold" }}
               >{`(${item.gene_symbol}) ${item.hgvs}: `}</Text>
-              {item.text}
+              {item.text_interpretation}
             </Text>
           ))}
         </View>

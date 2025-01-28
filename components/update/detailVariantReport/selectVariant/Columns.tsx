@@ -130,7 +130,7 @@ export const Columns: ColumnDef<Variant>[] = [
           case "RAD51C":
           case "RAD51D":
           case "BARD1":
-            return "border-red-600 ";
+            return "border-red-primary ";
           default:
             return "border-gray-500"; // Default color if value doesn't match
         }
@@ -153,7 +153,7 @@ export const Columns: ColumnDef<Variant>[] = [
           case "RAD51C":
           case "RAD51D":
           case "BARD1":
-            return "text-red-600 font-semibold ";
+            return "text-red-primary font-semibold ";
           default:
             return "text-text-primary font-semibold"; // Default color if value doesn't match
         }
@@ -172,7 +172,7 @@ export const Columns: ColumnDef<Variant>[] = [
               ) : (
                 <Skeleton
                   aria-label="..."
-                  className="h-6 w-[100px]  bg-gray-300"
+                  className="h-6 w-[100px] bg-border"
                 />
               )}
             </div>
@@ -183,7 +183,7 @@ export const Columns: ColumnDef<Variant>[] = [
             ) : (
               <Skeleton
                 vocab="Loading"
-                className="h-6 w-[150px] pl-2 mt-2 bg-gray-300"
+                className="h-6 w-[150px] pl-2 mt-2 bg-border"
               />
             )}
           </div>
@@ -192,7 +192,7 @@ export const Columns: ColumnDef<Variant>[] = [
             {item.rsID ? (
               <p className="text-md font-sans text-text-secondary ">{`RSID: ${item.rsID?.toUpperCase()}`}</p>
             ) : (
-              <Skeleton vocab="Loading" className="h-6 w-[100px] bg-gray-300" />
+              <Skeleton vocab="Loading" className="h-6 w-[100px] bg-border" />
             )}
           </div>
         </div>
@@ -319,7 +319,7 @@ export const Columns: ColumnDef<Variant>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="text-md hover:bg-transparent"
+          className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >

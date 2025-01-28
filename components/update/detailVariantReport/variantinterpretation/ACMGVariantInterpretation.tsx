@@ -554,7 +554,7 @@ const ACMGVariantInterpretation: React.FC<ACMGVariantInterpretationProops> = ({
           <Button
             variant="outlineSecondary"
             size="large"
-            label="Sava"
+            label="Save"
             onClick={handleSave}
             disabled={!isSaveActive}
             icon={<SaveAll className="w-4 h-4 mr-2"></SaveAll>}

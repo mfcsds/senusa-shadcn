@@ -157,7 +157,7 @@ const VariantAlellel: React.FC<VariantAlellelProops> = ({ data }) => {
                       style={{
                         maxHeight:
                           document.getElementById("information-details")
-                            ?.offsetHeight || "auto",
+                            ?.offsetHeight || "w-[600px]",
                       }}
                     >
                       <p className="font-semibold text-xl text-text-primary">

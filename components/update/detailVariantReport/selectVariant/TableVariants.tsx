@@ -705,7 +705,7 @@ export function TableVariants<TData, TValue>({
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow
                     key={headerGroup.id}
-                    className="hover:bg-accent bg-accent border-y-2 border-border rounded-md"
+                    className="hover:bg-accent bg-accent border-y-2 border-border rounded-md text-text-primary"
                   >
                     {headerGroup.headers.map((header) => (
                       <TableHead
@@ -747,7 +747,7 @@ export function TableVariants<TData, TValue>({
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-10 text-center"
+                      className="h-10 text-center text-text-primary"
                     >
                       No results.
                     </TableCell>

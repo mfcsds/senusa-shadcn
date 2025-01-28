@@ -256,7 +256,7 @@ export default function DetailVariantReport({ params }: PageProps) {
           <Tabs defaultValue="select-variant">
             <TabsList>
               <TabsTrigger value="information-approvel">
-                Information Approvel Report
+                Information Approval Report
               </TabsTrigger>
               <TabsTrigger value="select-variant">Select Variant</TabsTrigger>
               <TabsTrigger value="result-interpretation">

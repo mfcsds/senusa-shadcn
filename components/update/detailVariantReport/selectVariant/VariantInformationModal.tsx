@@ -14,19 +14,6 @@ import ACMGAnnotation from "../../../items/ACMGAnnotation";
 import FunctionalAnnotations from "../../../items/FunctionalAnnotations";
 import Transcripts from "../../../items/Transcripts";
 import ConservationScores from "../../../items/ConservationScores";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/update/ui/table";
-import Button from "@/components/update/button/Button";
-import ACMGVariantQuery from "../../../items/variantquery/ACMGVariantQuery";
-import { equal } from "assert";
-import ACMGVariantReport from "../../../items/variantquery/ACMGVariantReport";
-import Spinner from "@/components/update/ui/Spinner";
 
 interface VariantInformation {
   hgvsNotation: string | "";
@@ -180,11 +167,6 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
 
     if (hgvsNotation) {
       fetchVariantData();
-      // fetchACMGCriteria(hgvsNotation).then((variant) => {
-      //   if (variant) {
-      //     setACMGCriteria(variant);
-      //   }
-      // });
     }
   }, [hgvsNotation]);
 
@@ -247,7 +229,7 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
 
   return (
     <div className="flex flex-col bg-background">
-      <div className="flex bg-background flex-col border-2 border-border shadow-xl mt-10 p-4 mb-10 w-full">
+      <div className="flex bg-foreground flex-col border-2 border-border shadow-xl mt-10 p-4 mb-10 w-full">
         <div className="grid">
           <div className="flex items-center gap-8">
             <img
@@ -258,15 +240,6 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
             <p className="text-2xl text-text-primary font-semibold text-balance border-primary border-l-4 pl-5 flex-grow text-center">
               {hgvsNotation}
             </p>
-            <div className="flex gap-4 mt-0">
-              <Button
-                label="Save"
-                variant="outlineSecondary"
-                size="large"
-                icon={<Save className="w-5 h-5" />}
-                type="submit"
-              />
-            </div>
           </div>
         </div>
       </div>

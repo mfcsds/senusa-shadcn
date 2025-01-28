@@ -491,8 +491,8 @@ The conclusion make it easy to understand, make it efficient, and short, no more
           <Textarea
             className="w-full p-5 mt-4 border-2 border-border rounded-md mb-6 h-[200px] text-text-secondary"
             placeholder="Edit conclusion here..."
-            value={selectedRecommendation}
-            onChange={(e) => setSelectedRecommendation(e.target.value)}
+            value={selectedConclusion}
+            onChange={(e) => setSelectedConclusion(e.target.value)}
           />
           <DialogFooter>
             <div className="flex justify-end gap-4 mb-2">
