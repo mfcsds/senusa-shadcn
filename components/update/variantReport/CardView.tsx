@@ -53,7 +53,7 @@ const CardView: React.FC<CardViewProps> = ({ initialVariants }) => {
         <Card key={variant.id}>
           <CardHeader className="flex items-left gap-4">
             <div>
-              <CardTitle className="text-sm text-text-primary"> ID: {variant.id}</CardTitle>
+              <CardTitle className="text-sm text-text-primary">Report ID: {variant.id}</CardTitle>
               <CardTitle className="text-sm text-text-primary">Patient ID: {variant.idPatient}</CardTitle>
             </div>
           </CardHeader>

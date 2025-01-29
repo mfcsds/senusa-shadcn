@@ -341,7 +341,7 @@ const AddVCFDialog: React.FC<AddVcfDialogProps> = ({ patientID }) => {
           icon={<Plus className="w-4 h-4" />}
         />
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[80%] max-h-[90%] overflow-y-auto bg-foreground">
+      <DialogContent className="sm:max-w-[90%] max-h-[90%] overflow-y-auto bg-foreground">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <Server className="w-8 h-8 text-primary" />
@@ -472,14 +472,14 @@ const AddVCFDialog: React.FC<AddVcfDialogProps> = ({ patientID }) => {
 
           <div className="flex flex-col p-2">
             {tableDataVariant.length > 0 && (
-              <div className="flex flex-col p-2 rounded-md border-primary border-2 ">
+              <div className="flex flex-col p-2 rounded-md border-primary border-2 w-full">
                 <DialogTitle className="flex items-center space-x-2">
                   <span className="text-text-primary text-sm">
                     Preview Variant Data
                   </span>
                 </DialogTitle>
                 <div className="mt-6">
-                  <Table className="overflow-y-auto h-[200px] w-[350px] md:w-[1000px] block">
+                  <Table className="overflow-y-auto h-[200px] w-[350px] md:w-[1050px] block">
                     <TableHeader className="sticky top-0 bg-foreground z-10">
                       <TableRow>
                         <TableHead>Chrom</TableHead>

@@ -17,8 +17,8 @@ import {
   Edit,
 } from "lucide-react";
 import VariantItem from "@/components/variant/VariantItem";
-import ACMGLabel from "@/components/variant/ACMGLabel";
-import ZygosityLabel from "@/components/variant/ZygosityLabel";
+import ACMGLabel from "./ACMGLabel";
+import ZygosityLabel from "./ZygosityLabel";
 import { ZYGOSITY_HETEROZYGOUS, ZYGOSITY_HOMOZYGOUS } from "@/utils/Contanst";
 import {
   deleteSelectedVariant,
@@ -53,7 +53,7 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-  DialogFooter
+  DialogFooter,
 } from "@/components/update/dialog/Dialog";
 import VariantInformationModal from "../selectVariant/VariantInformationModal";
 import { getSelectedVariant } from "@/src/graphql/queries";
@@ -238,7 +238,7 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
               <div className="flex flex-col px-3 py-2 gap-2">
                 <p className="text-md font-bold text-text-secondary">ACMG</p>
                 <div>
-                <ACMGLabel label={acmg ?? ""}></ACMGLabel>
+                  <ACMGLabel label={acmg ?? ""}></ACMGLabel>
                 </div>
               </div>
               <div className="flex flex-col px-3 py-2 gap-2">
@@ -332,27 +332,25 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                      <Dialog>
-            <DialogHeader>
-              <DialogTitle></DialogTitle>
-            </DialogHeader>
-            <DialogTrigger asChild>
-            <Button
-                          variant="iconSecondary"
-                          size="md"
-                          icon={<ListCollapse className="w-4 h-4" />}
-                        />
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[95%] max-h-[95%] overflow-y-auto bg-background">
-              <VariantInformationModal
-                id_variant={`${variantData?.id}`}
-                hgvsNotation={`${variantData?.hgvs}`}
-              ></VariantInformationModal>
-              <DialogFooter>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-                        
+                        <Dialog>
+                          <DialogHeader>
+                            <DialogTitle></DialogTitle>
+                          </DialogHeader>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="iconSecondary"
+                              size="md"
+                              icon={<ListCollapse className="w-4 h-4" />}
+                            />
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[95%] max-h-[95%] overflow-y-auto bg-background">
+                            <VariantInformationModal
+                              id_variant={`${variantData?.id}`}
+                              hgvsNotation={`${variantData?.hgvs}`}
+                            ></VariantInformationModal>
+                            <DialogFooter></DialogFooter>
+                          </DialogContent>
+                        </Dialog>
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>Detail Variant Information</p>

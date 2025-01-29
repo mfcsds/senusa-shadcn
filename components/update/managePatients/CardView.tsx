@@ -56,9 +56,12 @@ const CardView: React.FC<CardViewProps> = ({ initialPatients }) => {
             <Accessibility className="text-primary w-5 h-5 sm:w-10 sm:h-10" />
           </div>
           <div className="flex flex-col ml-4 flex-1 pt-4">
-            <h3 className="text-lg sm:text-lg font-medium text-text-primary mb-2">
-              {patient.id}
-            </h3>
+            <div className="flex flex-col">
+              <h2 className="text-lg sm:text-lg font-medium text-text-primary mb-2">
+                Patient ID {patient.id}
+              </h2>
+            </div>
+
             <p className="text-sm text-text-secondary">{patient.health_desc}</p>
             <div className="flex justify-end space-x-2 sm:mt-2 pb-5">
               <Button

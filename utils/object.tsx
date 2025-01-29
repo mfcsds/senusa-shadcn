@@ -86,6 +86,7 @@ export interface DataPatients {
   dob: string;
   institutionID?: string;
   health_desc?: string;
+  id_reference?: string;
 }
 
 export interface DataUser {

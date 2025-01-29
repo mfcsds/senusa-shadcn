@@ -237,15 +237,15 @@ const ACMGVariantInterpretation: React.FC<ACMGVariantInterpretationProops> = ({
   const getBadgeColor = () => {
     switch (dataACMG?.acmg_class) {
       case "Pathogenic":
-        return "border-2 border-red-600 bg-red-primary text-black";
+        return "border-2 border-red-600 bg-red-400 text-black";
       case "Likely Pathogenic":
-        return "border-2 border-red-600 bg-red-primary text-black";
+        return "border-2 border-red-600 bg-red-200 text-black";
       case "Likely Benign":
-        return "border-2 border-primary bg-secondary text-black"; // Red for pathogenic
+        return "border-2 border-green-600 bg-green-200 text-black"; // Red for pathogenic
       case "Benign":
-        return "border-2 border-primary bg-accent text-black"; // Green for benign
+        return "border-2 border-green-600 bg-green-300 text-black"; // Green for benign
       case "VUS":
-        return "border-2 border-yellow-primary bg-yellow-secondary text-black"; // Yellow for VUS
+        return "border-2 border-yellow-600 bg-yellow-300 text-black"; // Yellow for VUS
       default:
         return "border-2 border-gray-500 bg-foreground text-black"; // Default color if value doesn't match
     }

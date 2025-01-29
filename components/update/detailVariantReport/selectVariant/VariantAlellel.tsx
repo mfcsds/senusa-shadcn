@@ -35,22 +35,27 @@ const VariantAlellel: React.FC<VariantAlellelProops> = ({ data }) => {
   }
 
   return (
-    <div className="flex flex-col bg-background w-full mt-10">
-      <Card className="border-none shadow-none bg-background">
-        <CardContent>
+    <div className="flex flex-col bg-background w-full mt-6">
+      <div className="border-none shadow-none bg-background">
+        <div className="p-4">
           <div className="flex flex-col gap-4">
             {data.map((variant, idx) => (
-              <Card
+              <div
                 key={idx}
                 className="mb-4 rounded-lg bg-background flex flex-col border-none shadow-none"
               >
-                <CardHeader>
-                  <CardTitle>Colocated Variant {idx + 1}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" >
+                <div className="mb-6">
+                  <h2 className="text-xl font-bold text-text-primary">
+                    Colocated Variant {idx + 1}
+                  </h2>
+                </div>
+                <div>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Information Details */}
-                    <div className="flex flex-col gap-6" id="information-details">
+                    <div
+                      className="flex flex-col gap-6"
+                      id="information-details"
+                    >
                       {/* Variant Details */}
                       <div className="flex flex-col bg-foreground border-border border-2 rounded-xl shadow-xl p-5">
                         <p className="font-semibold text-lg text-text-primary mb-4">
@@ -119,9 +124,7 @@ const VariantAlellel: React.FC<VariantAlellelProops> = ({ data }) => {
                       </div>
 
                       {/* Allele Frequency Distribution */}
-                      <div
-                        className="flex flex-col bg-foreground border-border border-2 rounded-xl shadow-xl p-5"
-                      >
+                      <div className="flex flex-col bg-foreground border-border border-2 rounded-xl shadow-xl p-5">
                         <p className="font-semibold text-lg text-text-primary mb-4">
                           Allele Frequency Distribution Across Populations
                         </p>
@@ -167,10 +170,7 @@ const VariantAlellel: React.FC<VariantAlellelProops> = ({ data }) => {
                         <div className="flex flex-col gap-4 mt-4">
                           {Object.entries(variant.var_synonyms).map(
                             ([source, synonyms], index) => (
-                              <div
-                                key={index}
-                                className="p-4 rounded-lg"
-                              >
+                              <div key={index} className="p-4 rounded-lg">
                                 <p className="font-semibold text-lg text-primary">
                                   {source}
                                 </p>
@@ -197,9 +197,8 @@ const VariantAlellel: React.FC<VariantAlellelProops> = ({ data }) => {
                       )}
                     </div>
                   </div>
-
                   <div className="mt-6">
-                    <p className="font-bold text-text-primary text-lg mb-4 mt-8">
+                    <p className="font-bold text-text-primary text-xl mb-4 mt-8">
                       References
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -214,12 +213,12 @@ const VariantAlellel: React.FC<VariantAlellelProops> = ({ data }) => {
                       )}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };

@@ -4,14 +4,14 @@ import React, { useState, useEffect } from "react";
 import { getAcmgAnnotation, listAcmgAnnotations } from "@/src/graphql/queries";
 import { generateClient } from "aws-amplify/api";
 import { Save, X } from "lucide-react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"; // Adjust import based on your setup
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/update/ui/tabs"; // Adjust import based on your setup
 import axios from "axios";
 import VariantGeneralInfo from "../../../items/VariantGeneralInfo";
 import VariantAlellel from "./VariantAlellel";
 import { AcmgCriteria, VariantData } from "@/utils/object";
-import VariantComputationalPrediction from "../../../items/VariantComputationalPrediction";
+import FunctionalAnnotations from "@/components/update/detailVariantReport/selectVariant/FunctionalAnnotations";
 import ACMGAnnotation from "../../../items/ACMGAnnotation";
-import FunctionalAnnotations from "../../../items/FunctionalAnnotations";
+import VariantComputationalPrediction from "@/components/update/detailVariantReport/selectVariant/VariantComputationalPrediction";
 import Transcripts from "../../../items/Transcripts";
 import ConservationScores from "../../../items/ConservationScores";
 
@@ -105,16 +105,6 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
       }
     };
 
-    // const client = generateClient();
-    // const fetchACMGCriteria = async () => {
-    //   try {
-    //     const acmgResult = await client.graphql({
-    //       query: listAcmgAnnotations,
-    //       variables: { filter: { id_variant: { eq: id_variant } } },
-    //     });
-    //   } catch (error) {}
-    // };
-
     const fetchVariantData = async () => {
       setLoading(true);
       try {
@@ -181,7 +171,7 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
           </div>
         </div>
         <p className="text-lg text-center text-primary font-semibold animate-pulse">
-          Loading... fetching data for {hgvsNotation}
+          Loading data for {hgvsNotation}
         </p>
       </div>
     );
@@ -228,7 +218,7 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
   } = variantData || {};
 
   return (
-    <div className="flex flex-col bg-background">
+    <div className="flex flex-col bg-background w-full">
       <div className="flex bg-foreground flex-col border-2 border-border shadow-xl mt-10 p-4 mb-10 w-full">
         <div className="grid">
           <div className="flex items-center gap-8">
@@ -249,40 +239,34 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
           defaultValue="allele"
           className="w-full items-start bg-background justify-start mt-6"
         >
-          <TabsList className=" flex items-start mb-4 h-[80px]border-b-2 w-full justify-start">
+          <TabsList className=" flex items-start mb-4 h-[80px] border-b-2 w-full justify-start">
             <TabsTrigger
               value="general"
-              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-background"
             >
               General Information
             </TabsTrigger>
             <TabsTrigger
               value="allele"
-              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-background "
             >
               Allele Frequency
             </TabsTrigger>
             <TabsTrigger
               value="computational"
-              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-background "
             >
               Computational Predictions
             </TabsTrigger>
             <TabsTrigger
               value="functional"
-              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-background "
             >
               Functional Annotations
             </TabsTrigger>
             <TabsTrigger
               value="transcripts"
-              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-background "
             >
               Transcripts
             </TabsTrigger>
             <TabsTrigger
               value="conservation"
-              className="text-md text-text-primary hover:border-b-4 hover:border-primary rounded-none data-[state=active]:border-b-4 data-[state=active]:border-primary data-[state=active]:text-text-primary data-[state=active]:bg-background "
             >
               Conservation Scores
             </TabsTrigger>
@@ -300,12 +284,12 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
 
           {/* Computational Predictions Tab */}
           <TabsContent value="computational">
-            <FunctionalAnnotations data={transcript_consequences} />
+            <VariantComputationalPrediction data={transcript_consequences} />
           </TabsContent>
 
           {/* Functional Annotations Tab */}
           <TabsContent value="functional">
-          <VariantComputationalPrediction
+          <FunctionalAnnotations
               data={variantData.transcript_consequences}
             />
           </TabsContent>

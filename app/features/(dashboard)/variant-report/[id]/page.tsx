@@ -247,7 +247,7 @@ export default function DetailVariantReport({ params }: PageProps) {
         <div className="mt-4 w-auto">
           <Spinner />
           <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
-            Loading...
+            Loading
           </p>
         </div>
       ) : selectedVCF ? (

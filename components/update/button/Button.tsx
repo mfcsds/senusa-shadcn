@@ -3,7 +3,7 @@ import React from 'react';
 interface ButtonProps {
   
   label?: string;
-  variant: 'primary' | 'secondary' | 'danger' | 'outlinePrimary' | 'outlineSecondary' | 'outlineDanger' | 'borderPrimary' | 'borderSecondary' | 'borderDanger' | 'iconPrimary' | 'iconSecondary' | 'iconDanger' | 'iconBorderPrimary' | 'iconBorderSecondary' | 'iconBorderDanger' | 'iconListViewActive' | 'iconListView' | 'iconCardViewActive' | 'iconCardView' | 'underlinePrimary';
+  variant: 'primary' | 'secondary' | 'danger' | 'outlinePrimary' | 'outlineSecondary' | 'outlineDanger' | 'borderPrimary' | 'borderSecondary' | 'borderDanger' | 'iconPrimary' | 'iconSecondary' | 'iconDanger' | 'iconBorderPrimary' | 'iconBorderSecondary' | 'iconBorderDanger' | 'iconListViewActive' | 'iconListView' | 'iconCardViewActive' | 'iconCardView' | 'underlinePrimary' | 'copy';
   size?: 'small' | 'medium' | 'large' | 'innerSize' | 'innerChild' | 'sm' | 'md' | 'lg';
   className?: string;
   icon?: React.ReactNode;
@@ -61,6 +61,7 @@ const Button: React.FC<ButtonProps> = ({
     iconCardView: 'text-blue-primary hover:text-text-secondary',
     iconCardViewActive: 'text-blue-primary border-2 border-blue-primary',
     underlinePrimary: 'text-primary hover:text-secondary hover:underline',
+    copy: "gap-2 border-2 border-border bg-background hover:bg-foreground text-text-primary hover:text-text-primary rounded-md hover:shadow-xl py-4 px-4"
   };
 
   const disabledStyles = 'opacity-50 cursor-not-allowed disabled:pointer-events-none disabled:opacity-50'; // Gaya untuk tombol disabled

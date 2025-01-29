@@ -166,7 +166,7 @@ export default function VariantReportPage() {
 
       {loading ? (
         <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
-          Loading...
+          Loading
         </p>
       ) : (
         <div className="flex justify-between items-center mt-10">

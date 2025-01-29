@@ -41,7 +41,7 @@ const generals = [
   { title: "Manage Accounts", url: "/features/manage-accounts", icon: User },
   { title: "Manage Patients", url: "/features/manage-patients", icon: PersonStanding },
   { title: "Variant Report", url: "/features/variant-report", icon: Dna },
-  { title: "Variant Query", url: "#", icon: TextSearch },
+  { title: "Variant Query", url: "/features/variant-query", icon: TextSearch },
   { title: "Variant Library", url: "#", icon: SquareLibrary },
 ];
 

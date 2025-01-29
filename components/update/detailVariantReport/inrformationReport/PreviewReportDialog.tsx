@@ -65,7 +65,7 @@ const PreviewReportDialog: React.FC<PreviewReportProops> = ({
       <DialogContent className="sm:max-w-[80%] max-h-[90%] overflow-y-auto bg-foreground">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
-            <span className="text-text-primary text-lg font-semibold">Priview Variant Report</span>
+            <span className="text-text-primary text-lg font-semibold">Preview Variant Report</span>
           </DialogTitle>
         </DialogHeader>
           <div className="p-8 border-2 w-full mt-4 shadow-xl">

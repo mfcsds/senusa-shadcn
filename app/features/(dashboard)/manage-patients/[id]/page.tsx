@@ -226,7 +226,7 @@ export default function DetailPatientPage({ params }: PageProps) {
     </div>
     {loading ? (
       <p className="text-sm text-center mt-10 text-primary font-semibold animate-pulse">
-        Loading...
+        Loading
       </p>
     ) : (
       <div className="flex flex-col sm:flex-row justify-between items-center mt-8">
