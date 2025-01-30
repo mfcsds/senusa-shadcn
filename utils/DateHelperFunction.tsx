@@ -21,7 +21,7 @@ export function ReportStatus(counter: number) {
   if (counter == 1) {
     return "Draft";
   } else if (counter == 2) {
-    return "process";
+    return "Process";
   } else if (counter == 3) {
     return "Waiting for Approval";
   } else if (counter == 4) {

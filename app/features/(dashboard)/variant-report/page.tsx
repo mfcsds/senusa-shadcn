@@ -22,7 +22,9 @@ export default function VariantReportPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"card" | "list">("card");
   const [varReports, setVarReports] = useState<CreateVariantReportInput[]>([]);
+  const [filteredVariants, setFilteredVariants] = useState<CreateVariantReportInput[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
 
   useEffect(() => {
     const loadVariants = async () => {
@@ -30,8 +32,9 @@ export default function VariantReportPage() {
         setLoading(true);
         const fetchedVariants = await fetchVariantReport();
         setVarReports(fetchedVariants);
+        setFilteredVariants(fetchedVariants);
       } catch (error) {
-        console.error("Failed to fetch patients:", error);
+        console.error("Failed to fetch variant reports:", error);
       } finally {
         setLoading(false);
       }
@@ -40,20 +43,30 @@ export default function VariantReportPage() {
     loadVariants();
   }, []);
 
-  const fetchLoadVariantReport = async (): Promise<void> => {
-    const loadVariants = async () => {
-      try {
-        setLoading(true);
-        const fetchedVariants = await fetchVariantReport();
-        setVarReports(fetchedVariants);
-      } catch (error) {
-        console.error("Failed to fetch patients:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  useEffect(() => {
+    if (selectedStatus === "draft") {
+      setFilteredVariants(varReports.filter(report => report.status === 1));
+    } else if (selectedStatus === "process") {
+      setFilteredVariants(varReports.filter(report => report.status === 2));
+    }if (selectedStatus === "waitingForApproval") {
+      setFilteredVariants(varReports.filter(report => report.status === 3));
+    } else if (selectedStatus === "completed") {
+      setFilteredVariants(varReports.filter(report => report.status === 4));
+    } else if (selectedStatus === "all") {
+      setFilteredVariants(varReports);
+    }
+  }, [selectedStatus, varReports]);
 
-    loadVariants();
+  const fetchLoadVariantReport = async (): Promise<void> => {
+    try {
+      setLoading(true);
+      const fetchedVariants = await fetchVariantReport();
+      setVarReports(fetchedVariants);
+    } catch (error) {
+      console.error("Failed to fetch variant reports:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -83,21 +96,17 @@ export default function VariantReportPage() {
             <Button
               variant="iconPrimary"
               size="innerSize"
-              icon={<SearchIcon className="w-5 h-5 " />}
+              icon={<SearchIcon className="w-5 h-5" />}
             />
           </div>
           <AddReportDialog onUpdateVariantReport={fetchLoadVariantReport}/>
           <Button
-            variant={
-              viewMode === "card" ? "iconCardViewActive" : "iconCardView"
-            }
+            variant={viewMode === "card" ? "iconCardViewActive" : "iconCardView"}
             onClick={() => setViewMode("card")}
             icon={<LayoutDashboard className="w-6 h-6" />}
           />
           <Button
-            variant={
-              viewMode === "list" ? "iconListViewActive" : "iconListView"
-            }
+            variant={viewMode === "list" ? "iconListViewActive" : "iconListView"}
             onClick={() => setViewMode("list")}
             icon={<LayoutList className="w-6 h-6" />}
           />
@@ -105,60 +114,21 @@ export default function VariantReportPage() {
       </div>
 
       <div className="mb-6 w-auto">
-        <Tabs defaultValue="allStatus">
+        <Tabs defaultValue="all" onValueChange={setSelectedStatus}>
           <TabsList>
-            <TabsTrigger value="allStatus">All</TabsTrigger>
+            <TabsTrigger value="all">All Status</TabsTrigger>
             <TabsTrigger value="draft">Draft</TabsTrigger>
-            <TabsTrigger value="inProccess">In Process</TabsTrigger>
-            <TabsTrigger value="waitingForApproval">
-              Waiting for Approval
-            </TabsTrigger>
+            <TabsTrigger value="process">In Process</TabsTrigger>
+            <TabsTrigger value="waitingForApproval">Waiting for Approval</TabsTrigger>
             <TabsTrigger value="completed">Completed</TabsTrigger>
           </TabsList>
-          <TabsContent value="allStatus">
+          <TabsContent value={selectedStatus}>
             {loading ? (
               <Spinner />
             ) : viewMode === "card" ? (
-              <CardView initialVariants={varReports} />
+              <CardView initialVariants={filteredVariants} />
             ) : (
-              <ListView initialVariants={varReports} />
-            )}
-          </TabsContent>
-          <TabsContent value="draft">
-            {loading ? (
-              <Spinner />
-            ) : viewMode === "card" ? (
-              <CardView initialVariants={varReports} />
-            ) : (
-              <ListView initialVariants={varReports} />
-            )}
-          </TabsContent>
-          <TabsContent value="inProccess">
-            {loading ? (
-              <Spinner />
-            ) : viewMode === "card" ? (
-              <CardView initialVariants={varReports} />
-            ) : (
-              <ListView initialVariants={varReports} />
-            )}
-          </TabsContent>
-          <TabsContent value="waitingForApproval">
-            {loading ? (
-              <Spinner />
-            ) : viewMode === "card" ? (
-              <CardView initialVariants={varReports} />
-            ) : (
-              <ListView initialVariants={varReports} />
-            )}
-          </TabsContent>
-          <TabsContent value="completed">
-            {loading ? (
-              <Spinner />
-              
-            ) : viewMode === "card" ? (
-              <CardView initialVariants={varReports} />
-            ) : (
-              <ListView initialVariants={varReports} />
+              <ListView initialVariants={filteredVariants} />
             )}
           </TabsContent>
         </Tabs>
