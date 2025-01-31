@@ -1,33 +1,73 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/update/ui/Switch";
 import { Mail, LogOut, RectangleEllipsis } from "lucide-react";
 import { DividerVerticalIcon } from "@radix-ui/react-icons";
 import { SidebarTrigger } from "@/components/update/ui/Sidebar";
 import { useRouter } from "next/navigation";
-
+import { getCurrentUser } from "aws-amplify/auth";
 import { signOut } from "aws-amplify/auth";
+import { getUser } from "@/src/graphql/queries";
+import { User } from "@/src/API";
+import { generateClient } from "aws-amplify/api";
 
 const Navbar = () => {
   const [dropDownOpen, setDropDownOpen] = useState(false);
-
+  const [username, setUsername] = useState("");
+  const [userRole, setUserRole] = useState("");
+  const [user, setUser] = useState<User>();
+  const [hasFetched, setHasFetched] = useState(false);
   const toggleDropdown = () => {
     setDropDownOpen(!dropDownOpen);
   };
-
+  const client = generateClient();
   const router = useRouter();
+
   const handleLogout = async () => {
     try {
       await signOut();
-      // router.push("/login");
-      router.push("/");
+      router.push("/features/login");
       console.log("log out");
     } catch (error) {
       console.log("gagal log out");
       console.log(error);
     }
   };
+
+  const getUserProfile = async () => {
+    try {
+      const result = client.graphql({
+        query: getUser,
+        variables: { id: username },
+      });
+      setUser((await result).data.getUser as User);
+    } catch (error) {
+      console.log("error:", error);
+    }
+  };
+
+  const currentAuthenticatedUser = async () => {
+    try {
+      const { username, userId, signInDetails } = await getCurrentUser();
+      console.log(`The username: ${username}`);
+      console.log(`The userId: ${userId}`);
+      console.log(`The signInDetails: ${signInDetails}`);
+      await setUsername(username);
+      await setUserRole(userId);
+      await getUserProfile();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setHasFetched(true);
+    }
+  };
+
+  useEffect(() => {
+    if (!hasFetched) {
+      currentAuthenticatedUser();
+    }
+  });
 
   return (
     <div className="sticky top-0 z-50 flex justify-between shadow-md px-4 w-full items-center py-4 bg-foreground">
@@ -49,7 +89,7 @@ const Navbar = () => {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <p className="hidden lg:block text-sm text-text-secondary">
-              user@example.com
+            {user?.email ?? "No Email"}
             </p>
           </div>
           {dropDownOpen && (
