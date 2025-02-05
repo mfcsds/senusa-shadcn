@@ -51,6 +51,13 @@ import {
   createVariant,
   createVcfdata,
 } from "@/src/graphql/mutations";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/update/ui/select";
 import { generateClient } from "aws-amplify/api";
 
 Amplify.configure(config);
@@ -84,11 +91,6 @@ const AddVCFDialog: React.FC<AddVcfDialogProps> = ({ patientID }) => {
       setFile(event.target.files[0]);
     }
   };
-
-  const optionsGenomeReference = [
-    { label: "GRCH38", value: "GRCH38" },
-    { label: "GRCH37", value: "GRCH37" },
-  ];
 
   const handleUploadVCFd = async () => {
     if (!genomReference) {
@@ -374,14 +376,18 @@ const AddVCFDialog: React.FC<AddVcfDialogProps> = ({ patientID }) => {
                   reference genome use variant during calling to avoid
                   inconsistencies in analysis.
                 </p>
-                <Dropdown
-                  options={optionsGenomeReference}
-                  selectedValue={genomReference}
-                  onChange={setGenomReference}
-                  placeholder="Select the genome reference"
-                  size="medium"
-                  variant="default"
-                />
+                <Select
+                value={`${genomReference}`}
+                onValueChange={setGenomReference}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select the genome reference" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="GRCH38">GRCH38</SelectItem>
+                  <SelectItem value="GRCH37">GRCH37</SelectItem>
+                </SelectContent>
+              </Select>
                 {errorGenomReference && (
                   <p className="text-red-primary text-xs mt-2">
                     {errorGenomReference}
@@ -409,7 +415,6 @@ const AddVCFDialog: React.FC<AddVcfDialogProps> = ({ patientID }) => {
                   value={sampleDate}
                   onChange={(e) => setSampleDate(e.target.value)}
                   placeholder="Pick a Date"
-                  className="w-full bg-foreground"
                 />
               </div>
             </div>
@@ -480,7 +485,7 @@ const AddVCFDialog: React.FC<AddVcfDialogProps> = ({ patientID }) => {
                 </DialogTitle>
                 <div className="mt-6">
                   <Table className="overflow-y-auto h-[200px] w-[350px] md:w-[1050px] block">
-                    <TableHeader className="sticky top-0 bg-foreground z-10">
+                    <TableHeader className="sticky top-0 bg-accent z-10">
                       <TableRow>
                         <TableHead>Chrom</TableHead>
                         <TableHead>Pos</TableHead>
@@ -535,7 +540,7 @@ const AddVCFDialog: React.FC<AddVcfDialogProps> = ({ patientID }) => {
               </div>
             )}
           </div>
-          <DialogFooter className="mt-6 mb-6 gap-4">
+          <DialogFooter className="mt-6 gap-4">
             <Button
               label="Cancel"
               variant="outlineDanger"
@@ -544,7 +549,7 @@ const AddVCFDialog: React.FC<AddVcfDialogProps> = ({ patientID }) => {
               onClick={handleCancelDialog}
             />
             <Button
-              label="Save"
+              label="Save VCF"
               variant="outlineSecondary"
               size="large"
               icon={<Save className="w-4 h-4" />}

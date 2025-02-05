@@ -62,8 +62,34 @@ const CardView: React.FC<CardViewProps> = ({ initialPatients }) => {
               </h2>
             </div>
 
-            <p className="text-sm text-text-secondary">{patient.health_desc}</p>
-            <div className="flex justify-end space-x-2 sm:mt-2 pb-5">
+            <ul className="space-y-3 text-sm text-text-secondary">
+            <li className="p-2 bg-background border border-border rounded-md shadow-md hover:bg-accent hover:text-text-primary transition-colors">
+                <span className="font-semibold">ID Reference: </span>
+                {patient.id_reference ?? "Not available"}
+              </li>
+              <li className="p-2 bg-background border border-border rounded-md shadow-md hover:bg-accent hover:text-text-primary transition-colors">
+                <span className="font-semibold">Name: </span>
+                {patient.name ?? "Not available"}
+              </li>
+              <li className="p-2 bg-background border border-border rounded-md shadow-md hover:bg-accent hover:text-text-primary transition-colors">
+                <span className="font-semibold">Sex: </span>
+                {patient.sex ?? "Not available"}
+              </li>
+              <li className="p-2 bg-background border border-border rounded-md shadow-md hover:bg-accent hover:text-text-primary transition-colors">
+                <span className="font-semibold">Date of Birth: </span>
+                {patient.dob ?? "Not available"}
+              </li>
+              <li className="p-2 bg-background border border-border rounded-md shadow-md hover:bg-accent hover:text-text-primary transition-colors">
+                <span className="font-semibold">Phone Number: </span>
+                {patient.phone_number ?? "Not available"}
+              </li>
+              <li className="p-2 bg-background border border-border rounded-md shadow-md hover:bg-accent h-[70px] hover:text-text-primary transition-colors">
+                <span className="font-semibold">Health Description: </span>
+                {patient.health_desc ?? "Not available"}
+              </li>
+            </ul>
+
+            <div className="flex justify-end space-x-2 mt-6 sm:mt-6 sm:mb-2 pb-5">
               <Button
                 variant="outlineSecondary"
                 size="small"

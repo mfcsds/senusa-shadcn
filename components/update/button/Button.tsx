@@ -3,8 +3,8 @@ import React from 'react';
 interface ButtonProps {
   
   label?: string;
-  variant: 'primary' | 'secondary' | 'danger' | 'outlinePrimary' | 'outlineSecondary' | 'outlineDanger' | 'borderPrimary' | 'borderSecondary' | 'borderDanger' | 'iconPrimary' | 'iconSecondary' | 'iconDanger' | 'iconBorderPrimary' | 'iconBorderSecondary' | 'iconBorderDanger' | 'iconListViewActive' | 'iconListView' | 'iconCardViewActive' | 'iconCardView' | 'underlinePrimary' | 'copy';
-  size?: 'small' | 'medium' | 'large' | 'innerSize' | 'innerChild' | 'sm' | 'md' | 'lg';
+  variant: 'primary' | 'secondary' | 'danger' | 'outlinePrimary' | 'outlineSecondary' | 'outlineDanger' | 'borderPrimary' | 'borderSecondary' | 'borderDanger' | 'icon' | 'iconPrimary' | 'iconSecondary' | 'iconDanger' | 'iconBorderPrimary' | 'iconBorderSecondary' | 'iconBorderDanger' | 'iconListViewActive' | 'iconListView' | 'iconCardViewActive' | 'iconCardView' | 'underlinePrimary' | 'underlineSecondary' | 'copy';
+  size?: 'small' | 'medium' | 'large' | 'innerSize' | 'innerChild' | 'sm' | 'md' | 'lg' | 'none';
   className?: string;
   icon?: React.ReactNode;
   iconClassName?: string;
@@ -35,6 +35,7 @@ const Button: React.FC<ButtonProps> = ({
     large: 'px-4 h-10 py-2 text-sm',
     innerSize: 'absolute inset-y-0 right-0 flex items-center pr-3',
     innerChild: 'absolute inset-y-0 right-0 flex items-center pr-10',
+    none: 'px-0 py-0 text-sm',
     sm: "h-9 rounded-md px-3",
     md: 'px-2 h-10 py-2',
     lg: "h-11 rounded-md px-8",
@@ -50,6 +51,7 @@ const Button: React.FC<ButtonProps> = ({
     borderPrimary: 'bg-foreground border-2 border-primary hover:border-secondary rounded hover:bg-secondary text-primary hover:text-text-action',
     borderSecondary: 'bg-foreground border-2 border-blue-primary hover:border-blue-secondary rounded hover:bg-blue-secondary text-blue-primary hover:text-text-action',
     borderDanger: 'bg-foreground border-2 border-red-primary hover:border-red-secondary rounded hover:bg-red-secondary text-red-primary hover:text-text-action',
+    icon: 'text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline',
     iconPrimary: 'text-primary hover:text-text-secondary',
     iconSecondary: 'text-blue-primary hover:text-text-secondary',
     iconDanger: 'text-red-primary hover:text-text-secondary',
@@ -61,10 +63,11 @@ const Button: React.FC<ButtonProps> = ({
     iconCardView: 'text-blue-primary hover:text-text-secondary',
     iconCardViewActive: 'text-blue-primary border-2 border-blue-primary',
     underlinePrimary: 'text-primary hover:text-secondary hover:underline',
+    underlineSecondary: 'text-blue-primary hover:text-blue-secondary hover:underline',
     copy: "gap-2 border-2 border-border bg-background hover:bg-foreground text-text-primary hover:text-text-primary rounded-md hover:shadow-xl py-4 px-4"
   };
 
-  const disabledStyles = 'opacity-50 cursor-not-allowed disabled:pointer-events-none disabled:opacity-50'; // Gaya untuk tombol disabled
+  const disabledStyles = 'opacity-50 cursor-not-allowed disabled:pointer-events-none disabled:opacity-50'; 
   
   return (
     <button

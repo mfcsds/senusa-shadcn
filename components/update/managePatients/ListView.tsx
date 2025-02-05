@@ -16,6 +16,16 @@ import {
   AlertDialogTrigger,
 } from "@/components/update/dialog/AlertDialog";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/update/ui/table";
 
 interface CardViewProps {
   initialPatients: DataPatients[];
@@ -46,30 +56,31 @@ const ListView: React.FC<CardViewProps> = ({ initialPatients }) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="bg-foreground shadow-xl rounded-lg p-6">
+      <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Patient ID</TableHead>
+          <TableHead>ID Reference</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Sex</TableHead>
+          <TableHead>Date of Birth</TableHead>
+          <TableHead>Phone Number:</TableHead>
+          <TableHead>Health Description</TableHead>
+          <TableHead>Action</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
       {patients.map((patient) => (
-        <div
-          key={patient.id}
-          className="flex flex-col sm:flex-row items-center justify-between p-4 bg-foreground shadow-xl rounded-lg space-y-4 sm:space-y-0 sm:space-x-4"
-        >
-          {/* Icon */}
-          <div className="bg-accent rounded-lg flex items-center justify-center w-16 h-16 shrink-0">
-            <Accessibility className="text-primary w-8 h-8" />
-          </div>
-
-          {/* Patient Info */}
-          <div className="flex-1 text-center sm:text-left">
-            <h3 className="text-lg font-medium text-text-primary truncate">
-              {patient.id}
-            </h3>
-            <p className="text-md text-text-secondary truncate">
-              {patient.health_desc}
-            </p>
-          </div>
-
-          {/* Actions */}
-          <div className="flex space-x-2 sm:space-x-4">
-            {/* Edit Button */}
+          <TableRow key={patient.id}>
+            <TableCell className="font-medium">{patient.id}</TableCell>
+            <TableCell className="font-medium">{patient.id_reference}</TableCell>
+            <TableCell>{patient.name}</TableCell>
+            <TableCell>{patient.sex}</TableCell>
+            <TableCell>{patient.dob}</TableCell>
+            <TableCell>{patient.phone_number}</TableCell>
+            <TableCell>{patient.health_desc}</TableCell>
+            <TableCell className="flex gap-4">
             <Button
               variant="outlineSecondary"
               size="small"
@@ -78,8 +89,6 @@ const ListView: React.FC<CardViewProps> = ({ initialPatients }) => {
                 router.push(`/features/manage-patients/${patient.id}`);
               }}
             />
-
-            {/* Delete Button with Confirmation */}
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
@@ -106,9 +115,12 @@ const ListView: React.FC<CardViewProps> = ({ initialPatients }) => {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-          </div>
-        </div>
-      ))}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+      
     </div>
   );
 };

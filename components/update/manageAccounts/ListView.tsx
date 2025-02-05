@@ -1,16 +1,56 @@
-import { Progress } from "@/components/update/progress/Progress";
+"use client";
+
+import React, { useEffect, useState } from "react";import { Progress } from "@/components/update/progress/Progress";
 import Button from "@/components/update/button/Button";
 import { HospitalIcon, Eye, Trash2 } from "lucide-react";
 import { Institution } from "@/utils/object"
+import { removeInstitution, fetchInstitutions } from "@/hooks/useAccounts";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/update/dialog/AlertDialog";
+import { useRouter } from "next/navigation";
 
 interface ListViewProps {
   intialInstitution: Institution[];
 }
 
 const ListView: React.FC<ListViewProps> = ({ intialInstitution }) => {
+  const [institutionList, setInstitutionsList] = useState<Institution[]>(intialInstitution);
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const handleDelete = async (id: string) => {
+      try {
+        await removeInstitution(id);
+        const updatedPatients = await fetchInstitutions();
+        setInstitutionsList(updatedPatients);
+        toast({
+          title: "Delete Successfully",
+          description: "Account Institutions has been deleted successfully.",
+        });
+      } catch (error) {
+        console.error("Error deleting patient:", error);
+        toast({
+          variant: "destructive",
+          title: "Failed to delete patient",
+          description: "Unable to delete the account Institutions.",
+        });
+      }
+    };
+
+
   return (
     <div className="space-y-4">
-      {intialInstitution.map((institution) => (
+      {institutionList.map((institution) => (
         <div
           key={institution.id}
           className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 bg-foreground shadow rounded-lg relative"
@@ -67,10 +107,29 @@ const ListView: React.FC<ListViewProps> = ({ intialInstitution }) => {
               size="small"
               icon={<Eye className="w-4 h-4" />}
             />
-            <Button
-              variant="outlineDanger"
-              icon={<Trash2 className="w-4 h-4" />}
-            />
+            <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outlineDanger"
+                    icon={<Trash2 className="w-4 h-4" />}
+                  />
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you sure you want to delete this account Institutions?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => handleDelete(institution.id!)}>
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
           </div>
         </div>
       ))}

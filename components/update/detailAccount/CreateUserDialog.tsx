@@ -20,6 +20,13 @@ import {
   Phone,
   Save,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/update/ui/select";
 import Button from "@/components/update/button/Button";
 import Input from "@/components/update/input/Input";
 import Dropdown from "@/components/update/input/Dropdown";
@@ -57,7 +64,7 @@ const CreateUserDialog: React.FC = () => {
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          label="New User"
+          label="Add New User"
           className="relative w-full sm:w-auto"
           variant="primary"
           size="large"
@@ -94,7 +101,6 @@ const CreateUserDialog: React.FC = () => {
                 value={institutionID}
                 onChange={(e) => setInstitutionID(e.target.value)}
                 placeholder="Enter Institutin ID"
-                className="w-full bg-foreground"
               />
             </div>
             <div>
@@ -111,13 +117,18 @@ const CreateUserDialog: React.FC = () => {
                 Level 1 indicate the limited access, while the Level 2 provide
                 the user to full access.
               </p>
-              <Dropdown
-                options={userLevel}
-                selectedValue={levelAccount}
-                onChange={setLevelAccount}
-                placeholder="Select User Level"
-                variant="default"
-              />
+              <Select
+                value={levelAccount}
+                onValueChange={setLevelAccount}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Subscription Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Level 1">Level 1</SelectItem>
+                  <SelectItem value="Level 2">Level 2</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <div className="flex items-center space-x-2">
@@ -133,13 +144,22 @@ const CreateUserDialog: React.FC = () => {
                 Select the role assigned to the user, such as Genetic Counselor
                 to restrict access.
               </p>
-              <Dropdown
-                options={userRole}
-                selectedValue={roleAccount}
-                onChange={setRoleAccount}
-                placeholder="Select User Level"
-                variant="default"
-              />
+              <Select
+                value={roleAccount}
+                onValueChange={setRoleAccount}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Subscription Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Admin Lab">Admin Lab</SelectItem>
+                  <SelectItem value="User Lab">User Lab</SelectItem>
+                  <SelectItem value="Bioinformatician">Bioinformatician</SelectItem>
+                  <SelectItem value="Head Lab">Head Lab</SelectItem>
+                  <SelectItem value="Genetic Cousellor">Genetic Cousellor</SelectItem>
+                  <SelectItem value="Clinical Pathology">Clinical Pathology</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -162,7 +182,6 @@ const CreateUserDialog: React.FC = () => {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 placeholder="Enter First Name"
-                className="w-full bg-foreground"
               />
             </div>
             <div>
@@ -184,7 +203,6 @@ const CreateUserDialog: React.FC = () => {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 placeholder="Enter Last Name"
-                className="w-full bg-foreground"
               />
             </div>
           </div>
@@ -208,7 +226,6 @@ const CreateUserDialog: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter Email"
-                className="w-full bg-foreground"
               />
             </div>
             <div>
@@ -230,7 +247,6 @@ const CreateUserDialog: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter Institutin"
-                className="w-full bg-foreground"
               />
             </div>
             <div>
@@ -243,7 +259,7 @@ const CreateUserDialog: React.FC = () => {
                   Phone or Telephone Number
                 </label>
               </div>
-              <p className="text-xs text-text-secondary mb-4">
+              <p className="text-xs text-text-secondary h-12">
                 Official phone number.
               </p>
               <Input
@@ -252,7 +268,6 @@ const CreateUserDialog: React.FC = () => {
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="Enter Phone Number"
-                className="w-full bg-foreground"
               />
             </div>
           </div>
@@ -264,7 +279,7 @@ const CreateUserDialog: React.FC = () => {
               icon={<X className="w-4 h-4" />}
             />
             <Button
-              label="Save"
+              label="Add New User"
               variant="outlineSecondary"
               size="large"
               icon={<Save className="w-4 h-4" />}

@@ -4,6 +4,7 @@ import Button from "@/components/update/button/Button";
 import ButtonFormatReport from "@/components/update/detailVariantReport/inrformationReport/ButtonFormatReport";
 import React, { useState, useEffect } from "react";
 import PreviewReportDialog from "./inrformationReport/PreviewReportDialog";
+import EditTestingDialog from "./inrformationReport/EditTestingDialog";
 import { generateClient } from "aws-amplify/api";
 import { Amplify } from "aws-amplify";
 import config from "@/src/amplifyconfiguration.json";
@@ -63,17 +64,26 @@ const InformationApprovalReport: React.FC<InformationApprovalReportProops> = ({
     []
   );
   const [newStatus, setNewStatus] = useState("");
+  const [reportId, setReportId] = useState("");
+  const [testingDesc, setTestingDesc] = useState("");
   const [variantInter, setVariantInter] = useState<VariantInterpretation[]>([]);
   const [variantReport, setVariantReport] = useState<VariantReportData>();
+  const [loading, setLoading] = useState(true);
 
-  
-  const fetchVariantReport = async () => {
+  const handleUpdateTestingDescription = (newDescription: string) => {
+    setTestingDesc(newDescription);
+  };
+
+  const fetchVariantReportById = async () => {
     try {
       const result = await client.graphql({
         query: getVariantReport,
         variables: { id: id_report },
       });
       setVariantReport(result.data.getVariantReport as VariantReportData);
+      setReportId(result.data.getVariantReport?.id ?? "");
+      setTestingDesc(result.data.getVariantReport?.testing_description ?? "");
+      setLoading(false);
     } catch (error) {
       console.log("Error fetch variant report");
     }
@@ -155,7 +165,7 @@ const InformationApprovalReport: React.FC<InformationApprovalReportProops> = ({
         await fecthSelectedVariant();
         await fetchPatient();
         await fetchVariantInterpretation();
-        await fetchVariantReport();
+        await fetchVariantReportById();
       } catch (error) {
         console.error("Error fetching initial data:", error);
       }
@@ -170,7 +180,7 @@ const InformationApprovalReport: React.FC<InformationApprovalReportProops> = ({
           throw new Error("Failed to fetch Ensembl version");
         }
         const data = await response.json();
-        setEnsembleVersion(data.release); // Assuming the "release" key contains the version
+        setEnsembleVersion(data.release);
       } catch (error) {
         console.error("Error fetching Ensembl version:", error);
       }
@@ -185,15 +195,15 @@ const InformationApprovalReport: React.FC<InformationApprovalReportProops> = ({
           throw new Error("Failed to fetch Ensembl version");
         }
         const data = await response.json();
-        setEnsembleRestVersion(data.release); // Assuming the "release" key contains the version
+        setEnsembleRestVersion(data.release);
       } catch (error) {
         console.error("Error fetching Ensembl Rest version:", error);
       }
     };
 
-    fetchData(); // Call all data fetching functions
-    fetchEnsemblVersion(); // Call Ensembl version
-    fetchEnsemblRestVersion(); // Call Ensembl REST version
+    fetchData();
+    fetchEnsemblVersion();
+    fetchEnsemblRestVersion();
   }, []);
 
   const handleUpdateReportStatus = async () => {
@@ -207,7 +217,7 @@ const InformationApprovalReport: React.FC<InformationApprovalReportProops> = ({
         variables: { input: temp },
       });
       if (result.data.updateVariantReport) {
-        fetchVariantReport();
+        fetchVariantReportById();
       }
     } catch (error) {
       console.error("Error updating status report:", error);
@@ -222,26 +232,37 @@ const InformationApprovalReport: React.FC<InformationApprovalReportProops> = ({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
       <div className="bg-foreground p-6 rounded-lg shadow-lg text-text-primary">
-        <div className="flex items-center gap-4 mb-8">
-          <FileText className="text-blue-primary w-10 h-10" />
-          <h3 className="font-semibold text-xl">Testing Detail</h3>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-4 mb-8">
+            <FileText className="text-blue-primary w-10 h-10" />
+            <h3 className="font-semibold text-xl">Testing Detail</h3>
+          </div>
         </div>
-        <p className="mb-8">
-          <span className="font-medium">Testing Method Sequencing:</span> Next
-          Generation
-        </p>
-        <p className="mb-8">
-          <span className="font-medium">Gene Panel Cardiomyopathy Panel:</span>{" "}
-          Comprehensive
-        </p>
-        <p className="font-medium mb-4">Testing Description:</p>
-        <p className="text-text-secondary">
-          The genetic analysis was performed using high-throughput Next
-          Generation Sequencing (NGS) on a blood sample. DNA was extracted using
-          the QIAamp DNA Blood Mini Kit. Sequencing was carried out on an
-          Illumina HiSeq 4000 platform, covering all coding regions and
-          intron-exon boundaries of the genes listed.
-        </p>
+        <div>
+          <p className="font-semibold mb-2">Testing Method Sequencing:</p>
+          <p className="mb-6">Next Generation</p>
+        </div>
+        <div>
+          <p className="font-semibold mb-2">Gene Panel Cardiomyopathy Panel:</p>
+          <p className="mb-6">Comprehensive</p>
+        </div>
+        <div className="flex justify-between items-center gap-6">
+          <div className="flex items-center gap-2 text-text-primary">
+            <p className="font-semibold mb-4">Testing Description:</p>
+          </div>
+          <EditTestingDialog
+            reportId={reportId}
+            testingDescription={testingDesc}
+            onUpdateSuccess={handleUpdateTestingDescription}
+          />
+        </div>
+        {loading ? (
+          <p className="text-sm text-center mt-4 mb-4 text-primary font-semibold animate-pulse">
+            Loading
+          </p>
+        ) : (
+          <p className="text-text-secondary mb-4 text-justify">{testingDesc}</p>
+        )}
       </div>
 
       <div className="bg-foreground p-10 rounded-lg shadow-lg">
@@ -263,7 +284,6 @@ const InformationApprovalReport: React.FC<InformationApprovalReportProops> = ({
             />
           </div>
           <div className="flex justify-between items-center gap-6">
-
             <Select onValueChange={setNewStatus}>
               <SelectTrigger className="w-full]">
                 <SelectValue placeholder="Select Report Status" />
@@ -271,10 +291,10 @@ const InformationApprovalReport: React.FC<InformationApprovalReportProops> = ({
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Report Status</SelectLabel>
-                  <SelectItem value="draft">Draft</SelectItem>
-                  <SelectItem value="process">In Process</SelectItem>
-                  <SelectItem value="wait">Waiting for Approval</SelectItem>
-                  <SelectItem value="complete">Completed</SelectItem>
+                  <SelectItem value="Draft">Draft</SelectItem>
+                  <SelectItem value="Process">In Process</SelectItem>
+                  <SelectItem value="Waiting for Approval">Waiting for Approval</SelectItem>
+                  <SelectItem value="Completed">Completed</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

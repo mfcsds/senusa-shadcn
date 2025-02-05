@@ -19,7 +19,7 @@ export default function ManageAccountsPage() {
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchLoadAccountsInstitutions = async (): Promise<void> => {
     const loadInstitutions = async () => {
       try {
         setLoading(true); 
@@ -33,6 +33,10 @@ export default function ManageAccountsPage() {
     };
 
     loadInstitutions();
+    };
+
+  useEffect(() => {
+    fetchLoadAccountsInstitutions();
   }, []);
 
   return (
@@ -68,7 +72,7 @@ export default function ManageAccountsPage() {
             />
           </div>
 
-          <CreateAccountDialog />
+          <CreateAccountDialog onUpdateAccountsInstitutions={fetchLoadAccountsInstitutions}/>
 
           <Button
             variant={

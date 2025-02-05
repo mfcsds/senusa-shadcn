@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { Button } from "../../ui/button";
+import { ButtonAdd } from "@/components/update/button/ButtonAdd";
 import {
   ArrowUpDown,
   Edit,
@@ -318,14 +318,14 @@ export const Columns: ColumnDef<Variant>[] = [
     accessorKey: "zygosity",
     header: ({ column }) => {
       return (
-        <Button
+        <ButtonAdd
           className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Zygosity
           <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </ButtonAdd>
       );
     },
     cell: ({ row }) => {
@@ -354,14 +354,14 @@ export const Columns: ColumnDef<Variant>[] = [
     accessorKey: "functional_impact",
     header: ({ column }) => {
       return (
-        <Button
-          className="text-sm hover:bg-black hover:text-white"
+        <ButtonAdd
+          className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Functional Impact
           <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </ButtonAdd>
       );
     },
   },
@@ -369,14 +369,14 @@ export const Columns: ColumnDef<Variant>[] = [
     accessorKey: "acmg",
     header: ({ column }) => {
       return (
-        <Button
-          className="text-md hover:bg-transparent hover:text-text-primary"
+        <ButtonAdd
+          className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           ACMG
           <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </ButtonAdd>
       );
     },
 
@@ -390,11 +390,11 @@ export const Columns: ColumnDef<Variant>[] = [
           case "Likely Pathogenic":
             return "border-red-600 bg-red-secondary text-black";
           case "Likely Benign":
-            return "border-primary bg-secondary text-black"; // Red for pathogenic
+            return "border-green-600 bg-green-200 text-black"; // Red for pathogenic
           case "Benign":
-            return "border-primary bg-accent text-black"; // Green for benign
+            return "border-green-600 bg-green-300 text-black"; // Green for benign
           case "VUS":
-            return "border-yellow-primary bg-yellow-secondary text-black"; // Yellow for VUS
+            return "border-yellow-600 bg-yellow-300 text-black"; // Yellow for VUS
           default:
             return "border-gray-500 "; // Default color if value doesn't match
         }
@@ -415,14 +415,14 @@ export const Columns: ColumnDef<Variant>[] = [
     accessorKey: "clinicalSign",
     header: ({ column }) => {
       return (
-        <Button
-          className="text-md hover:text-black hover:bg-transparent"
+        <ButtonAdd
+          className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Clinical Sign
           <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </ButtonAdd>
       );
     },
     cell: ({ row }) => {
@@ -439,14 +439,14 @@ export const Columns: ColumnDef<Variant>[] = [
     accessorKey: "severeconsequence",
     header: ({ column }) => {
       return (
-        <Button
-          className="text-md hover:text-black hover:bg-transparent"
+        <ButtonAdd
+          className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Most Consequence
           <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </ButtonAdd>
       );
     },
     cell: ({ row }) => {
@@ -462,14 +462,14 @@ export const Columns: ColumnDef<Variant>[] = [
     accessorKey: "sift_score",
     header: ({ column }) => {
       return (
-        <Button
-          className="text-xs hover:bg-black hover:text-black"
+        <ButtonAdd
+          className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Sift Score
           <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </ButtonAdd>
       );
     },
   },
@@ -477,14 +477,14 @@ export const Columns: ColumnDef<Variant>[] = [
     accessorKey: "sift_prediction",
     header: ({ column }) => {
       return (
-        <Button
-          className="text-xs hover:bg-black hover:text-black"
+        <ButtonAdd
+          className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Sift Prediction
           <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </ButtonAdd>
       );
     },
   },
@@ -503,10 +503,10 @@ export const Columns: ColumnDef<Variant>[] = [
             <AccordionItem value="phenotypes">
               <AccordionTrigger>
                 <div className="flex flex-row items-center gap-3">
-                  <Button
+                  <ButtonAdd
                     variant="link"
                     className="text-md text-text-primary"
-                  >{`${phenotypesList.length} Found`}</Button>
+                  >{`${phenotypesList.length} Found`}</ButtonAdd>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
@@ -539,14 +539,14 @@ export const Columns: ColumnDef<Variant>[] = [
     accessorKey: "gnomade",
     header: ({ column }) => {
       return (
-        <Button
-          className="text-xs hover:bg-black hover:text-black"
+        <ButtonAdd
+          className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Gnomade
           <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </ButtonAdd>
       );
     },
     filterFn: numberRangeFilterFn,
@@ -555,14 +555,14 @@ export const Columns: ColumnDef<Variant>[] = [
     accessorKey: "gnomadg",
     header: ({ column }) => {
       return (
-        <Button
-          className="text-xs hover:bg-black hover:text-black"
+        <ButtonAdd
+          className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Gnomadg
           <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </ButtonAdd>
       );
     },
     filterFn: "inNumberRange",
@@ -589,11 +589,11 @@ export const Columns: ColumnDef<Variant>[] = [
               <DialogTitle></DialogTitle>
             </DialogHeader>
             <DialogTrigger asChild>
-              <Button variant="outline" className="rounded-lg bg-foreground border-2 border-blue-primary hover:border-blue-secondary hover:bg-blue-secondary text-blue-primary hover:text-text-action">
+              <ButtonAdd variant="outline" className="rounded-lg bg-foreground border-2 border-blue-primary hover:border-blue-secondary hover:bg-blue-secondary text-blue-primary hover:text-text-action">
                 <small>
                   <TableOfContents className="h-4 w-4"></TableOfContents>
                 </small>
-              </Button>
+              </ButtonAdd>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[95%] max-h-[95%] overflow-y-auto bg-background">
               <VariantInformationModal

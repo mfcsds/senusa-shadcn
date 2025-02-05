@@ -39,7 +39,6 @@ import {
 import { Amplify } from "aws-amplify";
 import config from "@/src/amplifyconfiguration.json";
 import { generateClient } from "aws-amplify/api";
-import { CreateConclusionInput, CreateRecommendationInput } from "@/src/API";
 import {
   generateConclusionID,
   generateRecommendationID,
@@ -63,11 +62,7 @@ import {
   Conclusion,
   VariantInterpretation,
 } from "@/utils/object";
-import { Textarea } from "../../ui/textarea";
-import { text } from "stream/consumers";
-import { Tooltip, TooltipContent } from "../../ui/tooltip";
-import { TooltipProvider } from "../../ui/tooltip";
-import { TooltipTrigger } from "@radix-ui/react-tooltip";
+import { Textarea } from "@/components/update/input/textarea";
 
 Amplify.configure(config);
 
@@ -154,27 +149,19 @@ const RecommendationAndConclusion: React.FC<RecommendationConclusionProops> = ({
 The recommendation should include the phenotypic relevance, impact of patient management, recommendation for further testing result, follow-up, and limitation, make it easy to understand, make it efficient, and short`;
       // Request AI-generated text from OpenAI
       const response = await clientOpenAi.chat.completions.create({
-        model: "gpt-4", // Use the GPT-4 model for better analysis
+        model: "gpt-4",
         messages: [{ role: "user", content: prompt }],
       });
 
       if (response.choices && response.choices[0]?.message?.content) {
         const generatedText = response.choices[0].message.content.trim();
 
-        // setSelectedRecommendation(generatedText);
-        // Update the selected recommendation with the AI-generated text
         setListRecommendation((prevList) =>
           prevList.map((item) =>
             item.id === id ? { ...item, text: generatedText } : item
           )
         );
         setSelectedRecommendation(generatedText);
-        // console.log(generatedText);
-        // Update Textarea with AI response
-        // setListRecommendation((prevState) => ({
-        //   ...prevState,
-        //   text: generatedText,
-        // }));
       }
     } catch (error) {
       console.error("Error generating AI pre-text:", error);
@@ -195,7 +182,7 @@ The recommendation should include the phenotypic relevance, impact of patient ma
       Recommendation
       ${setSelectedRecommendation}
 
-The conclusion make it easy to understand, make it efficient, and short, no more then 150 words`;
+      The conclusion make it easy to understand, make it efficient, and short, no more then 150 words`;
       // Request AI-generated text from OpenAI
       const response = await clientOpenAi.chat.completions.create({
         model: "gpt-4", // Use the GPT-4 model for better analysis
@@ -482,10 +469,9 @@ The conclusion make it easy to understand, make it efficient, and short, no more
         <DialogContent className="sm:max-w-[70%] max-h-[90%]">
           <DialogTitle>Edit Conclusion</DialogTitle>
           <DialogDescription>
-          Modify the conclusion text based on the new findings or
-                  interpretations for the selected variant. Make sure the text
-                  clearly explains any new conclusions or changes to previous
-                  ones.
+            Modify the conclusion text based on the new findings or
+            interpretations for the selected variant. Make sure the text clearly
+            explains any new conclusions or changes to previous ones.
           </DialogDescription>
 
           <Textarea
@@ -496,20 +482,20 @@ The conclusion make it easy to understand, make it efficient, and short, no more
           />
           <DialogFooter>
             <div className="flex justify-end gap-4 mb-2">
-            <Button
-                      label="Cancel"
-                      variant="outlineDanger"
-                      size="large"
-                      icon={<X className="w-5 h-5" />}
-                      onClick={() => setIsEditModalConclusionOpen(false)}
-                    />
-                    <Button
-                      label="Save"
-                      variant="outlineSecondary"
-                      size="large"
-                      icon={<Save className="w-5 h-5" />}
-                      onClick={() => handleSaveEditConclusion()}
-                    />
+              <Button
+                label="Cancel"
+                variant="outlineDanger"
+                size="large"
+                icon={<X className="w-5 h-5" />}
+                onClick={() => setIsEditModalConclusionOpen(false)}
+              />
+              <Button
+                label="Save"
+                variant="outlineSecondary"
+                size="large"
+                icon={<Save className="w-5 h-5" />}
+                onClick={() => handleSaveEditConclusion()}
+              />
             </div>
           </DialogFooter>
         </DialogContent>

@@ -24,38 +24,174 @@ import {
   CalendarArrowUp,
   CalendarCheck,
   Save,
+  EyeOff,
+  Eye,
 } from "lucide-react";
 import Button from "@/components/update/button/Button";
+import { Checkbox } from "@/components/update/ui/checkbox";
 import Input from "@/components/update/input/Input";
+import { generateUserID } from "@/utils/function";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/update/ui/select";
+import { createInstitution, createUser } from "@/src/graphql/mutations";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  getDateNext,
+  getDateNextMonth,
+  getDateToday,
+} from "@/utils/DateHelperFunction";
+import { signUp } from "aws-amplify/auth";
+import { generateClient } from "aws-amplify/api";
 
-const CreateAccountDialog: React.FC = () => {
-  const [institutionID, setInstitutionID] = useState("");
+const CreateAccountDialog = ({
+  onUpdateAccountsInstitutions,
+}: {
+  onUpdateAccountsInstitutions: () => Promise<void>;
+}) => {
+  const [openDialog, setOpenDialog] = useState(false);
+  const [institutionID, setInstitutionID] = useState(generateUserID());
   const [institution, setInstitution] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [contactName, setContactName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
-  const [storageQuota, setStorageQuota] = useState("");
-  const [Subscription, setSubscription] = useState("");
+  const [storageQuota, setStorageQuota] = useState<number>(0);
+  const [subscription, setSubscription] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [dueDate, setDueDate] = useState(getDateNextMonth());
+  const [registrationDate, setRegistrationDate] = useState(getDateToday());
+  const [prosesSubmit, setProcessSubmit] = useState(false);
+  const { toast } = useToast();
+  const client = generateClient();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log({
-      email,
-      contactName,
-      password,
-      phoneNumber,
-      storageQuota,
-      address,
-    });
+  const handleCancelDialog = () => {
+    setOpenDialog(false);
+    setInstitutionID(generateUserID());
+    setInstitution("");
+    setEmail("");
+    setPassword("");
+    setContactName("");
+    setPhoneNumber("");
+    setAddress("");
+    setStorageQuota(0);
+    setSubscription("");
+    setDueDate(getDateNextMonth());
+    setRegistrationDate(getDateToday());
+  };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+
+  const handleSubscriptionChange = (value: string) => {
+    setSubscription(value);
+
+    switch (value) {
+      case "1":
+        setDueDate(getDateNext(1));
+        break;
+      case "3":
+        setDueDate(getDateNext(3));
+        break;
+      case "12":
+        setDueDate(getDateNext(12));
+        break;
+      default:
+        setDueDate(getDateToday());
+    }
+  };
+
+  const handleCreateUser = async (
+      e: React.FormEvent,
+      onUpdateAccountsInstitutions: () => Promise<void>
+    ) => {
+      e.preventDefault();
+    try {
+      setProcessSubmit(true); 
+      setInstitutionID(generateUserID());
+      const { isSignUpComplete, userId, nextStep } = await signUp({
+        username: email,
+        password: password,
+      });
+      const newUser = {
+        id: userId,
+        institutionID: institutionID,
+        name: contactName,
+        role_type: 2,
+        category: "Admin",
+        specialty: "Administrator",
+        email: email,
+      };
+
+      const newDataInstitution = {
+        id: institutionID,
+        name: institution,
+        currentUserQuota: 0,
+        currentStorageQuota: 0,
+        accountStatus: true,
+        registrationDate: registrationDate,
+        dueDate: dueDate,
+        subscription_type: subscription,
+        storageQuota: storageQuota,
+        email: email,
+        contactname: contactName,
+        contactphone: phoneNumber,
+        userQuotas: 10,
+        address: address,
+      };
+
+      try {
+        const registerInstitutionAccount = await client.graphql({
+          query: createInstitution,
+          variables: { input: newDataInstitution },
+        });
+        console.log("Institution Sucessfull", registerInstitutionAccount);
+        const registerAdminAccount = await client.graphql({
+          query: createUser,
+          variables: { input: newUser },
+        });
+        console.log("Institution Admin Sucessull", registerAdminAccount);
+        toast({
+          title: "Success Add new account Institution",
+          description: "Account Institution added successfully",
+        });
+        await onUpdateAccountsInstitutions();
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Failed to add new account Institution",
+          description: "Failed to add new account Institution. Please try again.",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setProcessSubmit(false);
+      setOpenDialog(false);
+      setInstitution("");
+      setEmail("");
+      setPassword("");
+      setContactName("");
+      setPhoneNumber("");
+      setAddress("");
+      setStorageQuota(0);
+      setSubscription("");
+      setDueDate(getDateNextMonth());
+      setRegistrationDate(getDateToday());
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
         <Button
-          label="New Account"
+          label="Create New Account"
           variant="primary"
           size="large"
           icon={<Plus className="w-4 h-4" />}
@@ -72,7 +208,7 @@ const CreateAccountDialog: React.FC = () => {
             medical lab in the system.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="grid gap-4 mt-4">
+        <form onSubmit={(e) => handleCreateUser(e, onUpdateAccountsInstitutions)} className="grid gap-4 mt-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <div className="flex items-center space-x-2">
@@ -89,12 +225,12 @@ const CreateAccountDialog: React.FC = () => {
                 typically read-only.
               </p>
               <Input
+                disabled={true}
                 id="institutionID"
                 type="text"
                 value={institutionID}
-                onChange={(e) => setInstitutionID(e.target.value)}
+                onChange={(e) => setInstitutionID(generateUserID())}
                 placeholder="Enter Institutin ID"
-                className="w-full bg-foreground"
               />
             </div>
             <div>
@@ -116,7 +252,6 @@ const CreateAccountDialog: React.FC = () => {
                 value={institution}
                 onChange={(e) => setInstitution(e.target.value)}
                 placeholder="Enter Institutin"
-                className="w-full bg-foreground"
               />
             </div>
           </div>
@@ -140,7 +275,6 @@ const CreateAccountDialog: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter Email"
-                className="w-full bg-foreground"
               />
             </div>
             <div>
@@ -156,14 +290,27 @@ const CreateAccountDialog: React.FC = () => {
               <p className="text-xs text-text-secondary mb-4">
                 The password of the primary contact’s account access.
               </p>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter Institutin"
-                className="w-full bg-foreground"
-              />
+              <div className="relative w-full sm:w-auto">
+                <Input
+                  id="password"
+                  type={isPasswordVisible ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter Institutin"
+                />
+                <Button
+                  variant="iconPrimary"
+                  size="innerSize"
+                  onClick={togglePasswordVisibility}
+                  icon={
+                    isPasswordVisible ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )
+                  }
+                />
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -186,12 +333,11 @@ const CreateAccountDialog: React.FC = () => {
                 value={contactName}
                 onChange={(e) => setContactName(e.target.value)}
                 placeholder="Enter Contact Name"
-                className="w-full bg-foreground"
               />
             </div>
             <div>
               <div className="flex items-center space-x-2 mt-2">
-                <Phone className="w-6 h-6 text-blue-primary mb-1" />
+                <Phone className="w-6 h-6 text-blue-primary mb-1"/>
                 <label
                   htmlFor="phoneNumber"
                   className="block text-sm font-medium text-text-primary"
@@ -199,7 +345,7 @@ const CreateAccountDialog: React.FC = () => {
                   Phone or Telephone Number
                 </label>
               </div>
-              <p className="text-xs text-text-secondary mb-4">
+              <p className="text-xs text-text-secondary h-12">
                 Official phone number.
               </p>
               <Input
@@ -208,7 +354,6 @@ const CreateAccountDialog: React.FC = () => {
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="Enter Phone Number"
-                className="w-full bg-foreground"
               />
             </div>
             <div>
@@ -221,7 +366,7 @@ const CreateAccountDialog: React.FC = () => {
                   Address
                 </label>
               </div>
-              <p className="text-xs text-text-secondary mb-4">
+              <p className="text-xs text-text-secondary h-12">
                 The typical address of the institution or medical lab.
               </p>
               <Input
@@ -230,7 +375,6 @@ const CreateAccountDialog: React.FC = () => {
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Enter Address"
-                className="w-full bg-foreground"
               />
             </div>
           </div>
@@ -248,14 +392,19 @@ const CreateAccountDialog: React.FC = () => {
               <p className="text-xs text-text-secondary mb-4">
                 The allocated storage capacity for the institution’s data.
               </p>
-              <Input
-                id="storageQuota"
-                type="text"
-                value={storageQuota}
-                onChange={(e) => setStorageQuota(e.target.value)}
-                placeholder="Enter Storage Quota, masure in gygabytes (GB)"
-                className="w-full bg-foreground"
-              />
+              <Select
+                value={`${storageQuota}`}
+                onValueChange={(value) => setStorageQuota(Number(value))}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Storage Quota" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5">5 GB</SelectItem>
+                  <SelectItem value="25">25 GB</SelectItem>
+                  <SelectItem value="50">50 GB</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <div className="flex items-center space-x-2 mt-2">
@@ -270,14 +419,19 @@ const CreateAccountDialog: React.FC = () => {
               <p className="text-xs text-text-secondary mb-4">
                 The type of subscribtion plan selected for the institution.
               </p>
-              <Input
-                id="subscribtion"
-                type="text"
-                value={Subscription}
-                onChange={(e) => setSubscription(e.target.value)}
-                placeholder="Enter Subscribtion Type"
-                className="w-full bg-foreground"
-              />
+              <Select
+                value={subscription}
+                onValueChange={handleSubscriptionChange}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Subscription Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">1-Month Trial</SelectItem>
+                  <SelectItem value="3">3 Month</SelectItem>
+                  <SelectItem value="12"> 1 Year</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <div className="flex items-center space-x-2 mt-2">
@@ -293,12 +447,12 @@ const CreateAccountDialog: React.FC = () => {
                 The date on which the subscribtion auto-generated will start.
               </p>
               <Input
+                disabled={true}
                 id="registration"
                 type="text"
-                value={contactName}
-                onChange={(e) => setContactName(e.target.value)}
+                value={registrationDate}
+                onChange={(e) => setRegistrationDate(e.target.value)}
                 placeholder="Enter Registration Date"
-                className="w-full bg-foreground"
               />
             </div>
             <div>
@@ -316,26 +470,36 @@ const CreateAccountDialog: React.FC = () => {
               </p>
               <Input
                 id="dueDate"
+                disabled={true}
                 type="text"
-                value={contactName}
-                onChange={(e) => setContactName(e.target.value)}
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
                 placeholder="Enter Due Date"
-                className="w-full bg-foreground"
               />
             </div>
           </div>
-          <DialogFooter className="mt-6 mb-6 gap-4">
+          <div className="flex flex-row w-full gap-1 items-center">
+            <Checkbox value={"Term"}></Checkbox>
+            <p className="text-text-primary text-sm ml-2">
+              I have read and accept with the
+            </p>
+            <a href="#"> terms and condition</a>
+          </div>
+          <DialogFooter className="mt-6 gap-4">
             <Button
               label="Cancel"
               variant="outlineDanger"
               size="large"
               icon={<X className="w-4 h-4" />}
+              onClick={handleCancelDialog}
             />
             <Button
-              label="Save"
+              label={prosesSubmit ? "Save" : "Create New Account"}
               variant="outlineSecondary"
               size="large"
               icon={<Save className="w-4 h-4" />}
+              disabled={prosesSubmit ? true : false}
+              type="submit"
             />
           </DialogFooter>
         </form>

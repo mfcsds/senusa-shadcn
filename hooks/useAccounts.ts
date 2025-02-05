@@ -1,8 +1,8 @@
 import { generateClient } from "aws-amplify/api";
-import { listInstitutions } from "@/src/graphql/queries";
-import { createInstitution, deleteInstitution  } from "@/src/graphql/mutations";
-import { CreateInstitutionInput } from "@/src/API";
-import { Institution } from "@/utils/object";
+import { listInstitutions, listUsers} from "@/src/graphql/queries";
+import { createInstitution, deleteInstitution, createUser, deleteUser  } from "@/src/graphql/mutations";
+import { CreateInstitutionInput, CreateUserInput } from "@/src/API";
+import { Institution, DataUser } from "@/utils/object";
 import { Amplify } from "aws-amplify";
 import config from "@/src/amplifyconfiguration.json";
 
@@ -56,5 +56,54 @@ export const removeInstitution = async (institutionId: string): Promise<void> =>
       console.log("Institution successfully deleted");
     } catch (error) {
       console.error("Error deleting institution:", error);
+    }
+  };
+
+  export const fetchUser = async (): Promise<DataUser[]> => {
+    try {
+      const result = await client.graphql({ query: listUsers });
+      return result.data.listUsers.items as DataUser[];
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      return [];
+    }
+  };
+  
+  export const fetchUserByInstitutionId = async (InstitutionID: string): Promise<DataUser[]> => {
+    try {
+      const result = await client.graphql({
+        query: listUsers,
+        variables: { filter: { institutionID: { eq: InstitutionID } } },
+      });
+      return result.data.listUsers.items as DataUser[];
+    } catch (error) {
+      console.error("Error fetching VCF data:", error);
+      return [];
+    }
+  };
+
+  export const addNewUser = async (
+    UserData: CreateUserInput
+  ): Promise<void> => {
+    try {
+      await client.graphql({
+        query: createUser,
+        variables: { input: UserData },
+      });
+      console.log("User successfully created");
+    } catch (error) {
+      console.error("Error creating User:", error);
+    }
+  };
+
+  export const removeUserByInstitutionId = async (userId: string): Promise<void> => {
+    try {
+      await client.graphql({
+        query: deleteUser,
+        variables: { input: { id: userId } },
+      });
+      console.log("User successfully deleted");
+    } catch (error) {
+      console.error("Error deleting User:", error);
     }
   };

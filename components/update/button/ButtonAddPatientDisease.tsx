@@ -37,6 +37,7 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
   const [selectedPhenotypes, setSelectedPhenotypes] = useState<
     PatientDiseaseData[]
   >([]);
+  const [openPopover, setOpenPopover] = React.useState(false);
 
   const client = generateClient();
 
@@ -86,6 +87,7 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
     }
     setPhenotypeQuery("");
     setSuggestions([]);
+    setOpenPopover(false)
   };
 
   useEffect(() => {
@@ -124,10 +126,10 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
         collapsible
         className="w-[200px] text-text-primary text-sm"
       >
-        <AccordionItem value="patient-history">
-          <AccordionTrigger>Patient Disease History</AccordionTrigger>
+        <AccordionItem value="family-history">
+        <AccordionTrigger>Patient Disease History</AccordionTrigger>
           <AccordionContent>
-            <ul className="list-disc list-inside">
+          <ul className="list-disc list-inside">
               {selectedPhenotypes.map((phenotype, index) => (
                 <li key={index} className="flex justify-between items-center">
                   {phenotype.hpo_code} - {phenotype.hpo_desc}
@@ -151,7 +153,7 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-      <Popover>
+      <Popover open={openPopover} onOpenChange={setOpenPopover}>
         <PopoverTrigger asChild>
           <ButtonAdd
             variant={"outline"}
@@ -160,34 +162,39 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
             <Plus className="w-5 h-5 text-blue-primary" />
           </ButtonAdd>
         </PopoverTrigger>
-        <PopoverContent className="sm:-translate-x-20 -translate-x-5 sm-translate-y-10 -translate-y-30 w-[380px]">
+        <PopoverContent className="sm:-translate-x-20 -translate-x-5 sm-translate-y-10 -translate-y-30 bg-background w-[380px] min-h-[250px] max-h-[80vh] overflow-y-auto">
           <div className="flex flex-col w-full p-2">
-            <div className="flex flex-row items-center justify-between gap-2">
+            <div className="relative w-full sm:w-auto">
               <Input
-                id="searchPatient"
+                id="searchFamily"
                 value={phenotypeQuery}
                 type="text"
+                className="bg-foreground"
                 onChange={(e) => setPhenotypeQuery(e.target.value)}
                 placeholder="Type patient history disease"
               />
               <Button
                 variant="iconPrimary"
-                size="innerChild"
+                size="innerSize"
                 icon={<SearchIcon className="w-5 h-5 " />}
               />
             </div>
-            {suggestions.length > 0 && (
+            {suggestions.length > 0 ? (
               <ul className="absolute translate-y-14 z-10 bg-background border border-border w-md mt-1 rounded-md shadow-lg">
-                {suggestions.map((suggestion, index) => (
-                  <li
-                    key={index}
-                    onClick={() => handlePhenotypeSelect(suggestion)}
-                    className="px-4 py-2 hover:bg-accent text-text-secondary cursor-pointer text-sm"
-                  >
-                    {suggestion.id} - {suggestion.name}
-                  </li>
-                ))}
-              </ul>
+              {suggestions.map((suggestion, index) => (
+                <li
+                  key={index}
+                  onClick={() => handlePhenotypeSelect(suggestion)}
+                  className="px-4 py-2 hover:bg-accent text-text-secondary cursor-pointer text-sm"
+                >
+                  {suggestion.id} - {suggestion.name}
+                </li>
+              ))}
+            </ul>
+            ) : (
+              <p className="text-center mt-12 text-sm text-text-secondary">
+                Search for a patient history disease
+              </p>
             )}
           </div>
         </PopoverContent>

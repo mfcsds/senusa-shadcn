@@ -31,7 +31,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/update/ui/select";
 import Spinner from "@/components/update/ui/Spinner";
 import RecommendationAndConclusion from "@/components/update/detailVariantReport/RecommendationAndConclusion";
 

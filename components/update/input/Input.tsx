@@ -11,6 +11,7 @@ interface InputProps {
   placeholder?: string;
   className?: string;
   size?: "small" | "medium" | "large";
+  disabled?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -21,12 +22,14 @@ const Input: React.FC<InputProps> = ({
   placeholder = "",
   className = "",
   size = "medium", 
+  disabled = false, 
 }) => {
   const sizeClasses = {
     small: "text-sm h-8 px-2",
     medium: "text-sm h-10 px-4",
     large: "text-base h-12 px-6",
   };
+  const disabledStyles = 'opacity-50 cursor-not-allowed disabled:pointer-events-none disabled:opacity-50'; 
 
   return (
     <input
@@ -39,6 +42,7 @@ const Input: React.FC<InputProps> = ({
         sizeClasses[size],  
       )}
       placeholder={placeholder}
+      disabled={disabled}
     />
   );
 };

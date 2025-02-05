@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getCurrentUser } from "aws-amplify/auth";
+import { getCurrentUser, signOut } from "aws-amplify/auth";
 
 export default function ClientLayout({
   children,
@@ -15,11 +15,9 @@ export default function ClientLayout({
   useEffect(() => {
     async function checkSession() {
       try {
-        // getCurrentUser => baca token di localStorage
         const { username } = await getCurrentUser();
         console.log("Current user is:", username);
       } catch (err) {
-        // Belum login => redirect
         router.push("/features/login");
       } finally {
         setLoading(false);

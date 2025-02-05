@@ -47,7 +47,7 @@ const DragAndDropInput: React.FC<DragAndDropInputProps> = ({
   return (
     <div
       className={clsx(
-        "w-full h-28 border-2 border-dashed border-border rounded-lg p-4 bg-foreground cursor-pointer hover:border-primary flex items-center justify-center text-center",
+        "w-full h-28 border-2 border-dashed border-border rounded-lg p-4 bg-background cursor-pointer hover:border-primary flex items-center justify-center text-center",
         className
       )}
       onDragOver={handleDragOver}

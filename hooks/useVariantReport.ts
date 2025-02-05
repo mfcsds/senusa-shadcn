@@ -6,6 +6,7 @@ import { Amplify } from "aws-amplify";
 import {
   createVariantReport,
   deleteVariantReport,
+  updateVariantReport
 } from "@/src/graphql/mutations";
 
 Amplify.configure(config);
@@ -24,11 +25,27 @@ export const fetchVariantReport = async (): Promise<CreateVariantReportInput[]> 
     }
   };
 
-  export const addVariantReport = async (DataVariant: any): Promise<void> => {
+  export const addVariantReport = async (dataVariant: any): Promise<void> => {
     try {
       await client.graphql({
         query: createVariantReport,
-        variables: { input: DataVariant },
+        variables: { input: dataVariant },
+      });
+    } catch (error) {
+      console.error("Error adding variant report:", error);
+    }
+  };
+
+  export const editVariantReport = async (idVariant: string, testingDescription: any): Promise<void> => {
+    try {
+      await client.graphql({
+        query: updateVariantReport,
+        variables: {
+          input: {
+            id: idVariant,
+            testing_description: testingDescription ?? "",
+          },
+        },
       });
     } catch (error) {
       console.error("Error adding variant report:", error);

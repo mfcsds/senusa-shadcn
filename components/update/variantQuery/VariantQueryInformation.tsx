@@ -3,9 +3,9 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/update/ui/tabs";
 import React from "react";
 import { AcmgCriteria } from "@/utils/object";
-import VariantAlellel from "@/components/update/detailVariantReport/selectVariant/VariantAlellel";
-import VariantComputationalPrediction from "@/components/update/detailVariantReport/selectVariant/VariantComputationalPrediction";
-import FunctionalAnnotations from "@/components/update/detailVariantReport/selectVariant/FunctionalAnnotations";
+import VariantAlellel from "@/components/update/detailVariant/VariantAlellel";
+import VariantComputationalPrediction from "@/components/update/detailVariant/VariantComputationalPrediction";
+import FunctionalAnnotations from "@/components/update/detailVariant/FunctionalAnnotations";
 import ACMGVariantQuery from "./ACMGVariantQuery";
 import { Badge } from "@/components/ui/badge";
 

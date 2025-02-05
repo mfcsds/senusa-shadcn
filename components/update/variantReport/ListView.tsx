@@ -28,9 +28,8 @@ const ListView: React.FC<CardViewProps> = ({ initialVariants }) => {
           <TableHead>Report ID</TableHead>
           <TableHead>Patient ID</TableHead>
           <TableHead>Medical History</TableHead>
-          <TableHead>Current Diagnosis</TableHead>
           <TableHead>Sample Collection</TableHead>
-          <TableHead>Patient Phenotypes:</TableHead>
+          <TableHead>Patient Phenotypes</TableHead>
           <TableHead>Status Report</TableHead>
           <TableHead>Action</TableHead>
         </TableRow>

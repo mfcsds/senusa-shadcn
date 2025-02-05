@@ -15,13 +15,13 @@ import {
   X,
   Plus,
   Accessibility,
-  History,
-  BookHeart,
   FileUp,
+  LetterText 
 } from "lucide-react";
 import Button from "@/components/update/button/Button";
 import { ButtonAdd } from "@/components/update/button/ButtonAdd";
 import Input from "@/components/update/input/Input";
+import { Textarea }from "@/components/update/input/textarea";
 import DragAndDropInput from "@/components/update/input/DragAndDropInput";
 import {
   Popover,
@@ -47,8 +47,8 @@ import { addVariantReport, fetchVariantReport } from "@/hooks/useVariantReport";
 import { generateReportID } from "@/utils/function";
 import { useToast } from "@/components/ui/use-toast";
 
-const AddPatientDialog= ({ onUpdateVariantReport }: { onUpdateVariantReport: () => Promise<void> }) => {
-  const [patientID, setPatientID] = useState("");
+const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: () => Promise<void> }) => {
+  const [testingDesc, setTestingDesc] = useState("");
   const [patients, setPatients] = useState<DataPatients[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [phenotypeQuery, setPhenotypeQuery] = useState("");
@@ -66,11 +66,6 @@ const AddPatientDialog= ({ onUpdateVariantReport }: { onUpdateVariantReport: () 
     if (e.target.files) {
       setFiles(Array.from(e.target.files));
     }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log({ patientID });
   };
 
   useEffect(() => {
@@ -146,6 +141,7 @@ const AddPatientDialog= ({ onUpdateVariantReport }: { onUpdateVariantReport: () 
         sample_collection: getDateToday(),
         phenotype: selectedPhenotypes,
         idPatient: selectedPatient?.id,
+        testing_description: testingDesc
       };
       await addVariantReport(newReport)
     } catch (error) {
@@ -172,7 +168,7 @@ const AddPatientDialog= ({ onUpdateVariantReport }: { onUpdateVariantReport: () 
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
         <Button
-          label="Variant Report"
+          label="Create Variant Report"
           variant="primary"
           size="large"
           icon={<Plus className="w-4 h-4" />}
@@ -187,7 +183,7 @@ const AddPatientDialog= ({ onUpdateVariantReport }: { onUpdateVariantReport: () 
           </DialogTitle>
           <DialogDescription>Adding Variant Report.</DialogDescription>
         </DialogHeader>
-        <form onSubmit={(e) => handleCreateReport(e, onUpdateVariantReport)} className="grid gap-4 mt-2">
+        <form onSubmit={(e) => handleCreateReport(e, onUpdateVariantReport)} className="grid gap-4 mt-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
             <div>
               <div className="flex items-center space-x-2">
@@ -209,7 +205,7 @@ const AddPatientDialog= ({ onUpdateVariantReport }: { onUpdateVariantReport: () 
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="bg-foreground border-2 border-primary hover:border-secondary w-full justify-between rounded hover:bg-secondary text-text-primary hover:text-text-action"
+                    className="bg-background border-2 border-border hover:border-secondary w-full justify-between rounded hover:bg-secondary text-text-primary hover:text-text-action"
                   >
                     {selectedPatient ? selectedPatient.id : "Select Patient"}
                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -316,6 +312,28 @@ const AddPatientDialog= ({ onUpdateVariantReport }: { onUpdateVariantReport: () 
                 </div>
               )}
             </div>
+
+            <div>
+              <div className="flex items-center space-x-2">
+                <LetterText  className="w-6 h-6 text-blue-primary mb-1" />
+                <label
+                  htmlFor="institution"
+                  className="block text-sm font-medium text-text-primary"
+                >
+                  Testing Description
+                </label>
+              </div>
+              <p className="text-xs text-text-secondary mb-4">
+              Add testing description for variant report.
+              </p>
+              <Textarea
+                id="testingDesc"
+                value={testingDesc}
+                onChange={(e) => setTestingDesc(e.target.value)}
+                placeholder="Enter Test Description"
+              />
+            </div>
+
             <div className="flex items-center space-x-2">
               <FileUp className="w-6 h-6 text-blue-primary mb-1" />
               <label
@@ -340,7 +358,7 @@ const AddPatientDialog= ({ onUpdateVariantReport }: { onUpdateVariantReport: () 
             </DragAndDropInput>
           </div>
 
-          <DialogFooter className="mt-4 gap-4">
+          <DialogFooter className="mt-6 gap-4">
             <Button
               label="Cancel"
               variant="outlineDanger"
@@ -349,7 +367,7 @@ const AddPatientDialog= ({ onUpdateVariantReport }: { onUpdateVariantReport: () 
               onClick={handleCancelDialog}
             />
             <Button
-              label="Save"
+              label="Create Variant Report"
               variant="outlineSecondary"
               size="large"
               icon={<Save className="w-4 h-4" />}

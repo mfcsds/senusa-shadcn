@@ -47,6 +47,11 @@
     --red-secondary: 0, 79.73%, 70.98%;
     --yellow-primary: 44.62, 100%, 77.06%;
     --yellow-secondary: 45, 100%, 91.37%;
+    --table-blue: 213.8 100% 96.9%;
+    --table-green: 138.5 76.5% 96.7%;
+    --table-yellow: 54.5 91.7% 95.3%;
+    --table-red: 0 85.7% 97.3%;
+    --table-indigo: 270 100% 98%;
   }
 
   .dark {
@@ -93,6 +98,11 @@
     --red-secondary: 7.18, 100%, 72.16%;
     --yellow-primary: 41.88, 100%, 50%;
     --yellow-secondary: 42.11, 100%, 68.43%;
+    --table-blue: 226.2 57% 21%;
+    --table-green: 144.9 80.4% 10%;
+    --table-yellow: 26 83.3% 14.1%;
+    --table-red: 0 74.7% 15.5%;
+    --table-indigo: 243.8 47.1% 20%;
   }
 }
 

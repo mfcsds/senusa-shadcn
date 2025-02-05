@@ -18,21 +18,6 @@ export default function ManageAccountsPage() {
   const [patients, setPatients] = useState<DataPatients[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-      const loadPatients = async () => {
-        try {
-          setLoading(true);
-          const fetchedPatients = await fetchPatients();
-          setPatients(fetchedPatients);
-        } catch (error) {
-          console.error("Failed to fetch patients:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      loadPatients();
-  }, []);
-
   const fetchLoadPatients = async (): Promise<void> => {
     const loadPatients = async () => {
       try {
@@ -48,6 +33,10 @@ export default function ManageAccountsPage() {
     loadPatients();
   };
 
+  useEffect(() => {
+    fetchLoadPatients();
+  }, []);
+  
   return (
     <div className="p-8 min-h-screen">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8">

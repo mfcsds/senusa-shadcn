@@ -24,7 +24,6 @@ import {
   deleteSelectedVariant,
   updateSelectedVariant,
 } from "@/src/graphql/mutations";
-
 import {
   Tooltip,
   TooltipContent,

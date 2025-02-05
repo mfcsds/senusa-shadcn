@@ -7,9 +7,9 @@ import {
   TableHead,
   TableCell,
   TableBody,
-} from "@/components/update/ui/table";
+} from "@/components/ui/table";
 
-interface FunctionalAnnotationsProps {
+interface TranscriptsProops {
   data?: TranscriptConsequence[];
 }
 
@@ -19,34 +19,22 @@ interface FeatureGroup {
   color: string; // Tailwind CSS class for background color
 }
 
-const FunctionalAnnotations: React.FC<
-  FunctionalAnnotationsProps
-> = ({ data }) => {
+const Transcripts: React.FC<TranscriptsProops> = ({ data }) => {
   if (!data || data.length === 0) {
     return <div>No computational predictions available.</div>;
   }
 
   const groupedFeatures: FeatureGroup[] = [
     {
-      groupName: "Gene and Transcript Information",
+      groupName: "Transcript and Protein Impact",
       features: [
-        { key: "transcript_id", label: "Transcript ID" },
-        { key: "gene_symbol", label: "Gene Symbol" },
-        { key: "gene_id", label: "Gene ID" },
-        { key: "biotype", label: "Biotype" },
-        { key: "canonical", label: "Canonical" },
-        { key: "appris", label: "APPRIS" },
-        { key: "tsl", label: "TSL" },
+        { key: "hgvsc", label: "HGVSc" },
+        { key: "hgvsp", label: "HGVSp" },
+        { key: "aa", label: "Amino Acid Change" },
+        { key: "protein_id", label: "Protein ID" },
+        { key: "variant_allele", label: "Variant Allele" },
       ],
-      color: "bg-blue-50",
-    },
-    {
-      groupName: "Consequence Terms",
-      features: [
-        { key: "consequence_terms", label: "Consequence Terms" },
-        { key: "impact", label: "Impact" },
-      ],
-      color: "bg-green-50",
+      color: "bg-table-indigo",
     },
   ];
 
@@ -59,7 +47,7 @@ const FunctionalAnnotations: React.FC<
   );
 
   return (
-    <div className="max-w-full max-h-[500px] overflow-y-auto mt-10">
+    <div className="overflow-auto max-w-full overflow-x-auto overflow-y-auto mt-10">
       <Table>
         <thead>
           {/* Group Headers */}
@@ -68,7 +56,7 @@ const FunctionalAnnotations: React.FC<
               <TableHead
                 key={group.groupName}
                 colSpan={group.features.length}
-                className={`text-center ${group.color} border-2 text-text-primary border-border`}
+                className={`text-center ${group.color} border-2 border-background text-text-primary`}
               >
                 {group.groupName}
               </TableHead>
@@ -79,7 +67,7 @@ const FunctionalAnnotations: React.FC<
             {allFeatures.map((feature) => (
               <TableHead
                 key={feature.key}
-                className={`${feature.color} border-2 border-border text-text-primary`}
+                className={`${feature.color} border-2 border-background text-text-primary`}
               >
                 {feature.label}
               </TableHead>
@@ -101,7 +89,7 @@ const FunctionalAnnotations: React.FC<
                 return (
                   <TableCell
                     key={feature.key}
-                    className={`${feature.color} border border-border text-text-secondary`}
+                    className={`${feature.color} border-2 border-background text-text-secondary`}
                   >
                     {value !== undefined && value !== null && value !== ""
                       ? value
@@ -117,4 +105,4 @@ const FunctionalAnnotations: React.FC<
   );
 };
 
-export default FunctionalAnnotations;
+export default Transcripts;

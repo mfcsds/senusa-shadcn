@@ -9,7 +9,7 @@ import {
   TableBody,
 } from "@/components/update/ui/table";
 
-interface VariantVariantComputationalPredictionProops {
+interface FunctionalAnnotationsProps {
   data?: TranscriptConsequence[];
 }
 
@@ -19,35 +19,34 @@ interface FeatureGroup {
   color: string; // Tailwind CSS class for background color
 }
 
-const VariantComputationalPrediction: React.FC<VariantVariantComputationalPredictionProops> = ({
-  data,
-}) => {
+const FunctionalAnnotations: React.FC<
+  FunctionalAnnotationsProps
+> = ({ data }) => {
   if (!data || data.length === 0) {
     return <div>No computational predictions available.</div>;
   }
 
   const groupedFeatures: FeatureGroup[] = [
     {
-      groupName: "Variant Impact and Functional Significance",
+      groupName: "Gene and Transcript Information",
       features: [
-        { key: "cadd_phred", label: "CADD Phred" },
-        { key: "cadd_raw", label: "CADD Raw" },
-        { key: "sift_prediction", label: "SIFT Prediction" },
-        { key: "sift_score", label: "SIFT Score" },
-        { key: "polyphen_prediction", label: "PolyPhen Prediction" },
-        { key: "polyphen_score", label: "PolyPhen Score" },
-        { key: "conservation", label: "Conservation" },
+        { key: "transcript_id", label: "Transcript ID" },
+        { key: "gene_symbol", label: "Gene Symbol" },
+        { key: "gene_id", label: "Gene ID" },
+        { key: "biotype", label: "Biotype" },
+        { key: "canonical", label: "Canonical" },
+        { key: "appris", label: "APPRIS" },
+        { key: "tsl", label: "TSL" },
       ],
-      color: "bg-yellow-50",
+      color: "bg-table-blue",
     },
     {
-      groupName: "Location Information",
+      groupName: "Consequence Terms",
       features: [
-        { key: "location", label: "Location" },
-        { key: "distance", label: "Distance" },
-        { key: "strand", label: "Strand" },
+        { key: "consequence_terms", label: "Consequence Terms" },
+        { key: "impact", label: "Impact" },
       ],
-      color: "bg-red-50",
+      color: "bg-table-green",
     },
   ];
 
@@ -60,7 +59,7 @@ const VariantComputationalPrediction: React.FC<VariantVariantComputationalPredic
   );
 
   return (
-    <div className="overflow-auto max-w-full max-h-[500px] overflow-y-auto mt-10">
+    <div className="max-w-full overflow-y-auto mt-10">
       <Table>
         <thead>
           {/* Group Headers */}
@@ -69,7 +68,7 @@ const VariantComputationalPrediction: React.FC<VariantVariantComputationalPredic
               <TableHead
                 key={group.groupName}
                 colSpan={group.features.length}
-                className={`text-center ${group.color} border-2 border-border text-text-primary`}
+                className={`text-center ${group.color} border-2 text-text-primary border-background`}
               >
                 {group.groupName}
               </TableHead>
@@ -80,7 +79,7 @@ const VariantComputationalPrediction: React.FC<VariantVariantComputationalPredic
             {allFeatures.map((feature) => (
               <TableHead
                 key={feature.key}
-                className={`${feature.color} border-2 border-border text-text-primary`}
+                className={`${feature.color} border-2 border-background text-text-primary`}
               >
                 {feature.label}
               </TableHead>
@@ -102,7 +101,7 @@ const VariantComputationalPrediction: React.FC<VariantVariantComputationalPredic
                 return (
                   <TableCell
                     key={feature.key}
-                    className={`${feature.color} border border-border text-text-secondary`}
+                    className={`${feature.color} border-2 border-background text-text-secondary`}
                   >
                     {value !== undefined && value !== null && value !== ""
                       ? value
@@ -118,4 +117,4 @@ const VariantComputationalPrediction: React.FC<VariantVariantComputationalPredic
   );
 };
 
-export default VariantComputationalPrediction;
+export default FunctionalAnnotations;

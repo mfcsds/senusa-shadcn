@@ -61,7 +61,7 @@ export default function VariantReportPage() {
     try {
       setLoading(true);
       const fetchedVariants = await fetchVariantReport();
-      setVarReports(fetchedVariants);
+      setFilteredVariants(fetchedVariants);
     } catch (error) {
       console.error("Failed to fetch variant reports:", error);
     } finally {

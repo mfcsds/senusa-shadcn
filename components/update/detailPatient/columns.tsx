@@ -10,7 +10,7 @@ export const columns: ColumnDef<VariantRawData>[] = [
     accessorKey: "hgvs",
     header: ({ column }) => (
       <Button
-        variant={"iconPrimary"}
+        variant={"icon"}
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         label="Hgvs"
         icon={<ArrowUpDown className="w-5 h-5" />}
@@ -21,7 +21,7 @@ export const columns: ColumnDef<VariantRawData>[] = [
     accessorKey: "chrom",
     header: ({ column }) => (
       <Button
-        variant={"iconPrimary"}
+        variant={"icon"}
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         label="Chrom"
         icon={<ArrowUpDown className="w-5 h-5" />}
@@ -32,7 +32,7 @@ export const columns: ColumnDef<VariantRawData>[] = [
     accessorKey: "pos",
     header: ({ column }) => (
       <Button
-        variant={"iconPrimary"}
+        variant={"icon"}
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         label="Pos"
         icon={<ArrowUpDown className="w-5 h-5" />}
@@ -43,7 +43,7 @@ export const columns: ColumnDef<VariantRawData>[] = [
     accessorKey: "id_var",
     header: ({ column }) => (
       <Button
-        variant={"iconPrimary"}
+        variant={"icon"}
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         label="Id"
         icon={<ArrowUpDown className="w-5 h-5" />}
@@ -54,7 +54,7 @@ export const columns: ColumnDef<VariantRawData>[] = [
     accessorKey: "ref",
     header: ({ column }) => (
       <Button
-        variant={"iconPrimary"}
+        variant={"icon"}
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         label="Ref"
         icon={<ArrowUpDown className="w-5 h-5" />}
@@ -65,7 +65,7 @@ export const columns: ColumnDef<VariantRawData>[] = [
     accessorKey: "alt",
     header: ({ column }) => (
       <Button
-        variant={"iconPrimary"}
+        variant={"icon"}
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         label="Alt"
         icon={<ArrowUpDown className="w-5 h-5" />}
@@ -76,7 +76,7 @@ export const columns: ColumnDef<VariantRawData>[] = [
     accessorKey: "qual",
     header: ({ column }) => (
       <Button
-        variant={"iconPrimary"}
+        variant={"icon"}
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         label="Qual"
         icon={<ArrowUpDown className="w-5 h-5" />}
@@ -87,7 +87,7 @@ export const columns: ColumnDef<VariantRawData>[] = [
     accessorKey: "info",
     header: ({ column }) => (
       <Button
-        variant={"iconPrimary"}
+        variant={"icon"}
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         label="Info"
         icon={<ArrowUpDown className="w-5 h-5" />}
@@ -98,7 +98,7 @@ export const columns: ColumnDef<VariantRawData>[] = [
     accessorKey: "filter",
     header: ({ column }) => (
       <Button
-        variant={"iconPrimary"}
+        variant={"icon"}
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         label="Filter"
         icon={<ArrowUpDown className="w-5 h-5" />}

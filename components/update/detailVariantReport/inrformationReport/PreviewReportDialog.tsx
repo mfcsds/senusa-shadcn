@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/update/dialog/Dialog";
-import { ClipboardPlus, Building2 } from "lucide-react";
+import { Eye, Building2 } from "lucide-react";
 import Button from "@/components/update/button/Button";
 import {
   Table,
@@ -18,24 +18,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/update/ui/table";
-import { generateClient } from "aws-amplify/api";
 import { Amplify } from "aws-amplify";
 import config from "@/src/amplifyconfiguration.json";
-import { getPatient } from "@/src/graphql/queries";
-import { getVariantReport } from "@/src/graphql/queries";
-
 import {
-  Conclusion,Patient
-  ,
+  Conclusion,
   Recommendation,
   SelectedVariant,
-  VariantInterpretation,
-  VariantReportData,
 } from "@/utils/object";
-
-import { listSelectedVariants } from "@/src/graphql/queries";
-import { listVariantInterpretations } from "@/src/graphql/queries";
-import { listRecommendations, listConclusions } from "@/src/graphql/queries";
 
 Amplify.configure(config);
 
@@ -60,6 +49,7 @@ const PreviewReportDialog: React.FC<PreviewReportProops> = ({
           label="Preview Report"
           variant="underlinePrimary"
           size="large"
+          icon={<Eye className="w-4 h-4" />}
         />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[80%] max-h-[90%] overflow-y-auto bg-foreground">
