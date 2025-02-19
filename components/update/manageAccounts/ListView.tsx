@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";import { Progress } from "@/c
 import Button from "@/components/update/button/Button";
 import { HospitalIcon, Eye, Trash2 } from "lucide-react";
 import { Institution } from "@/utils/object"
-import { removeInstitution, fetchInstitutions } from "@/hooks/useAccounts";
 import { useToast } from "@/components/ui/use-toast";
 import {
   AlertDialog,
@@ -18,6 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/update/dialog/AlertDialog";
 import { useRouter } from "next/navigation";
+import { removeInstitution, fetchInstitutions, removeUserByInstitutionId, fetchUserByInstitutionId } from "@/hooks/useAccounts";
 
 interface ListViewProps {
   intialInstitution: Institution[];
@@ -30,9 +30,18 @@ const ListView: React.FC<ListViewProps> = ({ intialInstitution }) => {
 
   const handleDelete = async (id: string) => {
       try {
+        const data = await fetchUserByInstitutionId(id);
+        console.log(data);
+        console.log(id);
         await removeInstitution(id);
-        const updatedPatients = await fetchInstitutions();
-        setInstitutionsList(updatedPatients);
+        await Promise.all(
+          data.map(async (user) => {
+            await removeUserByInstitutionId(user.id);
+            console.log("Removed user from institution");
+          })
+        );
+        const updateInstitution = await fetchInstitutions();
+        setInstitutionsList(updateInstitution);
         toast({
           title: "Delete Successfully",
           description: "Account Institutions has been deleted successfully.",

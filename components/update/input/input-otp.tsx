@@ -13,7 +13,7 @@ const InputOTP = React.forwardRef<
   <OTPInput
     ref={ref}
     containerClassName={cn(
-      "flex items-center gap-2 has-[:disabled]:opacity-50",
+      "flex items-center gap-1 has-[:disabled]:opacity-50",
       containerClassName
     )}
     className={cn("disabled:cursor-not-allowed", className)}
@@ -26,7 +26,7 @@ const InputOTPGroup = React.forwardRef<
   React.ElementRef<"div">,
   React.ComponentPropsWithoutRef<"div">
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("flex items-center gap-2", className)} {...props} />
+  <div ref={ref} className={cn("flex items-center gap-1", className)} {...props} />
 ))
 InputOTPGroup.displayName = "InputOTPGroup"
 
@@ -41,8 +41,8 @@ const InputOTPSlot = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "relative flex h-10 w-10 items-center justify-center border-2 border-blue-secondary text-md text-text-primary transition-all first:rounded-l-md  last:rounded-r-md",
-        isActive && "z-10 ring ring-blue-primary ring-offset-background",
+        "relative flex h-8 w-8 items-center justify-center rounded-md border-2 border-border text-sm font-semibold text-text-primary transition-all first:rounded-l-md last:rounded-r-md bg-foreground shadow-sm",
+        isActive && "z-10 border-blue-primary bg-background",
         className
       )}
       {...props}
@@ -50,7 +50,7 @@ const InputOTPSlot = React.forwardRef<
       {char}
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="h-4 w-px animate-caret-blink bg-foreground duration-1000" />
+          <div className="h-3 w-px animate-caret-blink  duration-1000" />
         </div>
       )}
     </div>
@@ -62,7 +62,7 @@ const InputOTPSeparator = React.forwardRef<
   React.ElementRef<"div">,
   React.ComponentPropsWithoutRef<"div">
 >(({ ...props }, ref) => (
-  <div ref={ref} role="separator" {...props}>
+  <div ref={ref} role="separator" className="mx-1 text-blue-primary" {...props}>
     <Dot />
   </div>
 ))

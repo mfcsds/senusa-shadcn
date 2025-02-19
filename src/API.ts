@@ -2,20 +2,28 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreatePatientHistoryDiseaseInput = {
+export type CreateUserNotificationsInput = {
   id?: string | null,
+  user_id?: string | null,
+  institutionID?: string | null,
+  message?: string | null,
+  id_fromuser?: string | null,
+  id_report?: string | null,
+  markasread?: boolean | null,
   id_patient?: string | null,
-  hpo_code?: string | null,
-  hpo_desc?: string | null,
 };
 
-export type ModelPatientHistoryDiseaseConditionInput = {
+export type ModelUserNotificationsConditionInput = {
+  user_id?: ModelStringInput | null,
+  institutionID?: ModelStringInput | null,
+  message?: ModelStringInput | null,
+  id_fromuser?: ModelStringInput | null,
+  id_report?: ModelStringInput | null,
+  markasread?: ModelBooleanInput | null,
   id_patient?: ModelStringInput | null,
-  hpo_code?: ModelStringInput | null,
-  hpo_desc?: ModelStringInput | null,
-  and?: Array< ModelPatientHistoryDiseaseConditionInput | null > | null,
-  or?: Array< ModelPatientHistoryDiseaseConditionInput | null > | null,
-  not?: ModelPatientHistoryDiseaseConditionInput | null,
+  and?: Array< ModelUserNotificationsConditionInput | null > | null,
+  or?: Array< ModelUserNotificationsConditionInput | null > | null,
+  not?: ModelUserNotificationsConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
 };
@@ -58,6 +66,60 @@ export type ModelSizeInput = {
   ge?: number | null,
   gt?: number | null,
   between?: Array< number | null > | null,
+};
+
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
+export type UserNotifications = {
+  __typename: "UserNotifications",
+  id: string,
+  user_id?: string | null,
+  institutionID?: string | null,
+  message?: string | null,
+  id_fromuser?: string | null,
+  id_report?: string | null,
+  markasread?: boolean | null,
+  id_patient?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateUserNotificationsInput = {
+  id: string,
+  user_id?: string | null,
+  institutionID?: string | null,
+  message?: string | null,
+  id_fromuser?: string | null,
+  id_report?: string | null,
+  markasread?: boolean | null,
+  id_patient?: string | null,
+};
+
+export type DeleteUserNotificationsInput = {
+  id: string,
+};
+
+export type CreatePatientHistoryDiseaseInput = {
+  id?: string | null,
+  id_patient?: string | null,
+  hpo_code?: string | null,
+  hpo_desc?: string | null,
+};
+
+export type ModelPatientHistoryDiseaseConditionInput = {
+  id_patient?: ModelStringInput | null,
+  hpo_code?: ModelStringInput | null,
+  hpo_desc?: ModelStringInput | null,
+  and?: Array< ModelPatientHistoryDiseaseConditionInput | null > | null,
+  or?: Array< ModelPatientHistoryDiseaseConditionInput | null > | null,
+  not?: ModelPatientHistoryDiseaseConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type PatientHistoryDisease = {
@@ -155,13 +217,6 @@ export type ModelAcmgAnnotationConditionInput = {
   not?: ModelAcmgAnnotationConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
-};
-
-export type ModelBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
 };
 
 export type AcmgAnnotation = {
@@ -1214,6 +1269,28 @@ export type DeleteInstitutionInput = {
   id: string,
 };
 
+export type ModelUserNotificationsFilterInput = {
+  id?: ModelIDInput | null,
+  user_id?: ModelStringInput | null,
+  institutionID?: ModelStringInput | null,
+  message?: ModelStringInput | null,
+  id_fromuser?: ModelStringInput | null,
+  id_report?: ModelStringInput | null,
+  markasread?: ModelBooleanInput | null,
+  id_patient?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelUserNotificationsFilterInput | null > | null,
+  or?: Array< ModelUserNotificationsFilterInput | null > | null,
+  not?: ModelUserNotificationsFilterInput | null,
+};
+
+export type ModelUserNotificationsConnection = {
+  __typename: "ModelUserNotificationsConnection",
+  items:  Array<UserNotifications | null >,
+  nextToken?: string | null,
+};
+
 export type ModelPatientHistoryDiseaseFilterInput = {
   id?: ModelIDInput | null,
   id_patient?: ModelStringInput | null,
@@ -1619,15 +1696,19 @@ export type ModelInstitutionConnection = {
   nextToken?: string | null,
 };
 
-export type ModelSubscriptionPatientHistoryDiseaseFilterInput = {
+export type ModelSubscriptionUserNotificationsFilterInput = {
   id?: ModelSubscriptionIDInput | null,
+  user_id?: ModelSubscriptionStringInput | null,
+  institutionID?: ModelSubscriptionStringInput | null,
+  message?: ModelSubscriptionStringInput | null,
+  id_fromuser?: ModelSubscriptionStringInput | null,
+  id_report?: ModelSubscriptionStringInput | null,
+  markasread?: ModelSubscriptionBooleanInput | null,
   id_patient?: ModelSubscriptionStringInput | null,
-  hpo_code?: ModelSubscriptionStringInput | null,
-  hpo_desc?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionPatientHistoryDiseaseFilterInput | null > | null,
-  or?: Array< ModelSubscriptionPatientHistoryDiseaseFilterInput | null > | null,
+  and?: Array< ModelSubscriptionUserNotificationsFilterInput | null > | null,
+  or?: Array< ModelSubscriptionUserNotificationsFilterInput | null > | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -1658,6 +1739,22 @@ export type ModelSubscriptionStringInput = {
   beginsWith?: string | null,
   in?: Array< string | null > | null,
   notIn?: Array< string | null > | null,
+};
+
+export type ModelSubscriptionBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+};
+
+export type ModelSubscriptionPatientHistoryDiseaseFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  id_patient?: ModelSubscriptionStringInput | null,
+  hpo_code?: ModelSubscriptionStringInput | null,
+  hpo_desc?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionPatientHistoryDiseaseFilterInput | null > | null,
+  or?: Array< ModelSubscriptionPatientHistoryDiseaseFilterInput | null > | null,
 };
 
 export type ModelSubscriptionAcmgAnnotationFilterInput = {
@@ -1698,11 +1795,6 @@ export type ModelSubscriptionAcmgAnnotationFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionAcmgAnnotationFilterInput | null > | null,
   or?: Array< ModelSubscriptionAcmgAnnotationFilterInput | null > | null,
-};
-
-export type ModelSubscriptionBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
 };
 
 export type ModelSubscriptionFamilyHistoryDiseaseFilterInput = {
@@ -1975,6 +2067,69 @@ export type ModelSubscriptionInstitutionFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionInstitutionFilterInput | null > | null,
   or?: Array< ModelSubscriptionInstitutionFilterInput | null > | null,
+};
+
+export type CreateUserNotificationsMutationVariables = {
+  input: CreateUserNotificationsInput,
+  condition?: ModelUserNotificationsConditionInput | null,
+};
+
+export type CreateUserNotificationsMutation = {
+  createUserNotifications?:  {
+    __typename: "UserNotifications",
+    id: string,
+    user_id?: string | null,
+    institutionID?: string | null,
+    message?: string | null,
+    id_fromuser?: string | null,
+    id_report?: string | null,
+    markasread?: boolean | null,
+    id_patient?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateUserNotificationsMutationVariables = {
+  input: UpdateUserNotificationsInput,
+  condition?: ModelUserNotificationsConditionInput | null,
+};
+
+export type UpdateUserNotificationsMutation = {
+  updateUserNotifications?:  {
+    __typename: "UserNotifications",
+    id: string,
+    user_id?: string | null,
+    institutionID?: string | null,
+    message?: string | null,
+    id_fromuser?: string | null,
+    id_report?: string | null,
+    markasread?: boolean | null,
+    id_patient?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteUserNotificationsMutationVariables = {
+  input: DeleteUserNotificationsInput,
+  condition?: ModelUserNotificationsConditionInput | null,
+};
+
+export type DeleteUserNotificationsMutation = {
+  deleteUserNotifications?:  {
+    __typename: "UserNotifications",
+    id: string,
+    user_id?: string | null,
+    institutionID?: string | null,
+    message?: string | null,
+    id_fromuser?: string | null,
+    id_report?: string | null,
+    markasread?: boolean | null,
+    id_patient?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
 };
 
 export type CreatePatientHistoryDiseaseMutationVariables = {
@@ -3198,6 +3353,52 @@ export type DeleteInstitutionMutation = {
   } | null,
 };
 
+export type GetUserNotificationsQueryVariables = {
+  id: string,
+};
+
+export type GetUserNotificationsQuery = {
+  getUserNotifications?:  {
+    __typename: "UserNotifications",
+    id: string,
+    user_id?: string | null,
+    institutionID?: string | null,
+    message?: string | null,
+    id_fromuser?: string | null,
+    id_report?: string | null,
+    markasread?: boolean | null,
+    id_patient?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListUserNotificationsQueryVariables = {
+  filter?: ModelUserNotificationsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListUserNotificationsQuery = {
+  listUserNotifications?:  {
+    __typename: "ModelUserNotificationsConnection",
+    items:  Array< {
+      __typename: "UserNotifications",
+      id: string,
+      user_id?: string | null,
+      institutionID?: string | null,
+      message?: string | null,
+      id_fromuser?: string | null,
+      id_report?: string | null,
+      markasread?: boolean | null,
+      id_patient?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetPatientHistoryDiseaseQueryVariables = {
   id: string,
 };
@@ -4061,6 +4262,66 @@ export type ListInstitutionsQuery = {
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
+  } | null,
+};
+
+export type OnCreateUserNotificationsSubscriptionVariables = {
+  filter?: ModelSubscriptionUserNotificationsFilterInput | null,
+};
+
+export type OnCreateUserNotificationsSubscription = {
+  onCreateUserNotifications?:  {
+    __typename: "UserNotifications",
+    id: string,
+    user_id?: string | null,
+    institutionID?: string | null,
+    message?: string | null,
+    id_fromuser?: string | null,
+    id_report?: string | null,
+    markasread?: boolean | null,
+    id_patient?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateUserNotificationsSubscriptionVariables = {
+  filter?: ModelSubscriptionUserNotificationsFilterInput | null,
+};
+
+export type OnUpdateUserNotificationsSubscription = {
+  onUpdateUserNotifications?:  {
+    __typename: "UserNotifications",
+    id: string,
+    user_id?: string | null,
+    institutionID?: string | null,
+    message?: string | null,
+    id_fromuser?: string | null,
+    id_report?: string | null,
+    markasread?: boolean | null,
+    id_patient?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteUserNotificationsSubscriptionVariables = {
+  filter?: ModelSubscriptionUserNotificationsFilterInput | null,
+};
+
+export type OnDeleteUserNotificationsSubscription = {
+  onDeleteUserNotifications?:  {
+    __typename: "UserNotifications",
+    id: string,
+    user_id?: string | null,
+    institutionID?: string | null,
+    message?: string | null,
+    id_fromuser?: string | null,
+    id_report?: string | null,
+    markasread?: boolean | null,
+    id_patient?: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 

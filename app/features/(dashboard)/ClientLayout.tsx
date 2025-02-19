@@ -18,7 +18,7 @@ export default function ClientLayout({
         const { username } = await getCurrentUser();
         console.log("Current user is:", username);
       } catch (err) {
-        router.push("/features/login");
+        router.push("/");
       } finally {
         setLoading(false);
       }

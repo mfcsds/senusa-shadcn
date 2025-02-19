@@ -9,7 +9,7 @@ import { AcmgCriteria } from "@/utils/object";
 import axios from "axios";
 import VariantQueryInformation from "@/components/update/variantQuery/VariantQueryInformation";
 
-export default function VariantReportPage() {
+export default function VariantQueryComponent() {
   const [variant, setVariant] = useState("");
   const [theACMG, setACMG] = useState<AcmgCriteria>();
   const [variantData, setVariantData] = useState<any>(null);

@@ -23,8 +23,9 @@ import { Progress } from "@/components/update/progress/Progress";
 import CreateUserDialog from "@/components/update/detailAccount/CreateUserDialog";
 import TableDetailUser from "@/components/update/detailAccount/TableDetailUser";
 import { fetchDetailInstitution } from "@/hooks/useAccounts";
-import { Institution } from "@/utils/object";
+import { Institution, DataUser } from "@/utils/object";
 import Spinner from "@/components/update/ui/Spinner";
+import { fetchUserByInstitutionId } from "@/hooks/useAccounts";
 
 interface PageProps {
   params: Promise<{
@@ -37,8 +38,10 @@ export default function DetailAccountsPage({ params }: PageProps) {
   const [id, setId] = useState<string | null>(null);
   const router = useRouter();
   const [institutions, setInstitutions] = useState<Institution[]>([]);
-  const [loading, setLoading] = useState(true);
-
+  const [listUsers, setListUsers] = useState<DataUser[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+  
   useEffect(() => {
     const resolveParams = async () => {
       try {
@@ -55,6 +58,22 @@ export default function DetailAccountsPage({ params }: PageProps) {
     resolveParams();
   }, [params]);
 
+  const fetchLoadAccountsUsers = async (): Promise<void> => {
+    const loadInstitutions = async () => {
+      try {
+        setLoadingUsers(true); 
+        const data = await fetchUserByInstitutionId(id!);;
+        setListUsers(data);
+      } catch (error) {
+        console.error("Error loading users:", error);
+      } finally {
+        setLoadingUsers(false); 
+      }
+    };
+
+    loadInstitutions();
+    };
+
   useEffect(() => {
     if (!id) return;
 
@@ -63,6 +82,7 @@ export default function DetailAccountsPage({ params }: PageProps) {
         setLoading(true);
         const data = await fetchDetailInstitution(id);
         setInstitutions(data);
+        fetchLoadAccountsUsers();
       } catch (error) {
         console.error("Error loading institutions:", error);
       } finally {
@@ -73,17 +93,6 @@ export default function DetailAccountsPage({ params }: PageProps) {
     loadInstitutions();
   }, [id]);
 
-  const data = [
-    { id: "1", fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-    { id: "2",fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-    { id: "3",fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-    { id: "4",fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-    { id: "5",fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-    { id: "6",fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-    { id: "7",fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-    { id: "8",fullName: "Ardian Saputra", userLevel: "level 1", userRole: "Admin Lab", email: "admin@gmailcom", phone: "082114494926" },
-  ];
-
   return (
     <div className="p-8 min-h-screen">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8">
@@ -93,7 +102,6 @@ export default function DetailAccountsPage({ params }: PageProps) {
                 variant="iconPrimary"
                 size="large"
                 icon={<ArrowLeft className="w-8 h-8" />}
-                className="bg-foreground"
                 onClick={() => {router.push(`/features/manage-accounts`)}}
               />
             <h1 className="text-2xl font-semibold text-text-primary">
@@ -107,13 +115,14 @@ export default function DetailAccountsPage({ params }: PageProps) {
           </div>
         </div>
 
-        <CreateUserDialog />
+        <CreateUserDialog onUpdateAccountsUser={fetchLoadAccountsUsers} institution_id={id!}/>
       </div>
 
       {loading ? (
-        <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
-        Loading
-      </p>
+        <Spinner />
+      //   <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
+      //   Loading
+      // </p>
       ) : (
         institutions.map((institution) => (
           <div key={institution.id} className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -253,7 +262,15 @@ export default function DetailAccountsPage({ params }: PageProps) {
           </div>
         ))
       )}
-      <TableDetailUser data={data}/>
+
+{loading ? (
+        <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
+        Loading
+      </p>
+      ) : (
+        <TableDetailUser listUsers={listUsers}/>
+      )}
+      
     </div>
   );
 }

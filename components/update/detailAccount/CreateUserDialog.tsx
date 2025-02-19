@@ -18,6 +18,8 @@ import {
   RectangleEllipsis,
   User,
   Phone,
+  EyeOff,
+  Eye,
   Save,
 } from "lucide-react";
 import {
@@ -27,12 +29,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/update/ui/select";
+import { signUp } from "aws-amplify/auth";
+import { useToast } from "@/components/ui/use-toast";
 import Button from "@/components/update/button/Button";
 import Input from "@/components/update/input/Input";
-import Dropdown from "@/components/update/input/Dropdown";
+import { addNewUser } from "@/hooks/useAccounts";
 
-const CreateUserDialog: React.FC = () => {
-  const [institutionID, setInstitutionID] = useState("");
+const CreateUserDialog = ({
+  institution_id,
+  onUpdateAccountsUser,
+}: {
+  institution_id: string;
+  onUpdateAccountsUser: () => Promise<void>;
+}) => {
+  const { toast } = useToast();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [institutionID, setInstitutionID] = useState(institution_id);
   const [levelAccount, setLevelAccount] = useState("");
   const [roleAccount, setRoleAccount] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -40,28 +52,144 @@ const CreateUserDialog: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [errorLevelAccount, setErrorLevelAccount] = useState("");
+  const [errorRoleAccount, setErrorRoleAccount] = useState("");
+  const [errorFirstName, setErrorFirstName] = useState("");
+  const [errorLastName, setErrorLastName] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
+  const [errorPhoneNumber, setErrorPhoneNumber] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleCreateUser = async (
+    e: React.FormEvent,
+    onUpdateAccountsUser: () => Promise<void>
+  ) => {
     e.preventDefault();
-    console.log({ institutionID });
-  };
+    try {
+      if (!levelAccount) {
+        setErrorLevelAccount("Select user level account.");
+        return;
+      }
+      if (levelAccount) {
+        setErrorLevelAccount("");
+      }
+      if (!roleAccount.trim()) {
+        setErrorRoleAccount("Select user role account.");
+        return;
+      }
+      if (roleAccount) {
+        setErrorRoleAccount("");
+      }
+      if (!firstName.trim()) {
+        setErrorFirstName("Please enter first name.");
+        return;
+      }
+      if (firstName.trim()) {
+        setErrorFirstName("");
+      }
+      if (!lastName.trim()) {
+        setErrorLastName("Please enter last name.");
+        return;
+      }
+      if (lastName.trim()) {
+        setErrorLastName("");
+      }
+      if (!email.trim()) {
+        setErrorEmail("Please enter email institution.");
+        return;
+      }
+      if (email.trim()) {
+        setErrorEmail("");
+      }
+      if (!password.trim()) {
+        setErrorPassword("Please enter password institution.");
+        return;
+      }
+      if (password.trim()) {
+        setErrorPassword("");
+      }
+      if (!phoneNumber.trim()) {
+        setErrorPhoneNumber("Please enter phone number institution.");
+        return;
+      }
+      if (phoneNumber.trim()) {
+        setErrorPhoneNumber("");
+      }
+      try {
+        const { isSignUpComplete, userId, nextStep } = await signUp({
+          username: email,
+          password: password,
+        });
+        const newUser = {
+          id: userId ?? "",
+          institutionID: institution_id,
+          first_name: firstName,
+          last_name: lastName,
+          role: roleAccount,
+          status: 1,
+          level: Number(levelAccount),
+          category: "Admin",
+          specialty: "Administrator",
+          email: email,
+          phone_number: phoneNumber,
+        };
   
-  const userLevel = [
-    { label: "Level 1", value: "Level 1" },
-    { label: "Level 2", value: "Level 2" },
-  ];
+        try {
+          await addNewUser(newUser);
+          console.log(newUser);
+          toast({
+            title: "Success Add new account user",
+            description: "Account user added successfully",
+          });
+          await onUpdateAccountsUser();
+        } catch (error) {
+          toast({
+            variant: "destructive",
+            title: "Failed to add new account user",
+            description: "Failed to add new account user. Please try again.",
+          });
+        }
+        handleCancelDialog();
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Failed to add new account user",
+          description: "Email has been used.",
+        });
+        handleCancelDialog();
+        return;
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const userRole = [
-    { label: "Admin Lab", value: "Admin Lab" },
-    { label: "User Lab", value: "User Lab" },
-    { label: "Bioinformatician", value: "Bioinformatician" },
-    { label: "Head Lab", value: "Head Lab" },
-    { label: "Genetic Cousellor", value: "Genetic Cousellor" },
-    { label: "Clinical Pathology", value: "Clinical Pathology" },
-  ];
+  const handleCancelDialog = () => {
+    setOpenDialog(false);
+    setLevelAccount("");
+    setRoleAccount("");
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPassword("");
+    setPhoneNumber("");
+    setErrorLevelAccount("");
+    setErrorRoleAccount("");
+    setErrorFirstName("");
+    setErrorLastName("");
+    setErrorEmail("");
+    setErrorPassword("");
+    setErrorPhoneNumber("");
+  };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
 
   return (
-    <Dialog>
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
         <Button
           label="Add New User"
@@ -79,7 +207,10 @@ const CreateUserDialog: React.FC = () => {
           </DialogTitle>
           <DialogDescription>User account registration.</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="grid gap-4 mt-4">
+        <form
+          onSubmit={(e) => handleCreateUser(e, onUpdateAccountsUser)}
+          className="grid gap-4 mt-4"
+        >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div>
               <div className="flex items-center space-x-2">
@@ -92,14 +223,15 @@ const CreateUserDialog: React.FC = () => {
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
-                A unique, auto-generated identifier for the institution,
-                typically read-only.
+                A unique, auto-generated identifier your institution, typically
+                read-only.
               </p>
               <Input
                 id="institutionID"
                 type="text"
-                value={institutionID}
-                onChange={(e) => setInstitutionID(e.target.value)}
+                value={institution_id}
+                disabled={true}
+                onChange={(e) => setInstitutionID(institution_id)}
                 placeholder="Enter Institutin ID"
               />
             </div>
@@ -117,18 +249,20 @@ const CreateUserDialog: React.FC = () => {
                 Level 1 indicate the limited access, while the Level 2 provide
                 the user to full access.
               </p>
-              <Select
-                value={levelAccount}
-                onValueChange={setLevelAccount}
-              >
+              <Select value={levelAccount} onValueChange={setLevelAccount}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Subscription Type" />
+                  <SelectValue placeholder="Select User Level" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Level 1">Level 1</SelectItem>
-                  <SelectItem value="Level 2">Level 2</SelectItem>
+                  <SelectItem value="1">Level 1</SelectItem>
+                  <SelectItem value="2">Level 2</SelectItem>
                 </SelectContent>
               </Select>
+              {errorLevelAccount && (
+                <p className="text-red-primary text-xs mt-2">
+                  {errorLevelAccount}
+                </p>
+              )}
             </div>
             <div>
               <div className="flex items-center space-x-2">
@@ -144,22 +278,30 @@ const CreateUserDialog: React.FC = () => {
                 Select the role assigned to the user, such as Genetic Counselor
                 to restrict access.
               </p>
-              <Select
-                value={roleAccount}
-                onValueChange={setRoleAccount}
-              >
+              <Select value={roleAccount} onValueChange={setRoleAccount}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Subscription Type" />
+                  <SelectValue placeholder="Select User Role" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Admin Lab">Admin Lab</SelectItem>
                   <SelectItem value="User Lab">User Lab</SelectItem>
-                  <SelectItem value="Bioinformatician">Bioinformatician</SelectItem>
+                  <SelectItem value="Bioinformatician">
+                    Bioinformatician
+                  </SelectItem>
                   <SelectItem value="Head Lab">Head Lab</SelectItem>
-                  <SelectItem value="Genetic Cousellor">Genetic Cousellor</SelectItem>
-                  <SelectItem value="Clinical Pathology">Clinical Pathology</SelectItem>
+                  <SelectItem value="Genetic Cousellor">
+                    Genetic Cousellor
+                  </SelectItem>
+                  <SelectItem value="Clinical Pathology">
+                    Clinical Pathology
+                  </SelectItem>
                 </SelectContent>
               </Select>
+              {errorRoleAccount && (
+                <p className="text-red-primary text-xs mt-2">
+                  {errorRoleAccount}
+                </p>
+              )}
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -183,6 +325,11 @@ const CreateUserDialog: React.FC = () => {
                 onChange={(e) => setFirstName(e.target.value)}
                 placeholder="Enter First Name"
               />
+              {errorFirstName && (
+                <p className="text-red-primary text-xs mt-2">
+                  {errorFirstName}
+                </p>
+              )}
             </div>
             <div>
               <div className="flex items-center space-x-2 mt-2">
@@ -204,6 +351,9 @@ const CreateUserDialog: React.FC = () => {
                 onChange={(e) => setLastName(e.target.value)}
                 placeholder="Enter Last Name"
               />
+              {errorLastName && (
+                <p className="text-red-primary text-xs mt-2">{errorLastName}</p>
+              )}
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -227,6 +377,9 @@ const CreateUserDialog: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter Email"
               />
+              {errorEmail && (
+                <p className="text-red-primary text-xs mt-2">{errorEmail}</p>
+              )}
             </div>
             <div>
               <div className="flex items-center space-x-2 mt-2">
@@ -241,13 +394,30 @@ const CreateUserDialog: React.FC = () => {
               <p className="text-xs text-text-secondary mb-4">
                 The password of the primary contact’s account access.
               </p>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter Institutin"
-              />
+              <div className="relative w-full sm:w-auto">
+                <Input
+                  id="password"
+                  type={isPasswordVisible ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter Institutin"
+                />
+                <Button
+                  variant="iconPrimary"
+                  size="innerSize"
+                  onClick={togglePasswordVisibility}
+                  icon={
+                    isPasswordVisible ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )
+                  }
+                />
+              </div>
+              {errorPassword && (
+                <p className="text-red-primary text-xs mt-2">{errorPassword}</p>
+              )}
             </div>
             <div>
               <div className="flex items-center space-x-2 mt-2">
@@ -269,6 +439,11 @@ const CreateUserDialog: React.FC = () => {
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="Enter Phone Number"
               />
+              {errorPhoneNumber && (
+                <p className="text-red-primary text-xs mt-2">
+                  {errorPhoneNumber}
+                </p>
+              )}
             </div>
           </div>
           <DialogFooter className="mt-6 mb-6 gap-4">
@@ -277,11 +452,13 @@ const CreateUserDialog: React.FC = () => {
               variant="outlineDanger"
               size="large"
               icon={<X className="w-4 h-4" />}
+              onClick={handleCancelDialog}
             />
             <Button
               label="Add New User"
               variant="outlineSecondary"
               size="large"
+              type="submit"
               icon={<Save className="w-4 h-4" />}
             />
           </DialogFooter>

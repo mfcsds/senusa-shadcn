@@ -19,6 +19,7 @@ import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
+  InputOTPSeparator
 } from "@/components/update/input/input-otp";
 
 Amplify.configure(config);
@@ -36,6 +37,10 @@ export default function LoginForm() {
     try {
       await resendSignUpCode({
         username: email,
+      });
+      toast({
+        title: "Verification Code has been sent to your email",
+        description: "Please check your inbox or spam folder to continue the verification process..",
       });
       console.log("Verification Code has been sent!");
     } catch (error) {
@@ -98,13 +103,16 @@ export default function LoginForm() {
           onChange={(value) => setCode(value)}
         >
           <InputOTPGroup>
-            <InputOTPSlot index={0}></InputOTPSlot>
-            <InputOTPSlot index={1}></InputOTPSlot>
-            <InputOTPSlot index={2}></InputOTPSlot>
-            <InputOTPSlot index={3}></InputOTPSlot>
-            <InputOTPSlot index={4}></InputOTPSlot>
-            <InputOTPSlot index={5}></InputOTPSlot>
-          </InputOTPGroup>
+        <InputOTPSlot index={0} />
+        <InputOTPSlot index={1} />
+        <InputOTPSlot index={2} />
+      </InputOTPGroup>
+      <InputOTPSeparator />
+      <InputOTPGroup>
+        <InputOTPSlot index={3} />
+        <InputOTPSlot index={4} />
+        <InputOTPSlot index={5} />
+      </InputOTPGroup>
         </InputOTP>
       </div>
       <div className="grid grid-cols-2 gap-6">

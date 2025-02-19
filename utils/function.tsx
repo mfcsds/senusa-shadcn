@@ -12,6 +12,16 @@ export function generatePatientID() {
   return patientID;
 }
 
+export function userStatus(counter: number) {
+  if (counter == 1) {
+    return "In verification";
+  } else if (counter == 2) {
+    return "Active";
+  } else if (counter == 3) {
+    return "Deactivated";
+  }
+}
+
 export function generateACMGID() {
   const characters = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let acmgID = "ACMG-";

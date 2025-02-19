@@ -25,6 +25,8 @@ export { default as RecommendationUpdateForm } from "./RecommendationUpdateForm"
 export { default as SelectedVariantCreateForm } from "./SelectedVariantCreateForm";
 export { default as SelectedVariantUpdateForm } from "./SelectedVariantUpdateForm";
 export { default as UserCreateForm } from "./UserCreateForm";
+export { default as UserNotificationsCreateForm } from "./UserNotificationsCreateForm";
+export { default as UserNotificationsUpdateForm } from "./UserNotificationsUpdateForm";
 export { default as UserUpdateForm } from "./UserUpdateForm";
 export { default as VariantCreateForm } from "./VariantCreateForm";
 export { default as VariantInterpretationCreateForm } from "./VariantInterpretationCreateForm";

@@ -8,6 +8,52 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getUserNotifications = /* GraphQL */ `query GetUserNotifications($id: ID!) {
+  getUserNotifications(id: $id) {
+    id
+    user_id
+    institutionID
+    message
+    id_fromuser
+    id_report
+    markasread
+    id_patient
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetUserNotificationsQueryVariables,
+  APITypes.GetUserNotificationsQuery
+>;
+export const listUserNotifications = /* GraphQL */ `query ListUserNotifications(
+  $filter: ModelUserNotificationsFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listUserNotifications(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      user_id
+      institutionID
+      message
+      id_fromuser
+      id_report
+      markasread
+      id_patient
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListUserNotificationsQueryVariables,
+  APITypes.ListUserNotificationsQuery
+>;
 export const getPatientHistoryDisease = /* GraphQL */ `query GetPatientHistoryDisease($id: ID!) {
   getPatientHistoryDisease(id: $id) {
     id

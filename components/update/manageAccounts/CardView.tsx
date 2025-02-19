@@ -44,10 +44,12 @@ const CardView: React.FC<CardViewProps> = ({ intialInstitution }) => {
       console.log(data);
       console.log(id);
       await removeInstitution(id);
-      // for (const user of data) {
-      //   await removeUserByInstitutionId(user.id);
-      //   console.log("Removed user from institution");
-      // }
+      await Promise.all(
+        data.map(async (user) => {
+          await removeUserByInstitutionId(user.id);
+          console.log("Removed user from institution");
+        })
+      );
       const updateInstitution = await fetchInstitutions();
       setInstitutionsList(updateInstitution);
       toast({
@@ -79,7 +81,7 @@ const CardView: React.FC<CardViewProps> = ({ intialInstitution }) => {
                   {institution.id}
                 </CardDescription>
                 <div className="border-2 text-primary border-primary px-2 py-1 rounded-lg text-sm w-auto text-center mt-3">
-                  {institution.accountStatus ? "Active" : "Inactive"}
+                  {institution.accountStatus ? "Active" : "Deactivated"}
                 </div>
               </div>
             </div>
@@ -115,7 +117,6 @@ const CardView: React.FC<CardViewProps> = ({ intialInstitution }) => {
             <Button
               label="View"
               variant="outlineSecondary"
-              size="medium"
               onClick={() =>
                 router.push(`/features/manage-accounts/${institution.id}`)
               }

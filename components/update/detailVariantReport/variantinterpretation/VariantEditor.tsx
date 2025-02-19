@@ -5,6 +5,8 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import Underline from "@tiptap/extension-underline";
 import StarterKit from "@tiptap/starter-kit";
 import Button from "@/components/update/button/Button";
+import { DividerVerticalIcon } from "@radix-ui/react-icons";
+import ButtonInviteUser from "@/components/update/button/ButtonInviteUser";
 import {
   Trash,
   UserPlus,
@@ -55,8 +57,10 @@ import {
   DialogFooter,
 } from "@/components/update/dialog/Dialog";
 import VariantInformationModal from "../selectVariant/VariantInformationModal";
-import { getSelectedVariant } from "@/src/graphql/queries";
+import { getSelectedVariant, getUser } from "@/src/graphql/queries";
 import { ButtonAdd } from "../../button/ButtonAdd";
+import { getCurrentUser } from "aws-amplify/auth";
+import { User } from "@/src/API";
 
 interface VariantEditorProops {
   variantData?: SelectedVariant;
@@ -68,10 +72,12 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
   onDeleteVariant,
 }) => {
   const client = generateClient();
+  const [user, setUser] = useState<User>();
   const { toast } = useToast();
   const [contentText, setContentText] = useState<string>(
     variantData?.text_interpretation ?? "<p>Start editing here...</p>"
   );
+  const [hasFetched, setHasFetched] = useState(false);
   const [acmg, setACMG] = useState<string>(variantData?.acmg ?? "");
   const [isEditableVariantEditor, setEditableVariantEditor] = useState(true);
 
@@ -86,6 +92,25 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
     editable: isEditableVariantEditor,
   });
 
+  const fetchCurrentUser = async () => {
+    try {
+      const { username, userId, signInDetails } = await getCurrentUser();
+      const result = await client.graphql({
+        query: getUser,
+        variables: { id: userId },
+      });
+      setHasFetched(true);
+
+      await setUser(result.data.getUser as User);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    if (!hasFetched) {
+      fetchCurrentUser();
+    }
+  });
+  
   useEffect(() => {
     const fetchVariantData = async () => {
       try {
@@ -108,12 +133,8 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
     fetchVariantData();
   }, [variantData]);
 
-  // ➊ Gunakan useEffect untuk memonitor perubahan pada variantData?.text_interpretation
   useEffect(() => {
     if (!editor) return;
-
-    // Jika text_interpretatio dari server berbeda dengan contentText saat ini
-    // maka update contentText dan isi editor
     if (
       variantData?.text_interpretation &&
       variantData.text_interpretation !== contentText
@@ -359,11 +380,10 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button
-                          variant="iconSecondary"
-                          size="md"
-                          icon={<UserPlus className="w-4 h-4" />}
-                        />
+                      <ButtonInviteUser
+                          user={user}
+                          variant_data={variantData}
+                        ></ButtonInviteUser>
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>Invite other user to provide analysis</p>
@@ -385,7 +405,7 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
                         <p>Save Current Analysis</p>
                       </TooltipContent>
                     </Tooltip>
-                  </TooltipProvider>
+                  </TooltipProvider>  
                   {/* Activate Delete */}
                   <AlertDialog>
                     <TooltipProvider>

@@ -61,7 +61,7 @@ interface EditTestingDialogProps {
           onClick={() => setOpenDialog(true)}
         />
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[40%] max-h-[90%] overflow-y-auto bg-foreground">
+      <DialogContent className="sm:max-w-[70%] max-h-[90%] overflow-y-auto bg-foreground">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <ClipboardPlus className="w-8 h-8 text-primary" />
@@ -85,6 +85,7 @@ interface EditTestingDialogProps {
             </p>
             <Textarea
               id="testingDesc"
+              className="w-full mt-4 border-2 border-border rounded-md h-[200px] text-text-secondary"
               value={testingDesc}
               onChange={(e) => setTestingDesc(e.target.value)}
               placeholder="Enter Test Description"

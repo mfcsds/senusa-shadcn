@@ -38,7 +38,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/update/ui/select";
-import { createInstitution, createUser } from "@/src/graphql/mutations";
 import { useToast } from "@/components/ui/use-toast";
 import {
   getDateNext,
@@ -46,7 +45,7 @@ import {
   getDateToday,
 } from "@/utils/DateHelperFunction";
 import { signUp } from "aws-amplify/auth";
-import { generateClient } from "aws-amplify/api";
+import { addNewUser, addNewInstitution } from "@/hooks/useAccounts";
 
 const CreateAccountDialog = ({
   onUpdateAccountsInstitutions,
@@ -67,8 +66,16 @@ const CreateAccountDialog = ({
   const [dueDate, setDueDate] = useState(getDateNextMonth());
   const [registrationDate, setRegistrationDate] = useState(getDateToday());
   const [prosesSubmit, setProcessSubmit] = useState(false);
+  const [errorInstitution, setErrorInstitution] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
+  const [errorContactName, setErrorContactName] = useState("");
+  const [errorPhoneNumber, setErrorPhoneNumber] = useState("");
+  const [errorAddress, setErrorAddress] = useState("");
+  const [errorStorageQuota, setErrorStorageQuota] = useState("");
+  const [errorSubscription, setErrorSubscription] = useState("");
+
   const { toast } = useToast();
-  const client = generateClient();
 
   const handleCancelDialog = () => {
     setOpenDialog(false);
@@ -83,6 +90,15 @@ const CreateAccountDialog = ({
     setSubscription("");
     setDueDate(getDateNextMonth());
     setRegistrationDate(getDateToday());
+    setErrorInstitution("");
+    setErrorEmail("");
+    setErrorPassword("");
+    setErrorContactName("");
+    setErrorPhoneNumber("");
+    setErrorAddress("");
+    setErrorStorageQuota("");
+    setErrorSubscription("");
+    setProcessSubmit(false);
   };
 
   const togglePasswordVisibility = () => {
@@ -108,82 +124,133 @@ const CreateAccountDialog = ({
   };
 
   const handleCreateUser = async (
-      e: React.FormEvent,
-      onUpdateAccountsInstitutions: () => Promise<void>
-    ) => {
-      e.preventDefault();
+    e: React.FormEvent,
+    onUpdateAccountsInstitutions: () => Promise<void>
+  ) => {
+    e.preventDefault();
     try {
-      setProcessSubmit(true); 
-      setInstitutionID(generateUserID());
-      const { isSignUpComplete, userId, nextStep } = await signUp({
-        username: email,
-        password: password,
-      });
-      const newUser = {
-        id: userId,
-        institutionID: institutionID,
-        name: contactName,
-        role_type: 2,
-        category: "Admin",
-        specialty: "Administrator",
-        email: email,
-      };
+      if (!institution.trim()) {
+        setErrorInstitution("Please enter institution.");
+        return;
+      }
+      if (institution.trim()) {
+        setErrorInstitution("");
+      }
+      if (!email.trim()) {
+        setErrorEmail("Please enter email institution.");
+        return;
+      }
+      if (email.trim()) {
+        setErrorEmail("");
+      }
+      if (!password.trim()) {
+        setErrorPassword("Please enter password institution.");
+        return;
+      }
+      if (password.trim()) {
+        setErrorPassword("");
+      }
+      if (!contactName.trim()) {
+        setErrorContactName("Please enter Contact Name institution.");
+        return;
+      }
+      if (contactName.trim()) {
+        setErrorContactName("");
+      }
+      if (!phoneNumber.trim()) {
+        setErrorPhoneNumber("Please enter phone number institution.");
+        return;
+      }
+      if (phoneNumber.trim()) {
+        setErrorPhoneNumber("");
+      }
+      if (!address.trim()) {
+        setErrorAddress("Please enter address institution.");
+        return;
+      }
+      if (address.trim()) {
+        setErrorAddress("");
+      }
+      if (!storageQuota) {
+        setErrorStorageQuota("Select storage quota is required.");
+        return;
+      }
+      if (storageQuota) {
+        setErrorStorageQuota("");
+      }
+      if (!subscription.trim()) {
+        setErrorSubscription("Select subscription is required.");
+        return;
+      }
+      if (subscription.trim()) {
+        setErrorSubscription("");
+      }
 
-      const newDataInstitution = {
-        id: institutionID,
-        name: institution,
-        currentUserQuota: 0,
-        currentStorageQuota: 0,
-        accountStatus: true,
-        registrationDate: registrationDate,
-        dueDate: dueDate,
-        subscription_type: subscription,
-        storageQuota: storageQuota,
-        email: email,
-        contactname: contactName,
-        contactphone: phoneNumber,
-        userQuotas: 10,
-        address: address,
-      };
-
+      setProcessSubmit(true);
       try {
-        const registerInstitutionAccount = await client.graphql({
-          query: createInstitution,
-          variables: { input: newDataInstitution },
+        const { isSignUpComplete, userId, nextStep } = await signUp({
+          username: email,
+          password: password,
         });
-        console.log("Institution Sucessfull", registerInstitutionAccount);
-        const registerAdminAccount = await client.graphql({
-          query: createUser,
-          variables: { input: newUser },
-        });
-        console.log("Institution Admin Sucessull", registerAdminAccount);
-        toast({
-          title: "Success Add new account Institution",
-          description: "Account Institution added successfully",
-        });
-        await onUpdateAccountsInstitutions();
+        const newUser = {
+          id: userId ?? "",
+          institutionID: institutionID,
+          first_name: institution,
+          last_name: "",
+          role: "Institution",
+          level: 2,
+          category: "Admin",
+          specialty: "Administrator",
+          email: email,
+          status: 1,
+          phone_number: phoneNumber,
+        };
+
+        const newDataInstitution = {
+          id: institutionID,
+          name: institution,
+          currentUserQuota: 0,
+          currentStorageQuota: 0,
+          accountStatus: true,
+          registrationDate: registrationDate,
+          dueDate: dueDate,
+          subscription_type: subscription,
+          storageQuota: storageQuota,
+          email: email,
+          contactname: contactName,
+          contactphone: phoneNumber,
+          userQuotas: 10,
+          address: address,
+        };
+
+        try {
+          await addNewInstitution(newDataInstitution);
+          await addNewUser(newUser);
+          toast({
+            title: "Success Add new account Institution",
+            description: "Account Institution added successfully",
+          });
+          await onUpdateAccountsInstitutions();
+        } catch (error) {
+          toast({
+            variant: "destructive",
+            title: "Failed to add new account Institution",
+            description:
+              "Failed to add new account Institution. Please try again.",
+          });
+        }
+        handleCancelDialog();
       } catch (error) {
         toast({
           variant: "destructive",
           title: "Failed to add new account Institution",
-          description: "Failed to add new account Institution. Please try again.",
+          description: "Email has been used.",
         });
+        handleCancelDialog();
+        return;
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setProcessSubmit(false);
-      setOpenDialog(false);
-      setInstitution("");
-      setEmail("");
-      setPassword("");
-      setContactName("");
-      setPhoneNumber("");
-      setAddress("");
-      setStorageQuota(0);
-      setSubscription("");
-      setDueDate(getDateNextMonth());
-      setRegistrationDate(getDateToday());
     }
   };
 
@@ -208,7 +275,10 @@ const CreateAccountDialog = ({
             medical lab in the system.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={(e) => handleCreateUser(e, onUpdateAccountsInstitutions)} className="grid gap-4 mt-4">
+        <form
+          onSubmit={(e) => handleCreateUser(e, onUpdateAccountsInstitutions)}
+          className="grid gap-4 mt-4"
+        >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <div className="flex items-center space-x-2">
@@ -253,6 +323,11 @@ const CreateAccountDialog = ({
                 onChange={(e) => setInstitution(e.target.value)}
                 placeholder="Enter Institutin"
               />
+              {errorInstitution && (
+                <p className="text-red-primary text-xs mt-2">
+                  {errorInstitution}
+                </p>
+              )}
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -276,6 +351,9 @@ const CreateAccountDialog = ({
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter Email"
               />
+              {errorEmail && (
+                <p className="text-red-primary text-xs mt-2">{errorEmail}</p>
+              )}
             </div>
             <div>
               <div className="flex items-center space-x-2 mt-2">
@@ -311,6 +389,9 @@ const CreateAccountDialog = ({
                   }
                 />
               </div>
+              {errorPassword && (
+                <p className="text-red-primary text-xs mt-2">{errorPassword}</p>
+              )}
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -334,10 +415,15 @@ const CreateAccountDialog = ({
                 onChange={(e) => setContactName(e.target.value)}
                 placeholder="Enter Contact Name"
               />
+              {errorContactName && (
+                <p className="text-red-primary text-xs mt-2">
+                  {errorContactName}
+                </p>
+              )}
             </div>
             <div>
               <div className="flex items-center space-x-2 mt-2">
-                <Phone className="w-6 h-6 text-blue-primary mb-1"/>
+                <Phone className="w-6 h-6 text-blue-primary mb-1" />
                 <label
                   htmlFor="phoneNumber"
                   className="block text-sm font-medium text-text-primary"
@@ -355,6 +441,11 @@ const CreateAccountDialog = ({
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="Enter Phone Number"
               />
+              {errorPhoneNumber && (
+                <p className="text-red-primary text-xs mt-2">
+                  {errorPhoneNumber}
+                </p>
+              )}
             </div>
             <div>
               <div className="flex items-center space-x-2 mt-2">
@@ -376,6 +467,9 @@ const CreateAccountDialog = ({
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Enter Address"
               />
+              {errorAddress && (
+                <p className="text-red-primary text-xs mt-2">{errorAddress}</p>
+              )}
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
@@ -405,6 +499,11 @@ const CreateAccountDialog = ({
                   <SelectItem value="50">50 GB</SelectItem>
                 </SelectContent>
               </Select>
+              {errorStorageQuota && (
+                <p className="text-red-primary text-xs mt-2">
+                  {errorStorageQuota}
+                </p>
+              )}
             </div>
             <div>
               <div className="flex items-center space-x-2 mt-2">
@@ -432,6 +531,11 @@ const CreateAccountDialog = ({
                   <SelectItem value="12"> 1 Year</SelectItem>
                 </SelectContent>
               </Select>
+              {errorSubscription && (
+                <p className="text-red-primary text-xs mt-2">
+                  {errorSubscription}
+                </p>
+              )}
             </div>
             <div>
               <div className="flex items-center space-x-2 mt-2">
@@ -478,13 +582,13 @@ const CreateAccountDialog = ({
               />
             </div>
           </div>
-          <div className="flex flex-row w-full gap-1 items-center">
+          {/* <div className="flex flex-row w-full gap-1 items-center">
             <Checkbox value={"Term"}></Checkbox>
             <p className="text-text-primary text-sm ml-2">
               I have read and accept with the
             </p>
             <a href="#"> terms and condition</a>
-          </div>
+          </div> */}
           <DialogFooter className="mt-6 gap-4">
             <Button
               label="Cancel"
@@ -494,7 +598,7 @@ const CreateAccountDialog = ({
               onClick={handleCancelDialog}
             />
             <Button
-              label={prosesSubmit ? "Save" : "Create New Account"}
+              label={prosesSubmit ? "Loading" : "Create New Account"}
               variant="outlineSecondary"
               size="large"
               icon={<Save className="w-4 h-4" />}

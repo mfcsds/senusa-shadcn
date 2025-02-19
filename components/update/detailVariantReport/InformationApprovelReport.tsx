@@ -292,9 +292,9 @@ const InformationApprovalReport: React.FC<InformationApprovalReportProops> = ({
                 <SelectGroup>
                   <SelectLabel>Report Status</SelectLabel>
                   <SelectItem value="Draft">Draft</SelectItem>
-                  <SelectItem value="Process">In Process</SelectItem>
-                  <SelectItem value="Waiting for Approval">Waiting for Approval</SelectItem>
-                  <SelectItem value="Completed">Completed</SelectItem>
+                  <SelectItem value="process">In Process</SelectItem>
+                  <SelectItem value="wait">Waiting for Approval</SelectItem>
+                  <SelectItem value="complete">Completed</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

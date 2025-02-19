@@ -39,10 +39,9 @@ const ListView: React.FC<CardViewProps> = ({ initialVariants }) => {
           <TableRow key={variant.id}>
             <TableCell className="font-medium">{variant.id}</TableCell>
             <TableCell className="font-medium">{variant.idPatient}</TableCell>
-            <TableCell>{variant.phenotype}</TableCell>
             <TableCell>{variant.medical_history}</TableCell>
-            <TableCell>{variant.current_diagnosis}</TableCell>
             <TableCell>{variant.sample_collection}</TableCell>
+            <TableCell>{variant.phenotype}</TableCell>
             <TableCell className="text-text-primary">{ReportStatus(variant.status ?? 4)}</TableCell>
             <TableCell className="flex gap-4">
               <Button

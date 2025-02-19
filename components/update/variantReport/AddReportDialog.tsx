@@ -50,7 +50,6 @@ import { useToast } from "@/components/ui/use-toast";
 const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: () => Promise<void> }) => {
   const [testingDesc, setTestingDesc] = useState("");
   const [patients, setPatients] = useState<DataPatients[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [phenotypeQuery, setPhenotypeQuery] = useState("");
   const [suggestions, setSuggestions] = useState<
     { id: string; name: string }[]
@@ -61,6 +60,7 @@ const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: ()
   const { toast } = useToast();
   const [openDialog, setOpenDialog] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
+  const [errorSelectPatient, setErrorSelectPatient] = useState("");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -71,14 +71,11 @@ const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: ()
   useEffect(() => {
     const loadPatients = async () => {
       try {
-        setLoading(true);
         const fetchedPatients = await fetchPatients();
         setPatients(fetchedPatients);
       } catch (error) {
         console.error("Failed to fetch patients:", error);
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
     loadPatients();
   }, []);
@@ -133,6 +130,10 @@ const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: ()
   ) => {
     e.preventDefault();
     try {
+      if (!selectedPatient?.id.trim()) {
+        setErrorSelectPatient("Select patient is required.");
+        return;
+      }
       const newReport = {
         id: generateReportID(),
         status: 1,
@@ -144,9 +145,6 @@ const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: ()
         testing_description: testingDesc
       };
       await addVariantReport(newReport)
-    } catch (error) {
-      console.log(error);
-    } finally {
       await onUpdateVariantReport();
       setOpenDialog(false);
       setSelectedPhenotypes([])
@@ -155,6 +153,8 @@ const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: ()
         title: "Success Add Variant Report",
         description: "Variant Report added successfully",
       });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -162,6 +162,7 @@ const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: ()
     setOpenDialog(false);
     setSelectedPhenotypes([])
     setSelectedPatient(null)
+    setErrorSelectPatient("")
   };
 
   return (
@@ -250,6 +251,11 @@ const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: ()
                   </Command>
                 </PopoverContent>
               </Popover>
+              {errorSelectPatient && (
+                <p className="text-red-primary text-xs mt-2">
+                  {errorSelectPatient}
+                </p>
+              )}
             </div>
 
             <div>

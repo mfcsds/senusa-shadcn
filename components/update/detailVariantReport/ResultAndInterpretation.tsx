@@ -2,17 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../../ui/dialog";
-
-import VariantInformationModal from "./selectVariant/VariantInformationModal";
-
-import {
   listSelectedVariants,
   listVariantInterpretations,
 } from "@/src/graphql/queries";
