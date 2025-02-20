@@ -33,7 +33,6 @@ interface PageProps {
   }>;
 }
 
-
 export default function DetailAccountsPage({ params }: PageProps) {
   const [id, setId] = useState<string | null>(null);
   const router = useRouter();
@@ -41,7 +40,7 @@ export default function DetailAccountsPage({ params }: PageProps) {
   const [listUsers, setListUsers] = useState<DataUser[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadingUsers, setLoadingUsers] = useState(false);
-  
+
   useEffect(() => {
     const resolveParams = async () => {
       try {
@@ -61,18 +60,19 @@ export default function DetailAccountsPage({ params }: PageProps) {
   const fetchLoadAccountsUsers = async (): Promise<void> => {
     const loadInstitutions = async () => {
       try {
-        setLoadingUsers(true); 
-        const data = await fetchUserByInstitutionId(id!);;
+        setLoadingUsers(true);
+        const data = await fetchUserByInstitutionId(id!);
         setListUsers(data);
+        console.log("Daftar list account user", data);
       } catch (error) {
         console.error("Error loading users:", error);
       } finally {
-        setLoadingUsers(false); 
+        setLoadingUsers(false);
       }
     };
 
     loadInstitutions();
-    };
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -98,12 +98,14 @@ export default function DetailAccountsPage({ params }: PageProps) {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8">
         <div className="mb-4 sm:mb-0">
           <div className="flex">
-          <Button
-                variant="iconPrimary"
-                size="large"
-                icon={<ArrowLeft className="w-8 h-8" />}
-                onClick={() => {router.push(`/features/manage-accounts`)}}
-              />
+            <Button
+              variant="iconPrimary"
+              size="large"
+              icon={<ArrowLeft className="w-8 h-8" />}
+              onClick={() => {
+                router.push(`/features/manage-accounts`);
+              }}
+            />
             <h1 className="text-2xl font-semibold text-text-primary">
               Manage and Detail Account
             </h1>
@@ -115,17 +117,23 @@ export default function DetailAccountsPage({ params }: PageProps) {
           </div>
         </div>
 
-        <CreateUserDialog onUpdateAccountsUser={fetchLoadAccountsUsers} institution_id={id!}/>
+        <CreateUserDialog
+          onUpdateAccountsUser={fetchLoadAccountsUsers}
+          institution_id={id!}
+        />
       </div>
 
       {loading ? (
         <Spinner />
-      //   <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
-      //   Loading
-      // </p>
       ) : (
+        //   <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
+        //   Loading
+        // </p>
         institutions.map((institution) => (
-          <div key={institution.id} className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div
+            key={institution.id}
+            className="grid grid-cols-1 gap-4 sm:grid-cols-3"
+          >
             <div className="bg-foreground shadow rounded-lg p-6 space-y-4">
               <div className="flex items-start space-x-6 p-2">
                 <div>
@@ -133,11 +141,13 @@ export default function DetailAccountsPage({ params }: PageProps) {
                 </div>
                 <div className="space-y-1">
                   <h2 className="font-bold text-lg text-text-primary">
-                  {institution.name}
+                    {institution.name}
                   </h2>
-                  <p className="text-sm text-text-secondary">{institution.id}</p>
                   <p className="text-sm text-text-secondary">
-                  {institution.address}
+                    {institution.id}
+                  </p>
+                  <p className="text-sm text-text-secondary">
+                    {institution.address}
                   </p>
                 </div>
               </div>
@@ -145,18 +155,20 @@ export default function DetailAccountsPage({ params }: PageProps) {
                 <div className="flex items-center space-x-3">
                   <User className="text-blue-primary w-6 h-6" />
                   <p className="font-medium text-text-primary">
-                  {institution.contactname}
+                    {institution.contactname}
                   </p>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Mail className="text-blue-primary w-6 h-6" />
                   <p className="font-medium text-text-primary">
-                  {institution.email}
+                    {institution.email}
                   </p>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="text-blue-primary w-6 h-6" />
-                  <p className="font-medium text-text-primary">{institution.contactphone}</p>
+                  <p className="font-medium text-text-primary">
+                    {institution.contactphone}
+                  </p>
                 </div>
               </div>
             </div>
@@ -170,7 +182,9 @@ export default function DetailAccountsPage({ params }: PageProps) {
                   <h3 className="font-medium text-text-primary">
                     Subscription Type
                   </h3>
-                  <p className="text-md text-text-secondary">{institution.subscription_type} Months</p>
+                  <p className="text-md text-text-secondary">
+                    {institution.subscription_type} Months
+                  </p>
                 </div>
               </div>
 
@@ -182,7 +196,9 @@ export default function DetailAccountsPage({ params }: PageProps) {
                   <h3 className="font-medium text-text-primary">
                     Number of User Quotas
                   </h3>
-                  <p className="text-md text-text-secondary">{institution.userQuotas} users</p>
+                  <p className="text-md text-text-secondary">
+                    {institution.userQuotas} users
+                  </p>
                 </div>
               </div>
 
@@ -194,7 +210,9 @@ export default function DetailAccountsPage({ params }: PageProps) {
                   <h3 className="font-medium text-text-primary">
                     Current Number of User
                   </h3>
-                  <p className="text-md text-text-secondary">{institution.currentUserQuota} users</p>
+                  <p className="text-md text-text-secondary">
+                    {institution.currentUserQuota} users
+                  </p>
                 </div>
               </div>
             </div>
@@ -208,7 +226,7 @@ export default function DetailAccountsPage({ params }: PageProps) {
                   </span>
                 </div>
                 <div className="border-2 text-primary border-primary px-6 py-1 rounded-lg text-sm">
-                {institution.accountStatus ? "Active" : "Inactive"}
+                  {institution.accountStatus ? "Active" : "Inactive"}
                 </div>
               </div>
 
@@ -243,15 +261,17 @@ export default function DetailAccountsPage({ params }: PageProps) {
                           Storage Quota
                         </span>
                         <p className="text-lg text-text-primary font-semibold ml-auto">
-                        {institution.storageQuota} GB
+                          {institution.storageQuota} GB
                         </p>
                       </div>
                     </div>
                     <div className="items-center w-full pt-4">
                       <Progress
                         value={
-                            (institution.currentStorageQuota / institution.currentStorageQuota) * 100
-                          }
+                          (institution.currentStorageQuota /
+                            institution.currentStorageQuota) *
+                          100
+                        }
                         className="w-full md:w-full"
                       />
                     </div>
@@ -263,14 +283,13 @@ export default function DetailAccountsPage({ params }: PageProps) {
         ))
       )}
 
-{loading ? (
+      {loading ? (
         <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
-        Loading
-      </p>
+          Loading
+        </p>
       ) : (
-        <TableDetailUser listUsers={listUsers}/>
+        <TableDetailUser listUsers={listUsers} />
       )}
-      
     </div>
   );
 }

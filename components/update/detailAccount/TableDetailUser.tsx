@@ -29,7 +29,7 @@ const TableDetailUser: React.FC<DetailUserProps> = ({ listUsers }) => {
   return (
     <div className="bg-foreground shadow rounded-lg p-6 space-y-4 mt-6">
       <Table>
-        <TableCaption>Current Number of User Account {users.length}/10.</TableCaption>
+        <TableCaption>Current Number of User Account {listUsers.length}/10.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableCell>Full Name</TableCell>
@@ -42,7 +42,7 @@ const TableDetailUser: React.FC<DetailUserProps> = ({ listUsers }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.map((user) => (
+          {listUsers.map((user) => (
             <TableRow key={user.id}>
               <TableCell>{user.first_name} {user.last_name}</TableCell>
               <TableCell>{user.level}</TableCell>

@@ -68,6 +68,6 @@ export const updateDataPatient = async (idPatient: string, patientStatusDesc: st
       },
     });
   } catch (error) {
-    console.error("Error adding patient:", error);
+    console.error("Error update patient:", error);
   }
 };

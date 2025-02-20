@@ -2,7 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getCurrentUser, signOut } from "aws-amplify/auth";
+import { fetchAuthSession } from "aws-amplify/auth";
+
+import awsconfig from "@/src/aws-exports";
+import { Amplify } from "aws-amplify";
+Amplify.configure(awsconfig);
 
 export default function ClientLayout({
   children,
@@ -15,9 +19,15 @@ export default function ClientLayout({
   useEffect(() => {
     async function checkSession() {
       try {
-        const { username } = await getCurrentUser();
-        console.log("Current user is:", username);
+        const session = await fetchAuthSession();
+        console.log("ID token:", session.tokens?.idToken);
+        console.log("Access token:", session.tokens?.accessToken);
+
+        if (!session.tokens?.idToken) {
+          throw new Error("No valid session tokens found.");
+        }
       } catch (err) {
+        console.error("Not logged in or invalid session:", err);
         router.push("/");
       } finally {
         setLoading(false);

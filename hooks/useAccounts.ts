@@ -1,6 +1,6 @@
 import { generateClient } from "aws-amplify/api";
 import { listInstitutions, listUsers} from "@/src/graphql/queries";
-import { createInstitution, deleteInstitution, createUser, deleteUser  } from "@/src/graphql/mutations";
+import { createInstitution, deleteInstitution, createUser, deleteUser, updateUser  } from "@/src/graphql/mutations";
 import { CreateInstitutionInput, CreateUserInput } from "@/src/API";
 import { Institution, DataUser } from "@/utils/object";
 import { Amplify } from "aws-amplify";
@@ -105,5 +105,21 @@ export const removeInstitution = async (institutionId: string): Promise<void> =>
       console.log("User successfully deleted");
     } catch (error) {
       console.error("Error deleting User:", error);
+    }
+  };
+
+  export const updateAccountUser = async (idUser: string, statusUser: number): Promise<void> => {
+    try {
+      await client.graphql({
+        query: updateUser,
+        variables: {
+          input: {
+            id: idUser,
+            status: statusUser ?? 1,
+          },
+        },
+      });
+    } catch (error) {
+      console.error("Error update status user:", error);
     }
   };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   confirmSignUp,
   type ConfirmSignUpInput,
@@ -19,12 +19,22 @@ import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-  InputOTPSeparator
+  InputOTPSeparator,
 } from "@/components/update/input/input-otp";
+import { User } from "@/src/API";
+import { getUser } from "@/src/graphql/queries";
+import { generateClient } from "aws-amplify/api";
+import { getCurrentUser } from "aws-amplify/auth";
+import { updateAccountUser } from "@/hooks/useAccounts";
 
 Amplify.configure(config);
 
+interface LoginFormProops {
+  user: User;
+}
+
 export default function LoginForm() {
+  const client = generateClient();
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -32,16 +42,54 @@ export default function LoginForm() {
   const [inputEmail, setInputEmail] = useState(email);
   const [code, setCode] = useState("");
   const [process, setProcess] = useState(false);
+  const [user, setUser] = useState<User>();
+  const [username, setUsername] = useState("");
+  const [hasFetched, setHasFetched] = useState(false);
+
+  const currentAuthenticatedUser = async () => {
+    try {
+      const { username, userId, signInDetails } = await getCurrentUser();
+      await setUsername(username);
+      await getUserProfile();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setHasFetched(true);
+    }
+  };
+  useEffect(() => {
+    if (!hasFetched) {
+      currentAuthenticatedUser();
+    }
+  });
+
+  const getUserProfile = async () => {
+    try {
+      const result = client.graphql({
+        query: getUser,
+        variables: { id: username },
+      });
+      setUser((await result).data.getUser as User);
+    } catch (error) {
+      console.log("error:", error);
+    }
+  };
 
   const handleResendCode = async () => {
     try {
       await resendSignUpCode({
         username: email,
       });
-      toast({
-        title: "Verification Code has been sent to your email",
-        description: "Please check your inbox or spam folder to continue the verification process..",
-      });
+      try {
+        await updateAccountUser(user?.id!, 2);
+        toast({
+          title: "Verification Code has been sent to your email",
+          description:
+            "Please check your inbox or spam folder to continue the verification process..",
+        });
+      } catch (error) {
+        console.error("Error updating account status:", error);
+      }
       console.log("Verification Code has been sent!");
     } catch (error) {
       console.error("Error resending code:", error);
@@ -66,7 +114,7 @@ export default function LoginForm() {
       console.error("Error during confirmation:", error);
     }
   };
-  
+
   return (
     <div className="space-y-6">
       <div>
@@ -103,16 +151,16 @@ export default function LoginForm() {
           onChange={(value) => setCode(value)}
         >
           <InputOTPGroup>
-        <InputOTPSlot index={0} />
-        <InputOTPSlot index={1} />
-        <InputOTPSlot index={2} />
-      </InputOTPGroup>
-      <InputOTPSeparator />
-      <InputOTPGroup>
-        <InputOTPSlot index={3} />
-        <InputOTPSlot index={4} />
-        <InputOTPSlot index={5} />
-      </InputOTPGroup>
+            <InputOTPSlot index={0} />
+            <InputOTPSlot index={1} />
+            <InputOTPSlot index={2} />
+          </InputOTPGroup>
+          <InputOTPSeparator />
+          <InputOTPGroup>
+            <InputOTPSlot index={3} />
+            <InputOTPSlot index={4} />
+            <InputOTPSlot index={5} />
+          </InputOTPGroup>
         </InputOTP>
       </div>
       <div className="grid grid-cols-2 gap-6">

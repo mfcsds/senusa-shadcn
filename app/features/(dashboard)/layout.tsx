@@ -14,7 +14,7 @@ export default async function Layout({
     (await cookieStore).get("sidebar:state")?.value === "true";
 
   return (
-    // <ClientLayout>
+    <ClientLayout>
     <div className={`flex h-screen overflow-hidden w-screen`}>
       <SidebarProvider defaultOpen={defaultOpen}>
         <AppSidebar />
@@ -26,6 +26,6 @@ export default async function Layout({
         </div>
       </SidebarProvider>
     </div>
-    // </ClientLayout>
+    </ClientLayout>
   );
 }

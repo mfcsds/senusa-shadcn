@@ -1,17 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/update/dialog/Dialog";
-import Button from "@/components/update/button/Button";
-import { BellRing } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { User, UserNotifications } from "@/src/API";
 
 import { getCurrentUser } from "aws-amplify/auth";
@@ -87,25 +76,26 @@ const ButtonNotifications = () => {
   };
 
   return (
-    <div className="p-8 min-h-screen">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8">
-        <div className="grid items-center gap-4 mb-4 sm:mb-0">
-          <h1 className="text-2xl font-semibold text-text-primary">
-            Notifications
-          </h1>
-          <h2 className="text-xl font-semibold text-text-primary">
-            {`List of Notification ${listOfNotification.length}`}{" "}
-          </h2>
-        </div>
-        {listOfNotification.length <= 0
-          ? "No Data"
-          : listOfNotification.map((item) => (
+    <div className="flex flex-col items-center justify-center min-h-screen p-8">
+      <div className="text-center mb-6">
+        <h1 className="text-2xl font-semibold text-gray-900">Notifications</h1>
+        <h2 className="text-lg text-gray-600">{`You have ${listOfNotification.length} notifications`}</h2>
+      </div>
+
+      <div className="w-full max-w-[1000px] p-6">
+        {listOfNotification.length === 0 ? (
+          <p className="text-center text-gray-500">No Notifications</p>
+        ) : (
+          <div className="space-y-4">
+            {listOfNotification.map((item) => (
               <NotificationItem
                 key={item.id}
                 notifItem={item}
                 onCloseDialog={() => setOpen(false)}
-              ></NotificationItem>
+              />
             ))}
+          </div>
+        )}
       </div>
     </div>
   );

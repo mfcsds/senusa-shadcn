@@ -2,7 +2,7 @@
 
 import Button from "@/components/update/button/Button";
 import Input from "@/components/update/input/Input";
-import { Loader2, RefreshCw } from "lucide-react";
+import { Loader2, RefreshCw, EyeOff, Eye } from "lucide-react";
 import React, { useState } from "react";
 import { resetPassword } from "aws-amplify/auth";
 import { confirmResetPassword } from "aws-amplify/auth";
@@ -24,14 +24,17 @@ export default function ForgotPasswordForm() {
   const [hasReceived, setHasReceived] = useState(false);
   const [errors, setErrors] = useState("");
   const { toast } = useToast();
-
-  // Track loading states
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
 
   const [hasSentNewVerify, setHasSentNewVerify] = useState(false);
 
   const verifyCode = async () => {};
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
 
   // Password validation function
   const validatePassword = (password: string) => {
@@ -143,17 +146,41 @@ export default function ForgotPasswordForm() {
         />
       </div>
       <div>
-        <div className="flex flex-col">
-          <label
-            htmlFor="email"
-            className="block text-text-primary font-semiBold mb-3"
-          >
-            Verification Code
-          </label>
-          <p className="text-sm text-text-secondary mb-4">
-            Enter the code sent to your email.
-          </p>
+        <label
+          htmlFor="password"
+          className="block text-text-primary font-nostalgic mb-3 mt-3"
+        >
+          New Password
+        </label>
+        <div className="relative w-full sm:w-auto mb-4">
+          <Input
+            type={isPasswordVisible ? "text" : "password"}
+            id="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            placeholder="Enter New Password"
+          />
+          <Button
+            variant="iconPrimary"
+            size="innerSize"
+            onClick={togglePasswordVisibility}
+            icon={
+              isPasswordVisible ? (
+                <EyeOff className="w-4 h-4" />
+              ) : (
+                <Eye className="w-4 h-4" />
+              )
+            }
+          />
         </div>
+      </div>
+      <div>
+        <label
+          htmlFor="email"
+          className="block text-text-primary font-semiBold mb-3"
+        >
+          Enter the code sent to your email
+        </label>
         <div className="flex flex-row gap-2">
           <InputOTP
             maxLength={6}
@@ -172,22 +199,29 @@ export default function ForgotPasswordForm() {
               <InputOTPSlot index={5} />
             </InputOTPGroup>
           </InputOTP>
-          <Button
-            variant="outlineSecondary"
-            className="bg-foreground text-blue-pr"
+          {/* <Button
+            variant="borderSecondary"
             icon={<RefreshCw className="w-5 h-5" />}
-          />
+            onClick={sendAgainVerifyCode}
+          /> */}
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2">
         <Button
-          label="Confirm Password"
+          label={isChanging ? "Process" : "Confirm Password"}
+          icon={
+            isChanging ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null
+          }
           variant="primary"
           size="large"
-          className="w-full mt-6 text-lg"
+          className="w-full mt-6"
+          disabled={isChanging}
+          onClick={handleChangePassword}
         />
         <Button
-          label={isResetting ? "Send Code" : "Reset Password"}
+          label={isResetting ? "Process" : "Send Code"}
           icon={
             isResetting ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -202,4 +236,4 @@ export default function ForgotPasswordForm() {
       </div>
     </div>
   );
-};
+}

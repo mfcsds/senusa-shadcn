@@ -31,7 +31,7 @@ export default function LoginPage() {
             </a>
           </div>
           <div className="flex justify-end mt-2">
-            <a href="/forgot-password" className="text-primary hover:underline">
+            <a href="/auth/forgot-password" className="text-primary hover:underline">
               Forgot Password?
             </a>
           </div>
