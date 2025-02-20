@@ -60,16 +60,16 @@ const ProfileUserNavbar = () => {
 
   const delay = 3000; 
 
-useEffect(() => {
-  const timeout = setTimeout(() => {
-    console.log("User LOGIN IS", userLogin);
-    if (userLogin === null) {
-      handleLogout();
-    }
-  }, delay);
+// useEffect(() => {
+//   const timeout = setTimeout(() => {
+//     console.log("User LOGIN IS", userLogin);
+//     if (userLogin === null) {
+//       handleLogout();
+//     }
+//   }, delay);
 
-  return () => clearTimeout(timeout); 
-}, [userLogin]);
+//   return () => clearTimeout(timeout); 
+// }, [userLogin]);
 
   const handleLogout = async () => {
     try {
