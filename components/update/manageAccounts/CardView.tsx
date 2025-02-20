@@ -128,7 +128,7 @@ const CardView: React.FC<CardViewProps> = ({ intialInstitution }) => {
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>
-                    Are you sure you want to delete this account Institutions?
+                    Are you sure you want to deactivated this account Institutions?
                   </AlertDialogTitle>
                   <AlertDialogDescription></AlertDialogDescription>
                 </AlertDialogHeader>

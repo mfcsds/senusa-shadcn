@@ -26,6 +26,8 @@ import { fetchDetailInstitution } from "@/hooks/useAccounts";
 import { Institution, DataUser } from "@/utils/object";
 import Spinner from "@/components/update/ui/Spinner";
 import { fetchUserByInstitutionId } from "@/hooks/useAccounts";
+import { updateAccountUser } from "@/hooks/useAccounts";
+import { useToast } from "@/components/ui/use-toast";
 
 interface PageProps {
   params: Promise<{
@@ -40,6 +42,7 @@ export default function DetailAccountsPage({ params }: PageProps) {
   const [listUsers, setListUsers] = useState<DataUser[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadingUsers, setLoadingUsers] = useState(false);
+const { toast } = useToast();
 
   useEffect(() => {
     const resolveParams = async () => {
@@ -92,6 +95,8 @@ export default function DetailAccountsPage({ params }: PageProps) {
 
     loadInstitutions();
   }, [id]);
+
+  
 
   return (
     <div className="p-8 min-h-screen">

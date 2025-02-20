@@ -108,7 +108,7 @@ export default function LoginForm() {
       if (isSignUpComplete) {
         setProcess(true);
         console.log("Verification Success");
-        router.push("/features/login");
+        router.push("/auth/login");
       }
     } catch (error) {
       console.error("Error during confirmation:", error);
