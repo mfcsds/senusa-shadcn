@@ -1,7 +1,13 @@
 import React from "react";
+import VariantLibrary from "./VariantLibrary";
 
-const VariantLibrary = () => {
-  return <div>This is variant Library</div>;
+const VariantLibraryPage = () => {
+  
+  return (
+    <div className="w-full">
+      <VariantLibrary></VariantLibrary>
+    </div>
+  );
 };
 
-export default VariantLibrary;
+export default VariantLibraryPage;

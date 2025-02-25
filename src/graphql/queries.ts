@@ -328,6 +328,7 @@ export const getSelectedVariant = /* GraphQL */ `query GetSelectedVariant($id: I
     zygosity
     text_interpretation
     id_variant
+    inheritance
     createdAt
     updatedAt
     __typename
@@ -384,6 +385,7 @@ export const listSelectedVariants = /* GraphQL */ `query ListSelectedVariants(
       zygosity
       text_interpretation
       id_variant
+      inheritance
       createdAt
       updatedAt
       __typename

@@ -421,6 +421,7 @@ export const onCreateSelectedVariant = /* GraphQL */ `subscription OnCreateSelec
     zygosity
     text_interpretation
     id_variant
+    inheritance
     createdAt
     updatedAt
     __typename
@@ -474,6 +475,7 @@ export const onUpdateSelectedVariant = /* GraphQL */ `subscription OnUpdateSelec
     zygosity
     text_interpretation
     id_variant
+    inheritance
     createdAt
     updatedAt
     __typename
@@ -527,6 +529,7 @@ export const onDeleteSelectedVariant = /* GraphQL */ `subscription OnDeleteSelec
     zygosity
     text_interpretation
     id_variant
+    inheritance
     createdAt
     updatedAt
     __typename

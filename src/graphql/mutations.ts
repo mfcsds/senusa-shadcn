@@ -437,6 +437,7 @@ export const createSelectedVariant = /* GraphQL */ `mutation CreateSelectedVaria
     zygosity
     text_interpretation
     id_variant
+    inheritance
     createdAt
     updatedAt
     __typename
@@ -491,6 +492,7 @@ export const updateSelectedVariant = /* GraphQL */ `mutation UpdateSelectedVaria
     zygosity
     text_interpretation
     id_variant
+    inheritance
     createdAt
     updatedAt
     __typename
@@ -545,6 +547,7 @@ export const deleteSelectedVariant = /* GraphQL */ `mutation DeleteSelectedVaria
     zygosity
     text_interpretation
     id_variant
+    inheritance
     createdAt
     updatedAt
     __typename

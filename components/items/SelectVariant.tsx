@@ -123,6 +123,7 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
             gnomade: null,
             gnomadg: null,
             alldesc: null,
+            inheritance: null,
           };
           return variantTemporary;
         });

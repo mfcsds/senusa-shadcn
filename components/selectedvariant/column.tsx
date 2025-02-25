@@ -9,14 +9,6 @@ import {
   PlusCircle,
   TableOfContents,
 } from "lucide-react";
-import { updateVariant } from "@/src/graphql/mutations";
-
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { Badge } from "../ui/badge";
 import {
   AcmgCriteria,
   SelectedVariant,
@@ -230,6 +222,13 @@ export const columns: ColumnDef<Variant>[] = [
       }
 
       return <p className="text-lg">{displayValue}</p>;
+    },
+  },
+  {
+    accessorKey: "inheritance",
+    header: "Inheritance",
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.inheritance}</p>;
     },
   },
   {

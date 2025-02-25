@@ -54,6 +54,7 @@ export interface Variant {
   gnomadg: number | null;
   gnomade: number | null;
   alldesc: string | null;
+  inheritance: string | null;
 }
 
 export interface Recommendation {

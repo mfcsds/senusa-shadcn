@@ -324,6 +324,7 @@ export const fetchVariantDetails4 = async (
           rsID: lambdaBody.rsID || null,
           phenotypes: lambdaBody.phenotypes || null,
           alldesc: lambdaBody.alldesc || "",
+          inheritance: lambdaBody.inheritance || "Not available",
         };
       } else {
         console.error(

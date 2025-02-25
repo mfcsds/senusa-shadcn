@@ -16,6 +16,7 @@ interface NotificationItemProops {
   notifItem: UserNotifications;
   onCloseDialog?: () => void;
 }
+
 const NotificationItem = ({
   notifItem,
   onCloseDialog,

@@ -15,8 +15,6 @@ import { Button } from "@/components/ui/button";
 
 import { useRouter } from "next/navigation";
 import { signIn, type SignInInput } from "aws-amplify/auth";
-import awsconfig from "@/src/aws-exports";
-import { Amplify } from "aws-amplify";
 
 import { ToastAction } from "@/components/ui/toast";
 import { toast, useToast } from "@/components/ui/use-toast";
@@ -25,6 +23,8 @@ import Image from "next/image";
 import logo from "@/public/logo-senusa.png";
 import { Separator } from "@/components/ui/separator";
 
+import awsconfig from "@/src/aws-exports";
+import { Amplify } from "aws-amplify";
 Amplify.configure(awsconfig);
 
 const LoginForm = () => {

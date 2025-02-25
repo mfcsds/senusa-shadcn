@@ -112,6 +112,7 @@ type SelectedVariant @model @auth(rules: [{allow: public}]) {
   zygosity: String
   text_interpretation: String
   id_variant: String
+  inheritance: String
 }
 
 type Vcfdata @model @auth(rules: [{allow: public}]) {

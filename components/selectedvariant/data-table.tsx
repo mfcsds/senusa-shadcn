@@ -79,9 +79,7 @@ export function DataTable<TData, TValue>({
   // Colum yang akan dimunculkan
   const visibleColumns = [
     "gene_id",
-    "AC",
-    "AF",
-    "fraction",
+    "inheritance",
     "acmg",
     "clinicalSign",
     "phenotypes",
