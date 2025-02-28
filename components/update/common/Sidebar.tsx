@@ -45,7 +45,7 @@ const generals = [
   },
   { title: "Variant Report", url: "/features/variant-report", icon: Dna },
   { title: "Variant Query", url: "/features/variant-query", icon: TextSearch },
-  { title: "Variant Library", url: "#", icon: SquareLibrary },
+  { title: "Variant Library", url: "/features/variant-library", icon: SquareLibrary },
 ];
 
 export function AppSidebar() {

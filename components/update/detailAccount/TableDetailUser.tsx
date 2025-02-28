@@ -1,6 +1,6 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@/components/update/button/Button";
-import { Trash2 } from "lucide-react";
+import { Check, X } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -33,13 +33,20 @@ interface DetailUserProps {
 const TableDetailUser: React.FC<DetailUserProps> = ({ listUsers }) => {
   const [users, setUsers] = useState<DataUser[]>(listUsers);
   const { toast } = useToast();
+
+  useEffect(() => {
+    setUsers(listUsers);
+  }, [listUsers]);
+
   const handleUpdateUser = (updatedUser: DataUser) => {
     setUsers((prevUsers) =>
-      prevUsers.map((listUsers) => (listUsers.id === updatedUser.id ? updatedUser : listUsers))
+      prevUsers.map((users) =>
+        users.id === updatedUser.id ? updatedUser : users
+      )
     );
   };
 
-  const handleUpdateStatus = async (id: string) => {
+  const handleUpdateStatusDestructive = async (id: string) => {
     try {
       await updateAccountUser(id, 3);
 
@@ -51,14 +58,38 @@ const TableDetailUser: React.FC<DetailUserProps> = ({ listUsers }) => {
 
       toast({
         title: "Deactivated Successfully",
-        description: "Account has been Deactivated successfully.",
+        description: "Account has been deactivated successfully.",
       });
     } catch (error) {
-      console.error("Error deactivating account:", error);
+      console.error("Error deactivate account:", error);
       toast({
         variant: "destructive",
         title: "Failed to deactivate account",
         description: "Unable to deactivate the account user.",
+      });
+    }
+  };
+
+  const handleUpdateStatusActive = async (id: string) => {
+    try {
+      await updateAccountUser(id, 2);
+
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === id ? { ...user, status: 2 } : user
+        )
+      );
+
+      toast({
+        title: "Active Successfully",
+        description: "Account has been active successfully.",
+      });
+    } catch (error) {
+      console.error("Error active account:", error);
+      toast({
+        variant: "destructive",
+        title: "Failed to active account",
+        description: "Unable to active the account user.",
       });
     }
   };
@@ -97,31 +128,57 @@ const TableDetailUser: React.FC<DetailUserProps> = ({ listUsers }) => {
                   user={user}
                   onUpdateSuccess={handleUpdateUser}
                 />
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button
-                      variant="borderDanger"
-                      icon={<Trash2 className="w-4 h-4" />}
-                    />
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you sure you want to deactivated this account
-                        Institutions?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription></AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={() => handleUpdateStatus(user.id!)}
-                      >
-                        Continue
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                {user.status == 3 ? (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="borderPrimary"
+                        icon={<Check className="w-4 h-4" />}
+                      />
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you sure you want to active this account?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription></AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleUpdateStatusActive(user.id!)}
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                ) : (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="borderDanger"
+                        icon={<X className="w-4 h-4" />}
+                      />
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you sure you want to deactivated this account?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription></AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleUpdateStatusDestructive(user.id!)}
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
               </TableCell>
             </TableRow>
           ))}

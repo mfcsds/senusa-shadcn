@@ -127,7 +127,7 @@ const CreateUserDialog = ({
           first_name: firstName,
           last_name: lastName,
           role: roleAccount,
-          status: 1,
+          status: 2,
           level: Number(levelAccount),
           category: "Admin",
           specialty: "Administrator",

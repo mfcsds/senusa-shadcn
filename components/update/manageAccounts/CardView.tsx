@@ -14,7 +14,10 @@ import Button from "@/components/update/button/Button";
 import { HospitalIcon } from "lucide-react";
 import { Institution } from "@/utils/object";
 import { useRouter } from "next/navigation";
-import { removeInstitution, fetchInstitutions, removeUserByInstitutionId, fetchUserByInstitutionId } from "@/hooks/useAccounts";
+import {
+  fetchInstitutions,
+  fetchUserByInstitutionId,
+} from "@/hooks/useAccounts";
 import { useToast } from "@/components/ui/use-toast";
 import {
   AlertDialog,
@@ -27,6 +30,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/update/dialog/AlertDialog";
+import { updateAccountUser, updateStatusInstution } from "@/hooks/useAccounts";
 
 interface CardViewProps {
   intialInstitution: Institution[];
@@ -38,30 +42,44 @@ const CardView: React.FC<CardViewProps> = ({ intialInstitution }) => {
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleDelete = async (id: string) => {
+  const handleUpdateStatusDestructive = async (id: string) => {
     try {
       const data = await fetchUserByInstitutionId(id);
-      console.log(data);
-      console.log(id);
-      await removeInstitution(id);
-      await Promise.all(
-        data.map(async (user) => {
-          await removeUserByInstitutionId(user.id);
-          console.log("Removed user from institution");
-        })
-      );
+      await updateStatusInstution(id, false);
+      await updateAccountUser(data[0].id, 3);
       const updateInstitution = await fetchInstitutions();
       setInstitutionsList(updateInstitution);
       toast({
-        title: "Delete Successfully",
-        description: "Account Institutions has been deleted successfully.",
+        title: "Deactivated Successfully",
+        description: "Institution has been deactivated successfully.",
       });
     } catch (error) {
-      console.error("Error deleting patient:", error);
+      console.error("Error deactivate account:", error);
       toast({
         variant: "destructive",
-        title: "Failed to delete patient",
-        description: "Unable to delete the account Institutions.",
+        title: "Failed to deactivate institution",
+        description: "Unable to deactivate the institution.",
+      });
+    }
+  };
+
+  const handleUpdateStatusActive = async (id: string) => {
+    try {
+      const data = await fetchUserByInstitutionId(id);
+      await updateStatusInstution(id, true);
+      await updateAccountUser(data[0].id, 2);
+      const updateInstitution = await fetchInstitutions();
+      setInstitutionsList(updateInstitution);
+      toast({
+        title: "Deactivated Successfully",
+        description: "Institution has been deactivated successfully.",
+      });
+    } catch (error) {
+      console.error("Error active account:", error);
+      toast({
+        variant: "destructive",
+        title: "Failed to active institution",
+        description: "Unable to active the institution.",
       });
     }
   };
@@ -80,9 +98,15 @@ const CardView: React.FC<CardViewProps> = ({ intialInstitution }) => {
                 <CardDescription className="text-text-secondary text-sm">
                   {institution.id}
                 </CardDescription>
-                <div className="border-2 text-primary border-primary px-2 py-1 rounded-lg text-sm w-auto text-center mt-3">
-                  {institution.accountStatus ? "Active" : "Deactivated"}
-                </div>
+                {institution.accountStatus ? (
+                  <div className="border-2 text-primary border-primary px-2 py-1 rounded-lg text-sm w-auto text-center mt-3">
+                    Active
+                  </div>
+                ) : (
+                  <div className="border-2 text-red-primary border-red-primary px-2 py-1 rounded-lg text-sm w-auto text-center mt-3">
+                    Deactivated
+                  </div>
+                )}
               </div>
             </div>
           </CardHeader>
@@ -121,27 +145,54 @@ const CardView: React.FC<CardViewProps> = ({ intialInstitution }) => {
                 router.push(`/features/manage-accounts/${institution.id}`)
               }
             />
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="outlineDanger" label="Delete" />
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Are you sure you want to deactivated this account Institutions?
-                  </AlertDialogTitle>
-                  <AlertDialogDescription></AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => handleDelete(institution.id!)}
-                  >
-                    Continue
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            {institution.accountStatus == false ? (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outlinePrimary" label="Active" />
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you sure you want to active this account Institutions?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription></AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => handleUpdateStatusActive(institution.id!)}
+                    >
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            ) : (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outlineDanger" label="Deactivated" />
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you sure you want to deactivated this account
+                      Institutions?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription></AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() =>
+                        handleUpdateStatusDestructive(institution.id!)
+                      }
+                    >
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
           </CardFooter>
         </Card>
       ))}

@@ -202,7 +202,7 @@ const CreateAccountDialog = ({
           category: "Admin",
           specialty: "Administrator",
           email: email,
-          status: 1,
+          status: 2,
           phone_number: phoneNumber,
         };
 

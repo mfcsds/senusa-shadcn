@@ -22,64 +22,61 @@ import NotificationItem from "@/components/update/notification/NotificationItem"
 
 const ButtonNotifications = () => {
   const client = generateClient();
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
   const [username, setUsername] = useState("");
   const [hasFetched, setHasFetched] = useState(false);
   const [open, setOpen] = useState(false);
-  const [listOfNotification, setListOfNotification] = useState<UserNotifications[]>([]);
-
-  const getUserProfile = async () => {
-    try {
-      const result = await client.graphql({
-        query: getUser,
-        variables: { id: username },
-      });
-      setUser(result.data.getUser as User);
-    } catch (error) {
-      console.log("error:", error);
-    }
-  };
-
-  const currentAuthenticatedUser = async () => {
-    try {
-      const { username } = await getCurrentUser();
-      setUsername(username);
-      await getUserProfile();
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setHasFetched(true);
-    }
-  };
+  const [listOfNotification, setListOfNotification] = useState<
+    UserNotifications[]
+  >([]);
 
   useEffect(() => {
+    const currentAuthenticatedUser = async () => {
+      try {
+        const { username } = await getCurrentUser();
+        setUsername(username);
+        const result = await client.graphql({
+          query: getUser,
+          variables: { id: username },
+        });
+        setUser(result.data.getUser as User);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setHasFetched(true);
+      }
+    };
+
     if (!hasFetched) {
       currentAuthenticatedUser();
     }
   }, [hasFetched]);
 
   useEffect(() => {
-    fetchNotification();
-  }, [user?.id]);
-
-  const fetchNotification = async () => {
-    if (user?.id) {
-      try {
-        const result = await client.graphql({
-          query: listUserNotifications,
-          variables: { filter: { user_id: { eq: user.id }, markasread: { eq: false } } },
-        });
-        
-        const sortedNotifications = result.data.listUserNotifications.items.sort(
-          (a: UserNotifications, b: UserNotifications) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-        setListOfNotification(sortedNotifications);
-      } catch (error) {
-        console.log(error);
+    const fetchNotification = async () => {
+      if (user?.id) {
+        try {
+          const result = await client.graphql({
+            query: listUserNotifications,
+            variables: { filter: { user_id: { eq: user.id }, markasread: { eq: false } } },
+          });
+          const sortedNotifications =
+            result.data.listUserNotifications.items.sort(
+              (a: UserNotifications, b: UserNotifications) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            );
+          setListOfNotification(sortedNotifications);
+        } catch (error) {
+          console.log(error);
+        }
       }
+    };
+
+    if (user?.id) {
+      fetchNotification();
     }
-  };
+  }, [user?.id]);
 
   const markNotificationAsRead = async (id: string) => {
     try {
@@ -89,7 +86,9 @@ const ButtonNotifications = () => {
           input: { id, markasread: true },
         },
       });
-      fetchNotification();
+      setListOfNotification((prevNotifications) =>
+        prevNotifications.filter((notif) => notif.id !== id)
+      );
     } catch (error) {
       console.log("Error updating notification status", error);
     }
@@ -121,15 +120,23 @@ const ButtonNotifications = () => {
                 <p className="text-text-secondary">
                   {`You have ${listOfNotification.length} new notifications`}
                 </p>
-                <a className="text-red-primary hover:text-red-secondary hover:underline" href="/features/notification">
+                <a
+                  className="text-red-primary hover:text-red-secondary hover:underline"
+                  href="/features/notification"
+                >
                   View All Notification
                 </a>
               </div>
             </DialogDescription>
           </DialogHeader>
-          {listOfNotification.length <= 0
-            ? "No Data"
-            : listOfNotification.map((item) => (
+          {listOfNotification.length <= 0 ? (
+            <p className="text-text-secondary text-sm text-center mt-6">
+              Nothing Notifications
+            </p>
+          ) : (
+            listOfNotification
+              // .filter((item) => item.markasread === false)
+              .map((item) => (
                 <NotificationItem
                   key={item.id}
                   notifItem={item}
@@ -138,7 +145,8 @@ const ButtonNotifications = () => {
                     setOpen(false);
                   }}
                 />
-              ))}
+              ))
+          )}
         </DialogContent>
       </Dialog>
     </div>

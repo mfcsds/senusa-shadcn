@@ -49,9 +49,7 @@ const ButtonInviteUser: React.FC<ButtonInviteUserProops> = ({
       return;
     }
     try {
-      console.log("Invite");
       const notificationInput = {
-        id: "NF-1939128391",
         institutionID: user?.institutionID,
         user_id: listOfUser.at(index)?.id,
         message: `Hallo, ${
@@ -70,6 +68,7 @@ const ButtonInviteUser: React.FC<ButtonInviteUserProops> = ({
         query: createUserNotifications,
         variables: { input: notificationInput },
       });
+      console.log("Successfullu add notification " ,addNotif);
       toast({
         title: "Successfully Send Invitation",
         description: `Sucessfully sent invitation to ${
@@ -123,30 +122,31 @@ const ButtonInviteUser: React.FC<ButtonInviteUserProops> = ({
           </DialogDescription>
         </DialogHeader>
         <div className="max-w-2xl flex flex-col">
-          <Table>
-            <TableHeader className="bg-accent text-text-primary">
-              <TableHead>User</TableHead>
-
-              <TableHead>Action</TableHead>
-            </TableHeader>
-            <TableBody>
-              {listOfUser.map((item, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    <ProfileAddUser user={item}></ProfileAddUser>
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="borderSecondary"
-                      size="medium"
-                      icon={<UserPlus className="w-4 h-4" />}
-                      onClick={() => handleInviteUserButton(index)}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <div className="overflow-y-auto max-h-[300px]">
+            <Table className="min-w-full">
+              <TableHeader className="bg-accent text-text-primary">
+                <TableHead>User</TableHead>
+                <TableHead>Action</TableHead>
+              </TableHeader>
+              <TableBody className="divide-y">
+                {listOfUser.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <ProfileAddUser user={item}></ProfileAddUser>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="borderSecondary"
+                        size="medium"
+                        icon={<UserPlus className="w-4 h-4" />}
+                        onClick={() => handleInviteUserButton(index)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

@@ -5,14 +5,11 @@ import {
   confirmSignUp,
   type ConfirmSignUpInput,
   resendSignUpCode,
+  getCurrentUser,
 } from "aws-amplify/auth";
 import Input from "@/components/update/input/Input";
 import Button from "@/components/update/button/Button";
 import { useRouter } from "next/navigation";
-import { signIn, type SignInInput } from "aws-amplify/auth";
-import config from "@/src/amplifyconfiguration.json";
-import { Amplify } from "aws-amplify";
-import { signOut } from "aws-amplify/auth";
 import { useToast } from "@/components/ui/use-toast";
 import { useSearchParams } from "next/navigation";
 import {
@@ -24,94 +21,99 @@ import {
 import { User } from "@/src/API";
 import { getUser } from "@/src/graphql/queries";
 import { generateClient } from "aws-amplify/api";
-import { getCurrentUser } from "aws-amplify/auth";
 import { updateAccountUser } from "@/hooks/useAccounts";
+import config from "@/src/amplifyconfiguration.json";
+import { Amplify } from "aws-amplify";
 
 Amplify.configure(config);
-
-interface LoginFormProops {
-  user: User;
-}
 
 export default function LoginForm() {
   const client = generateClient();
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const email = searchParams?.get("email") || ""; // Extract email from query params
+
+  const email = searchParams?.get("email") || "";
   const [inputEmail, setInputEmail] = useState(email);
   const [code, setCode] = useState("");
   const [process, setProcess] = useState(false);
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
   const [username, setUsername] = useState("");
   const [hasFetched, setHasFetched] = useState(false);
 
-  const currentAuthenticatedUser = async () => {
+  const fetchCurrentUser = async () => {
     try {
-      const { username, userId, signInDetails } = await getCurrentUser();
-      await setUsername(username);
-      await getUserProfile();
+      const { username } = await getCurrentUser();
+      setUsername(username);
+      await getUserProfile(username);
     } catch (err) {
-      console.log(err);
+      console.log("Error fetching user:", err);
     } finally {
       setHasFetched(true);
     }
   };
+
   useEffect(() => {
     if (!hasFetched) {
-      currentAuthenticatedUser();
+      fetchCurrentUser();
     }
-  });
+  }, []);
 
-  const getUserProfile = async () => {
+  const getUserProfile = async (username: string) => {
     try {
-      const result = client.graphql({
+      const result = await client.graphql({
         query: getUser,
         variables: { id: username },
       });
-      setUser((await result).data.getUser as User);
+      setUser(result.data.getUser as User);
     } catch (error) {
-      console.log("error:", error);
+      console.log("Error fetching user profile:", error);
     }
   };
 
   const handleResendCode = async () => {
     try {
-      await resendSignUpCode({
-        username: email,
+      await resendSignUpCode({ username: email });
+      toast({
+        title: "Verification Code has been sent to your email",
+        description:
+          "Please check your inbox or spam folder to continue the verification process.",
       });
-      try {
-        await updateAccountUser(user?.id!, 2);
-        toast({
-          title: "Verification Code has been sent to your email",
-          description:
-            "Please check your inbox or spam folder to continue the verification process..",
-        });
-      } catch (error) {
-        console.error("Error updating account status:", error);
-      }
-      console.log("Verification Code has been sent!");
+      console.log("Kode verifikasi telah dikirim!");
     } catch (error) {
-      console.error("Error resending code:", error);
+      console.error("Error mengirim ulang kode:", error);
     }
   };
 
-  const handleConfirmSignUp = async ({
-    username,
-    confirmationCode,
-  }: ConfirmSignUpInput) => {
+  const handleConfirmSignUp = async () => {
+    if (!code) {
+      toast({
+        title: "Verification code is required!",
+        description: "Please enter the verification code before continuing.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
-      const { isSignUpComplete } = await confirmSignUp({
+      await confirmSignUp({
         username: email,
         confirmationCode: code,
       });
-      if (isSignUpComplete) {
-        setProcess(true);
-        console.log("Verification Success");
-        router.push("/auth/login");
-      }
+      await updateAccountUser(username, 2);
+      toast({
+        title: "Verification Success",
+        description: "Email verification has been successfully completed.",
+      });
+      console.log("Verifikasi Success");
+      router.push("/auth/login");
     } catch (error) {
-      console.error("Error during confirmation:", error);
+      console.error("Error saat verifikasi akun:", error);
+      toast({
+        title: "Verification Failed",
+        description: "The code you entered is incorrect or has expired.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -164,17 +166,12 @@ export default function LoginForm() {
         </InputOTP>
       </div>
       <div className="grid grid-cols-2 gap-6">
-        <Button
+      <Button
           label="Verify Email"
           variant="primary"
           size="large"
           className="w-full mt-6"
-          onClick={() =>
-            handleConfirmSignUp({
-              username: email,
-              confirmationCode: code,
-            })
-          }
+          onClick={handleConfirmSignUp}
         />
         <Button
           label="Resend Code"

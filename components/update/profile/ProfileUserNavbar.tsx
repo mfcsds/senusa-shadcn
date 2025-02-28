@@ -58,18 +58,18 @@ const ProfileUserNavbar = () => {
     }
   });
 
-  const delay = 3000; 
+  const delay = 1000; 
 
-// useEffect(() => {
-//   const timeout = setTimeout(() => {
-//     console.log("User LOGIN IS", userLogin);
-//     if (userLogin === null) {
-//       handleLogout();
-//     }
-//   }, delay);
+useEffect(() => {
+  const timeout = setTimeout(() => {
+    console.log("User LOGIN IS", userLogin);
+    if (userLogin?.status === 3) {
+      handleLogout();
+    }
+  }, delay);
 
-//   return () => clearTimeout(timeout); 
-// }, [userLogin]);
+  return () => clearTimeout(timeout); 
+}, [userLogin]);
 
   const handleLogout = async () => {
     try {
@@ -107,7 +107,7 @@ const ProfileUserNavbar = () => {
             <CircleUser className="mr-2 w-4 h-4 text-primary" />
             Profile
           </a>
-          <a className="flex items-center px-4 py-2 text-sm text-text-primary hover:bg-accent">
+          <a href="/auth/forgot-password" className="flex items-center px-4 py-2 text-sm text-text-primary hover:bg-accent">
             <RectangleEllipsis className="mr-2 w-4 h-4 text-primary" />
             Change Password
           </a>

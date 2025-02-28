@@ -83,6 +83,7 @@ export function TableVariants<TData, TValue>({
   // Colum yang akan dimunculkan
   const visibleColumns = [
     "gene_id",
+    "inheritance",
     "AC",
     "AF",
     "fraction",

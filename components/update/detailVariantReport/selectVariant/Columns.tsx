@@ -7,7 +7,6 @@ import {
   Edit,
   TableOfContents,
 } from "lucide-react";
-import { Badge } from "../../../ui/badge";
 import {
   AcmgCriteria,
   SelectedVariant,
@@ -25,18 +24,6 @@ import {
 } from "@/components/update/dialog/Dialog";
 import VariantInformationModal from "./VariantInformationModal";
 import React from "react";
-import { Label } from "../../../ui/label";
-import { Input } from "../../../ui/input";
-import { Separator } from "../../../ui/separator";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/src/components/ui/sheet";
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { Checkbox } from "../../../ui/checkbox";
 import { Skeleton } from "../../../ui/skeleton";
 import {
   Accordion,
@@ -45,11 +32,8 @@ import {
   AccordionTrigger,
 } from "../../../ui/accordion";
 
-import { generateClient } from "aws-amplify/api";
 import awsconfig from "@/src/amplifyconfiguration.json";
 import { Amplify } from "aws-amplify";
-import { generateUserID } from "@/utils/function";
-import { Toast, ToastAction } from "../../../ui/toast";
 import BAddSelectedVariant from "@/components/update/button/BAddSelectedVariant";
 import { ZYGOSITY_HETEROZYGOUS, ZYGOSITY_HOMOZYGOUS } from "@/utils/Contanst";
 
@@ -221,6 +205,13 @@ export const Columns: ColumnDef<Variant>[] = [
       return <p className="text-md">{displayValue}</p>;
     },
   },
+  // {
+  //   accessorKey: "inheritance",
+  //   header: "Inheritance",
+  //   cell: ({ row }) => {
+  //     return <p className="text-lg">{row.original.inheritance}</p>;
+  //   },
+  // },
   {
     accessorKey: "AF",
     header: ({ column }) => {
