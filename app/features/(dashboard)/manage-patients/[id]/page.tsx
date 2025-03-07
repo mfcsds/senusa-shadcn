@@ -111,16 +111,24 @@ export default function DetailPatientPage({ params }: PageProps) {
             <Accessibility className="w-10 h-10" />
           </div>
           <div className="flex flex-col flex-1 p-4 md:ml-4 text-left gap-2">
-            <h4 className="font-semibold text-lg text-text-primary">
-              Patient ID
-            </h4>
+            <div className="flex justify-between gap-4">
+              <h4 className="font-semibold text-lg text-text-primary">
+                Patient ID
+              </h4>
+              <Button
+                variant="iconSecondary"
+                size="none"
+                icon={<Info className="w-5 h-5" />}
+                className="bg-foreground mr-4"
+              />
+            </div>
             <p className="text-lg font-medium text-text-secondary">{id}</p>
-            <DropDownSelectPatient
+            {/* <DropDownSelectPatient
               options={patients}
               selectedValue={selectedPatient || ""}
               onChange={setSelectedPatient}
               placeholder="Select Patient State"
-            />
+            /> */}
           </div>
         </div>
 

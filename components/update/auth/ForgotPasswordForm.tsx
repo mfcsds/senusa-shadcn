@@ -15,6 +15,7 @@ import {
 } from "@/components/update/input/input-otp";
 import { Amplify } from "aws-amplify";
 import config from "@/src/aws-exports";
+import { useRouter } from "next/navigation";
 
 Amplify.configure(config);
 export default function ForgotPasswordForm() {
@@ -24,6 +25,7 @@ export default function ForgotPasswordForm() {
   const [hasReceived, setHasReceived] = useState(false);
   const [errors, setErrors] = useState("");
   const { toast } = useToast();
+  const router = useRouter();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
@@ -71,6 +73,14 @@ export default function ForgotPasswordForm() {
   };
   const doResetPassword = async () => {
     setIsResetting(true);
+    if (!email) {
+      toast({
+        title: "Email Required",
+        description: "Please enter your email address.",
+      });
+      setIsResetting(false);
+      return;
+    }
     try {
       const output = await resetPassword({ username: email });
       const { nextStep } = output;
@@ -96,13 +106,14 @@ export default function ForgotPasswordForm() {
       setIsResetting(false);
     }
   };
-  const sendAgainVerifyCode = async () => {};
 
   const handleChangePassword = async () => {
     const passwordErrors = validatePassword(newPassword);
     setIsChanging(true);
     if (passwordErrors.length > 0) {
       setErrors(passwordErrors.join(" "));
+      console.log("Password Error", passwordErrors[0]);
+      setIsChanging(false);
       return;
     }
 
@@ -124,7 +135,12 @@ export default function ForgotPasswordForm() {
       });
     } finally {
       setIsChanging(false);
+      router.push("/auth/login");
     }
+  };
+
+  const handleBack = () => {
+    router.back(); 
   };
 
   return (
@@ -143,6 +159,19 @@ export default function ForgotPasswordForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter Email"
+        />
+        <Button
+          label={isResetting ? "Process" : "Reset Password"}
+          icon={
+            isResetting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null
+          }
+          variant="borderPrimary"
+          size="large"
+          className="w-full mt-6"
+          disabled={isResetting}
+          onClick={doResetPassword}
         />
       </div>
       <div>
@@ -173,6 +202,9 @@ export default function ForgotPasswordForm() {
             }
           />
         </div>
+        {errors && (
+                <p className="text-red-primary text-xs mt-2">{errors}</p>
+              )}
       </div>
       <div>
         <label
@@ -199,39 +231,38 @@ export default function ForgotPasswordForm() {
               <InputOTPSlot index={5} />
             </InputOTPGroup>
           </InputOTP>
-          {/* <Button
-            variant="borderSecondary"
-            icon={<RefreshCw className="w-5 h-5" />}
-            onClick={sendAgainVerifyCode}
-          /> */}
+          <Button
+            variant="iconPrimary"
+            icon={
+              isResetting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : <RefreshCw className="w-5 h-5" />
+            }
+            disabled={isResetting}
+            onClick={doResetPassword}
+          />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2">
         <Button
-          label={isChanging ? "Process" : "Confirm Password"}
+          label={isChanging ? "Process" : "Change Password"}
           icon={
             isChanging ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : null
           }
-          variant="primary"
+          variant="outlineSecondary"
           size="large"
           className="w-full mt-6"
           disabled={isChanging}
           onClick={handleChangePassword}
         />
         <Button
-          label={isResetting ? "Process" : "Send Code"}
-          icon={
-            isResetting ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : null
-          }
-          variant="borderSecondary"
+          label= "Cancel"
+          variant="outlineDanger"
           size="large"
           className="w-full mt-6"
-          disabled={isResetting}
-          onClick={doResetPassword}
+          onClick={handleBack}
         />
       </div>
     </div>
