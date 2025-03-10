@@ -24,6 +24,7 @@ import {
 } from "@/components/update/ui/select";
 import { ButtonAdd } from "@/components/update/button/ButtonAdd";
 import { useToast } from "@/components/ui/use-toast";
+import DetailPatientDialog from "@/components/update/detailPatient/DetailPatientDialog";
 
 interface PageProps {
   params: Promise<{
@@ -115,12 +116,9 @@ export default function DetailPatientPage({ params }: PageProps) {
               <h4 className="font-semibold text-lg text-text-primary">
                 Patient ID
               </h4>
-              <Button
-                variant="iconSecondary"
-                size="none"
-                icon={<Info className="w-5 h-5" />}
-                className="bg-foreground mr-4"
-              />
+              <DetailPatientDialog
+                          patientID={id!}
+                        />
             </div>
             <p className="text-lg font-medium text-text-secondary">{id}</p>
             {/* <DropDownSelectPatient
