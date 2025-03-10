@@ -39,7 +39,7 @@ const ListView: React.FC<ListViewProps> = ({ intialInstitution }) => {
     try {
       const data = await fetchUserByInstitutionId(id);
       await updateStatusInstution(id, false);
-      await updateAccountUser(data[0].id, 3);
+      await Promise.all(data.map((user) => updateAccountUser(user.id, 3)));
       const updateInstitution = await fetchInstitutions();
       setInstitutionsList(updateInstitution);
       toast({
@@ -60,7 +60,7 @@ const ListView: React.FC<ListViewProps> = ({ intialInstitution }) => {
     try {
       const data = await fetchUserByInstitutionId(id);
       await updateStatusInstution(id, true);
-      await updateAccountUser(data[0].id, 2);
+      await Promise.all(data.map((user) => updateAccountUser(user.id, 2)));
       const updateInstitution = await fetchInstitutions();
       setInstitutionsList(updateInstitution);
       toast({
