@@ -64,7 +64,7 @@ import {
   GENE_PANEL_50,
   GENE_PANEL_75,
   GENE_PANEL_113,
-} from "@/utils/Contanst";
+} from "@/utils/Constant";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

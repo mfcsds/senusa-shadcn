@@ -8,6 +8,57 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const createRole = /* GraphQL */ `mutation CreateRole(
+  $input: CreateRoleInput!
+  $condition: ModelRoleConditionInput
+) {
+  createRole(input: $input, condition: $condition) {
+    id
+    name
+    userID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateRoleMutationVariables,
+  APITypes.CreateRoleMutation
+>;
+export const updateRole = /* GraphQL */ `mutation UpdateRole(
+  $input: UpdateRoleInput!
+  $condition: ModelRoleConditionInput
+) {
+  updateRole(input: $input, condition: $condition) {
+    id
+    name
+    userID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateRoleMutationVariables,
+  APITypes.UpdateRoleMutation
+>;
+export const deleteRole = /* GraphQL */ `mutation DeleteRole(
+  $input: DeleteRoleInput!
+  $condition: ModelRoleConditionInput
+) {
+  deleteRole(input: $input, condition: $condition) {
+    id
+    name
+    userID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteRoleMutationVariables,
+  APITypes.DeleteRoleMutation
+>;
 export const createUserNotifications = /* GraphQL */ `mutation CreateUserNotifications(
   $input: CreateUserNotificationsInput!
   $condition: ModelUserNotificationsConditionInput
@@ -1095,9 +1146,9 @@ export const createPatient = /* GraphQL */ `mutation CreatePatient(
     sex
     phone_number
     dob
-    id_reference
     id_institution
     health_desc
+    id_reference
     createdAt
     updatedAt
     __typename
@@ -1117,9 +1168,9 @@ export const updatePatient = /* GraphQL */ `mutation UpdatePatient(
     sex
     phone_number
     dob
-    id_reference
     id_institution
     health_desc
+    id_reference
     createdAt
     updatedAt
     __typename
@@ -1139,9 +1190,9 @@ export const deletePatient = /* GraphQL */ `mutation DeletePatient(
     sex
     phone_number
     dob
-    id_reference
     id_institution
     health_desc
+    id_reference
     createdAt
     updatedAt
     __typename
@@ -1167,6 +1218,10 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     level
     status
     phone_number
+    Roles {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -1192,6 +1247,10 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     level
     status
     phone_number
+    Roles {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -1217,6 +1276,10 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     level
     status
     phone_number
+    Roles {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename

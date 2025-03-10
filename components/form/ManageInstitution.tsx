@@ -19,6 +19,7 @@ import config from "@/src/amplifyconfiguration.json";
 
 import { generateClient } from "aws-amplify/api";
 import { Institution } from "@/utils/object";
+import TableUserInstitution from "../table/TableUserInstitution";
 
 Amplify.configure(config);
 
@@ -72,7 +73,7 @@ const ManageInstituionData: React.FC<ManageInstituionDataProops> = ({ id }) => {
             <ProfileInstitution id={id}></ProfileInstitution>
           </TabsContent>
           <TabsContent value="Account">
-            <TableUserAccount></TableUserAccount>
+            <TableUserInstitution id={id ?? ""}></TableUserInstitution>
           </TabsContent>
         </Tabs>
       </CardContent>

@@ -66,6 +66,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TableReportList from "@/components/table/TableReportList";
 import { Separator } from "@/components/ui/separator";
 import PatientNameItem from "@/components/items/PatientNameItem";
+import { fetchUserAttributes } from "aws-amplify/auth";
 
 Amplify.configure(config2);
 
@@ -75,6 +76,8 @@ const VariantReport = () => {
     { id: string; name: string }[]
   >([]);
   const [selectedPhenotypes, setSelectedPhenotypes] = useState<string[]>([]);
+
+  const [institution_id, setInstitutionID] = useState("");
 
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
@@ -95,14 +98,31 @@ const VariantReport = () => {
   };
 
   useEffect(() => {
+    const getUserInstitutionID = async () => {
+      try {
+        const attributes = await fetchUserAttributes();
+        setInstitutionID(attributes["custom:institution_id"] ?? "");
+      } catch (error) {
+        console.error("Error fetching user attributes", error);
+      }
+    };
+    getUserInstitutionID();
+  }, []);
+
+  useEffect(() => {
     const fetchPatient = async () => {
       try {
-        const result = await client.graphql({ query: listPatients });
+        const result = await client.graphql({
+          query: listPatients,
+          variables: { filter: { id_institution: { eq: institution_id } } },
+        });
         setPatients(result.data.listPatients.items as Patient[]);
-      } catch (error) {}
+      } catch (error) {
+        console.log("Error fetching Patient");
+      }
     };
     fetchPatient();
-  }, []);
+  }, [institution_id]);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -183,8 +203,10 @@ const VariantReport = () => {
       event.preventDefault();
     }
     try {
-      const result = await client.graphql({ query: listVariantReports });
-      console.log(result.data.listVariantReports.items);
+      const result = await client.graphql({
+        query: listVariantReports,
+        variables: { filter: { institutionID: { eq: institution_id } } },
+      });
       setVarReports(
         result.data.listVariantReports.items as CreateVariantReportInput[]
       );
@@ -209,10 +231,11 @@ const VariantReport = () => {
   useEffect(() => {
     fetchVariantReport();
     console.log(varReports);
-  }, []);
+  }, [institution_id]);
 
   const handleCreateReport = async () => {
     try {
+      console.log(selectedPatient?.institutionID);
       const newReport: CreateVariantReportInput = {
         id: generateReportID(),
         status: 1,
@@ -221,6 +244,7 @@ const VariantReport = () => {
         sample_collection: getDateToday(),
         phenotype: selectedPhenotypes,
         idPatient: selectedPatient?.id,
+        institutionID: institution_id,
       };
       const resultReport = await client.graphql({
         query: createVariantReport,

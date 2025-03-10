@@ -22,8 +22,6 @@ export default function ClientLayout({
         // Attempt to fetch the current auth session
         const session = await fetchAuthSession();
         // Optionally log them to the console
-        console.log("ID token:", session.tokens?.idToken);
-        console.log("Access token:", session.tokens?.accessToken);
 
         // If there's no valid ID token, treat it as not logged in
         if (!session.tokens?.idToken) {

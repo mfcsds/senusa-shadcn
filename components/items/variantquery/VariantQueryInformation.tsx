@@ -67,7 +67,9 @@ const VariantQueryInformation: React.FC<VariantQueryInformationProops> = ({
     {
       tab: "Extract Data",
       value: "Extract Data",
-      comp: <DownloadVariant hgvs={hgvs ?? ""}></DownloadVariant>,
+      comp: (
+        <DownloadVariant hgvs={hgvs ?? ""} data={variantdata}></DownloadVariant>
+      ),
     },
   ];
 

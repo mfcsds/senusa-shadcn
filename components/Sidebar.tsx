@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 
 import { signOut } from "aws-amplify/auth";
 
-const Sidebar = () => {
+const SidebarApp = () => {
   const router = useRouter();
   const handleLogout = async () => {
     try {
@@ -92,4 +92,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default SidebarApp;

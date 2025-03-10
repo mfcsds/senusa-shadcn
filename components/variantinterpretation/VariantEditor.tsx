@@ -19,7 +19,7 @@ import {
 import VariantItem from "../variant/VariantItem";
 import ACMGLabel from "../variant/ACMGLabel";
 import ZygosityLabel from "../variant/ZygosityLabel";
-import { ZYGOSITY_HETEROZYGOUS, ZYGOSITY_HOMOZYGOUS } from "@/utils/Contanst";
+import { ZYGOSITY_HETEROZYGOUS, ZYGOSITY_HOMOZYGOUS } from "@/utils/Constant";
 import {
   deleteSelectedVariant,
   updateSelectedVariant,

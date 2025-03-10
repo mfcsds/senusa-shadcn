@@ -80,9 +80,7 @@ const BNotifications = () => {
         setListOfNotification(
           (await result).data.listUserNotifications.items as UserNotifications[]
         );
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
   };
 

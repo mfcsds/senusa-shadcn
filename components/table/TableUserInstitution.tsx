@@ -49,9 +49,11 @@ import { userStatus } from "@/utils/DateHelperFunction";
 
 Amplify.configure(config);
 
-const TableUserAccount = () => {
-  const idParamsEmail = useSearchParams()?.get("id") || "";
+type TableUserInstitutionProops = {
+  id?: string;
+};
 
+const TableUserInstitution = ({ id }: TableUserInstitutionProops) => {
   const colors = [
     "bg-red-900",
     "bg-blue-900",
@@ -77,7 +79,7 @@ const TableUserAccount = () => {
           variables: {
             filter: {
               institutionID: {
-                eq: idParamsEmail ?? "", // Fetch users with the specific institutionID
+                eq: id ?? "", // Fetch users with the specific institutionID
               },
             },
           },
@@ -92,7 +94,7 @@ const TableUserAccount = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [newUser, setNewUser] = useState<DataUser>({
-    institutionID: idParamsEmail,
+    institutionID: id,
     id: "",
     first_name: "",
     last_name: "",
@@ -120,13 +122,13 @@ const TableUserAccount = () => {
           options: {
             userAttributes: {
               "custom:roles": userRole,
-              "custom:institution_id": idParamsEmail,
+              "custom:institution_id": id,
             },
           },
         });
 
         const newData: CreateUserInput = {
-          institutionID: idParamsEmail ?? "",
+          institutionID: id ?? "",
           id: userId,
           email: newUser.email,
           phone_number: newUser.phone_number,
@@ -391,4 +393,4 @@ const TableUserAccount = () => {
   );
 };
 
-export default TableUserAccount;
+export default TableUserInstitution;

@@ -7,6 +7,7 @@ import { generateClient } from "aws-amplify/api";
 import { DividerVerticalIcon } from "@radix-ui/react-icons";
 import ProfileUserNavbar from "./ProfileUserNavbar";
 import BNotifications from "./button/BNotifications";
+import { SidebarTrigger } from "./ui/sidebar";
 
 const Navbar = () => {
   const [dropDownOpen, setDropDownOpen] = useState(false);
@@ -15,14 +16,17 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex flex-row-reverse shadow-md px-10 w-full items-center py-4 cursor-pointer gap-3">
-      <div className="flex gap-2 items-center">
-        <p className="ml-2 text-gray-500 text-[10px]">Dark Mode</p>
-        <Switch className="h-2"></Switch>
+    <div className="flex flex-row-reverse justify-between  shadow-md px-10 w-full items-center py-4 cursor-pointer gap-3">
+      <div className="flex flex-row-reverse">
+        <div className="flex gap-2 items-center">
+          <p className="ml-2 text-gray-500 text-[10px]">Dark Mode</p>
+          <Switch className="h-2"></Switch>
+        </div>
+        <DividerVerticalIcon></DividerVerticalIcon>
+        <ProfileUserNavbar></ProfileUserNavbar>
+        <BNotifications></BNotifications>
       </div>
-      <DividerVerticalIcon></DividerVerticalIcon>
-      <ProfileUserNavbar></ProfileUserNavbar>
-      <BNotifications></BNotifications>
+      <SidebarTrigger className="w-10 h-10" />
       {/* <div className="relative">
         <div className="flex flex-row gap-2 items-center justify-center">
           <Avatar onClick={toggleDropdown} className="w-8 h-8">

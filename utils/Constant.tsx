@@ -1,5 +1,3 @@
-import { constants } from "buffer";
-
 // Constants.tsx
 export const ACMG_BENIGN = "Benign";
 export const ACMG_LIKELY_BENIGN = "Likely Benign";
@@ -284,3 +282,20 @@ export const GENE_PANEL_113 = [
   "PHOX2B",
   "SDHC",
 ];
+
+export const ROLE_SUPER_ADMIN = "Super Admin";
+export const ROLE_ADMIN_LAB = "Admin Lab";
+export const ROLE_USER_LAB = "User Lab";
+export const ROLE_BIOINFORMATICIAN = "Bioinformatician";
+export const ROLE_GENETICS_CONCELOR = "Genetic Conselor";
+export const ROLE_CLINICAL_PATHOLOGY = "Clinical Pathology";
+export const ROLE_HEADLAB = "Head Lab";
+
+export const PATH_DASHBOARD = "/dashboard";
+export const PATH_ADMIN_MANAGE_ACCOUNT = "/dashboard/admin-manage/";
+export const PATH_MANAGE_ACCOUNT = "/dashboard/manageaccount/";
+export const PATH_MANAGE_INSTITUTION_USER = "/dashboard/manageinstitution/";
+export const PATH_MANAGE_PATIENT = "/dashboard/managepatient/";
+export const PATH_VARIANT_REPORT = "/dashboard/variantreport/";
+export const PATH_VARIANT_QUERY = "/dashboard/variantquery/";
+export const PATH_VARIANT_LIBRARY = "/dashboard/variantlibrary/";

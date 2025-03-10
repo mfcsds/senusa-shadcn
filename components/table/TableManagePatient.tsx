@@ -53,6 +53,16 @@ import { generatePatientID } from "@/utils/function";
 import { Separator } from "@/components/ui/separator";
 import LabelAndDescription from "../items/LabelAndDescription";
 
+import { fetchUserAttributes, getCurrentUser } from "aws-amplify/auth";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { CreatePatientInput } from "@/src/API";
+
 interface Patient {
   id: string;
   institutionID?: string;
@@ -65,12 +75,25 @@ interface Patient {
 }
 
 const TableManagePatient = () => {
-  const [patients, setPatients] = useState<Patient[]>([]);
-  // const [name, setName] = useState("");
+  const [institution_id, setInstitutionID] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getUserInstitutionID = async () => {
+      try {
+        const attributes = await fetchUserAttributes();
+        setInstitutionID(attributes["custom:institution_id"] || null);
+      } catch (error) {
+        console.error("Error fetching user attributes", error);
+      }
+    };
+    getUserInstitutionID();
+  }, []);
+
+  const [patients, setPatients] = useState<CreatePatientInput[]>([]);
+  const [name, setName] = useState("");
   const [idReference, setIDReference] = useState("");
-  // const [id, setIdPatient] = useState("");
-  // const [sex, setSex] = useState("");
-  // const [date, setDate] = React.useState<Date>();
+  const [sex, setSex] = useState("");
+  const [date, setDate] = React.useState<Date>();
   const [showModal, setShowModal] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [phone_number, setPhoneNumber] = useState("");
@@ -94,12 +117,14 @@ const TableManagePatient = () => {
 
   const savePatient = async () => {
     try {
-      const newPatient = {
+      const newPatient: CreatePatientInput = {
         id: generatePatientID(),
-        name: idReference,
-        sex: "-",
+        name: name,
+        sex: sex,
         id_reference: idReference,
         phone_number: phone_number,
+        id_institution: institution_id,
+        dob: date?.toString(),
       };
 
       const result = await client.graphql({
@@ -108,10 +133,9 @@ const TableManagePatient = () => {
       });
 
       setPatients([...patients, newPatient]);
-
       setShowModal(!showModal);
     } catch (error) {
-      console.error("Error Saving Data");
+      console.error(error);
     }
   };
 
@@ -133,15 +157,19 @@ const TableManagePatient = () => {
   useEffect(() => {
     const fetchPatient = async () => {
       try {
-        const result = await client.graphql({ query: listPatients });
+        const result = await client.graphql({
+          query: listPatients,
+          variables: { filter: { id_institution: { eq: institution_id } } },
+        });
         setPatients(result.data.listPatients.items as Patient[]);
-      } catch (error) {}
+      } catch (error) {
+        console.error("Error Fetching Data");
+      }
     };
     fetchPatient();
-  }, []);
+  }, [institution_id]);
 
   const router = useRouter();
-
   const navigateTo = (path: string) => {
     router.push(path);
   };
@@ -166,12 +194,13 @@ const TableManagePatient = () => {
         <TableCaption>User Accounts Details.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="text-xl w-5/12">ID / Reference</TableHead>
-            <TableHead className="text-xl w-5/12">Patient Status</TableHead>
-            {/* <TableHead>Sex</TableHead>
+            <TableHead>ID / Reference</TableHead>
+            <TableHead>Patient Status</TableHead>
+            <TableHead>Sex</TableHead>
             <TableHead>Phone Number</TableHead>
-            <TableHead>Date of Birth</TableHead> */}
-            <TableHead className="text-xl">Actions</TableHead>
+            <TableHead>Date of Birth</TableHead>
+
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -183,9 +212,11 @@ const TableManagePatient = () => {
                   name={patients.name}
                 ></PatientItem>
               </TableCell>
+
               <TableCell>{patients.health_desc || ""}</TableCell>
-              {/* <TableCell>{patients.phone_number || ""}</TableCell>
-              <TableCell>{patients.dob || ""}</TableCell> */}
+              <TableCell>{patients.sex || ""}</TableCell>
+              <TableCell>{patients.phone_number || ""}</TableCell>
+              <TableCell>{patients.dob || ""}</TableCell>
 
               <TableCell className="text-center">
                 <div className="flex flex-row gap-1 items-center">
@@ -210,7 +241,7 @@ const TableManagePatient = () => {
                   <Button
                     variant="ghost"
                     className="group hover:bg-rose-800"
-                    onClick={() => handleDeletePatientModal(patients.id)}
+                    onClick={() => handleDeletePatientModal(patients.id ?? "")}
                   >
                     <span>
                       <Trash className="group-hover:text-white w-3 h-3 " />
@@ -279,15 +310,54 @@ const TableManagePatient = () => {
             </CardHeader>
             <CardContent>
               <div className="flex flex-col gap-3">
-                <div className="flex flex-col gap-5 p-5 border rounded-md shadow-sm">
-                  <LabelAndDescription
-                    label="ID or Patient Reference Number"
-                    desc="Patient Identifier"
-                  ></LabelAndDescription>
+                <div className="flex flex-col p-2 rounded-md  gap-2">
+                  <Label>ID References</Label>
                   <Input
                     type="text"
-                    placeholder="Insert ID"
+                    className="focus-visible:ring-0 focus-visible:shadow-sm"
+                    placeholder="Insert ID or Medical Record Number"
                     onChange={(e) => setIDReference(e.target.value)}
+                  ></Input>
+                </div>
+
+                <div className="flex flex-col p-2 rounded-md gap-2">
+                  <Label>Full Name</Label>
+                  <Input
+                    type="text"
+                    className="focus-visible:ring-0 focus-visible:shadow-sm"
+                    placeholder="Fullname"
+                    onChange={(e) => setName(e.target.value)}
+                  ></Input>
+                </div>
+
+                <div className="flex flex-col p-2 rounded-md gap-2">
+                  <Label>Sex</Label>
+                  <Select onValueChange={(value) => setSex(value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select gender" />
+                    </SelectTrigger>
+                    <SelectContent className="focus-visible:ring-0">
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex flex-col p-2 rounded-md gap-2">
+                  <Label>Date of Birth</Label>
+                  <Input
+                    type="date"
+                    className="focus-visible:ring-0 focus-visible:shadow-sm"
+                    onChange={(e) => setDate(new Date(e.target.value))}
+                  ></Input>
+                </div>
+
+                <div className="flex flex-col p-2 rounded-md  gap-2">
+                  <Label>Phone Number</Label>
+                  <Input
+                    type="text"
+                    className="focus-visible:ring-0 focus-visible:shadow-sm"
+                    onChange={(e) => setPhoneNumber(e.target.value)}
                   ></Input>
                 </div>
               </div>
@@ -295,7 +365,7 @@ const TableManagePatient = () => {
             <CardFooter>
               <div className="flex w-full flex-row-reverse mt-4 gap-4">
                 <Button onClick={savePatient}>Save</Button>
-                <Button variant={"secondary"} onClick={handleAddNewPatient}>
+                <Button variant="secondary" onClick={handleAddNewPatient}>
                   Cancel
                 </Button>
               </div>

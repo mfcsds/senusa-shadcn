@@ -4,6 +4,9 @@ import "@/app/globals.css";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import ClientLayout from "./ClientLayout"; // Komponen client terpisah
+import SidebarApp from "@/components/Sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import AppSidebar from "@/components/AppSidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,13 +27,17 @@ export default function DashboardLayout({
       className={`${inter.className} flex h-screen overflow-hidden w-screen`}
     >
       <ClientLayout>
-        <Sidebar />
-        <div className="flex flex-col w-full h-full overflow-y-auto">
-          <Navbar />
-          {/* Bungkus children dengan komponen client yang cek session */}
+        <SidebarProvider>
+          <AppSidebar />
+          <div className="flex flex-col w-full h-full overflow-y-auto">
+            <Navbar />
+            {/* Bungkus children dengan komponen client yang cek session */}
 
-          <main className="flex justify-start items-start m-5">{children}</main>
-        </div>
+            <main className="flex justify-start items-start m-5">
+              {children}
+            </main>
+          </div>
+        </SidebarProvider>
       </ClientLayout>
     </div>
   );

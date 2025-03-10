@@ -4,7 +4,7 @@ import {
   ACMG_LIKELY_PATHOGENIC,
   ACMG_PATHOGENIC,
   ACMG_VUS,
-} from "@/utils/Contanst";
+} from "@/utils/Constant";
 import React from "react";
 
 function getBorderColor(acmgclass: string) {

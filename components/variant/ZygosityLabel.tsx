@@ -6,7 +6,7 @@ import {
   ACMG_VUS,
   ZYGOSITY_HETEROZYGOUS,
   ZYGOSITY_HOMOZYGOUS,
-} from "@/utils/Contanst";
+} from "@/utils/Constant";
 import React from "react";
 
 function getBorderColor(zygosity: string) {

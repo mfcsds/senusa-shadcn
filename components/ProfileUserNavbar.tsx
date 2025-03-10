@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { getCurrentUser } from "aws-amplify/auth";
+import { fetchUserAttributes, getCurrentUser } from "aws-amplify/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { getUser } from "@/src/graphql/queries";
 import { User } from "@/src/API";
@@ -31,12 +31,12 @@ const ProfileUserNavbar = () => {
 
   const currentAuthenticatedUser = async () => {
     try {
-      const { username, userId, signInDetails } = await getCurrentUser();
-      console.log(`The username: ${username}`);
-      console.log(`The userId: ${userId}`);
-      console.log(`The signInDetails: ${signInDetails}`);
-      await setUsername(username);
-      await setUserRole(userId);
+      const user = await getCurrentUser();
+      const attributes = await fetchUserAttributes();
+      const role = attributes["custom:roles"];
+
+      await setUsername(user.username);
+      await setUserRole(role ?? "");
       await getUserProfile();
     } catch (err) {
       console.log(err);

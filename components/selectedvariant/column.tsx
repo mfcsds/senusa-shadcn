@@ -52,7 +52,7 @@ import { Amplify } from "aws-amplify";
 import { generateUserID } from "@/utils/function";
 import { Toast, ToastAction } from "../ui/toast";
 import BAddSelectedVariant from "../button/BAddSelectedVariant";
-import { ZYGOSITY_HETEROZYGOUS, ZYGOSITY_HOMOZYGOUS } from "@/utils/Contanst";
+import { ZYGOSITY_HETEROZYGOUS, ZYGOSITY_HOMOZYGOUS } from "@/utils/Constant";
 import ACMGVariantReport from "../items/variantquery/ACMGVariantReport";
 import handleGeneratePDF from "../HandleGeneratePDF";
 
