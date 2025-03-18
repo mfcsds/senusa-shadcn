@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { listUsers } from "@/src/graphql/queries";
-import { User, UserNotifications } from "@/src/API";
+import { SelectedVariant, User, UserNotifications } from "@/src/API";
 import { generateClient } from "aws-amplify/api";
 import { toast } from "../ui/use-toast";
 import {
@@ -27,7 +27,6 @@ import {
 import Profile from "../items/profile/Profile";
 import { UserPlus } from "lucide-react";
 import { createUserNotifications } from "@/src/graphql/mutations";
-import { SelectedVariant } from "@/utils/object";
 
 interface BInviteUserProops {
   user: User | undefined;

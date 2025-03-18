@@ -1,5 +1,5 @@
 "use client";
-import { AcmgCriteria, SelectedVariant } from "@/utils/object";
+import { AcmgCriteria } from "@/utils/object";
 import React, { useEffect, useState } from "react";
 
 import { generateClient } from "aws-amplify/api";
@@ -21,7 +21,7 @@ import {
 } from "@/src/graphql/mutations";
 import { SaveAll } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { AcmgAnnotation } from "@/src/API";
+import { AcmgAnnotation, SelectedVariant } from "@/src/API";
 
 interface AcmgData {
   status: boolean | null | undefined;

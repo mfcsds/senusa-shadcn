@@ -66,6 +66,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Label } from "../ui/label";
 
 interface PreviewReportProops {
   id_report: string;
@@ -393,65 +403,101 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-1/12">Report Status</TableHead>
-                    <TableHead className="w-10/12">Approved By</TableHead>
+                    <TableHead className="w-9/12">Report Status</TableHead>
+                    <TableHead className="w-1/12">Approval </TableHead>
                     <TableHead className="w-1/12">Preview Report</TableHead>
+                    <TableHead className="w-1/12">Download</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   <TableRow>
                     <TableCell>
-                      <div className="flex flex-col gap-4">
-                        <LabelAndDescription
-                          label="Current Report Status"
-                          desc={`${ReportStatus(variantReport?.status ?? 0)}`}
-                        ></LabelAndDescription>
-                        <Separator></Separator>
-                      </div>
-                      <div className="flex flex-row gap-2 items-center">
-                        <Select onValueChange={setNewStatus}>
-                          <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Select Report Status" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>Report Status</SelectLabel>
-                              <SelectItem value="draft">Draft</SelectItem>
-                              <SelectItem value="process">
-                                In Process
-                              </SelectItem>
-                              <SelectItem value="wait">
-                                Waiting for Approval
-                              </SelectItem>
-                              <SelectItem value="complete">
-                                Completed
-                              </SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                        <Separator
-                          orientation="vertical"
-                          className="h-5"
-                        ></Separator>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant={"ghost"}
-                                className="hover:bg-green-500 hover:text-white"
-                                onClick={(e) => handleUpdateReportStatus()}
-                              >
-                                <small>
-                                  <Save className="w-5 h-5"></Save>
-                                </small>
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Save Change Status</TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+                      <div className="flex flex-row">
+                        <div className="flex flex-col">
+                          <div className="flex flex-col gap-4">
+                            <LabelAndDescription
+                              label="Current Report Status"
+                              desc={`${ReportStatus(
+                                variantReport?.status ?? 0
+                              )}`}
+                            ></LabelAndDescription>
+                            <Separator></Separator>
+                          </div>
+                          <div className="flex flex-row gap-2 items-center">
+                            <Select onValueChange={setNewStatus}>
+                              <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Select Report Status" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup>
+                                  <SelectLabel>Report Status</SelectLabel>
+                                  <SelectItem value="draft">Draft</SelectItem>
+                                  <SelectItem value="process">
+                                    In Process
+                                  </SelectItem>
+                                  <SelectItem value="wait">
+                                    Waiting for Approval
+                                  </SelectItem>
+                                  <SelectItem value="complete">
+                                    Completed
+                                  </SelectItem>
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                            <Separator
+                              orientation="vertical"
+                              className="h-5"
+                            ></Separator>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    variant={"ghost"}
+                                    className="hover:bg-green-500 hover:text-white"
+                                    onClick={(e) => handleUpdateReportStatus()}
+                                  >
+                                    <small>
+                                      <Save className="w-5 h-5"></Save>
+                                    </small>
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  Save Change Status
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                        </div>
+                        <div className="flex flex-col">
+                          <p className="text-lg">Approved by</p>
+                          <p className="text-lg">{"-"}</p>
+                        </div>
                       </div>
                     </TableCell>
-                    <TableCell>-</TableCell>
+                    <TableCell>
+                      <div className="flex flex-col">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline">Approve Report</Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                              <DialogTitle>Report Approval</DialogTitle>
+                              <DialogDescription>
+                                Make changes to your profile here. Click save
+                                when you're done.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                              This report will be approved by -
+                            </div>
+                            <DialogFooter>
+                              <Button type="submit">Save changes</Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <div className="flex flex-row items-center gap-2">
                         <Button
@@ -464,45 +510,47 @@ const PreviewReport: React.FC<PreviewReportProops> = ({
                           orientation="vertical"
                           className="h-5"
                         ></Separator>
-                        <Accordion type="single" collapsible>
-                          <AccordionItem value="item-1">
-                            <AccordionTrigger>Download Format</AccordionTrigger>
-                            <AccordionContent>
-                              <div className="flex flex-row gap-2">
-                                <div className="flex flex-row gap-1">
-                                  {/* <Button
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Accordion type="single" collapsible>
+                        <AccordionItem value="item-1">
+                          <AccordionTrigger>Download Format</AccordionTrigger>
+                          <AccordionContent>
+                            <div className="flex flex-row gap-2">
+                              <div className="flex flex-row gap-1">
+                                {/* <Button
                                     variant={"outline"}
                                     onClick={(e) => generatePDF()}
                                   >
                                     PDF
                                   </Button> */}
-                                  <DynamicGeneratePDF
-                                    patient={patient}
-                                    listConc={listConc}
-                                    listRec={listRec}
-                                    variantInter={variantInter}
-                                    listSelVariants={listSelVariants}
-                                    ensembleRestVersion={ensembleRestVersion}
-                                    ensembleVersion={ensembleVersion}
-                                  ></DynamicGeneratePDF>
-                                  <Button
-                                    variant={"outline"}
-                                    onClick={generateCSV}
-                                  >
-                                    CSV
-                                  </Button>
-                                  <Button
-                                    variant={"outline"}
-                                    onClick={generateXML}
-                                  >
-                                    XML
-                                  </Button>
-                                </div>
+                                <DynamicGeneratePDF
+                                  patient={patient}
+                                  listConc={listConc}
+                                  listRec={listRec}
+                                  variantInter={variantInter}
+                                  listSelVariants={listSelVariants}
+                                  ensembleRestVersion={ensembleRestVersion}
+                                  ensembleVersion={ensembleVersion}
+                                ></DynamicGeneratePDF>
+                                <Button
+                                  variant={"outline"}
+                                  onClick={generateCSV}
+                                >
+                                  CSV
+                                </Button>
+                                <Button
+                                  variant={"outline"}
+                                  onClick={generateXML}
+                                >
+                                  XML
+                                </Button>
                               </div>
-                            </AccordionContent>
-                          </AccordionItem>
-                        </Accordion>
-                      </div>
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
                     </TableCell>
                   </TableRow>
                 </TableBody>

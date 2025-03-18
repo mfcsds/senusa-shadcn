@@ -1,6 +1,6 @@
 import React from "react";
 import { Skeleton } from "../ui/skeleton";
-import { SelectedVariant } from "@/utils/object";
+import { SelectedVariant } from "@/src/API";
 
 interface VariantItemProops {
   variantData?: SelectedVariant;

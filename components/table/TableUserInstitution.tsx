@@ -46,6 +46,7 @@ import { useSearchParams } from "next/navigation";
 import { Amplify } from "aws-amplify";
 import config from "@/src/amplifyconfiguration.json";
 import { userStatus } from "@/utils/DateHelperFunction";
+import { Checkbox } from "../ui/checkbox";
 
 Amplify.configure(config);
 
@@ -302,38 +303,57 @@ const TableUserInstitution = ({ id }: TableUserInstitutionProops) => {
                 </SelectContent>
               </Select>
             </div>
-            <div className=" flex flex-col gap-2 mb-4">
+            <div className="flex flex-col gap-2 mb-4">
               <LabelAndDescription
-                label="Role"
-                desc="Select the role assigned to the user, such as Genetic Counselor."
+                label="Roles"
+                desc="Select roles assigned to the user."
               ></LabelAndDescription>
-              <Select
-                value={`${newUser.role}`}
-                onValueChange={(value) => {
-                  newUser.role = value;
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="User Role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>User Role</SelectLabel>
-                    <SelectItem value="Admin Lab">Admin Lab</SelectItem>
-                    <SelectItem value="User Lab">User Lab</SelectItem>
-                    <SelectItem value="Bioinformatician">
-                      Bioinformatician
-                    </SelectItem>
-                    <SelectItem value="Genetics Conselor">
-                      Genetic Conselor
-                    </SelectItem>
-                    <SelectItem value="Clinical Pathology">
-                      Clinical Pathology
-                    </SelectItem>
-                    <SelectItem value="Head Lab">Head Lab</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  "Admin Lab",
+                  "User Lab",
+                  "Bioinformatician",
+                  "Genetic Counselor",
+                  "Clinical Pathology",
+                  "Head Lab",
+                ].map((role) => (
+                  <div key={role} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={role}
+                      checked={newUser.role.includes(role)}
+                      onCheckedChange={(checked) => {
+                        setNewUser((prev) => {
+                          // Pastikan prev.role adalah string. Jika tidak, buat string kosong.
+                          let storedRoles =
+                            typeof prev.role === "string" ? prev.role : "";
+
+                          // Ubah jadi array menggunakan split.
+                          let rolesArray = storedRoles
+                            ? storedRoles.split(",")
+                            : [];
+
+                          if (checked) {
+                            // Tambah role jika belum ada di array.
+                            if (!rolesArray.includes(role)) {
+                              rolesArray.push(role);
+                            }
+                          } else {
+                            // Hapus role dari array.
+                            rolesArray = rolesArray.filter((r) => r !== role);
+                          }
+
+                          // Gabungkan kembali array menjadi string.
+                          return { ...prev, role: rolesArray.join(",") };
+                        });
+                      }}
+                    />
+                    <label htmlFor={role} className="text-sm font-medium">
+                      {role}
+                    </label>
+                  </div>
+                ))}
+              </div>
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">

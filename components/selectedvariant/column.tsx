@@ -6,6 +6,7 @@ import {
   ArrowUpDown,
   Edit,
   Edit2,
+  Info,
   PlusCircle,
   TableOfContents,
 } from "lucide-react";
@@ -55,6 +56,11 @@ import BAddSelectedVariant from "../button/BAddSelectedVariant";
 import { ZYGOSITY_HETEROZYGOUS, ZYGOSITY_HOMOZYGOUS } from "@/utils/Constant";
 import ACMGVariantReport from "../items/variantquery/ACMGVariantReport";
 import handleGeneratePDF from "../HandleGeneratePDF";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@radix-ui/react-hover-card";
 
 Amplify.configure(awsconfig);
 
@@ -206,7 +212,25 @@ export const columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "AC",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">AC</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2 hover:bg-violet-200">
+          <HoverCard>
+            <HoverCardTrigger>
+              <Button variant={"ghost"} className="hover:bg-violet-200">
+                <p className="text-lg">{"AC"}</p>
+                <Info></Info>
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-white p-3 rounded-md">
+                <p className="text-sm font-light text-gray-600">
+                  {"Allele Count"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       const ac = row.original.ac;
@@ -226,7 +250,27 @@ export const columns: ColumnDef<Variant>[] = [
   },
   {
     accessorKey: "inheritance",
-    header: "Inheritance",
+    header: ({ column }) => {
+      return (
+        <div className="flex flex-row  items-center gap-2 hover:bg-violet-200">
+          <HoverCard>
+            <HoverCardTrigger>
+              <Button variant={"ghost"} className="hover:bg-violet-200">
+                <p className="text-lg">{"Inheritance"}</p>
+                <Info></Info>
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-white p-3 rounded-md">
+                <p className="text-sm font-light text-gray-600">
+                  {"AD: Autosomal Dominant; AR: Autosomal Recessive"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
+    },
     cell: ({ row }) => {
       return <p className="text-lg">{row.original.inheritance}</p>;
     },
@@ -234,7 +278,25 @@ export const columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "AF",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">AF</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2 hover:bg-violet-200">
+          <HoverCard>
+            <HoverCardTrigger>
+              <Button variant={"ghost"} className="hover:bg-violet-200">
+                <p className="text-lg">{"AF"}</p>
+                <Info></Info>
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-white p-3 rounded-md">
+                <p className="text-sm font-light text-gray-600">
+                  {"Allele Frequent"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-lg">{row.original.af}</p>;
@@ -243,7 +305,25 @@ export const columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "AN",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">AN</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2 hover:bg-violet-200">
+          <HoverCard>
+            <HoverCardTrigger>
+              <Button variant={"ghost"} className="hover:bg-violet-200">
+                <p className="text-lg">{"AN"}</p>
+                <Info></Info>
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-white p-3 rounded-md">
+                <p className="text-sm font-light text-gray-600">
+                  {"Allele Number"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-lg">{row.original.an}</p>;
@@ -252,7 +332,25 @@ export const columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "DP",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">DP</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2 hover:bg-violet-200">
+          <HoverCard>
+            <HoverCardTrigger>
+              <Button variant={"ghost"} className="hover:bg-violet-200">
+                <p className="text-lg">{"DP"}</p>
+                <Info></Info>
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-white p-3 rounded-md">
+                <p className="text-sm font-light text-gray-600">
+                  {"Read Depth or Read Coverage"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-lg">{row.original.dp}</p>;
@@ -261,7 +359,25 @@ export const columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "FS",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">FS</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2 hover:bg-violet-200">
+          <HoverCard>
+            <HoverCardTrigger>
+              <Button variant={"ghost"} className="hover:bg-violet-200">
+                <p className="text-lg">{"FS"}</p>
+                <Info></Info>
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-white p-3 rounded-md">
+                <p className="text-sm font-light text-gray-600">
+                  {"Fisher Strand Bias"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-lg">{row.original.fs}</p>;
@@ -270,7 +386,25 @@ export const columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "MQ",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">MQ</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2 hover:bg-violet-200">
+          <HoverCard>
+            <HoverCardTrigger>
+              <Button variant={"ghost"} className="hover:bg-violet-200">
+                <p className="text-lg">{"MQ"}</p>
+                <Info></Info>
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-white p-3 rounded-md">
+                <p className="text-sm font-light text-gray-600">
+                  {"Mapping Quality"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-lg">{row.original.mq}</p>;
@@ -279,7 +413,25 @@ export const columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "MQRankSum",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">MQRankSum</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2 hover:bg-violet-200">
+          <HoverCard>
+            <HoverCardTrigger>
+              <Button variant={"ghost"} className="hover:bg-violet-200">
+                <p className="text-lg">{"MQRankSum"}</p>
+                <Info></Info>
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-white p-3 rounded-md">
+                <p className="text-sm font-light text-gray-600">
+                  {"Mapping Quality Rank Sum Test"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-lg">{row.original.mqranksum}</p>;
@@ -288,7 +440,25 @@ export const columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "QD",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">QD</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2 hover:bg-violet-200">
+          <HoverCard>
+            <HoverCardTrigger>
+              <Button variant={"ghost"} className="hover:bg-violet-200">
+                <p className="text-lg">{"QD"}</p>
+                <Info></Info>
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-white p-3 rounded-md">
+                <p className="text-sm font-light text-gray-600">
+                  {"Quality By Depth"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-lg">{row.original.qd}</p>;
@@ -298,7 +468,25 @@ export const columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "ReadPosRank",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">ReadPosRank</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2 hover:bg-violet-200">
+          <HoverCard>
+            <HoverCardTrigger>
+              <Button variant={"ghost"} className="hover:bg-violet-200">
+                <p className="text-lg">{"ReadPosRank"}</p>
+                <Info></Info>
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-white p-3 rounded-md">
+                <p className="text-sm font-light text-gray-600">
+                  {"Read Position Rank Sum Test"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-lg">{row.original.readposrank}</p>;
@@ -307,7 +495,25 @@ export const columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "Fraction",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">Fraction</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2 hover:bg-violet-200">
+          <HoverCard>
+            <HoverCardTrigger>
+              <Button variant={"ghost"} className="hover:bg-violet-200">
+                <p className="text-lg">{"Fraction Allele"}</p>
+                <Info></Info>
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-white p-3 rounded-md">
+                <p className="text-sm font-light text-gray-600">
+                  {"Fraction Allele"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-lg">{row.original.fraction}</p>;
@@ -317,7 +523,25 @@ export const columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "SOR",
     header: ({ column }) => {
-      return <p className="text-lg font-sans ml-5">SOR</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2 hover:bg-violet-200">
+          <HoverCard>
+            <HoverCardTrigger>
+              <Button variant={"ghost"} className="hover:bg-violet-200">
+                <p className="text-lg">{"SOR"}</p>
+                <Info></Info>
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-white p-3 rounded-md">
+                <p className="text-sm font-light text-gray-600">
+                  {"Strand Odds Ratio"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-lg">{row.original.sor}</p>;
@@ -445,14 +669,29 @@ export const columns: ColumnDef<Variant>[] = [
     accessorKey: "clinicalSign",
     header: ({ column }) => {
       return (
-        <Button
-          className="text-lg hover:text-black hover:bg-transparent"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Clinical Sign
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <HoverCard>
+          <HoverCardTrigger>
+            <Button
+              className="text-lg hover:text-black hover:bg-transparent"
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Clinical Significance
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          </HoverCardTrigger>
+          <HoverCardContent>
+            <div className="bg-white border rounded w-20 h-10 p-3 ">
+              <p className="text-sm font-light">
+                {
+                  "Clinical significance refers to the clinical interpretation of a genetic variant regarding its association with disease risk, treatment implications, or medical decision-making."
+                }
+              </p>
+            </div>
+          </HoverCardContent>
+        </HoverCard>
       );
     },
     cell: ({ row }) => {

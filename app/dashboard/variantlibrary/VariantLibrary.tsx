@@ -17,7 +17,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, TableOfContents } from "lucide-react";
+import {
+  Edit,
+  ExternalLink,
+  ReceiptText,
+  TableOfContents,
+  Waypoints,
+} from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -34,8 +40,52 @@ import { generateClient } from "aws-amplify/api";
 import { SelectedVariant } from "@/src/API";
 
 import { useRouter } from "next/navigation";
+import { Accordion } from "@/components/ui/accordion";
+import {
+  AccordionContent,
+  AccordionHeader,
+  AccordionItem,
+  AccordionTrigger,
+} from "@radix-ui/react-accordion";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@radix-ui/react-hover-card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import ACMGVariantInterpretation from "@/components/items/variantquery/ACMGVariantInterpretation";
+import { updateSelectedVariant } from "@/src/graphql/mutations";
+import { toast } from "@/components/ui/use-toast";
 
 const VariantLibrary = () => {
+  // const [variantData, setSelectedVariant] = useState<SelectedVariant>();
+  const [currentACMG, setACMG] = useState("");
+
+  const updateACMGClassSelectedVariant = async (
+    new_acmg: string,
+    selectedVariant: SelectedVariant
+  ) => {
+    selectedVariant.acmg = new_acmg;
+    // try {
+    //   const result = client.graphql({
+    //     query: updateSelectedVariant,
+    //     variables: { input: { id: variantData?.id ?? "", acmg: new_acmg } },
+    //   });
+
+    //   toast({ title: "Sucessfully update ACMG" });
+    // } catch (error) {
+    //   toast({
+    //     variant: "destructive",
+    //     title: "Failed Update ACMG Class",
+    //     description: `Failed update ${variantData?.acmg}`,
+    //   });
+    // }
+  };
+
   const client = generateClient();
   const [listSelectedVariant, setListSelectedVariant] = useState<
     SelectedVariant[]
@@ -164,6 +214,7 @@ const VariantLibrary = () => {
                 <TableHead>Gene</TableHead>
                 <TableHead>Variant HGVS</TableHead>
                 <TableHead>Inheritance</TableHead>
+                <TableHead>Interpretation</TableHead>
                 <TableHead>ACMG</TableHead>
                 <TableHead>Action</TableHead>
               </TableRow>
@@ -195,7 +246,7 @@ const VariantLibrary = () => {
                               className="bg-red-50 border-red-500"
                             >
                               <small>
-                                <TableOfContents className="h-4 w-4 text-red-500" />
+                                <Waypoints className="h-4 w-4 text-red-500" />
                               </small>
                             </Button>
                           </DialogTrigger>
@@ -282,7 +333,46 @@ const VariantLibrary = () => {
                       </div>
                     </TableCell>
 
-                    <TableCell>{item.acmg}</TableCell>
+                    <TableCell>
+                      <Popover>
+                        <PopoverTrigger>
+                          <Button
+                            variant={"ghost"}
+                            className="bg-green-50 border border-green-600"
+                          >
+                            <ReceiptText className="w-5 h-5 text-green-600"></ReceiptText>
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                          <div className="flex flex-col p-3 border bg-white border-gray-400 rounded-md ">
+                            <p className="text-sm font-light text-gray-400">
+                              No Data
+                            </p>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    </TableCell>
+
+                    <TableCell>
+                      <div className="flex flex-row w-[180px] justify-between items-center">
+                        <p>{item.acmg}</p>
+                        <Dialog>
+                          <DialogTitle>{""}</DialogTitle>
+                          <DialogTrigger>
+                            <Button variant={"ghost"}>
+                              <Edit className="w-5 h-5 text-gray-400"></Edit>
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-screen-2xl">
+                            <ACMGVariantInterpretation
+                              selectedVariant={item}
+                              onUpdateVariant={updateACMGClassSelectedVariant}
+                              setACMGClass={setACMG}
+                            ></ACMGVariantInterpretation>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <div className="flex flex-row gap-2">
                         {/* Example existing actions... */}

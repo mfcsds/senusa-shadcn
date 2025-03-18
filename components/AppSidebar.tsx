@@ -38,6 +38,7 @@ import {
   PATH_VARIANT_REPORT,
   ROLE_ADMIN_LAB,
   ROLE_BIOINFORMATICIAN,
+  ROLE_CLINICAL_PATHOLOGY,
   ROLE_GENETICS_CONCELOR,
   ROLE_HEADLAB,
   ROLE_SUPER_ADMIN,
@@ -104,19 +105,34 @@ const AppSidebar = () => {
     },
     {
       title: "Variant Report",
-      roles: [ROLE_BIOINFORMATICIAN, ROLE_GENETICS_CONCELOR, ROLE_HEADLAB],
+      roles: [
+        ROLE_BIOINFORMATICIAN,
+        ROLE_GENETICS_CONCELOR,
+        ROLE_HEADLAB,
+        ROLE_CLINICAL_PATHOLOGY,
+      ],
       icon: Dna,
       path: PATH_VARIANT_REPORT,
     },
     {
       title: "Variant Query",
-      roles: [ROLE_BIOINFORMATICIAN, ROLE_GENETICS_CONCELOR, ROLE_HEADLAB],
+      roles: [
+        ROLE_BIOINFORMATICIAN,
+        ROLE_GENETICS_CONCELOR,
+        ROLE_HEADLAB,
+        ROLE_CLINICAL_PATHOLOGY,
+      ],
       icon: Search,
       path: PATH_VARIANT_QUERY,
     },
     {
       title: "Variant Library",
-      roles: [ROLE_BIOINFORMATICIAN, ROLE_GENETICS_CONCELOR, ROLE_HEADLAB],
+      roles: [
+        ROLE_BIOINFORMATICIAN,
+        ROLE_GENETICS_CONCELOR,
+        ROLE_HEADLAB,
+        ROLE_CLINICAL_PATHOLOGY,
+      ],
       icon: SquareLibrary,
       path: PATH_VARIANT_LIBRARY,
     },
@@ -145,7 +161,11 @@ const AppSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               {list_menu
-                .filter((menu) => roles && menu.roles.includes(roles))
+                .filter((menu) => {
+                  if (!roles) return false;
+                  const userRoles = roles.split(",").map((r) => r.trim());
+                  return userRoles.some((r) => menu.roles.includes(r));
+                })
                 .map((item) => (
                   <SidebarMenuItem
                     key={item.title}

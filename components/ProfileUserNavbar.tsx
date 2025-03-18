@@ -5,6 +5,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { getUser } from "@/src/graphql/queries";
 import { User } from "@/src/API";
 import { generateClient } from "aws-amplify/api";
+import { HoverCard, HoverCardTrigger } from "@radix-ui/react-hover-card";
+import { Button } from "./ui/button";
+import { HoverCardContent } from "./ui/hover-card";
 
 const ProfileUserNavbar = () => {
   const client = generateClient();
@@ -58,9 +61,25 @@ const ProfileUserNavbar = () => {
         </Avatar>
         <div className="flex flex-col">
           <p className="text-lg font-semibold">{user?.first_name ?? "No"}</p>
-          <p className="text-lg font-extralight text-gray-500">
+          <div className="flex flex-col">
+            <HoverCard>
+              <HoverCardTrigger>
+                <p> {`Roles : ${Array.of(user?.role?.split(",").length)}`}</p>
+              </HoverCardTrigger>
+              <HoverCardContent>
+                <ul>
+                  {Array.of(
+                    user?.role
+                      ?.split(",")
+                      .map((item, index) => <li>{`${index + 1}. ${item}`}</li>)
+                  )}
+                </ul>
+              </HoverCardContent>
+            </HoverCard>
+          </div>
+          {/* <p className="text-lg font-extralight text-gray-500">
             {user?.role ?? "No Data"}
-          </p>
+          </p> */}
         </div>
       </div>
 

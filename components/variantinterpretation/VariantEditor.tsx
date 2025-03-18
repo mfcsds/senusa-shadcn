@@ -1,5 +1,4 @@
 "use component";
-import { SelectedVariant } from "@/utils/object";
 import React, { useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import Underline from "@tiptap/extension-underline";
@@ -59,7 +58,7 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 import ACMGVariantInterpretation from "../items/variantquery/ACMGVariantInterpretation";
 import BInviteUser from "../button/BInviteUser";
 import { getCurrentUser } from "aws-amplify/auth";
-import { User } from "@/src/API";
+import { SelectedVariant, User } from "@/src/API";
 
 interface VariantEditorProops {
   variantData?: SelectedVariant;
