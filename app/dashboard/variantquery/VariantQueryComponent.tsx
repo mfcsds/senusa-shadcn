@@ -37,54 +37,34 @@ const VariantQueryComponent = () => {
   const [freqData, setFreqData] = useState<any>(null);
 
   const fetchVariantData = async (variant: string) => {
+    setLoading(true);
     try {
-      const response = await axios.get(
-        `https://rest.ensembl.org/vep/human/hgvs/${encodeURIComponent(
-          variant
-        )}?content-type=application/json`,
-        {
-          params: {
-            AncestralAllele: 1,
-            Blosum62: 1,
-            CADD: 1,
-            Conservation: 1,
-            dbNSFP:
-              "SIFT_pred,Polyphen2_HDIV_pred,MutationTaster_pred,LRT_pred",
-            dbscSNV: 1,
-            MaxEntScan: 1,
-            GeneSplicer: 1,
-            NMD: 1,
-            mirna: 1,
-            appris: 1,
-            canonical: 1,
-            ccds: 1,
-            domains: 1,
-            hgvs: 1,
-            mane: 1,
-            numbers: 1,
-            protein: 1,
-            tsl: 1,
-            uniprot: 1,
-            variant_class: 1,
-            shift_3prime: 1,
-            shift_genomic: 1,
-            sift: "b",
-            polyphen: "b",
-            gene_phenotype: 1,
-            pubmed: 1,
-            xref_refseq: 1,
-          },
-        }
+      const apiUrl =
+        "https://iti7fmrlmj.execute-api.us-east-1.amazonaws.com/Dev/variant_extract";
+
+      const response = await axios.post(
+        apiUrl,
+        { body: JSON.stringify({ variants: [variant] }) },
+        { headers: { "Content-Type": "application/json" } }
       );
-      setVariantData(response.data[0]); // Assuming we get an array with one element
+
+      const responseBody = JSON.parse(response.data.body);
+
+      if (responseBody.length === 0) {
+        setError("No variant data found.");
+        setVariantData(null);
+        return;
+      }
+
+      setVariantData(responseBody[0]);
     } catch (error) {
       console.error("Error fetching variant data:", error);
       setVariantData(null);
+      setError("Failed to fetch variant data.");
     } finally {
       setLoading(false);
     }
   };
-
   // Destructure the data for easier access
   const {
     id,
