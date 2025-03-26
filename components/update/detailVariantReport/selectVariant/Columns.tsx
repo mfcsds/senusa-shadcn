@@ -2,11 +2,7 @@
 
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { ButtonAdd } from "@/components/update/button/ButtonAdd";
-import {
-  ArrowUpDown,
-  Edit,
-  TableOfContents,
-} from "lucide-react";
+import { ArrowUpDown, Edit, TableOfContents, Info } from "lucide-react";
 import {
   AcmgCriteria,
   SelectedVariant,
@@ -36,6 +32,11 @@ import awsconfig from "@/src/amplifyconfiguration.json";
 import { Amplify } from "aws-amplify";
 import BAddSelectedVariant from "@/components/update/button/BAddSelectedVariant";
 import { ZYGOSITY_HETEROZYGOUS, ZYGOSITY_HOMOZYGOUS } from "@/utils/Contanst";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@radix-ui/react-hover-card";
 
 Amplify.configure(awsconfig);
 
@@ -187,7 +188,28 @@ export const Columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "AC",
     header: ({ column }) => {
-      return <p className="text-md font-sans ml-5">AC</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2">
+          <HoverCard>
+            <HoverCardTrigger>
+              <ButtonAdd
+                className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
+                variant="ghost"
+              >
+                AC
+                <Info className="ml-2 h-4 w-4" />
+              </ButtonAdd>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-background p-3 rounded-md">
+                <p className="text-sm font-light text-text-secondary">
+                  {"Allele Count"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       const ac = row.original.ac;
@@ -207,7 +229,30 @@ export const Columns: ColumnDef<Variant>[] = [
   },
   {
     accessorKey: "inheritance",
-    header: "Inheritance",
+    header: ({ column }) => {
+      return (
+        <div className="flex flex-row  items-center gap-2">
+          <HoverCard>
+            <HoverCardTrigger>
+              <ButtonAdd
+                className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
+                variant="ghost"
+              >
+                Inheritance
+                <Info className="ml-2 h-4 w-4" />
+              </ButtonAdd>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-background p-3 rounded-md">
+                <p className="text-sm font-light text-text-secondary">
+                {"AD: Autosomal Dominant; AR: Autosomal Recessive"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
+    },
     cell: ({ row }) => {
       return <p className="text-lg">{row.original.inheritance}</p>;
     },
@@ -215,7 +260,28 @@ export const Columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "AF",
     header: ({ column }) => {
-      return <p className="text-md text-text-primary font-sans ml-5">AF</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2">
+          <HoverCard>
+            <HoverCardTrigger>
+              <ButtonAdd
+                className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
+                variant="ghost"
+              >
+                AF
+                <Info className="ml-2 h-4 w-4" />
+              </ButtonAdd>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-background p-3 rounded-md">
+                <p className="text-sm font-light text-text-secondary">
+                {"Allele Frequent"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-md text-text-primary">{row.original.af}</p>;
@@ -224,7 +290,28 @@ export const Columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "AN",
     header: ({ column }) => {
-      return <p className="text-md text-text-primary font-sans ml-5">AN</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2">
+          <HoverCard>
+            <HoverCardTrigger>
+              <ButtonAdd
+                className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
+                variant="ghost"
+              >
+                AN
+                <Info className="ml-2 h-4 w-4" />
+              </ButtonAdd>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-background p-3 rounded-md">
+                <p className="text-sm font-light text-text-secondary">
+                {"Allele Number"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-md text-text-primary">{row.original.an}</p>;
@@ -233,7 +320,28 @@ export const Columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "DP",
     header: ({ column }) => {
-      return <p className="text-md text-text-primary font-sans ml-5">DP</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2">
+          <HoverCard>
+            <HoverCardTrigger>
+              <ButtonAdd
+                className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
+                variant="ghost"
+              >
+                DP
+                <Info className="ml-2 h-4 w-4" />
+              </ButtonAdd>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-background p-3 rounded-md">
+                <p className="text-sm font-light text-text-secondary">
+                {"Read Depth or Read Coverage"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-md text-text-primary">{row.original.dp}</p>;
@@ -242,7 +350,28 @@ export const Columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "FS",
     header: ({ column }) => {
-      return <p className="text-md text-text-primary font-sans ml-5">FS</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2">
+          <HoverCard>
+            <HoverCardTrigger>
+              <ButtonAdd
+                className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
+                variant="ghost"
+              >
+                FS
+                <Info className="ml-2 h-4 w-4" />
+              </ButtonAdd>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-background p-3 rounded-md">
+                <p className="text-sm font-light text-text-secondary">
+                {"Fisher Strand Bias"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-md text-text-primary">{row.original.fs}</p>;
@@ -251,7 +380,28 @@ export const Columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "MQ",
     header: ({ column }) => {
-      return <p className="text-md text-text-primary font-sans ml-5">MQ</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2">
+          <HoverCard>
+            <HoverCardTrigger>
+              <ButtonAdd
+                className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
+                variant="ghost"
+              >
+                MQ
+                <Info className="ml-2 h-4 w-4" />
+              </ButtonAdd>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-background p-3 rounded-md">
+                <p className="text-sm font-light text-text-secondary">
+                {"Mapping Quality"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-md text-text-primary">{row.original.mq}</p>;
@@ -260,16 +410,60 @@ export const Columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "MQRankSum",
     header: ({ column }) => {
-      return <p className="text-md text-text-primary font-sans ml-5">MQRankSum</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2">
+          <HoverCard>
+            <HoverCardTrigger>
+              <ButtonAdd
+                className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
+                variant="ghost"
+              >
+                MQRankSum
+                <Info className="ml-2 h-4 w-4" />
+              </ButtonAdd>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-background p-3 rounded-md">
+                <p className="text-sm font-light text-text-secondary">
+                {"Mapping Quality Rank Sum Test"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
-      return <p className="text-md text-text-primary">{row.original.mqranksum}</p>;
+      return (
+        <p className="text-md text-text-primary">{row.original.mqranksum}</p>
+      );
     },
   },
   {
     accessorKey: "QD",
     header: ({ column }) => {
-      return <p className="text-md text-text-primary font-sans ml-5">QD</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2">
+          <HoverCard>
+            <HoverCardTrigger>
+              <ButtonAdd
+                className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
+                variant="ghost"
+              >
+                QD
+                <Info className="ml-2 h-4 w-4" />
+              </ButtonAdd>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-background p-3 rounded-md">
+                <p className="text-sm font-light text-text-secondary">
+                {"Quality By Depth"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
       return <p className="text-md text-text-primary">{row.original.qd}</p>;
@@ -279,26 +473,94 @@ export const Columns: ColumnDef<Variant>[] = [
   {
     accessorKey: "ReadPosRank",
     header: ({ column }) => {
-      return <p className="text-md text-text-primary font-sans ml-5">ReadPosRank</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2">
+          <HoverCard>
+            <HoverCardTrigger>
+              <ButtonAdd
+                className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
+                variant="ghost"
+              >
+                ReadPosRank
+                <Info className="ml-2 h-4 w-4" />
+              </ButtonAdd>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-background p-3 rounded-md">
+                <p className="text-sm font-light text-text-secondary">
+                {"Read Position Rank Sum Test"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
-      return <p className="text-md text-text-primary">{row.original.readposrank}</p>;
+      return (
+        <p className="text-md text-text-primary">{row.original.readposrank}</p>
+      );
     },
   },
   {
     accessorKey: "Fraction",
     header: ({ column }) => {
-      return <p className="text-md text-text-primary font-sans ml-5">Fraction</p>;
+      return (
+        <div className="flex flex-row  items-center gap-2">
+          <HoverCard>
+            <HoverCardTrigger>
+              <ButtonAdd
+                className="text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline"
+                variant="ghost"
+              >
+                Fraction
+                <Info className="ml-2 h-4 w-4" />
+              </ButtonAdd>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <div className="border bg-background p-3 rounded-md">
+                <p className="text-sm font-light text-text-secondary">
+                {"Fraction Allele"}
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+      );
     },
     cell: ({ row }) => {
-      return <p className="text-md text-text-primary">{row.original.fraction}</p>;
+      return (
+        <p className="text-md text-text-primary">{row.original.fraction}</p>
+      );
     },
   },
 
   {
     accessorKey: "SOR",
     header: ({ column }) => {
-      return <p className="text-md text-text-primary font-sans ml-5">SOR</p>;
+      return (
+  <div className="flex flex-row items-center gap-2">
+    <HoverCard>
+      <HoverCardTrigger>
+        <ButtonAdd
+          className="text-md hover:bg-transparent text-text-primary hover:text-primary hover:underline"
+          variant="ghost"
+        >
+          SOR
+          <Info className="ml-2 h-4 w-4" />
+        </ButtonAdd>
+      </HoverCardTrigger>
+      <HoverCardContent>
+        <div className="border bg-background p-3 rounded-md">
+          <p className="text-sm font-light text-text-secondary">
+            Strand Odds Ratio (SOR) is a measure of the likelihood of a variant
+            being associated with a particular strand.
+          </p>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
+  </div>
+);
     },
     cell: ({ row }) => {
       return <p className="text-md text-text-primary">{row.original.sor}</p>;
@@ -573,14 +835,15 @@ export const Columns: ColumnDef<Variant>[] = [
 
       return (
         <div className="flex flex-row gap-4">
-          
-
           <Dialog>
             <DialogHeader>
               <DialogTitle></DialogTitle>
             </DialogHeader>
             <DialogTrigger asChild>
-              <ButtonAdd variant="outline" className="rounded-lg bg-foreground border-2 border-blue-primary hover:border-blue-secondary hover:bg-blue-secondary text-blue-primary hover:text-text-action">
+              <ButtonAdd
+                variant="outline"
+                className="rounded-lg bg-foreground border-2 border-blue-primary hover:border-blue-secondary hover:bg-blue-secondary text-blue-primary hover:text-text-action"
+              >
                 <small>
                   <TableOfContents className="h-4 w-4"></TableOfContents>
                 </small>
@@ -591,8 +854,7 @@ export const Columns: ColumnDef<Variant>[] = [
                 hgvsNotation={item.hgvs}
                 id_variant={item.id}
               ></VariantInformationModal>
-              <DialogFooter>
-              </DialogFooter>
+              <DialogFooter></DialogFooter>
             </DialogContent>
           </Dialog>
 
