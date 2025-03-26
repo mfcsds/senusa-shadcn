@@ -46,16 +46,17 @@ const EditVariantReport = () => {
         <TestingInformation idpatient={patientID ?? ""}></TestingInformation>
       ),
     },
-    {
-      tab: "Select Variant",
-      value: "Select Variant",
-      comp: (
-        <SelectVariant
-          patientid={patientID}
-          id_report={reportID}
-        ></SelectVariant>
-      ),
-    },
+    // {
+    //   tab: "Select Variant",
+    //   value: "Select Variant",
+    //   comp: (
+    //     <SelectVariant
+    //       patientid={patientID}
+    //       id_report={reportID}
+    //       onUpdateVariant={}
+    //     ></SelectVariant>
+    //   ),
+    // },
     {
       tab: "Result and Interpretation",
       value: "Result and Interpretation",

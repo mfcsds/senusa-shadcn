@@ -19,54 +19,32 @@ export default function VariantReportPage() {
 
   const fetchVariantData = async (variant: string) => {
     try {
-      const response = await axios.get(
-        `https://rest.ensembl.org/vep/human/hgvs/${encodeURIComponent(
-          variant
-        )}?content-type=application/json`,
-        {
-          params: {
-            AncestralAllele: 1,
-            Blosum62: 1,
-            CADD: 1,
-            Conservation: 1,
-            dbNSFP:
-              "SIFT_pred,Polyphen2_HDIV_pred,MutationTaster_pred,LRT_pred",
-            dbscSNV: 1,
-            MaxEntScan: 1,
-            GeneSplicer: 1,
-            NMD: 1,
-            mirna: 1,
-            appris: 1,
-            canonical: 1,
-            ccds: 1,
-            domains: 1,
-            hgvs: 1,
-            mane: 1,
-            numbers: 1,
-            protein: 1,
-            tsl: 1,
-            uniprot: 1,
-            variant_class: 1,
-            shift_3prime: 1,
-            shift_genomic: 1,
-            sift: "b",
-            polyphen: "b",
-            gene_phenotype: 1,
-            pubmed: 1,
-            xref_refseq: 1,
-          },
-        }
+      const apiUrl =
+        "https://iti7fmrlmj.execute-api.us-east-1.amazonaws.com/Dev/variant_extract";
+
+      const response = await axios.post(
+        apiUrl,
+        { body: JSON.stringify({ variants: [variant] }) },
+        { headers: { "Content-Type": "application/json" } }
       );
-      setVariantData(response.data[0]); // Assuming we get an array with one element
+
+      const responseBody = JSON.parse(response.data.body);
+      console.log("respon body alele", responseBody)
+      console.log(responseBody.length)
+      if (responseBody.length === 0) {
+        setError("No variant data found.");
+        setVariantData(null);
+        return;
+      }
+
+      await setVariantData(responseBody[0]);
     } catch (error) {
       console.error("Error fetching variant data:", error);
       setVariantData(null);
-    } finally {
-      setLoading(false);
-    }
+      setError("Failed to fetch variant data.");
+    } 
   };
 
-  // Destructure the data for easier access
   const {
     id,
     input,
@@ -130,7 +108,6 @@ export default function VariantReportPage() {
 
       console.log("ParsedBody", parsedBody);
 
-      // Map the first item in the response to AcmgCriteria
       const acmgCriteria: AcmgCriteria = {
         PVS1: parsedBody[0].PVS1,
         PS1: parsedBody[0].PS1,
@@ -184,8 +161,12 @@ export default function VariantReportPage() {
       } else {
         setError("No ACMG criteria found for the variant.");
       }
-
-      await fetchVariantData(variant);
+      console.log("Variant", variant);
+      if (variant) {
+        await fetchVariantData(variant);
+      } else {
+        console.log("Variant is not obtain");
+      }
     } catch (error) {
       setError("Failed to fetch variant data.");
     } finally {
@@ -241,27 +222,29 @@ export default function VariantReportPage() {
       </div>
       {loading ? (
         <div>
-            <Spinner/>
-            <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
-          Loading
-        </p>
+          <Spinner />
+          <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
+            Loading
+          </p>
         </div>
       ) : (
         <div className="mt-10">
-            {theACMG && variantData ? (
-        <VariantQueryInformation
-        acmgdata={theACMG}
-        variantdata={variantData}
-        hgvs={variant}
-      />
-      ) : (
-        <div className="flex w-full items-center mt-3 text-text-secondary justify-center">
-          <p className=""> No data available. Please search for a variant.</p>
+          {theACMG && variantData ? (
+            <VariantQueryInformation
+              acmgdata={theACMG}
+              variantdata={variantData}
+              hgvs={variant}
+            />
+          ) : (
+            <div className="flex w-full items-center mt-3 text-text-secondary justify-center">
+              <p className="">
+                {" "}
+                No data available. Please search for a variant.
+              </p>
+            </div>
+          )}
         </div>
       )}
-        </div>
-      )}
-      
     </div>
   );
 }

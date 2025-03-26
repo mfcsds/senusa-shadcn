@@ -46,8 +46,9 @@ import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { addVariantReport, fetchVariantReport } from "@/hooks/useVariantReport";
 import { generateReportID } from "@/utils/function";
 import { useToast } from "@/components/ui/use-toast";
+import { fetchUserAttributes } from "aws-amplify/auth";
 
-const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: () => Promise<void> }) => {
+const AddReportDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: () => Promise<void> }) => {
   const [testingDesc, setTestingDesc] = useState("");
   const [patients, setPatients] = useState<DataPatients[]>([]);
   const [phenotypeQuery, setPhenotypeQuery] = useState("");
@@ -61,6 +62,19 @@ const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: ()
   const [openDialog, setOpenDialog] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [errorSelectPatient, setErrorSelectPatient] = useState("");
+  const [institution_id, setInstitutionID] = useState<string | null>(null)
+
+    useEffect(() => {
+      const getUserInstitutionID = async () => {
+        try {
+          const attributes = await fetchUserAttributes();
+          setInstitutionID(attributes["custom:institution_id"] || null);
+        } catch (error) {
+          console.error("Error fetching user attributes", error);
+        }
+      };
+      getUserInstitutionID();
+    }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -141,10 +155,12 @@ const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: ()
         current_diagnosis: "-",
         sample_collection: getDateToday(),
         phenotype: selectedPhenotypes,
+        institutionID: institution_id,
         idPatient: selectedPatient?.id,
         testing_description: testingDesc
       };
-      await addVariantReport(newReport)
+      console.log("New Report Add", newReport);
+      // await addVariantReport(newReport)
       await onUpdateVariantReport();
       setOpenDialog(false);
       setSelectedPhenotypes([])
@@ -193,12 +209,12 @@ const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: ()
                   htmlFor="patienID"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  Select Patient
+                  Select Patient <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
                 Choose the patient by id for whom you want to create this
-                variant report.
+                variant report is required.
               </p>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
@@ -340,7 +356,7 @@ const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: ()
               />
             </div>
 
-            <div className="flex items-center space-x-2">
+            {/* <div className="flex items-center space-x-2">
               <FileUp className="w-6 h-6 text-blue-primary mb-1" />
               <label
                 htmlFor="patienID"
@@ -361,7 +377,7 @@ const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: ()
               <p className="text-xs text-text-secondary">
                 (Only *.pdf, *.docx, *.jpg, and *.jpeg will be accepted)
               </p>
-            </DragAndDropInput>
+            </DragAndDropInput> */}
           </div>
 
           <DialogFooter className="mt-6 gap-4">
@@ -386,4 +402,4 @@ const AddPatientDialog = ({ onUpdateVariantReport }: { onUpdateVariantReport: ()
   );
 };
 
-export default AddPatientDialog;
+export default AddReportDialog;

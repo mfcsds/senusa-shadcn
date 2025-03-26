@@ -78,12 +78,32 @@ const TabelVariants: React.FC<TabelVariantsProps> = ({ initialVCFData }) => {
               <TableCell>{vcf.uploadAt}</TableCell>
               <TableCell className="flex gap-4">
                 <DetailVCFDialog id_vcf={vcf.id!} />
-                <Button
-                  variant="iconBorderDanger"
-                  size="small"
-                  icon={<Trash2 className="w-4 h-4" />}
-                  onClick={() => handleDelete(vcf.id!, vcf.pathfile!)}
-                />
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="iconBorderDanger"
+                      size="small"
+                      icon={<Trash2 className="w-4 h-4" />}
+                    />
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you sure you want to delete this VCF?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => handleDelete(vcf.id!, vcf.pathfile!)}
+                      >
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </TableCell>
             </TableRow>
           ))

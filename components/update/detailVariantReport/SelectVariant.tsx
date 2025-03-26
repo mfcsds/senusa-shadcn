@@ -76,7 +76,7 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
 
     if (data) {
       try {
-        const parsedVariants = data?.map((item) => {
+        const parsedVariants = await data?.map((item) => {
           const variantTemporary: Variant = {
             id: item.id ?? "",
             id_patient: item.id_patient ?? "",
@@ -116,8 +116,7 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
             gnomade: null,
             gnomadg: null,
             alldesc: null,
-            variantReportID: "",
-            globalallele: null
+            inheritance: null,
           };
           return variantTemporary;
         });

@@ -146,6 +146,9 @@ const ListView: React.FC<ListViewProps> = ({ intialInstitution }) => {
               variant="outlineSecondary"
               size="small"
               icon={<Eye className="w-4 h-4" />}
+              onClick={() =>
+                router.push(`/features/manage-institutions/${institution.id}`)
+              }
             />
             {institution.accountStatus == false ? (
               <AlertDialog>

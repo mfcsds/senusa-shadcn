@@ -284,3 +284,19 @@ export const GENE_PANEL_113 = [
   "PHOX2B",
   "SDHC",
 ];
+
+export const ROLE_SUPER_ADMIN = "Super Admin";
+export const ROLE_ADMIN_LAB = "Admin Lab";
+export const ROLE_USER_LAB = "User Lab";
+export const ROLE_BIOINFORMATICIAN = "Bioinformatician";
+export const ROLE_GENETICS_CONCELOR = "Genetic Conselor";
+export const ROLE_CLINICAL_PATHOLOGY = "Clinical Pathology";
+export const ROLE_HEADLAB = "Head Lab";
+
+export const PATH_DASHBOARD = "/features/dashboard";
+export const PATH_MANAGE_INSTITUTIONS = "/features/manage-institutions";
+export const PATH_MANAGE_USERS = "/features/manage-users";
+export const PATH_MANAGE_PATIENT = "/features/manage-patients";
+export const PATH_VARIANT_REPORT = "/features/variant-report";
+export const PATH_VARIANT_QUERY = "/features/variant-query";
+export const PATH_VARIANT_LIBRARY = "/features/variant-library";

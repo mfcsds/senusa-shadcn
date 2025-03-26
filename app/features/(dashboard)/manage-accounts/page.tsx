@@ -4,12 +4,12 @@ import React, { useState, useEffect } from "react";
 import Button from "@/components/update/button/Button";
 import Input from "@/components/update/input/Input";
 import { LayoutList, LayoutDashboard, Info, SearchIcon } from "lucide-react";
-import PaginationVariantReport from "@/components/update/manageAccounts/PaginationAccount";
+import PaginationAccount from "@/components/update/manageAccounts/PaginationAccount";
 import CardView from "@/components/update/manageAccounts/CardView";
 import ListView from "@/components/update/manageAccounts/ListView";
 import CreateAccountDialog from "@/components/update/manageAccounts/CreateAccountDialog";
 import { fetchInstitutions } from "@/hooks/useAccounts";
-import { Institution } from "@/utils/object"
+import { Institution } from "@/utils/object";
 import Spinner from "@/components/update/ui/Spinner";
 import { get } from "http";
 
@@ -22,18 +22,18 @@ export default function ManageAccountsPage() {
   const fetchLoadAccountsInstitutions = async (): Promise<void> => {
     const loadInstitutions = async () => {
       try {
-        setLoading(true); 
+        setLoading(true);
         const data = await fetchInstitutions();
         setInstitutions(data);
       } catch (error) {
         console.error("Error loading institutions:", error);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
     loadInstitutions();
-    };
+  };
 
   useEffect(() => {
     fetchLoadAccountsInstitutions();
@@ -72,22 +72,20 @@ export default function ManageAccountsPage() {
             />
           </div>
 
-          <CreateAccountDialog onUpdateAccountsInstitutions={fetchLoadAccountsInstitutions}/>
+          <CreateAccountDialog
+            onUpdateAccountsInstitutions={fetchLoadAccountsInstitutions}
+          />
 
           <Button
             variant={
-              viewMode === "card"
-                ? "iconCardViewActive"
-                : "iconCardView"
+              viewMode === "card" ? "iconCardViewActive" : "iconCardView"
             }
             onClick={() => setViewMode("card")}
             icon={<LayoutDashboard className="w-6 h-6" />}
           />
           <Button
             variant={
-              viewMode === "list"
-                ? "iconListViewActive"
-                : "iconListView"
+              viewMode === "list" ? "iconListViewActive" : "iconListView"
             }
             onClick={() => setViewMode("list")}
             icon={<LayoutList className="w-6 h-6" />}
@@ -96,23 +94,28 @@ export default function ManageAccountsPage() {
       </div>
 
       {loading ? (
-        <Spinner />
-      ) : viewMode === "card" ? (
-        <CardView intialInstitution={institutions} />
+        <div>
+          <Spinner />
+          <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
+            Loading
+          </p>
+        </div>
+      ) : institutions.length === 0 ? (
+        <p className="text-lg text-center mt-10 text-primary font-semibold">
+          No institutions found
+        </p>
       ) : (
-        <ListView intialInstitution={institutions} />
+        <>
+          {viewMode === "card" ? (
+            <CardView intialInstitution={institutions} />
+          ) : (
+            <ListView intialInstitution={institutions} />
+          )}
+          <div className="flex justify-center mt-10">
+            {/* <PaginationAccount/> */}
+          </div>
+        </>
       )}
-        
-      {loading ? (
-        <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
-        Loading
-      </p>
-      ) : (
-        <div className="flex justify-between items-center mt-10">
-        <PaginationVariantReport />
-      </div>
-      )}
-      
     </div>
   );
 }

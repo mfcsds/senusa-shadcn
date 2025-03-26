@@ -16,9 +16,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/update/ui/table";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { ButtonAdd } from "@/components/update/button/ButtonAdd";
-import { ExternalLink, TableOfContents, Eye } from "lucide-react";
+import { ExternalLink, TableOfContents, Eye, ReceiptText } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -37,6 +42,16 @@ import { SelectedVariant } from "@/src/API";
 import { useRouter } from "next/navigation";
 
 export default function VariantLibraryPage() {
+  // const [variantData, setSelectedVariant] = useState<SelectedVariant>();
+  const [currentACMG, setACMG] = useState("");
+
+  const updateACMGClassSelectedVariant = async (
+    new_acmg: string,
+    selectedVariant: SelectedVariant
+  ) => {
+    selectedVariant.acmg = new_acmg;
+  };
+
   const client = generateClient();
   const [listSelectedVariant, setListSelectedVariant] = useState<
     SelectedVariant[]
@@ -164,6 +179,7 @@ export default function VariantLibraryPage() {
                   <TableHead>Gene</TableHead>
                   <TableHead>Variant HGVS</TableHead>
                   <TableHead>Inheritance</TableHead>
+                  <TableHead>Interpretation</TableHead>
                   <TableHead>ACMG</TableHead>
                   <TableHead>Action</TableHead>
                 </TableRow>
@@ -286,6 +302,26 @@ export default function VariantLibraryPage() {
                             </DialogContent>
                           </Dialog>
                         </div>
+                      </TableCell>
+
+                      <TableCell>
+                        <Popover>
+                          <PopoverTrigger>
+                          <ButtonAdd
+                            variant="outline"
+                            className="rounded-lg bg-foreground border-2 border-yellow-primary hover:border-yellow-secondary hover:bg-yellow-secondary text-yellow-primary hover:text-text-action"
+                          >
+                            <ReceiptText className="w-4 h-4" />
+                          </ButtonAdd>
+                          </PopoverTrigger>
+                          <PopoverContent>
+                            <div className="flex flex-col p-3 border bg-white border-gray-400 rounded-md ">
+                              <p className="text-sm font-light text-gray-400">
+                                No Data
+                              </p>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
                       </TableCell>
 
                       <TableCell>{item.acmg}</TableCell>

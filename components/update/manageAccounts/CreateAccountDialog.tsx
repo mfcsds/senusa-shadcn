@@ -191,13 +191,16 @@ const CreateAccountDialog = ({
         const { isSignUpComplete, userId, nextStep } = await signUp({
           username: email,
           password: password,
+          options: {
+            userAttributes: { "custom:roles": "Head Lab", "custom:institution_id" : institutionID},
+          },
         });
         const newUser = {
           id: userId ?? "",
           institutionID: institutionID,
           first_name: institution,
           last_name: "",
-          role: "Institution",
+          role: "Head Lab",
           level: 2,
           category: "Admin",
           specialty: "Administrator",
@@ -310,7 +313,7 @@ const CreateAccountDialog = ({
                   htmlFor="institution"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  Institution
+                  Institution <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
@@ -338,7 +341,7 @@ const CreateAccountDialog = ({
                   htmlFor="email"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  Email
+                  Email <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
@@ -362,7 +365,7 @@ const CreateAccountDialog = ({
                   htmlFor="password"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  Password
+                  Password <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
@@ -402,7 +405,7 @@ const CreateAccountDialog = ({
                   htmlFor="contactName"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  Contact Name
+                  Contact Name <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
@@ -428,7 +431,7 @@ const CreateAccountDialog = ({
                   htmlFor="phoneNumber"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  Phone or Telephone Number
+                  Phone or Telephone Number <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary h-12">
@@ -454,7 +457,7 @@ const CreateAccountDialog = ({
                   htmlFor="address"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  Address
+                  Address <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary h-12">
@@ -480,7 +483,7 @@ const CreateAccountDialog = ({
                   htmlFor="storageQuota"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  Storage Quota
+                  Storage Quota <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
@@ -512,7 +515,7 @@ const CreateAccountDialog = ({
                   htmlFor="subscribtion"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  Subscribtion Type
+                  Subscribtion Type <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">

@@ -12,6 +12,7 @@ interface InputProps {
   className?: string;
   size?: "small" | "medium" | "large";
   disabled?: boolean;
+  max?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -23,6 +24,7 @@ const Input: React.FC<InputProps> = ({
   className = "",
   size = "medium", 
   disabled = false, 
+  max,
 }) => {
   const sizeClasses = {
     small: "text-sm h-8 px-2",
@@ -43,6 +45,7 @@ const Input: React.FC<InputProps> = ({
       )}
       placeholder={placeholder}
       disabled={disabled}
+      max={type === "date" ? max : undefined} 
     />
   );
 };

@@ -40,9 +40,6 @@ const ProfileUserNavbar = () => {
   const currentAuthenticatedUser = async () => {
     try {
       const { username, userId, signInDetails } = await getCurrentUser();
-      console.log(`The username: ${username}`);
-      console.log(`The userId: ${userId}`);
-      console.log(`The signInDetails: ${signInDetails}`);
       await setUsername(username);
       await setUserRole(userId);
       await getUserProfile();
@@ -52,24 +49,25 @@ const ProfileUserNavbar = () => {
       setHasFetched(true);
     }
   };
+  
   useEffect(() => {
     if (!hasFetched) {
       currentAuthenticatedUser();
     }
   });
 
-  const delay = 1000; 
+  const delay = 1000;
 
-useEffect(() => {
-  const timeout = setTimeout(() => {
-    console.log("User LOGIN IS", userLogin);
-    if (userLogin?.status === 3) {
-      handleLogout();
-    }
-  }, delay);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      console.log("User LOGIN IS", userLogin);
+      if (userLogin?.status === 3) {
+        handleLogout();
+      }
+    }, delay);
 
-  return () => clearTimeout(timeout); 
-}, [userLogin]);
+    return () => clearTimeout(timeout);
+  }, [userLogin]);
 
   const handleLogout = async () => {
     try {
@@ -81,6 +79,7 @@ useEffect(() => {
       console.log(error);
     }
   };
+
   return (
     <div className="relative">
       <div
@@ -107,7 +106,10 @@ useEffect(() => {
             <CircleUser className="mr-2 w-4 h-4 text-primary" />
             Profile
           </a>
-          <a href="/auth/forgot-password" className="flex items-center px-4 py-2 text-sm text-text-primary hover:bg-accent">
+          <a
+            href="/auth/forgot-password"
+            className="flex items-center px-4 py-2 text-sm text-text-primary hover:bg-accent"
+          >
             <RectangleEllipsis className="mr-2 w-4 h-4 text-primary" />
             Change Password
           </a>

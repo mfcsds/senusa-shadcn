@@ -3,7 +3,7 @@ import React from 'react';
 interface ButtonProps {
   
   label?: string;
-  variant: 'primary' | 'secondary' | 'danger' | 'outlinePrimary' | 'outlineSecondary' | 'outlineDanger' | 'borderPrimary' | 'borderSecondary' | 'borderDanger' | 'icon' | 'iconPrimary' | 'iconSecondary' | 'iconDanger' | 'iconBorderPrimary' | 'iconBorderSecondary' | 'iconBorderDanger' | 'iconListViewActive' | 'iconListView' | 'iconCardViewActive' | 'iconCardView' | 'underlinePrimary' | 'underlineSecondary' | 'copy';
+  variant: 'primary' | 'secondary' | 'danger' | 'outlinePrimary' | 'outlineSecondary' | 'outlineDanger' | 'borderPrimary' | 'borderSecondary' | 'borderDanger' | 'icon' | 'iconPrimary' | 'iconSecondary' | 'iconDanger' | 'iconBorderPrimary' | 'iconBorderSecondary' | 'iconBorderDanger' | 'iconListViewActive' | 'iconListView' | 'iconCardViewActive' | 'iconCardView' | 'underlinePrimary' | 'underlineSecondary' | 'copy' | 'iconYellow';
   size?: 'small' | 'medium' | 'large' | 'innerSize' | 'innerChild' | 'sm' | 'md' | 'lg' | 'none';
   className?: string;
   icon?: React.ReactNode;
@@ -54,6 +54,7 @@ const Button: React.FC<ButtonProps> = ({
     icon: 'text-md hover:bg-transparant text-text-primary hover:text-primary hover:underline',
     iconPrimary: 'text-primary hover:text-text-secondary',
     iconSecondary: 'text-blue-primary hover:text-text-secondary',
+    iconYellow: 'text-yellow-primary hover:text-text-secondary',
     iconDanger: 'text-red-primary hover:text-text-secondary',
     iconBorderPrimary: 'border-2 border-foreground text-primary hover:border-2 hover:border-primary',
     iconBorderSecondary: 'border-2 border-foreground text-blue-primary hover:border-2 hover:border-blue-primary',

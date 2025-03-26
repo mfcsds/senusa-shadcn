@@ -20,6 +20,19 @@ export const fetchPatients = async (): Promise<DataPatients[]> => {
   }
 };
 
+export const fetchPatientsById = async (institution_id: string): Promise<DataPatients[]> => {
+  try {
+    const result = await client.graphql({
+      query: listPatients,
+      variables: { filter: { id_institution: { eq: institution_id } } },
+    });
+    return result.data.listPatients.items as DataPatients[];
+  } catch (error) {
+    console.error("Error fetching patients:", error);
+    return [];
+  }
+};
+
 export const fetchDetailPatient = async (patientId: string): Promise<DataPatients[]> => {
   try {
     const result = await client.graphql({
@@ -56,7 +69,7 @@ export const addNewPatient = async (DataPatients: any): Promise<void> => {
   }
 };
 
-export const updateDataPatient = async (idPatient: string, patientStatusDesc: string): Promise<void> => {
+export const updateHealthDescPatient = async (idPatient: string, patientStatusDesc: string): Promise<void> => {
   try {
     await client.graphql({
       query: updatePatient,
@@ -65,6 +78,19 @@ export const updateDataPatient = async (idPatient: string, patientStatusDesc: st
           id: idPatient,
           health_desc: patientStatusDesc ?? "",
         },
+      },
+    });
+  } catch (error) {
+    console.error("Error update patient:", error);
+  }
+};
+
+export const updateDataPatient = async (idPatient: string, newDataPatient: any): Promise<void> => {
+  try {
+    await client.graphql({
+      query: updatePatient,
+      variables: {
+        input: newDataPatient,
       },
     });
   } catch (error) {

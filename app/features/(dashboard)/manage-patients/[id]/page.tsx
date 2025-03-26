@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchPatients, updateDataPatient } from "@/hooks/usePatients";
+import { fetchPatients, updateHealthDescPatient } from "@/hooks/usePatients";
 import Button from "@/components/update/button/Button";
 import DropDownSelectPatient from "@/components/update/managePatients/DropDownSelectPatient";
 import AddVCFDialog from "@/components/update/detailPatient/AddVCFDialog";
@@ -24,7 +24,8 @@ import {
 } from "@/components/update/ui/select";
 import { ButtonAdd } from "@/components/update/button/ButtonAdd";
 import { useToast } from "@/components/ui/use-toast";
-import DetailPatientDialog from "@/components/update/detailPatient/DetailPatientDialog";
+import EditDetailPatientDialog from "@/components/update/detailPatient/EditDetailPatientDialog";
+import { fetchDetailPatient } from "@/hooks/usePatients";
 
 interface PageProps {
   params: Promise<{
@@ -41,6 +42,7 @@ export default function DetailPatientPage({ params }: PageProps) {
   const [statusPasien, setStatusPasien] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
   const [patientStatusDesc, setPatientStatusDesc] = useState("");
+  const [patient, setPatient] = useState<any | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -59,17 +61,6 @@ export default function DetailPatientPage({ params }: PageProps) {
     resolveParams();
   }, [params]);
 
-  useEffect(() => {
-    const loadPatients = async () => {
-      try {
-        const fetchedPatients = await fetchPatients();
-        setPatients(fetchedPatients);
-      } catch (error) {
-        console.error("Failed to fetch patients:", error);
-      }
-    };
-    loadPatients();
-  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -87,9 +78,28 @@ export default function DetailPatientPage({ params }: PageProps) {
     loadVCFData();
   }, [id]);
 
+  useEffect(() => {
+    if (!id) return;
+
+    const getPatientDetails = async () => {
+      setLoading(true); 
+      try {
+        const response = await fetchDetailPatient(id);
+        setPatient(response); 
+        setPatientStatusDesc(response[0].health_desc ?? "");
+      } catch (error) {
+        console.error("Error fetching patient:", error);
+      } finally {
+        setLoading(false); 
+      }
+    };
+
+    getPatientDetails();
+  }, [id]);
+
   const handleUpdatePatientStatus = async () => {
     try {
-      await updateDataPatient(id!, patientStatusDesc);
+      await updateHealthDescPatient(id!, patientStatusDesc);
       toast({
         title: "Update Successfully",
         description: "The patient status has been update successfully.",
@@ -116,9 +126,7 @@ export default function DetailPatientPage({ params }: PageProps) {
               <h4 className="font-semibold text-lg text-text-primary">
                 Patient ID
               </h4>
-              <DetailPatientDialog
-                          patientID={id!}
-                        />
+              <EditDetailPatientDialog patientID={id!} />
             </div>
             <p className="text-lg font-medium text-text-secondary">{id}</p>
             {/* <DropDownSelectPatient
@@ -141,6 +149,7 @@ export default function DetailPatientPage({ params }: PageProps) {
             </label>
             <div className="flex flex-col items-start gap-4 flex-wrap">
               <Select
+              value={`${patientStatusDesc}`}
                 onValueChange={(value) => {
                   setPatientStatusDesc(value);
                 }}

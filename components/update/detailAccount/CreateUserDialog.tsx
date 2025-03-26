@@ -117,9 +117,17 @@ const CreateUserDialog = ({
         setErrorPhoneNumber("");
       }
       try {
+        console.log("role account", roleAccount);
+        console.log("institutions id", institution_id)
         const { isSignUpComplete, userId, nextStep } = await signUp({
           username: email,
           password: password,
+          options: {
+            userAttributes: {
+              "custom:roles": roleAccount ?? "",
+              "custom:institution_id": institution_id,
+            },
+          },
         });
         const newUser = {
           id: userId ?? "",
@@ -134,7 +142,7 @@ const CreateUserDialog = ({
           email: email,
           phone_number: phoneNumber,
         };
-  
+
         try {
           await addNewUser(newUser);
           console.log(newUser);
@@ -160,7 +168,6 @@ const CreateUserDialog = ({
         handleCancelDialog();
         return;
       }
-      
     } catch (error) {
       console.log(error);
     }
@@ -242,7 +249,7 @@ const CreateUserDialog = ({
                   htmlFor="institutionID"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  User Level
+                  User Level <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
@@ -271,7 +278,7 @@ const CreateUserDialog = ({
                   htmlFor="institutionID"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  User Role
+                  User Role <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
@@ -283,12 +290,12 @@ const CreateUserDialog = ({
                   <SelectValue placeholder="Select User Role" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="Head Lab">Head Lab</SelectItem>
                   <SelectItem value="Admin Lab">Admin Lab</SelectItem>
                   <SelectItem value="User Lab">User Lab</SelectItem>
                   <SelectItem value="Bioinformatician">
                     Bioinformatician
                   </SelectItem>
-                  <SelectItem value="Head Lab">Head Lab</SelectItem>
                   <SelectItem value="Genetic Cousellor">
                     Genetic Cousellor
                   </SelectItem>
@@ -312,7 +319,7 @@ const CreateUserDialog = ({
                   htmlFor="firstName"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  First Name
+                  First Name <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
@@ -338,7 +345,7 @@ const CreateUserDialog = ({
                   htmlFor="password"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  Last Name
+                  Last Name <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
@@ -364,7 +371,7 @@ const CreateUserDialog = ({
                   htmlFor="email"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  Email
+                  Email <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
@@ -388,7 +395,7 @@ const CreateUserDialog = ({
                   htmlFor="password"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  Password
+                  Password <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
@@ -426,7 +433,8 @@ const CreateUserDialog = ({
                   htmlFor="phoneNumber"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  Phone or Telephone Number
+                  Phone or Telephone Number{" "}
+                  <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary h-12">

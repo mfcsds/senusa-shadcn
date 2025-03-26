@@ -1,0 +1,119 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-senusashadcn-dev-ab8b9-authRole",
+      "UnauthRoleArn": "arn:aws:iam::471112501748:role/amplify-senusashadcn-dev-ab8b9-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::471112501748:role/amplify-senusashadcn-dev-ab8b9-authRole",
+      "Region": "ap-southeast-2",
+      "DeploymentBucketName": "amplify-senusashadcn-dev-ab8b9-deployment",
+      "UnauthRoleName": "amplify-senusashadcn-dev-ab8b9-unauthRole",
+      "StackName": "amplify-senusashadcn-dev-ab8b9",
+      "StackId": "arn:aws:cloudformation:ap-southeast-2:471112501748:stack/amplify-senusashadcn-dev-ab8b9/078ceda0-4c91-11ef-a501-0610ef1abd1d",
+      "AmplifyAppId": "d3iwi7cabpgyu2"
+    }
+  },
+  "api": {
+    "senusashadcn": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "senusashadcn63d575e5"
+        }
+      ],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            },
+            {
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+              "userPoolConfig": {
+                "userPoolId": "authsenusashadcn63d575e5"
+              }
+            }
+          ],
+          "defaultAuthentication": {
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 30,
+              "description": "api key description"
+            }
+          }
+        },
+        "GraphQLAPIIdOutput": "sb73mq7u3rgotbmsemcrvrqkfa",
+        "GraphQLAPIEndpointOutput": "https://zhka265xfrcanmenfkh7acmwxi.appsync-api.ap-southeast-2.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-pqkmtvwvuzamvovzqxksd44sxq"
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync",
+      "lastPushTimeStamp": "2025-01-28T14:35:44.586Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-senusashadcn-dev-ab8b9-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apisenusashadcn"
+      },
+      "lastPushDirHash": "5o3QPZpI/FRgIQRiN5aVDugDyX4="
+    }
+  },
+  "auth": {
+    "senusashadcn63d575e5": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": []
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "output": {
+        "UserPoolId": "ap-southeast-2_LaLmvmcKV",
+        "AppClientIDWeb": "4r5hd0leelod77vmf31k2h8ioe",
+        "AppClientID": "475931ut2k0jgbs1vpue3o9c2c",
+        "IdentityPoolId": "ap-southeast-2:c8a406b8-462d-4aaa-b2f7-41fa27d76fb9",
+        "UserPoolArn": "arn:aws:cognito-idp:ap-southeast-2:471112501748:userpool/ap-southeast-2_LaLmvmcKV",
+        "IdentityPoolName": "senusashadcn63d575e5_identitypool_63d575e5__dev",
+        "UserPoolName": "senusashadcn63d575e5_userpool_63d575e5"
+      },
+      "lastPushTimeStamp": "2025-01-28T14:35:44.458Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-senusashadcn-dev-ab8b9-deployment/amplify-cfn-templates/auth/senusashadcn63d575e5-cloudformation-template.json",
+        "logicalId": "authsenusashadcn63d575e5"
+      }
+    }
+  },
+  "storage": {
+    "s3senusashadcnstorage31e4d581": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3",
+      "output": {
+        "BucketName": "senusashadcn-storage-31e4d581ab8b9-dev",
+        "Region": "ap-southeast-2"
+      },
+      "lastPushTimeStamp": "2025-01-28T14:35:44.461Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-senusashadcn-dev-ab8b9-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
+        "logicalId": "storages3senusashadcnstorage31e4d581"
+      }
+    }
+  }
+}

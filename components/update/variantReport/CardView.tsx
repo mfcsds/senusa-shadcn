@@ -52,16 +52,25 @@ const CardView: React.FC<CardViewProps> = ({ initialVariants }) => {
       {variantReport.map((variant) => (
         <Card key={variant.id}>
           <CardHeader className="flex items-left gap-4">
-            <div>
+            <div className="flex flex-col gap-2">
               <CardTitle className="text-sm text-text-primary">Report ID: {variant.id}</CardTitle>
               <CardTitle className="text-sm text-text-primary">Patient ID: {variant.idPatient}</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-text-secondary mb-4">
-              <strong>Patient Phenotypes:</strong> {variant.phenotype}
+            <p className="text-sm text-text-secondary mb-2">
+              <strong>Patient Phenotypes:</strong>
             </p>
-            <div className="grid gap-2 items-center justify-between mb-4">
+            {Array.isArray(variant.phenotype) ? (
+                <div className="flex flex-col text-sm text-text-secondary">
+                  {variant.phenotype.map((item, index) => (
+                    <span key={index}>{item}</span>
+                  ))}
+                </div>
+              ) : (
+                <span>{variant.phenotype}</span>
+              )}
+            <div className="grid gap-2 items-center justify-between mb-4 mt-4">
             <p className="text-sm text-text-secondary">
               <strong>Status Report:</strong>
             </p>

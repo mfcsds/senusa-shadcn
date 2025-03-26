@@ -205,13 +205,13 @@ export const Columns: ColumnDef<Variant>[] = [
       return <p className="text-md">{displayValue}</p>;
     },
   },
-  // {
-  //   accessorKey: "inheritance",
-  //   header: "Inheritance",
-  //   cell: ({ row }) => {
-  //     return <p className="text-lg">{row.original.inheritance}</p>;
-  //   },
-  // },
+  {
+    accessorKey: "inheritance",
+    header: "Inheritance",
+    cell: ({ row }) => {
+      return <p className="text-lg">{row.original.inheritance}</p>;
+    },
+  },
   {
     accessorKey: "AF",
     header: ({ column }) => {
@@ -411,7 +411,7 @@ export const Columns: ColumnDef<Variant>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Clinical Sign
+          Clinical Significance
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </ButtonAdd>
       );

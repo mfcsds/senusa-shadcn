@@ -1,0 +1,249 @@
+type UserNotifications @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  user_id: String
+  institutionID: String
+  message: String
+  id_fromuser: String
+  id_report: String
+  markasread: Boolean
+  id_patient: String
+}
+
+type PatientHistoryDisease @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  id_patient: String
+  hpo_code: String
+  hpo_desc: String
+}
+
+type AcmgAnnotation @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  id_variant: String
+  PVS1: Boolean
+  PS1: Boolean
+  PS2: Boolean
+  PS3: Boolean
+  PS4: Boolean
+  PP1_Strong: Boolean
+  PM1: Boolean
+  PM2: Boolean
+  PM3: Boolean
+  PM4: Boolean
+  PM5: Boolean
+  PM6: Boolean
+  PP1_Moderate: Boolean
+  PP1_Cosegregation: Boolean
+  PP2: Boolean
+  PP3: Boolean
+  PP4: Boolean
+  PP5: Boolean
+  BP1: Boolean
+  BP2: Boolean
+  BP3: Boolean
+  BP4: Boolean
+  BP5: Boolean
+  BP6: Boolean
+  BP7: Boolean
+  BS1: Boolean
+  BS2: Boolean
+  BS3: Boolean
+  BS4: Boolean
+  BA1: Boolean
+  acmg_class: String
+}
+
+type FamilyHistoryDisease @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  id_patient: String
+  hpo_code: String
+  hpo_desc: String
+}
+
+type VariantInterpretation @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  hgvs: String
+  text: String
+  id_patient: String
+  id_report: String
+  id_varsample: String
+  alldesc: String
+  gene_symbol: String
+  gene_id: String
+}
+
+type SelectedVariant @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  id_patient: String
+  id_vcf: String
+  id_report: String
+  gene_id: String
+  gene_symbol: String
+  chrom: String
+  pos: String
+  id_var: String
+  ref: String
+  alt: String
+  qual: String
+  global_allele: Float
+  functional_impact: String
+  acmg: String
+  reviewer_class: String
+  clinical_sign: String
+  hgvs: String
+  severe_consequence: String
+  sift_score: Float
+  sift_prediction: String
+  phenotypes: String
+  rsID: String
+  gnomade: Float
+  gnomadg: Float
+  alldesc: String
+  ac: Float
+  af: Float
+  an: Float
+  dp: Float
+  fs: Float
+  mq: Float
+  mqranksum: Float
+  qd: Float
+  readposrank: Float
+  sor: Float
+  fraction: Float
+  zygosity: String
+  text_interpretation: String
+  id_variant: String
+}
+
+type Vcfdata @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  id_patient: String
+  sample_date: String
+  uploadAt: String
+  pathfile: String
+  genome_reference: String
+  number_variant: Int
+}
+
+type Variant @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  chrom: String
+  pos: String
+  ref: String
+  alt: String
+  qual: String
+  filter: String
+  info: String
+  hgvs: String
+  id_var: String
+  id_patient: String
+  id_vcf: String
+  acmg: String
+  ac: Float
+  af: Float
+  an: Float
+  dp: Float
+  fs: Float
+  mq: Float
+  mqranksum: Float
+  qd: Float
+  readposrank: Float
+  sor: Float
+  fraction: Float
+  zygosity: String
+  gene_id: String
+  gene_symbol: String
+}
+
+type GeneticsConselor @model @auth(rules: [{allow: public}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}]) {
+  id: ID!
+  text: String
+}
+
+type Phenotype @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  PhenotypeCode: String
+  Description: String
+}
+
+type Conclusion @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  text: String
+  id_patient: String
+  id_report: String
+}
+
+type Recommendation @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  text: String
+  id_patient: ID!
+  id_report: String
+}
+
+type VariantReport @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  status: Int
+  isApproved: Boolean
+  medical_history: String
+  current_diagnosis: String
+  institutionID: ID
+  createAt: AWSDate
+  phenotype: [String]
+  sample_collection: String
+  idPatient: String
+  testing_description: String
+}
+
+type PatientDocuments @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  pathfile: String
+  doctype: String
+  id_patient: String
+  id_report: String
+}
+
+type Patient @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  sex: String
+  phone_number: String
+  dob: String
+  id_reference: String
+  id_institution: String
+  health_desc: String
+}
+
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  first_name: String
+  last_name: String
+  role: String
+  email: String
+  category: String
+  specialty: String
+  institutionID: ID!
+  level: Int
+  status: Int
+  phone_number: String
+}
+
+type Institution @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  contactname: String
+  address: String
+  subscription_type: String
+  email: String
+  Users: [Patient] @hasMany(fields: ["id"])
+  Patients: [Patient] @hasMany(fields: ["id"])
+  userQuotas: Int
+  currentUserQuota: Int
+  storageQuota: Float
+  registrationDate: String
+  accountStatus: Boolean
+  VariantReports: [Patient] @hasMany(fields: ["id"])
+  contactphone: String
+  dueDate: String
+  currentStorageQuota: Float
+}
+ 

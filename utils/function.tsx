@@ -270,7 +270,6 @@ export const fetchVariantDetails = async (
 
     return {
       ...variant,
-      globalallele: gnomad,
       clinicalSign: clinicalSignificance,
       severeconsequence: severeConsequence,
       sift_score: siftScore,
@@ -323,7 +322,6 @@ export const fetchVariantDetails4 = async (
 
         return {
           ...variant,
-          globalallele: lambdaBody.globalallele || null,
           gnomade: lambdaBody.gnomade || null,
           gnomadg: lambdaBody.gnomadg || null,
           clinicalSign: lambdaBody.clinicalSign || null,
@@ -335,6 +333,7 @@ export const fetchVariantDetails4 = async (
           rsID: lambdaBody.rsID || null,
           phenotypes: lambdaBody.phenotypes || null,
           alldesc: lambdaBody.alldesc || "",
+          inheritance: lambdaBody.inheritance || "Not available",
         };
       } else {
         console.error(
@@ -514,7 +513,6 @@ export const fetchVariantDetails2 = async (
 
     return {
       ...variant,
-      globalallele: gnomad,
       gnomade: gnomade,
       gnomadg: gnomadg,
       clinicalSign: clinicalSignificance,
@@ -687,7 +685,6 @@ export const fetchVariantDetails3 = async (
 
     return {
       ...variant,
-      globalallele: gnomad,
       gnomade: gnomade,
       gnomadg: gnomadg,
       clinicalSign: clinicalSignificance,

@@ -95,7 +95,6 @@ export default function DetailVariantReport({ params }: PageProps) {
 
   useEffect(() => {
     if (!patientId) return;
-    console.log(patientId);
     const loadVCFData = async () => {
       try {
         setLoading(true);
@@ -268,7 +267,10 @@ export default function DetailVariantReport({ params }: PageProps) {
             </TabsList>
 
             <TabsContent value="information-approvel">
-              <InformationApprovalReport id_patient={patientId} id_report={id!}/>
+              <InformationApprovalReport
+                id_patient={patientId}
+                id_report={id!}
+              />
             </TabsContent>
 
             <TabsContent value="select-variant">
@@ -288,10 +290,10 @@ export default function DetailVariantReport({ params }: PageProps) {
             </TabsContent>
 
             <TabsContent value="recommendation">
-            <RecommendationAndConclusion
-          id_patient={patientId}
-          id_report={id}
-        ></RecommendationAndConclusion>
+              <RecommendationAndConclusion
+                id_patient={patientId}
+                id_report={id}
+              ></RecommendationAndConclusion>
             </TabsContent>
           </Tabs>
         </div>

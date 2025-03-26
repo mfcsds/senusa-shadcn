@@ -9,7 +9,7 @@ import {
     PaginationPrevious,
   } from "@/components/update/pagination/Pagination";
 
-const PaginationPatient: React.FC = () => {
+const PaginationVariantReport: React.FC = () => {
   return (
     <Pagination>
           <PaginationContent>
@@ -38,4 +38,4 @@ const PaginationPatient: React.FC = () => {
   );
 };
 
-export default PaginationPatient;
+export default PaginationVariantReport;

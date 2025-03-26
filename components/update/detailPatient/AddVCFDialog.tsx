@@ -46,6 +46,7 @@ import { Amplify } from "aws-amplify";
 import axios from "axios";
 import config from "@/src/amplifyconfiguration.json";
 import Swal from "sweetalert2";
+import { useToast } from "@/components/ui/use-toast";
 import {
   createAcmgAnnotation,
   createVariant,
@@ -68,6 +69,7 @@ interface AddVcfDialogProps {
 
 const AddVCFDialog: React.FC<AddVcfDialogProps> = ({ patientID }) => {
   const client = generateClient();
+  const { toast } = useToast();
   const [genomReference, setGenomReference] = useState("");
   const [sampleDate, setSampleDate] = useState("");
   const [file, setFile] = useState<File>();
@@ -101,22 +103,10 @@ const AddVCFDialog: React.FC<AddVcfDialogProps> = ({ patientID }) => {
       setErrorGenomReference("");
     }
     if (!file) {
-      Swal.fire({
-        title: "Information.",
-        text: "Please select a file VCF!",
-        icon: "info",
-        background: "bg-background",
-        color: "text-text-primary",
-        timer: 1500,
-        customClass: {
-          popup: "bg-background text-text-primary",
-          title: "text-2xl font-bold",
-          confirmButton:
-            "bg-primary text-text-action hover:bg-secondary rounded-lg px-4 py-2",
-          cancelButton:
-            "bg-red-primary text-text-action hover:bg-red-secondary rounded-lg px-4 py-2",
-        },
-        showConfirmButton: false,
+      toast({
+        variant: "destructive",
+        title: "Please select a file VCF!",
+        description: "Failed to update new patient. Please try again.",
       });
       return;
     }
@@ -328,7 +318,7 @@ const AddVCFDialog: React.FC<AddVcfDialogProps> = ({ patientID }) => {
       setReadVariantFromText([]);
       setDisabledButtonSave(false);
       setOpenDialog(false);
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
@@ -367,7 +357,7 @@ const AddVCFDialog: React.FC<AddVcfDialogProps> = ({ patientID }) => {
                     htmlFor="institution"
                     className="block text-sm font-medium text-text-primary"
                   >
-                    Genome Reference
+                    Genome Reference <span className="text-red-500">*</span>
                   </label>
                 </div>
                 <p className="text-xs text-text-secondary mb-4">
@@ -415,6 +405,7 @@ const AddVCFDialog: React.FC<AddVcfDialogProps> = ({ patientID }) => {
                   value={sampleDate}
                   onChange={(e) => setSampleDate(e.target.value)}
                   placeholder="Pick a Date"
+                  max={new Date().toISOString().split("T")[0]}
                 />
               </div>
             </div>
@@ -426,7 +417,7 @@ const AddVCFDialog: React.FC<AddVcfDialogProps> = ({ patientID }) => {
                     htmlFor="institution"
                     className="block text-sm font-medium text-text-primary"
                   >
-                    Upload VCF File
+                    Upload VCF File <span className="text-red-500">*</span>
                   </label>
                 </div>
                 <p className="text-xs text-text-secondary mb-4">

@@ -42,7 +42,7 @@ export default function DetailAccountsPage({ params }: PageProps) {
   const [listUsers, setListUsers] = useState<DataUser[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadingUsers, setLoadingUsers] = useState(false);
-const { toast } = useToast();
+  const { toast } = useToast();
 
   useEffect(() => {
     const resolveParams = async () => {
@@ -95,8 +95,6 @@ const { toast } = useToast();
 
     loadInstitutions();
   }, [id]);
-
-  
 
   return (
     <div className="p-8 min-h-screen">

@@ -107,7 +107,9 @@ const ButtonInviteUser: React.FC<ButtonInviteUserProops> = ({
         <Button
           variant="iconSecondary"
           size="md"
-          icon={<UserPlus className="w-4 h-4" />}
+          className="text-sm font-semibold hover:underline"
+          label="Invite User"
+          icon={<UserPlus className="w-5 h-5" />}
         />
       </DialogTrigger>
       <DialogContent className="max-w-2xl">

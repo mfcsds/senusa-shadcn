@@ -110,7 +110,7 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
       fetchCurrentUser();
     }
   });
-  
+
   useEffect(() => {
     const fetchVariantData = async () => {
       try {
@@ -280,23 +280,40 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
               <p className="text-text-secondary font-semibold">
                 Add variant interpretation
               </p>
-              <Dialog>
-                <DialogTrigger>
-                  <ButtonAdd
-                    variant="outline"
-                    className="rounded-lg font-semibold text-sm text-primary bg-background hover:bg-background hover:text-primary hover:underline"
-                  >
-                    Edit ACMG
-                  </ButtonAdd>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[90%] max-h-[90%] overflow-y-auto bg-foreground">
-                  <ACMGVariantInterpretation
-                    selectedVariant={variantData}
-                    onUpdateVariant={updateACMGClassSelectedVariant}
-                    setACMGClass={setACMG}
-                  ></ACMGVariantInterpretation>
-                </DialogContent>
-              </Dialog>
+
+              <div className="flex flex-row justify-end">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <ButtonInviteUser
+                        user={user}
+                        variant_data={variantData}
+                      ></ButtonInviteUser>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Invite other user to provide analysis</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                <Dialog>
+                  <DialogTrigger>
+                    <Button
+                      variant="iconPrimary"
+                      size="md"
+                      className="text-sm font-semibold hover:underline"
+                      label="Edit ACMG"
+                      icon={<Edit className="w-5 h-5" />}
+                    />
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[90%] max-h-[90%] overflow-y-auto bg-foreground">
+                    <ACMGVariantInterpretation
+                      selectedVariant={variantData}
+                      onUpdateVariant={updateACMGClassSelectedVariant}
+                      setACMGClass={setACMG}
+                    ></ACMGVariantInterpretation>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </div>
 
             {/* Toolbar */}
@@ -377,74 +394,6 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                      <ButtonInviteUser
-                          user={user}
-                          variant_data={variantData}
-                        ></ButtonInviteUser>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Invite other user to provide analysis</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                  {/* Save Variant Interpretation */}
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="iconSecondary"
-                          size="md"
-                          onClick={() => handleSaveVariantAnalysis()}
-                          icon={<Save className="w-4 h-4" />}
-                        />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Save Current Analysis</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>  
-                  {/* Activate Delete */}
-                  <AlertDialog>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              variant="iconDanger"
-                              size="md"
-                              icon={<Trash className="w-4 h-4" />}
-                            />
-                          </AlertDialogTrigger>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Delete this variant form analysis</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete the variant and remove related data from the
-                          database.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={handleDeleteVariantAnalysis}
-                        >
-                          Continue
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
                 </div>
               </div>
             </div>
@@ -453,6 +402,64 @@ const VariantEditor: React.FC<VariantEditorProops> = ({
               editor={editor}
               className="p-5 border mt-5 rounded bg-foreground text-text-primary border-gray-500"
             ></EditorContent>
+
+            <div className="flex flex-row gap-6 mt-2 justify-end">
+              {/* Save Variant Interpretation */}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outlineSecondary"
+                      size="large"
+                      onClick={() => handleSaveVariantAnalysis()}
+                      label="Save"
+                      icon={<Save className="w-4 h-4" />}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Save Current Analysis</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              {/* Activate Delete */}
+              <AlertDialog>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="outlineDanger"
+                          size="large"
+                          label="Delete"
+                          icon={<Trash className="w-4 h-4" />}
+                        />
+                      </AlertDialogTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Delete this variant form analysis</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      the variant and remove related data from the database.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDeleteVariantAnalysis}>
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
 
             {/* Dialog */}
             <Dialog

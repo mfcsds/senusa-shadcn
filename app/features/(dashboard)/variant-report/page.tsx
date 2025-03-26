@@ -17,14 +17,30 @@ import {
 import Spinner from "@/components/update/ui/Spinner";
 import { CreateVariantReportInput } from "@/src/API";
 import { fetchVariantReport } from "@/hooks/useVariantReport";
+import { fetchUserAttributes } from "aws-amplify/auth";
 
 export default function VariantReportPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"card" | "list">("card");
+  const [institution_id, setInstitutionID] = useState<string | null>(null);
   const [varReports, setVarReports] = useState<CreateVariantReportInput[]>([]);
-  const [filteredVariants, setFilteredVariants] = useState<CreateVariantReportInput[]>([]);
+  const [filteredVariants, setFilteredVariants] = useState<
+    CreateVariantReportInput[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
+
+  useEffect(() => {
+    const getUserInstitutionID = async () => {
+      try {
+        const attributes = await fetchUserAttributes();
+        setInstitutionID(attributes["custom:institution_id"] || null);
+      } catch (error) {
+        console.error("Error fetching user attributes", error);
+      }
+    };
+    getUserInstitutionID();
+  }, []);
 
   useEffect(() => {
     const loadVariants = async () => {
@@ -45,13 +61,14 @@ export default function VariantReportPage() {
 
   useEffect(() => {
     if (selectedStatus === "draft") {
-      setFilteredVariants(varReports.filter(report => report.status === 1));
+      setFilteredVariants(varReports.filter((report) => report.status === 1));
     } else if (selectedStatus === "process") {
-      setFilteredVariants(varReports.filter(report => report.status === 2));
-    }if (selectedStatus === "waitingForApproval") {
-      setFilteredVariants(varReports.filter(report => report.status === 3));
+      setFilteredVariants(varReports.filter((report) => report.status === 2));
+    }
+    if (selectedStatus === "waitingForApproval") {
+      setFilteredVariants(varReports.filter((report) => report.status === 3));
     } else if (selectedStatus === "completed") {
-      setFilteredVariants(varReports.filter(report => report.status === 4));
+      setFilteredVariants(varReports.filter((report) => report.status === 4));
     } else if (selectedStatus === "all") {
       setFilteredVariants(varReports);
     }
@@ -99,14 +116,18 @@ export default function VariantReportPage() {
               icon={<SearchIcon className="w-5 h-5" />}
             />
           </div>
-          <AddReportDialog onUpdateVariantReport={fetchLoadVariantReport}/>
+          <AddReportDialog onUpdateVariantReport={fetchLoadVariantReport} />
           <Button
-            variant={viewMode === "card" ? "iconCardViewActive" : "iconCardView"}
+            variant={
+              viewMode === "card" ? "iconCardViewActive" : "iconCardView"
+            }
             onClick={() => setViewMode("card")}
             icon={<LayoutDashboard className="w-6 h-6" />}
           />
           <Button
-            variant={viewMode === "list" ? "iconListViewActive" : "iconListView"}
+            variant={
+              viewMode === "list" ? "iconListViewActive" : "iconListView"
+            }
             onClick={() => setViewMode("list")}
             icon={<LayoutList className="w-6 h-6" />}
           />
@@ -119,30 +140,38 @@ export default function VariantReportPage() {
             <TabsTrigger value="all">All Status</TabsTrigger>
             <TabsTrigger value="draft">Draft</TabsTrigger>
             <TabsTrigger value="process">In Process</TabsTrigger>
-            <TabsTrigger value="waitingForApproval">Waiting for Approval</TabsTrigger>
+            <TabsTrigger value="waitingForApproval">
+              Waiting for Approval
+            </TabsTrigger>
             <TabsTrigger value="completed">Completed</TabsTrigger>
           </TabsList>
           <TabsContent value={selectedStatus}>
             {loading ? (
-              <Spinner />
-            ) : viewMode === "card" ? (
-              <CardView initialVariants={filteredVariants} />
+              <div>
+                <Spinner />
+                <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
+                  Loading
+                </p>
+              </div>
+            ) : filteredVariants.length === 0 ? (
+              <p className="text-lg text-center mt-10 text-primary font-semibold">
+                No variant report found
+              </p>
             ) : (
-              <ListView initialVariants={filteredVariants} />
+              <>
+                {viewMode === "card" ? (
+                  <CardView initialVariants={filteredVariants} />
+                ) : (
+                  <ListView initialVariants={filteredVariants} />
+                )}
+                <div className="flex justify-center mt-10">
+                  {/* <PaginationVariantReport /> */}
+                </div>
+              </>
             )}
           </TabsContent>
         </Tabs>
       </div>
-
-      {loading ? (
-        <p className="text-lg text-center mt-10 text-primary font-semibold animate-pulse">
-          Loading
-        </p>
-      ) : (
-        <div className="flex justify-between items-center mt-10">
-          <PaginationVariantReport />
-        </div>
-      )}
     </div>
   );
 }

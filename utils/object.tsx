@@ -40,9 +40,7 @@ export interface Variant {
   readposrank: number;
   sor: number;
   fraction: number;
-  variantReportID: string;
   zygosity: string | null;
-  globalallele: number | null;
   functional_impact: string | null;
   acmg: string;
   clinicalSign: string | null;
@@ -56,6 +54,7 @@ export interface Variant {
   gnomadg: number | null;
   gnomade: number | null;
   alldesc: string | null;
+  inheritance: string | null;
 }
 
 export interface Recommendation {

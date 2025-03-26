@@ -142,7 +142,7 @@ const CardView: React.FC<CardViewProps> = ({ intialInstitution }) => {
               label="View"
               variant="outlineSecondary"
               onClick={() =>
-                router.push(`/features/manage-accounts/${institution.id}`)
+                router.push(`/features/manage-institutions/${institution.id}`)
               }
             />
             {institution.accountStatus == false ? (

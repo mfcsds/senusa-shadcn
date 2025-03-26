@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,14 +19,13 @@ import {
   HeartPulse,
   CalendarArrowUp,
   Phone,
+  History,
 } from "lucide-react";
 import Button from "@/components/update/button/Button";
 import Input from "@/components/update/input/Input";
 import { generatePatientID } from "@/utils/GenerateID";
 import { addNewPatient } from "@/hooks/usePatients";
 import { useToast } from "@/components/ui/use-toast";
-import Dropdown from "@/components/update/input/Dropdown";
-import { getDateToday } from "@/utils/DateHelperFunction";
 import {
   Select,
   SelectContent,
@@ -34,12 +33,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/update/ui/select";
+import { generateClient } from "aws-amplify/api";
+import { getUser } from "@/src/graphql/queries";
+import { User } from "@/src/API";
+import ButtonAddFamilyDisease from "@/components/update/button/ButtonAddFamilyDisease";
+import ButtonAddPatientDisease from "@/components/update/button/ButtonAddPatientDisease";
+import { fetchUserAttributes } from "aws-amplify/auth";
 
 const AddPatientDialog = ({
   onUpdatePatients,
 }: {
   onUpdatePatients: () => Promise<void>;
 }) => {
+  const [patientID, setPatientID] = useState(generatePatientID());
   const [idReference, setIDReference] = useState("");
   const [name, setName] = useState("");
   const [sex, setSex] = useState("");
@@ -49,11 +55,30 @@ const AddPatientDialog = ({
   const [openDialog, setOpenDialog] = useState(false);
   const { toast } = useToast();
   const [healthDesc, setHealthDesc] = useState("");
+  const [institution_id, setInstitutionID] = useState<string | null>(null)
+
+  useEffect(() => {
+    const getUserInstitutionID = async () => {
+      try {
+        const attributes = await fetchUserAttributes();
+        setInstitutionID(attributes["custom:institution_id"] || null);
+      } catch (error) {
+        console.error("Error fetching user attributes", error);
+      }
+    };
+    getUserInstitutionID();
+  }, []);
 
   const handleCancelDialog = () => {
     setOpenDialog(false);
     setErrorIDReference("");
     setIDReference("");
+    setName("");
+    setSex("");
+    setPhoneNumber("");
+    setDob("");
+    setHealthDesc("");
+    setPatientID(generatePatientID());
   };
 
   const handleAddNewPatient = async (
@@ -67,13 +92,13 @@ const AddPatientDialog = ({
       return;
     }
 
-    const patientID = generatePatientID();
     const newPatient = {
       id: patientID,
       name: name ?? "-",
       sex: sex ?? "-",
       id_reference: idReference,
       dob: dob ?? "-",
+      id_institution: institution_id ?? "",
       phone_number: phoneNumber ?? "-",
       health_desc: healthDesc ?? "-",
     };
@@ -83,13 +108,12 @@ const AddPatientDialog = ({
       setErrorIDReference("");
       setIDReference("");
       setOpenDialog(false);
-
       await onUpdatePatients();
-
       toast({
         title: "Success Add Patient",
         description: "Patient added successfully",
       });
+      handleCancelDialog();
     } catch (error) {
       console.error("Error adding patient:", error);
       toast({
@@ -131,18 +155,18 @@ const AddPatientDialog = ({
                   htmlFor="patienID"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  ID or Patient Reference Number
+                  ID or Patient Reference Number <span className="text-red-500">*</span>
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
-                ID for Patient Identifier.
+              ID or Patient Reference Number is Required
               </p>
               <Input
                 id="patienID"
                 type="text"
                 value={idReference}
                 onChange={(e) => setIDReference(e.target.value)}
-                placeholder="Enter Patient ID"
+                placeholder="Enter Patient Reference Number"
               />
               {errorIDReference && (
                 <p className="text-red-primary text-xs mt-2">
@@ -212,7 +236,7 @@ const AddPatientDialog = ({
               </p>
               <Input
                 id="phoneNumber"
-                type="text"
+                type="number"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="Enter Phone Number"
@@ -228,7 +252,7 @@ const AddPatientDialog = ({
                   htmlFor="dob"
                   className="block text-sm font-medium text-text-primary"
                 >
-                  Dob
+                  Date of Birth
                 </label>
               </div>
               <p className="text-xs text-text-secondary mb-4">
@@ -240,6 +264,7 @@ const AddPatientDialog = ({
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
                 placeholder="Enter Dob Patient"
+                max={new Date().toISOString().split("T")[0]}
               />
             </div>
             <div>
@@ -274,6 +299,39 @@ const AddPatientDialog = ({
                   </SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <div className="flex items-center space-x-2">
+                <History className="w-6 h-6 text-blue-primary mb-1" />
+                <label
+                  htmlFor="dob"
+                  className="block text-sm font-medium text-text-primary"
+                >
+                  Patient Disease History
+                </label>
+              </div>
+              <p className="text-xs text-text-secondary mb-4">
+                Patient Disease History for Patient Identifier.
+              </p>
+              <ButtonAddPatientDisease patient_id={patientID} />
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <History className="w-6 h-6 text-blue-primary mb-1" />
+                <label
+                  htmlFor="healthDesc"
+                  className="block text-sm font-medium text-text-primary"
+                >
+                  Family Disease History
+                </label>
+              </div>
+              <p className="text-xs text-text-secondary mb-4">
+                Family Disease History for Patient Identifier.
+              </p>
+              <ButtonAddFamilyDisease patient_id={patientID} />
             </div>
           </div>
 

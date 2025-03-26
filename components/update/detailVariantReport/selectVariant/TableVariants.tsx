@@ -496,9 +496,9 @@ export function TableVariants<TData, TValue>({
 
             {/* Input Gene Symbol */}
             <div className="space-y-2">
-              <Label className="text-md">Gene Sysmbol</Label>
+              <Label className="text-md">Gene Symbol</Label>
               <Input
-                id="goneSysmbol"
+                id="goneSymbol"
                 className="max-w-sm"
                 placeholder="Gene Symbol"
                 value={gene_symbol}
