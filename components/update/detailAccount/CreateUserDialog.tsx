@@ -117,8 +117,6 @@ const CreateUserDialog = ({
         setErrorPhoneNumber("");
       }
       try {
-        console.log("role account", roleAccount);
-        console.log("institutions id", institution_id)
         const { isSignUpComplete, userId, nextStep } = await signUp({
           username: email,
           password: password,

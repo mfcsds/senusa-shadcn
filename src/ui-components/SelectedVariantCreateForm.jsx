@@ -62,6 +62,7 @@ export default function SelectedVariantCreateForm(props) {
     zygosity: "",
     text_interpretation: "",
     id_variant: "",
+    inheritance: "",
   };
   const [id_patient, setId_patient] = React.useState(initialValues.id_patient);
   const [id_vcf, setId_vcf] = React.useState(initialValues.id_vcf);
@@ -120,6 +121,9 @@ export default function SelectedVariantCreateForm(props) {
     initialValues.text_interpretation
   );
   const [id_variant, setId_variant] = React.useState(initialValues.id_variant);
+  const [inheritance, setInheritance] = React.useState(
+    initialValues.inheritance
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setId_patient(initialValues.id_patient);
@@ -161,6 +165,7 @@ export default function SelectedVariantCreateForm(props) {
     setZygosity(initialValues.zygosity);
     setText_interpretation(initialValues.text_interpretation);
     setId_variant(initialValues.id_variant);
+    setInheritance(initialValues.inheritance);
     setErrors({});
   };
   const validations = {
@@ -203,6 +208,7 @@ export default function SelectedVariantCreateForm(props) {
     zygosity: [],
     text_interpretation: [],
     id_variant: [],
+    inheritance: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -269,6 +275,7 @@ export default function SelectedVariantCreateForm(props) {
           zygosity,
           text_interpretation,
           id_variant,
+          inheritance,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -370,6 +377,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.id_patient ?? value;
@@ -432,6 +440,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.id_vcf ?? value;
@@ -494,6 +503,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.id_report ?? value;
@@ -556,6 +566,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.gene_id ?? value;
@@ -618,6 +629,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.gene_symbol ?? value;
@@ -680,6 +692,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.chrom ?? value;
@@ -742,6 +755,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.pos ?? value;
@@ -804,6 +818,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.id_var ?? value;
@@ -866,6 +881,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.ref ?? value;
@@ -928,6 +944,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.alt ?? value;
@@ -990,6 +1007,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.qual ?? value;
@@ -1056,6 +1074,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.global_allele ?? value;
@@ -1118,6 +1137,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.functional_impact ?? value;
@@ -1182,6 +1202,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.acmg ?? value;
@@ -1244,6 +1265,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.reviewer_class ?? value;
@@ -1306,6 +1328,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.clinical_sign ?? value;
@@ -1368,6 +1391,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.hgvs ?? value;
@@ -1430,6 +1454,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.severe_consequence ?? value;
@@ -1498,6 +1523,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.sift_score ?? value;
@@ -1560,6 +1586,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.sift_prediction ?? value;
@@ -1622,6 +1649,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.phenotypes ?? value;
@@ -1684,6 +1712,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.rsID ?? value;
@@ -1750,6 +1779,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.gnomade ?? value;
@@ -1816,6 +1846,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.gnomadg ?? value;
@@ -1878,6 +1909,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.alldesc ?? value;
@@ -1944,6 +1976,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.ac ?? value;
@@ -2010,6 +2043,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.af ?? value;
@@ -2076,6 +2110,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.an ?? value;
@@ -2142,6 +2177,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.dp ?? value;
@@ -2208,6 +2244,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.fs ?? value;
@@ -2274,6 +2311,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.mq ?? value;
@@ -2340,6 +2378,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.mqranksum ?? value;
@@ -2406,6 +2445,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.qd ?? value;
@@ -2472,6 +2512,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.readposrank ?? value;
@@ -2538,6 +2579,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.sor ?? value;
@@ -2604,6 +2646,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.fraction ?? value;
@@ -2666,6 +2709,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity: value,
               text_interpretation,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.zygosity ?? value;
@@ -2728,6 +2772,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation: value,
               id_variant,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.text_interpretation ?? value;
@@ -2792,6 +2837,7 @@ export default function SelectedVariantCreateForm(props) {
               zygosity,
               text_interpretation,
               id_variant: value,
+              inheritance,
             };
             const result = onChange(modelFields);
             value = result?.id_variant ?? value;
@@ -2805,6 +2851,69 @@ export default function SelectedVariantCreateForm(props) {
         errorMessage={errors.id_variant?.errorMessage}
         hasError={errors.id_variant?.hasError}
         {...getOverrideProps(overrides, "id_variant")}
+      ></TextField>
+      <TextField
+        label="Inheritance"
+        isRequired={false}
+        isReadOnly={false}
+        value={inheritance}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              id_vcf,
+              id_report,
+              gene_id,
+              gene_symbol,
+              chrom,
+              pos,
+              id_var,
+              ref,
+              alt,
+              qual,
+              global_allele,
+              functional_impact,
+              acmg,
+              reviewer_class,
+              clinical_sign,
+              hgvs,
+              severe_consequence,
+              sift_score,
+              sift_prediction,
+              phenotypes,
+              rsID,
+              gnomade,
+              gnomadg,
+              alldesc,
+              ac,
+              af,
+              an,
+              dp,
+              fs,
+              mq,
+              mqranksum,
+              qd,
+              readposrank,
+              sor,
+              fraction,
+              zygosity,
+              text_interpretation,
+              id_variant,
+              inheritance: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.inheritance ?? value;
+          }
+          if (errors.inheritance?.hasError) {
+            runValidationTasks("inheritance", value);
+          }
+          setInheritance(value);
+        }}
+        onBlur={() => runValidationTasks("inheritance", inheritance)}
+        errorMessage={errors.inheritance?.errorMessage}
+        hasError={errors.inheritance?.hasError}
+        {...getOverrideProps(overrides, "inheritance")}
       ></TextField>
       <Flex
         justifyContent="space-between"

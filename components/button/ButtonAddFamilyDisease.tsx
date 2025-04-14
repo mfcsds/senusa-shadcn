@@ -39,7 +39,7 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
   >([]);
 
   const client = generateClient();
-
+const [familyRelation, setFamilyRelation] = useState("");
   useEffect(() => {
     const loadInitialData = async () => {
       try {
@@ -70,6 +70,7 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
       id_patient: patient_id ?? "",
       hpo_code: suggestion.id,
       hpo_desc: suggestion.name,
+      family_relation: familyRelation,
     };
 
     try {

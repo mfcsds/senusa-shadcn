@@ -26,11 +26,13 @@ export declare type FamilyHistoryDiseaseUpdateFormInputValues = {
     id_patient?: string;
     hpo_code?: string;
     hpo_desc?: string;
+    family_relation?: string;
 };
 export declare type FamilyHistoryDiseaseUpdateFormValidationValues = {
     id_patient?: ValidationFunction<string>;
     hpo_code?: ValidationFunction<string>;
     hpo_desc?: ValidationFunction<string>;
+    family_relation?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type FamilyHistoryDiseaseUpdateFormOverridesProps = {
@@ -38,6 +40,7 @@ export declare type FamilyHistoryDiseaseUpdateFormOverridesProps = {
     id_patient?: PrimitiveOverrideProps<TextFieldProps>;
     hpo_code?: PrimitiveOverrideProps<TextFieldProps>;
     hpo_desc?: PrimitiveOverrideProps<TextFieldProps>;
+    family_relation?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type FamilyHistoryDiseaseUpdateFormProps = React.PropsWithChildren<{
     overrides?: FamilyHistoryDiseaseUpdateFormOverridesProps | undefined | null;

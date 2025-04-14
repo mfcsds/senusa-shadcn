@@ -2,28 +2,18 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateUserNotificationsInput = {
+export type CreateRoleInput = {
   id?: string | null,
-  user_id?: string | null,
-  institutionID?: string | null,
-  message?: string | null,
-  id_fromuser?: string | null,
-  id_report?: string | null,
-  markasread?: boolean | null,
-  id_patient?: string | null,
+  name?: string | null,
+  userID: string,
 };
 
-export type ModelUserNotificationsConditionInput = {
-  user_id?: ModelStringInput | null,
-  institutionID?: ModelStringInput | null,
-  message?: ModelStringInput | null,
-  id_fromuser?: ModelStringInput | null,
-  id_report?: ModelStringInput | null,
-  markasread?: ModelBooleanInput | null,
-  id_patient?: ModelStringInput | null,
-  and?: Array< ModelUserNotificationsConditionInput | null > | null,
-  or?: Array< ModelUserNotificationsConditionInput | null > | null,
-  not?: ModelUserNotificationsConditionInput | null,
+export type ModelRoleConditionInput = {
+  name?: ModelStringInput | null,
+  userID?: ModelIDInput | null,
+  and?: Array< ModelRoleConditionInput | null > | null,
+  or?: Array< ModelRoleConditionInput | null > | null,
+  not?: ModelRoleConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
 };
@@ -66,6 +56,67 @@ export type ModelSizeInput = {
   ge?: number | null,
   gt?: number | null,
   between?: Array< number | null > | null,
+};
+
+export type ModelIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
+export type Role = {
+  __typename: "Role",
+  id: string,
+  name?: string | null,
+  userID: string,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateRoleInput = {
+  id: string,
+  name?: string | null,
+  userID?: string | null,
+};
+
+export type DeleteRoleInput = {
+  id: string,
+};
+
+export type CreateUserNotificationsInput = {
+  id?: string | null,
+  user_id?: string | null,
+  institutionID?: string | null,
+  message?: string | null,
+  id_fromuser?: string | null,
+  id_report?: string | null,
+  markasread?: boolean | null,
+  id_patient?: string | null,
+};
+
+export type ModelUserNotificationsConditionInput = {
+  user_id?: ModelStringInput | null,
+  institutionID?: ModelStringInput | null,
+  message?: ModelStringInput | null,
+  id_fromuser?: ModelStringInput | null,
+  id_report?: ModelStringInput | null,
+  markasread?: ModelBooleanInput | null,
+  id_patient?: ModelStringInput | null,
+  and?: Array< ModelUserNotificationsConditionInput | null > | null,
+  or?: Array< ModelUserNotificationsConditionInput | null > | null,
+  not?: ModelUserNotificationsConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type ModelBooleanInput = {
@@ -303,12 +354,14 @@ export type CreateFamilyHistoryDiseaseInput = {
   id_patient?: string | null,
   hpo_code?: string | null,
   hpo_desc?: string | null,
+  family_relation?: string | null,
 };
 
 export type ModelFamilyHistoryDiseaseConditionInput = {
   id_patient?: ModelStringInput | null,
   hpo_code?: ModelStringInput | null,
   hpo_desc?: ModelStringInput | null,
+  family_relation?: ModelStringInput | null,
   and?: Array< ModelFamilyHistoryDiseaseConditionInput | null > | null,
   or?: Array< ModelFamilyHistoryDiseaseConditionInput | null > | null,
   not?: ModelFamilyHistoryDiseaseConditionInput | null,
@@ -322,6 +375,7 @@ export type FamilyHistoryDisease = {
   id_patient?: string | null,
   hpo_code?: string | null,
   hpo_desc?: string | null,
+  family_relation?: string | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -331,6 +385,7 @@ export type UpdateFamilyHistoryDiseaseInput = {
   id_patient?: string | null,
   hpo_code?: string | null,
   hpo_desc?: string | null,
+  family_relation?: string | null,
 };
 
 export type DeleteFamilyHistoryDiseaseInput = {
@@ -437,6 +492,7 @@ export type CreateSelectedVariantInput = {
   zygosity?: string | null,
   text_interpretation?: string | null,
   id_variant?: string | null,
+  inheritance?: string | null,
 };
 
 export type ModelSelectedVariantConditionInput = {
@@ -479,6 +535,7 @@ export type ModelSelectedVariantConditionInput = {
   zygosity?: ModelStringInput | null,
   text_interpretation?: ModelStringInput | null,
   id_variant?: ModelStringInput | null,
+  inheritance?: ModelStringInput | null,
   and?: Array< ModelSelectedVariantConditionInput | null > | null,
   or?: Array< ModelSelectedVariantConditionInput | null > | null,
   not?: ModelSelectedVariantConditionInput | null,
@@ -540,6 +597,7 @@ export type SelectedVariant = {
   zygosity?: string | null,
   text_interpretation?: string | null,
   id_variant?: string | null,
+  inheritance?: string | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -585,6 +643,7 @@ export type UpdateSelectedVariantInput = {
   zygosity?: string | null,
   text_interpretation?: string | null,
   id_variant?: string | null,
+  inheritance?: string | null,
 };
 
 export type DeleteSelectedVariantInput = {
@@ -908,22 +967,6 @@ export type ModelRecommendationConditionInput = {
   updatedAt?: ModelStringInput | null,
 };
 
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
-};
-
 export type Recommendation = {
   __typename: "Recommendation",
   id: string,
@@ -1065,9 +1108,9 @@ export type CreatePatientInput = {
   sex?: string | null,
   phone_number?: string | null,
   dob?: string | null,
-  id_reference?: string | null,
   id_institution?: string | null,
   health_desc?: string | null,
+  id_reference?: string | null,
 };
 
 export type ModelPatientConditionInput = {
@@ -1075,9 +1118,9 @@ export type ModelPatientConditionInput = {
   sex?: ModelStringInput | null,
   phone_number?: ModelStringInput | null,
   dob?: ModelStringInput | null,
-  id_reference?: ModelStringInput | null,
   id_institution?: ModelStringInput | null,
   health_desc?: ModelStringInput | null,
+  id_reference?: ModelStringInput | null,
   and?: Array< ModelPatientConditionInput | null > | null,
   or?: Array< ModelPatientConditionInput | null > | null,
   not?: ModelPatientConditionInput | null,
@@ -1092,9 +1135,9 @@ export type Patient = {
   sex?: string | null,
   phone_number?: string | null,
   dob?: string | null,
-  id_reference?: string | null,
   id_institution?: string | null,
   health_desc?: string | null,
+  id_reference?: string | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -1105,9 +1148,9 @@ export type UpdatePatientInput = {
   sex?: string | null,
   phone_number?: string | null,
   dob?: string | null,
-  id_reference?: string | null,
   id_institution?: string | null,
   health_desc?: string | null,
+  id_reference?: string | null,
 };
 
 export type DeletePatientInput = {
@@ -1159,8 +1202,15 @@ export type User = {
   level?: number | null,
   status?: number | null,
   phone_number?: string | null,
+  Roles?: ModelRoleConnection | null,
   createdAt: string,
   updatedAt: string,
+};
+
+export type ModelRoleConnection = {
+  __typename: "ModelRoleConnection",
+  items:  Array<Role | null >,
+  nextToken?: string | null,
 };
 
 export type UpdateUserInput = {
@@ -1269,6 +1319,23 @@ export type DeleteInstitutionInput = {
   id: string,
 };
 
+export type ModelRoleFilterInput = {
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  userID?: ModelIDInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelRoleFilterInput | null > | null,
+  or?: Array< ModelRoleFilterInput | null > | null,
+  not?: ModelRoleFilterInput | null,
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
 export type ModelUserNotificationsFilterInput = {
   id?: ModelIDInput | null,
   user_id?: ModelStringInput | null,
@@ -1361,6 +1428,7 @@ export type ModelFamilyHistoryDiseaseFilterInput = {
   id_patient?: ModelStringInput | null,
   hpo_code?: ModelStringInput | null,
   hpo_desc?: ModelStringInput | null,
+  family_relation?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelFamilyHistoryDiseaseFilterInput | null > | null,
@@ -1438,6 +1506,7 @@ export type ModelSelectedVariantFilterInput = {
   zygosity?: ModelStringInput | null,
   text_interpretation?: ModelStringInput | null,
   id_variant?: ModelStringInput | null,
+  inheritance?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelSelectedVariantFilterInput | null > | null,
@@ -1633,9 +1702,9 @@ export type ModelPatientFilterInput = {
   sex?: ModelStringInput | null,
   phone_number?: ModelStringInput | null,
   dob?: ModelStringInput | null,
-  id_reference?: ModelStringInput | null,
   id_institution?: ModelStringInput | null,
   health_desc?: ModelStringInput | null,
+  id_reference?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelPatientFilterInput | null > | null,
@@ -1696,19 +1765,14 @@ export type ModelInstitutionConnection = {
   nextToken?: string | null,
 };
 
-export type ModelSubscriptionUserNotificationsFilterInput = {
+export type ModelSubscriptionRoleFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  user_id?: ModelSubscriptionStringInput | null,
-  institutionID?: ModelSubscriptionStringInput | null,
-  message?: ModelSubscriptionStringInput | null,
-  id_fromuser?: ModelSubscriptionStringInput | null,
-  id_report?: ModelSubscriptionStringInput | null,
-  markasread?: ModelSubscriptionBooleanInput | null,
-  id_patient?: ModelSubscriptionStringInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  userID?: ModelSubscriptionIDInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionUserNotificationsFilterInput | null > | null,
-  or?: Array< ModelSubscriptionUserNotificationsFilterInput | null > | null,
+  and?: Array< ModelSubscriptionRoleFilterInput | null > | null,
+  or?: Array< ModelSubscriptionRoleFilterInput | null > | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -1739,6 +1803,21 @@ export type ModelSubscriptionStringInput = {
   beginsWith?: string | null,
   in?: Array< string | null > | null,
   notIn?: Array< string | null > | null,
+};
+
+export type ModelSubscriptionUserNotificationsFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  user_id?: ModelSubscriptionStringInput | null,
+  institutionID?: ModelSubscriptionStringInput | null,
+  message?: ModelSubscriptionStringInput | null,
+  id_fromuser?: ModelSubscriptionStringInput | null,
+  id_report?: ModelSubscriptionStringInput | null,
+  markasread?: ModelSubscriptionBooleanInput | null,
+  id_patient?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionUserNotificationsFilterInput | null > | null,
+  or?: Array< ModelSubscriptionUserNotificationsFilterInput | null > | null,
 };
 
 export type ModelSubscriptionBooleanInput = {
@@ -1802,6 +1881,7 @@ export type ModelSubscriptionFamilyHistoryDiseaseFilterInput = {
   id_patient?: ModelSubscriptionStringInput | null,
   hpo_code?: ModelSubscriptionStringInput | null,
   hpo_desc?: ModelSubscriptionStringInput | null,
+  family_relation?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionFamilyHistoryDiseaseFilterInput | null > | null,
@@ -1865,6 +1945,7 @@ export type ModelSubscriptionSelectedVariantFilterInput = {
   zygosity?: ModelSubscriptionStringInput | null,
   text_interpretation?: ModelSubscriptionStringInput | null,
   id_variant?: ModelSubscriptionStringInput | null,
+  inheritance?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionSelectedVariantFilterInput | null > | null,
@@ -2021,9 +2102,9 @@ export type ModelSubscriptionPatientFilterInput = {
   sex?: ModelSubscriptionStringInput | null,
   phone_number?: ModelSubscriptionStringInput | null,
   dob?: ModelSubscriptionStringInput | null,
-  id_reference?: ModelSubscriptionStringInput | null,
   id_institution?: ModelSubscriptionStringInput | null,
   health_desc?: ModelSubscriptionStringInput | null,
+  id_reference?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionPatientFilterInput | null > | null,
@@ -2067,6 +2148,54 @@ export type ModelSubscriptionInstitutionFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionInstitutionFilterInput | null > | null,
   or?: Array< ModelSubscriptionInstitutionFilterInput | null > | null,
+};
+
+export type CreateRoleMutationVariables = {
+  input: CreateRoleInput,
+  condition?: ModelRoleConditionInput | null,
+};
+
+export type CreateRoleMutation = {
+  createRole?:  {
+    __typename: "Role",
+    id: string,
+    name?: string | null,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateRoleMutationVariables = {
+  input: UpdateRoleInput,
+  condition?: ModelRoleConditionInput | null,
+};
+
+export type UpdateRoleMutation = {
+  updateRole?:  {
+    __typename: "Role",
+    id: string,
+    name?: string | null,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteRoleMutationVariables = {
+  input: DeleteRoleInput,
+  condition?: ModelRoleConditionInput | null,
+};
+
+export type DeleteRoleMutation = {
+  deleteRole?:  {
+    __typename: "Role",
+    id: string,
+    name?: string | null,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
 };
 
 export type CreateUserNotificationsMutationVariables = {
@@ -2333,6 +2462,7 @@ export type CreateFamilyHistoryDiseaseMutation = {
     id_patient?: string | null,
     hpo_code?: string | null,
     hpo_desc?: string | null,
+    family_relation?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2350,6 +2480,7 @@ export type UpdateFamilyHistoryDiseaseMutation = {
     id_patient?: string | null,
     hpo_code?: string | null,
     hpo_desc?: string | null,
+    family_relation?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2367,6 +2498,7 @@ export type DeleteFamilyHistoryDiseaseMutation = {
     id_patient?: string | null,
     hpo_code?: string | null,
     hpo_desc?: string | null,
+    family_relation?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2486,6 +2618,7 @@ export type CreateSelectedVariantMutation = {
     zygosity?: string | null,
     text_interpretation?: string | null,
     id_variant?: string | null,
+    inheritance?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2539,6 +2672,7 @@ export type UpdateSelectedVariantMutation = {
     zygosity?: string | null,
     text_interpretation?: string | null,
     id_variant?: string | null,
+    inheritance?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2592,6 +2726,7 @@ export type DeleteSelectedVariantMutation = {
     zygosity?: string | null,
     text_interpretation?: string | null,
     id_variant?: string | null,
+    inheritance?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3114,9 +3249,9 @@ export type CreatePatientMutation = {
     sex?: string | null,
     phone_number?: string | null,
     dob?: string | null,
-    id_reference?: string | null,
     id_institution?: string | null,
     health_desc?: string | null,
+    id_reference?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3135,9 +3270,9 @@ export type UpdatePatientMutation = {
     sex?: string | null,
     phone_number?: string | null,
     dob?: string | null,
-    id_reference?: string | null,
     id_institution?: string | null,
     health_desc?: string | null,
+    id_reference?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3156,9 +3291,9 @@ export type DeletePatientMutation = {
     sex?: string | null,
     phone_number?: string | null,
     dob?: string | null,
-    id_reference?: string | null,
     id_institution?: string | null,
     health_desc?: string | null,
+    id_reference?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3183,6 +3318,10 @@ export type CreateUserMutation = {
     level?: number | null,
     status?: number | null,
     phone_number?: string | null,
+    Roles?:  {
+      __typename: "ModelRoleConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3207,6 +3346,10 @@ export type UpdateUserMutation = {
     level?: number | null,
     status?: number | null,
     phone_number?: string | null,
+    Roles?:  {
+      __typename: "ModelRoleConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3231,6 +3374,10 @@ export type DeleteUserMutation = {
     level?: number | null,
     status?: number | null,
     phone_number?: string | null,
+    Roles?:  {
+      __typename: "ModelRoleConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3350,6 +3497,65 @@ export type DeleteInstitutionMutation = {
     currentStorageQuota?: number | null,
     createdAt: string,
     updatedAt: string,
+  } | null,
+};
+
+export type GetRoleQueryVariables = {
+  id: string,
+};
+
+export type GetRoleQuery = {
+  getRole?:  {
+    __typename: "Role",
+    id: string,
+    name?: string | null,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListRolesQueryVariables = {
+  filter?: ModelRoleFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListRolesQuery = {
+  listRoles?:  {
+    __typename: "ModelRoleConnection",
+    items:  Array< {
+      __typename: "Role",
+      id: string,
+      name?: string | null,
+      userID: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type RolesByUserIDQueryVariables = {
+  userID: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelRoleFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type RolesByUserIDQuery = {
+  rolesByUserID?:  {
+    __typename: "ModelRoleConnection",
+    items:  Array< {
+      __typename: "Role",
+      id: string,
+      name?: string | null,
+      userID: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
   } | null,
 };
 
@@ -3544,6 +3750,7 @@ export type GetFamilyHistoryDiseaseQuery = {
     id_patient?: string | null,
     hpo_code?: string | null,
     hpo_desc?: string | null,
+    family_relation?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3564,6 +3771,7 @@ export type ListFamilyHistoryDiseasesQuery = {
       id_patient?: string | null,
       hpo_code?: string | null,
       hpo_desc?: string | null,
+      family_relation?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -3666,6 +3874,7 @@ export type GetSelectedVariantQuery = {
     zygosity?: string | null,
     text_interpretation?: string | null,
     id_variant?: string | null,
+    inheritance?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3722,6 +3931,7 @@ export type ListSelectedVariantsQuery = {
       zygosity?: string | null,
       text_interpretation?: string | null,
       id_variant?: string | null,
+      inheritance?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -4109,9 +4319,9 @@ export type GetPatientQuery = {
     sex?: string | null,
     phone_number?: string | null,
     dob?: string | null,
-    id_reference?: string | null,
     id_institution?: string | null,
     health_desc?: string | null,
+    id_reference?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4133,9 +4343,9 @@ export type ListPatientsQuery = {
       sex?: string | null,
       phone_number?: string | null,
       dob?: string | null,
-      id_reference?: string | null,
       id_institution?: string | null,
       health_desc?: string | null,
+      id_reference?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -4161,6 +4371,10 @@ export type GetUserQuery = {
     level?: number | null,
     status?: number | null,
     phone_number?: string | null,
+    Roles?:  {
+      __typename: "ModelRoleConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4262,6 +4476,51 @@ export type ListInstitutionsQuery = {
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
+  } | null,
+};
+
+export type OnCreateRoleSubscriptionVariables = {
+  filter?: ModelSubscriptionRoleFilterInput | null,
+};
+
+export type OnCreateRoleSubscription = {
+  onCreateRole?:  {
+    __typename: "Role",
+    id: string,
+    name?: string | null,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateRoleSubscriptionVariables = {
+  filter?: ModelSubscriptionRoleFilterInput | null,
+};
+
+export type OnUpdateRoleSubscription = {
+  onUpdateRole?:  {
+    __typename: "Role",
+    id: string,
+    name?: string | null,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteRoleSubscriptionVariables = {
+  filter?: ModelSubscriptionRoleFilterInput | null,
+};
+
+export type OnDeleteRoleSubscription = {
+  onDeleteRole?:  {
+    __typename: "Role",
+    id: string,
+    name?: string | null,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -4519,6 +4778,7 @@ export type OnCreateFamilyHistoryDiseaseSubscription = {
     id_patient?: string | null,
     hpo_code?: string | null,
     hpo_desc?: string | null,
+    family_relation?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4535,6 +4795,7 @@ export type OnUpdateFamilyHistoryDiseaseSubscription = {
     id_patient?: string | null,
     hpo_code?: string | null,
     hpo_desc?: string | null,
+    family_relation?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4551,6 +4812,7 @@ export type OnDeleteFamilyHistoryDiseaseSubscription = {
     id_patient?: string | null,
     hpo_code?: string | null,
     hpo_desc?: string | null,
+    family_relation?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4666,6 +4928,7 @@ export type OnCreateSelectedVariantSubscription = {
     zygosity?: string | null,
     text_interpretation?: string | null,
     id_variant?: string | null,
+    inheritance?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4718,6 +4981,7 @@ export type OnUpdateSelectedVariantSubscription = {
     zygosity?: string | null,
     text_interpretation?: string | null,
     id_variant?: string | null,
+    inheritance?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4770,6 +5034,7 @@ export type OnDeleteSelectedVariantSubscription = {
     zygosity?: string | null,
     text_interpretation?: string | null,
     id_variant?: string | null,
+    inheritance?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -5267,9 +5532,9 @@ export type OnCreatePatientSubscription = {
     sex?: string | null,
     phone_number?: string | null,
     dob?: string | null,
-    id_reference?: string | null,
     id_institution?: string | null,
     health_desc?: string | null,
+    id_reference?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -5287,9 +5552,9 @@ export type OnUpdatePatientSubscription = {
     sex?: string | null,
     phone_number?: string | null,
     dob?: string | null,
-    id_reference?: string | null,
     id_institution?: string | null,
     health_desc?: string | null,
+    id_reference?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -5307,9 +5572,9 @@ export type OnDeletePatientSubscription = {
     sex?: string | null,
     phone_number?: string | null,
     dob?: string | null,
-    id_reference?: string | null,
     id_institution?: string | null,
     health_desc?: string | null,
+    id_reference?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -5333,6 +5598,10 @@ export type OnCreateUserSubscription = {
     level?: number | null,
     status?: number | null,
     phone_number?: string | null,
+    Roles?:  {
+      __typename: "ModelRoleConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -5356,6 +5625,10 @@ export type OnUpdateUserSubscription = {
     level?: number | null,
     status?: number | null,
     phone_number?: string | null,
+    Roles?:  {
+      __typename: "ModelRoleConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -5379,6 +5652,10 @@ export type OnDeleteUserSubscription = {
     level?: number | null,
     status?: number | null,
     phone_number?: string | null,
+    Roles?:  {
+      __typename: "ModelRoleConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,

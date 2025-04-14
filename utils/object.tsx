@@ -325,6 +325,7 @@ export interface FamilyDiseaseData {
   id_patient: string;
   hpo_code: string;
   hpo_desc: string;
+  family_relation: string;
 }
 
 export interface PatientDiseaseData {

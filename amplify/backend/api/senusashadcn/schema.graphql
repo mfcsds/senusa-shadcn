@@ -1,3 +1,9 @@
+type Role @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  userID: ID! @index(name: "byUser")
+}
+
 type UserNotifications @model @auth(rules: [{allow: public}]) {
   id: ID!
   user_id: String
@@ -57,6 +63,7 @@ type FamilyHistoryDisease @model @auth(rules: [{allow: public}]) {
   id_patient: String
   hpo_code: String
   hpo_desc: String
+  family_relation: String
 }
 
 type VariantInterpretation @model @auth(rules: [{allow: public}]) {
@@ -112,6 +119,7 @@ type SelectedVariant @model @auth(rules: [{allow: public}]) {
   zygosity: String
   text_interpretation: String
   id_variant: String
+  inheritance: String
 }
 
 type Vcfdata @model @auth(rules: [{allow: public}]) {
@@ -208,9 +216,9 @@ type Patient @model @auth(rules: [{allow: public}]) {
   sex: String
   phone_number: String
   dob: String
-  id_reference: String
   id_institution: String
   health_desc: String
+  id_reference: String
 }
 
 type User @model @auth(rules: [{allow: public}]) {
@@ -225,6 +233,7 @@ type User @model @auth(rules: [{allow: public}]) {
   level: Int
   status: Int
   phone_number: String
+  Roles: [Role] @hasMany(indexName: "byUser", fields: ["id"])
 }
 
 type Institution @model @auth(rules: [{allow: public}]) {

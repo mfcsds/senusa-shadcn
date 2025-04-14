@@ -12,6 +12,13 @@ import config from "@/src/amplifyconfiguration.json";
 import { generateClient } from "aws-amplify/api";
 import { FamilyDiseaseData } from "@/utils/object";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/update/ui/select";
+import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
@@ -31,6 +38,7 @@ interface FamilyProps {
 
 const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
   const [phenotypeQuery, setPhenotypeQuery] = useState("");
+  const [familyRelation, setFamilyRelation] = useState("");
   const [suggestions, setSuggestions] = useState<
     { id: string; name: string }[]
   >([]);
@@ -61,11 +69,11 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
       id_patient: patient_id ?? "",
       hpo_code: suggestion.id,
       hpo_desc: suggestion.name,
+      family_relation: familyRelation,
     };
 
     try {
       const result = await addNewFamilyDisease(newPhenotype);
-
       setSelectedPhenotypes((prev) => [...prev, newPhenotype]);
     } catch (error) {
       console.log("Error saving family history:", error);
@@ -87,7 +95,7 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
     }
     setPhenotypeQuery("");
     setSuggestions([]);
-    setOpenPopover(false)
+    setOpenPopover(false);
   };
 
   useEffect(() => {
@@ -132,7 +140,8 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
             <ul className="list-disc list-inside">
               {selectedPhenotypes.map((phenotype, index) => (
                 <li key={index} className="flex justify-between items-center">
-                  {phenotype.hpo_code} - {phenotype.hpo_desc}
+                  {phenotype.hpo_code} - {phenotype.hpo_desc} - relation{" "}
+                  {phenotype.family_relation}
                   <Button
                     variant="iconDanger"
                     icon={<Trash2 className="w-5 h-5" />}
@@ -163,7 +172,25 @@ const ButtonAddFamilyDisease: React.FC<FamilyProps> = ({ patient_id }) => {
           </ButtonAdd>
         </PopoverTrigger>
         <PopoverContent className="sm:-translate-x-20 -translate-x-5 sm-translate-y-10 -translate-y-30 bg-background w-[380px] min-h-[250px] max-h-[80vh] overflow-y-auto">
-          <div className="flex flex-col w-full p-2">
+          <div className="flex flex-col w-full p-2 gap-2">
+            <Select
+              value={familyRelation}
+              onValueChange={setFamilyRelation}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select Family Relation" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Grandmother">Grandmother</SelectItem>
+                <SelectItem value="Grandfather">Grandfather</SelectItem>
+                <SelectItem value="Father">Father</SelectItem>
+                <SelectItem value="Mother">Mother</SelectItem>
+                <SelectItem value="Son">Son</SelectItem>
+                <SelectItem value="Daughter">Daughter</SelectItem>
+                <SelectItem value="Uncle">Uncle</SelectItem>
+                <SelectItem value="Aunty">Aunty</SelectItem>
+              </SelectContent>
+            </Select>
             <div className="relative w-full sm:w-auto">
               <Input
                 id="searchFamily"

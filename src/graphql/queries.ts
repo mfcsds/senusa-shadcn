@@ -8,6 +8,66 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getRole = /* GraphQL */ `query GetRole($id: ID!) {
+  getRole(id: $id) {
+    id
+    name
+    userID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.GetRoleQueryVariables, APITypes.GetRoleQuery>;
+export const listRoles = /* GraphQL */ `query ListRoles(
+  $filter: ModelRoleFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listRoles(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      userID
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.ListRolesQueryVariables, APITypes.ListRolesQuery>;
+export const rolesByUserID = /* GraphQL */ `query RolesByUserID(
+  $userID: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelRoleFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  rolesByUserID(
+    userID: $userID
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      userID
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.RolesByUserIDQueryVariables,
+  APITypes.RolesByUserIDQuery
+>;
 export const getUserNotifications = /* GraphQL */ `query GetUserNotifications($id: ID!) {
   getUserNotifications(id: $id) {
     id
@@ -198,6 +258,7 @@ export const getFamilyHistoryDisease = /* GraphQL */ `query GetFamilyHistoryDise
     id_patient
     hpo_code
     hpo_desc
+    family_relation
     createdAt
     updatedAt
     __typename
@@ -222,6 +283,7 @@ export const listFamilyHistoryDiseases = /* GraphQL */ `query ListFamilyHistoryD
       id_patient
       hpo_code
       hpo_desc
+      family_relation
       createdAt
       updatedAt
       __typename
@@ -328,6 +390,7 @@ export const getSelectedVariant = /* GraphQL */ `query GetSelectedVariant($id: I
     zygosity
     text_interpretation
     id_variant
+    inheritance
     createdAt
     updatedAt
     __typename
@@ -384,6 +447,7 @@ export const listSelectedVariants = /* GraphQL */ `query ListSelectedVariants(
       zygosity
       text_interpretation
       id_variant
+      inheritance
       createdAt
       updatedAt
       __typename
@@ -771,9 +835,9 @@ export const getPatient = /* GraphQL */ `query GetPatient($id: ID!) {
     sex
     phone_number
     dob
-    id_reference
     id_institution
     health_desc
+    id_reference
     createdAt
     updatedAt
     __typename
@@ -795,9 +859,9 @@ export const listPatients = /* GraphQL */ `query ListPatients(
       sex
       phone_number
       dob
-      id_reference
       id_institution
       health_desc
+      id_reference
       createdAt
       updatedAt
       __typename
@@ -823,6 +887,10 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     level
     status
     phone_number
+    Roles {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename

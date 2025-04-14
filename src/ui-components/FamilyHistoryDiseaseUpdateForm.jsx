@@ -28,10 +28,14 @@ export default function FamilyHistoryDiseaseUpdateForm(props) {
     id_patient: "",
     hpo_code: "",
     hpo_desc: "",
+    family_relation: "",
   };
   const [id_patient, setId_patient] = React.useState(initialValues.id_patient);
   const [hpo_code, setHpo_code] = React.useState(initialValues.hpo_code);
   const [hpo_desc, setHpo_desc] = React.useState(initialValues.hpo_desc);
+  const [family_relation, setFamily_relation] = React.useState(
+    initialValues.family_relation
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = familyHistoryDiseaseRecord
@@ -40,6 +44,7 @@ export default function FamilyHistoryDiseaseUpdateForm(props) {
     setId_patient(cleanValues.id_patient);
     setHpo_code(cleanValues.hpo_code);
     setHpo_desc(cleanValues.hpo_desc);
+    setFamily_relation(cleanValues.family_relation);
     setErrors({});
   };
   const [familyHistoryDiseaseRecord, setFamilyHistoryDiseaseRecord] =
@@ -63,6 +68,7 @@ export default function FamilyHistoryDiseaseUpdateForm(props) {
     id_patient: [],
     hpo_code: [],
     hpo_desc: [],
+    family_relation: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -93,6 +99,7 @@ export default function FamilyHistoryDiseaseUpdateForm(props) {
           id_patient: id_patient ?? null,
           hpo_code: hpo_code ?? null,
           hpo_desc: hpo_desc ?? null,
+          family_relation: family_relation ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -156,6 +163,7 @@ export default function FamilyHistoryDiseaseUpdateForm(props) {
               id_patient: value,
               hpo_code,
               hpo_desc,
+              family_relation,
             };
             const result = onChange(modelFields);
             value = result?.id_patient ?? value;
@@ -182,6 +190,7 @@ export default function FamilyHistoryDiseaseUpdateForm(props) {
               id_patient,
               hpo_code: value,
               hpo_desc,
+              family_relation,
             };
             const result = onChange(modelFields);
             value = result?.hpo_code ?? value;
@@ -208,6 +217,7 @@ export default function FamilyHistoryDiseaseUpdateForm(props) {
               id_patient,
               hpo_code,
               hpo_desc: value,
+              family_relation,
             };
             const result = onChange(modelFields);
             value = result?.hpo_desc ?? value;
@@ -221,6 +231,33 @@ export default function FamilyHistoryDiseaseUpdateForm(props) {
         errorMessage={errors.hpo_desc?.errorMessage}
         hasError={errors.hpo_desc?.hasError}
         {...getOverrideProps(overrides, "hpo_desc")}
+      ></TextField>
+      <TextField
+        label="Family relation"
+        isRequired={false}
+        isReadOnly={false}
+        value={family_relation}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              id_patient,
+              hpo_code,
+              hpo_desc,
+              family_relation: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.family_relation ?? value;
+          }
+          if (errors.family_relation?.hasError) {
+            runValidationTasks("family_relation", value);
+          }
+          setFamily_relation(value);
+        }}
+        onBlur={() => runValidationTasks("family_relation", family_relation)}
+        errorMessage={errors.family_relation?.errorMessage}
+        hasError={errors.family_relation?.hasError}
+        {...getOverrideProps(overrides, "family_relation")}
       ></TextField>
       <Flex
         justifyContent="space-between"

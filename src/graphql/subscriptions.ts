@@ -8,6 +8,48 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateRole = /* GraphQL */ `subscription OnCreateRole($filter: ModelSubscriptionRoleFilterInput) {
+  onCreateRole(filter: $filter) {
+    id
+    name
+    userID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateRoleSubscriptionVariables,
+  APITypes.OnCreateRoleSubscription
+>;
+export const onUpdateRole = /* GraphQL */ `subscription OnUpdateRole($filter: ModelSubscriptionRoleFilterInput) {
+  onUpdateRole(filter: $filter) {
+    id
+    name
+    userID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateRoleSubscriptionVariables,
+  APITypes.OnUpdateRoleSubscription
+>;
+export const onDeleteRole = /* GraphQL */ `subscription OnDeleteRole($filter: ModelSubscriptionRoleFilterInput) {
+  onDeleteRole(filter: $filter) {
+    id
+    name
+    userID
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteRoleSubscriptionVariables,
+  APITypes.OnDeleteRoleSubscription
+>;
 export const onCreateUserNotifications = /* GraphQL */ `subscription OnCreateUserNotifications(
   $filter: ModelSubscriptionUserNotificationsFilterInput
 ) {
@@ -268,6 +310,7 @@ export const onCreateFamilyHistoryDisease = /* GraphQL */ `subscription OnCreate
     id_patient
     hpo_code
     hpo_desc
+    family_relation
     createdAt
     updatedAt
     __typename
@@ -285,6 +328,7 @@ export const onUpdateFamilyHistoryDisease = /* GraphQL */ `subscription OnUpdate
     id_patient
     hpo_code
     hpo_desc
+    family_relation
     createdAt
     updatedAt
     __typename
@@ -302,6 +346,7 @@ export const onDeleteFamilyHistoryDisease = /* GraphQL */ `subscription OnDelete
     id_patient
     hpo_code
     hpo_desc
+    family_relation
     createdAt
     updatedAt
     __typename
@@ -421,6 +466,7 @@ export const onCreateSelectedVariant = /* GraphQL */ `subscription OnCreateSelec
     zygosity
     text_interpretation
     id_variant
+    inheritance
     createdAt
     updatedAt
     __typename
@@ -474,6 +520,7 @@ export const onUpdateSelectedVariant = /* GraphQL */ `subscription OnUpdateSelec
     zygosity
     text_interpretation
     id_variant
+    inheritance
     createdAt
     updatedAt
     __typename
@@ -527,6 +574,7 @@ export const onDeleteSelectedVariant = /* GraphQL */ `subscription OnDeleteSelec
     zygosity
     text_interpretation
     id_variant
+    inheritance
     createdAt
     updatedAt
     __typename
@@ -1029,9 +1077,9 @@ export const onCreatePatient = /* GraphQL */ `subscription OnCreatePatient($filt
     sex
     phone_number
     dob
-    id_reference
     id_institution
     health_desc
+    id_reference
     createdAt
     updatedAt
     __typename
@@ -1048,9 +1096,9 @@ export const onUpdatePatient = /* GraphQL */ `subscription OnUpdatePatient($filt
     sex
     phone_number
     dob
-    id_reference
     id_institution
     health_desc
+    id_reference
     createdAt
     updatedAt
     __typename
@@ -1067,9 +1115,9 @@ export const onDeletePatient = /* GraphQL */ `subscription OnDeletePatient($filt
     sex
     phone_number
     dob
-    id_reference
     id_institution
     health_desc
+    id_reference
     createdAt
     updatedAt
     __typename
@@ -1092,6 +1140,10 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser($filter: Mo
     level
     status
     phone_number
+    Roles {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -1114,6 +1166,10 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser($filter: Mo
     level
     status
     phone_number
+    Roles {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -1136,6 +1192,10 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser($filter: Mo
     level
     status
     phone_number
+    Roles {
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename

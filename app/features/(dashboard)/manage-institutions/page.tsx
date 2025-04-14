@@ -45,7 +45,7 @@ export default function ManageAccountsPage() {
         <div className="mb-4 sm:mb-0">
           <div className="flex">
             <h1 className="text-2xl font-semibold text-text-primary">
-              Manage Accounts
+              Manage Institutions
             </h1>
             <Button
               variant="iconSecondary"
