@@ -345,8 +345,8 @@ const VariantLibrary = () => {
                         </PopoverTrigger>
                         <PopoverContent>
                           <div className="flex flex-col p-3 border bg-white border-gray-400 rounded-md ">
-                            <p className="text-sm font-light text-gray-400">
-                              No Data
+                            <p className="text-sm font-light text-gray-600">
+                              {item?.text_interpretation}
                             </p>
                           </div>
                         </PopoverContent>

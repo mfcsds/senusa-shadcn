@@ -39,6 +39,36 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
   const [theListACMGCriteria, setListACMGCriteria] = useState<AcmgCriteria[]>(
     []
   );
+  const [error, setError] = useState("");
+
+  const fetchVariantData = async () => {
+    setLoading(true);
+    try {
+      const apiUrl =
+        "https://iti7fmrlmj.execute-api.us-east-1.amazonaws.com/Dev/variant_extract";
+
+      const response = await axios.post(
+        apiUrl,
+        { body: JSON.stringify({ variants: [hgvsNotation] }) },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      const responseBody = JSON.parse(response.data.body);
+
+      if (responseBody.length === 0) {
+        setError("No variant data found.");
+        setVariantData(null);
+        return;
+      }
+      setVariantData(responseBody[0]);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching variant data:", error);
+      setVariantData(null);
+      setError("Failed to fetch variant data.");
+    } finally {
+    }
+  };
 
   useEffect(() => {
     // Function to fetch variant data
@@ -112,66 +142,6 @@ const VariantInformationModal: React.FC<VariantInformation> = ({
       } catch (error) {
         console.error("Error fetching ACMG Criteria:", error);
         return null;
-      }
-    };
-
-    // const client = generateClient();
-    // const fetchACMGCriteria = async () => {
-    //   try {
-    //     const acmgResult = await client.graphql({
-    //       query: listAcmgAnnotations,
-    //       variables: { filter: { id_variant: { eq: id_variant } } },
-    //     });
-    //   } catch (error) {}
-    // };
-
-    const fetchVariantData = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `https://rest.ensembl.org/vep/human/hgvs/${encodeURIComponent(
-            hgvsNotation
-          )}?content-type=application/json`,
-          {
-            params: {
-              AncestralAllele: 1,
-              Blosum62: 1,
-              CADD: 1,
-              Conservation: 1,
-              dbNSFP:
-                "SIFT_pred,Polyphen2_HDIV_pred,MutationTaster_pred,LRT_pred",
-              dbscSNV: 1,
-              MaxEntScan: 1,
-              GeneSplicer: 1,
-              NMD: 1,
-              mirna: 1,
-              appris: 1,
-              canonical: 1,
-              ccds: 1,
-              domains: 1,
-              hgvs: 1,
-              mane: 1,
-              numbers: 1,
-              protein: 1,
-              tsl: 1,
-              uniprot: 1,
-              variant_class: 1,
-              shift_3prime: 1,
-              shift_genomic: 1,
-              sift: "b",
-              polyphen: "b",
-              gene_phenotype: 1,
-              pubmed: 1,
-              xref_refseq: 1,
-            },
-          }
-        );
-        setVariantData(response.data[0]); // Assuming we get an array with one element
-      } catch (error) {
-        console.error("Error fetching variant data:", error);
-        setVariantData(null);
-      } finally {
-        setLoading(false);
       }
     };
 

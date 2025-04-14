@@ -37,34 +37,45 @@ const VariantQueryComponent = () => {
   const [freqData, setFreqData] = useState<any>(null);
 
   const fetchVariantData = async (variant: string) => {
-    setLoading(true);
-    try {
-      const apiUrl =
-        "https://iti7fmrlmj.execute-api.us-east-1.amazonaws.com/Dev/variant_extract";
+    console.log("Memanggin fetch varian data ");
+    const apiUrl =
+      "https://iti7fmrlmj.execute-api.us-east-1.amazonaws.com/Dev/variant_extract";
+    const maxRetries = 5;
+    const delayTime = 2000; // 2 seconds delay in milliseconds
 
-      const response = await axios.post(
-        apiUrl,
-        { body: JSON.stringify({ variants: [variant] }) },
-        { headers: { "Content-Type": "application/json" } }
-      );
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const response = await axios.post(
+          apiUrl,
+          { body: JSON.stringify({ variants: [variant] }) },
+          { headers: { "Content-Type": "application/json" } }
+        );
 
-      const responseBody = JSON.parse(response.data.body);
+        const responseBody = JSON.parse(response.data.body);
 
-      if (responseBody.length === 0) {
-        setError("No variant data found.");
-        setVariantData(null);
-        return;
+        if (responseBody.length === 0) {
+          setError("No variant data found.");
+          setVariantData(null);
+          return;
+        }
+
+        setVariantData(responseBody[0]);
+        return; // Successfully fetched data, exit the function
+      } catch (error) {
+        console.error(`Attempt ${attempt} failed:`, error);
+
+        if (attempt === maxRetries) {
+          setVariantData(null);
+          setError("Failed to fetch variant data.");
+          return;
+        }
+
+        // Wait for 2 seconds before retrying
+        await new Promise((resolve) => setTimeout(resolve, delayTime));
       }
-
-      setVariantData(responseBody[0]);
-    } catch (error) {
-      console.error("Error fetching variant data:", error);
-      setVariantData(null);
-      setError("Failed to fetch variant data.");
-    } finally {
-      setLoading(false);
     }
   };
+
   // Destructure the data for easier access
   const {
     id,
@@ -174,21 +185,23 @@ const VariantQueryComponent = () => {
   const handleSearch = async () => {
     setLoading(true);
     setError("");
-
     try {
       const acmgCriteria = await fetchACMGCriteria(variant);
       if (acmgCriteria) {
         setACMG(acmgCriteria);
-        console.log(acmgCriteria);
       } else {
         setError("No ACMG criteria found for the variant.");
       }
-
-      await fetchVariantData(variant);
     } catch (error) {
       setError("Failed to fetch variant data.");
-    } finally {
+    }
+
+    try {
+      await fetchVariantData(variant);
       setLoading(false);
+      console.log("Masuk Sini Fetch Variant Data");
+    } catch (error) {
+      console.log(error);
     }
   };
 
