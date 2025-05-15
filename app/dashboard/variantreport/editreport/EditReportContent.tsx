@@ -25,6 +25,8 @@ import { generateClient } from "aws-amplify/api";
 import { useToast } from "@/components/ui/use-toast";
 import ButtonAddPatientDisease from "@/components/button/ButtonAddPatientDisease";
 import { VariantRawData, VcfData } from "@/utils/object";
+import { Card, CardContent } from "@/components/ui/card";
+import { Ban, CircleCheck } from "lucide-react";
 
 const EditVariantReport = () => {
   const searchParams = useSearchParams();
@@ -177,75 +179,70 @@ const EditVariantReport = () => {
   ];
 
   return (
-    <div className="flex flex-col w-[90%]">
-      <div className="flex flex-row w-full justify-between border rounded border-gray-400 items-center shadow-lg">
-        <div className="p-2 flex gap-2 flex-row items-center justify-center space-y-2 bg-white rounded-lg shadow-sm border border-gray-200">
-          <p className="text-sm font-semibold text-gray-700 tracking-wide">
-            {`Report ID: ${reportID}`}
-          </p>
-          <p className="text-sm font-semibold text-gray-700 tracking-wide">
-            {`Patient ID: ${patientID}`}
-          </p>
+    <div className="flex flex-col w-full">
+      <div className="inline-flex items-baseline w-full p-4 border rounded-lg justify-between border-gray-300 shadow-lg bg-white">
+        <div className="inline-flex items-baseline  gap-x-8">
+          <div className="flex flex-col gap-y-1 ">
+            <p className="text-sm text-gray-500">Report ID</p>
+            <p className="text-lg font-semibold text-gray-800">{reportID}</p>
+          </div>
+          <div className="flex flex-col gap-y-1">
+            <p className="text-sm text-gray-500 mt-2">Patient ID</p>
+            <p className="text-lg font-semibold text-gray-800">{patientID}</p>
+          </div>
         </div>
-        <div className="flex flex-row">
+
+        <div className="inline-flex items-center">
           <Select
             disabled={loadingVariant}
             onValueChange={(value) => {
-              const selectedVCF = listVCF.find((vcf) => vcf.id === value); // Find selected VCF
-              if (selectedVCF) {
-                console.log(`${selectedVCF.id} is selected`); // Log selected VCF ID
-                fetchListVariant(selectedVCF.id ?? ""); // Uncomment this to fetch variants
-                setSelectedVCF(selectedVCF.id);
-                // Uncomment this to set selected VCF
+              const sel = listVCF.find((v) => v.id === value);
+              if (sel) {
+                fetchListVariant(sel.id ?? "");
+                setSelectedVCF(sel.id);
               }
             }}
           >
-            <SelectTrigger className="w-[280px] ">
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Select VCF Data" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Select VCF</SelectLabel>
-                {listVCF.map((item, index) => (
-                  <SelectItem key={index} value={`${item.id}`}>
+                <SelectLabel>Available VCF</SelectLabel>
+                {listVCF.map((item) => (
+                  <SelectItem key={item.id} value={item.id ?? ""}>
                     {item.id}
                   </SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>
           </Select>
-          {/* Show loading or selected VCF */}
-          <div className="mt-2">
+
+          <div className="pl-2">
             {loadingVariant ? (
               <div className="flex items-center gap-2">
-                <div className="animate-spin h-4 w-4 border-2 border-blue-500 rounded-full border-t-transparent"></div>
-                <p className="text-sm text-blue-600 font-semibold">
-                  Loading variants...
-                </p>
+                <div className="animate-spin h-4 w-4 border-2 border-blue-500 rounded-full border-t-transparent" />
+                <span className="text-sm text-blue-600 font-semibold"></span>
               </div>
             ) : selectedVCF ? (
-              <p className="text-sm text-green-600 font-semibold">
-                Selected VCF: {selectedVCF}
-              </p>
+              <span className="text-sm text-green-600 font-semibold">
+                <CircleCheck className="text-green-700"></CircleCheck>
+              </span>
             ) : (
-              <p className="text-sm text-gray-500">No VCF selected.</p>
+              <span className="text-sm text-gray-500">
+                <Ban></Ban>
+              </span>
             )}
           </div>
         </div>
 
-        <div className="flex flex-row items-center p-2 w-[400px]">
-          <ButtonAddPatientDisease
-            patient_id={patientID}
-          ></ButtonAddPatientDisease>
-        </div>
-
-        <div className="flex flex-row items-center p-2 w-[400px]">
-          <ButtonAddFamilyDisease
-            patient_id={patientID}
-          ></ButtonAddFamilyDisease>
+        <div className="inline-flex items-baseline">
+          <ButtonAddPatientDisease patient_id={patientID} />
+          <ButtonAddFamilyDisease patient_id={patientID} />
         </div>
       </div>
-      <div className="flex flex-col gap-5 border mt-5">
+
+      <div className="flex flex-col gap-5  mt-5">
         <Tabs className="gap-x-1 " defaultValue="Select Variant">
           <TabsList className="bg-white border h-[50px] border-b-1  border-t-1 border-l-0 border-r-0">
             {tabs.map((item, index) => (

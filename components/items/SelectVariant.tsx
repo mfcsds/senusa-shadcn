@@ -157,8 +157,8 @@ const SelectVariant: React.FC<SelectVariantProops> = ({
   };
 
   return (
-    <div className="flex flex-col w-fit">
-      <div className="flex flex-col border rounded-md py-4 px-5 gap-4">
+    <div className="flex flex-col w-full">
+      <div className="flex flex-col bg-gray-100 rounded-md py-4 px-5 gap-4">
         <div className="flex flex-row items-center gap-10">
           {/* <div className="flex flex-col">
             <p className="text-xl">Choose Variant Data</p>

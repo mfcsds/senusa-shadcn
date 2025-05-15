@@ -137,10 +137,12 @@ const ButtonAddPatientDisease: React.FC<PatientProops> = ({ patient_id }) => {
   }, [phenotypeQuery]);
 
   return (
-    <div className="flex flex-row gap-4 items-center justify-center w-[500px] mr-10">
+    <div className="flex flex-row gap-4 items-center justify-center  mr-10">
       <Accordion type="single" collapsible className="w-[200px]">
         <AccordionItem value="patient-history">
-          <AccordionTrigger>Patient Disease History</AccordionTrigger>
+          <AccordionTrigger>
+            <p className="text-gray-500">Patient Disease History</p>
+          </AccordionTrigger>
           <AccordionContent>
             <ul className="list-disc list-inside">
               {selectedPhenotypes.map((phenotype, index) => (
@@ -171,7 +173,7 @@ const ButtonAddPatientDisease: React.FC<PatientProops> = ({ patient_id }) => {
       </Accordion>
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant={"outline"}>
+          <Button variant={"outline"} className="rounded-full bg-gray-100">
             <Plus className="w-4 h-4 " />
           </Button>
         </PopoverTrigger>

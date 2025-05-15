@@ -1,7 +1,17 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Info } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 import {
   GENE_PANEL_25,
   GENE_PANEL_50,
@@ -11,12 +21,18 @@ import {
 
 interface GenePanelPopoverProps {
   selectedGenePanel: number;
+  selectedGenes: string[];
+  onGeneSelectionChange: (genes: string[]) => void;
 }
 
 const GenePanelPopover: React.FC<GenePanelPopoverProps> = ({
   selectedGenePanel,
+  selectedGenes,
+  onGeneSelectionChange,
 }) => {
-  // Function to get the gene list based on the selected panel
+  // const [selectedGenes, setSelectedGenes] = useState<string[]>([]);
+
+  // Get gene list
   const getGeneList = () => {
     switch (selectedGenePanel) {
       case 25:
@@ -28,11 +44,31 @@ const GenePanelPopover: React.FC<GenePanelPopoverProps> = ({
       case 113:
         return GENE_PANEL_113;
       default:
-        return []; // Return an empty array if no match
+        return [];
     }
   };
 
   const geneList = getGeneList();
+
+  useEffect(() => {
+    onGeneSelectionChange(geneList); // select all by default
+  }, [selectedGenePanel]);
+
+  const handleToggle = (gene: string, checked: boolean) => {
+    if (checked) {
+      onGeneSelectionChange([...selectedGenes, gene]);
+    } else {
+      onGeneSelectionChange(selectedGenes.filter((g) => g !== gene));
+    }
+  };
+
+  const handleSelectAll = () => {
+    onGeneSelectionChange(geneList);
+  };
+
+  const handleClearAll = () => {
+    onGeneSelectionChange([]);
+  };
 
   return (
     <Popover>
@@ -51,15 +87,46 @@ const GenePanelPopover: React.FC<GenePanelPopoverProps> = ({
               The genes that will be analyzed
             </p>
           </div>
+
+          <div className="flex justify-end gap-2">
+            <Button size="sm" variant="outline" onClick={handleSelectAll}>
+              Select All
+            </Button>
+            <Button size="sm" variant="ghost" onClick={handleClearAll}>
+              Clear
+            </Button>
+          </div>
+
           <div className="grid grid-cols-5 gap-4 max-h-[400px] overflow-y-auto border p-4 rounded-lg">
-            {geneList.map((gene, index) => (
-              <div
-                key={index}
-                className="text-sm bg-white p-2 rounded-md shadow-sm hover:bg-gray-100"
-              >
-                {gene}
-              </div>
-            ))}
+            <TooltipProvider>
+              {geneList.map((gene, index) => (
+                <Tooltip key={index}>
+                  <TooltipTrigger asChild>
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        id={`gene-${index}`}
+                        checked={selectedGenes.includes(gene)}
+                        onCheckedChange={(checked) =>
+                          handleToggle(gene, !!checked)
+                        }
+                      />
+                      <label
+                        htmlFor={`gene-${index}`}
+                        className="text-sm cursor-pointer hover:text-blue-600"
+                      >
+                        {gene}
+                      </label>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    <p className="text-xs">
+                      Info about <strong>{gene}</strong> — relevant for
+                      variant-related conditions.
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              ))}
+            </TooltipProvider>
           </div>
         </div>
       </PopoverContent>

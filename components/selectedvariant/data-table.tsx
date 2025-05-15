@@ -83,6 +83,7 @@ export function DataTable<TData, TValue>({
     "acmg",
     "clinicalSign",
     "phenotypes",
+    "gnomadg",
     "action",
   ]; // List of columns to be visible initially
 
@@ -153,6 +154,18 @@ export function DataTable<TData, TValue>({
 
   const [activeDownloadCSV, setActiveDownloadCSV] = useState(false);
   const [activeDownloadJSON, setActiveDownloadJSON] = useState(false);
+  const [gnomadRange, setGnomadRange] = useState<[number | "", number | ""]>([
+    "",
+    "",
+  ]);
+
+  const [selectedGenes, setSelectedGenes] = useState<string[]>(
+    getGenePanel(selectedGenePanel)
+  );
+
+  useEffect(() => {
+    table.getColumn("gene_symbol")?.setFilterValue(selectedGenes);
+  }, [selectedGenes]);
 
   const handleZygosityChange = (value: string) => {
     setZygosityFilter(value);
@@ -170,6 +183,26 @@ export function DataTable<TData, TValue>({
     ]);
   };
 
+  const gnomadCombinedRangeFilterFn = (
+    row: Row<any>,
+    _columnId: string, // unused
+    filterValue: [number | "", number | ""]
+  ): boolean => {
+    const [min, max] = filterValue;
+
+    const gnomadg = row.getValue<number>("gnomadg");
+    const gnomade = row.getValue<number>("gnomade");
+
+    const inRange = (val: number | undefined) => {
+      if (val === undefined || val === null) return false;
+      if (min !== "" && val < min) return false;
+      if (max !== "" && val > max) return false;
+      return true;
+    };
+
+    return inRange(gnomadg) || inRange(gnomade);
+  };
+
   const containsFilterFn = (
     row: Row<any>,
     columnId: string,
@@ -181,17 +214,44 @@ export function DataTable<TData, TValue>({
       : false;
   };
 
+  const geneSymbolFilterFn = (
+    row: Row<any>,
+    columnId: string,
+    filterValues: string[]
+  ): boolean => {
+    const cellValue = row.getValue<string>(columnId)?.toLowerCase();
+    return filterValues.some((value) =>
+      cellValue?.includes(value.toLowerCase())
+    );
+  };
+
+  const gnomadCombinedColumn: ColumnDef<TData, TValue> = {
+    id: "gnomad_combined",
+    accessorFn: () => undefined as unknown as TValue, // or undefined
+    header: () => null,
+    cell: () => null,
+    enableSorting: false,
+    enableHiding: false,
+    filterFn: gnomadCombinedRangeFilterFn,
+  };
+  useEffect(() => {
+    table.getColumn("gnomad_combined")?.setFilterValue(gnomadRange);
+  }, [gnomadRange]);
+
   const table = useReactTable({
     data,
-    columns: columns.map((column) => {
-      if (column.id === "clinicalSign") {
-        return {
-          ...column,
-          filterFn: containsFilterFn, // Assign the custom filter function
-        };
-      }
-      return column;
-    }),
+    columns: [
+      ...columns.map((column) => {
+        if (column.id === "clinicalSign") {
+          return { ...column, filterFn: containsFilterFn };
+        }
+        if (column.id === "gene_symbol") {
+          return { ...column, filterFn: geneSymbolFilterFn };
+        }
+        return column;
+      }),
+      gnomadCombinedColumn,
+    ],
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
@@ -403,6 +463,13 @@ export function DataTable<TData, TValue>({
     }
   };
 
+  useEffect(() => {
+    setColumnFilters((prev) => [
+      ...prev.filter((filter) => filter.id !== "gene_symbol"),
+      { id: "gene_symbol", value: selectedGenes },
+    ]);
+  }, [selectedGenes]);
+
   const [gene_id, setGeneID] = useState("");
   const [gene_symbol, setGeneSymbol] = useState("");
 
@@ -425,13 +492,14 @@ export function DataTable<TData, TValue>({
   };
 
   return (
-    <div className="flex flex-col rounded-md border gap-3 w-fit">
-      <div className="flex items-center p-4">
-        <div className="flex flex-row justify-between items-center w-full">
-          <div className="flex flex-row gap-5">
-            <div className="flex flex-col gap-2">
+    <div className="flex flex-col rounded-md  gap-3 w-full">
+      <div className="w-full  p-4 bg-white rounded-xl border">
+        <div className="overflow-x-auto">
+          <div className="flex flex-row  gap-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+            {/* Gene Panel */}
+            <div className="flex flex-col gap-2 min-w-[180px]">
               <Label className="text-lg">Gene Panel</Label>
-              <div className="flex flex-row">
+              <div className="flex flex-row items-center gap-2">
                 <Select
                   onValueChange={(value) => {
                     const selectedValue = parseInt(value);
@@ -439,15 +507,19 @@ export function DataTable<TData, TValue>({
                     switch (selectedValue) {
                       case 25:
                         genePanel = GENE_PANEL_25;
+                        setSelectedGenePanel(genePanel.length);
                         break;
                       case 50:
                         genePanel = GENE_PANEL_50;
+                        setSelectedGenePanel(genePanel.length);
                         break;
                       case 75:
                         genePanel = GENE_PANEL_75;
+                        setSelectedGenePanel(genePanel.length);
                         break;
                       case 113:
                         genePanel = GENE_PANEL_113;
+                        setSelectedGenePanel(genePanel.length);
                         break;
                     }
 
@@ -457,9 +529,7 @@ export function DataTable<TData, TValue>({
                   }}
                 >
                   <SelectTrigger>
-                    <SelectValue
-                      placeholder={"Select Gene Panel"}
-                    ></SelectValue>
+                    <SelectValue placeholder="Select Gene Panel" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
@@ -470,277 +540,249 @@ export function DataTable<TData, TValue>({
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-
                 <GenePanelPopover
                   selectedGenePanel={selectedGenePanel}
-                ></GenePanelPopover>
+                  selectedGenes={selectedGenes}
+                  onGeneSelectionChange={setSelectedGenes}
+                />
               </div>
             </div>
-            <div className="flex flex-col gap-2">
+
+            {/* Gene ID */}
+            <div className="flex flex-col gap-2 min-w-[160px]">
               <Label className="text-lg">Gene ID</Label>
               <Input
-                className="max-w-sm"
+                className="h-10"
                 placeholder="Gene ID"
                 value={gene_id}
-                onChange={(event) => {
-                  const value = event.target.value;
-                  setGeneID(value); // Update local state
-                  table.getColumn("gene_id")?.setFilterValue(value); // Set filter in table
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setGeneID(value);
+                  table.getColumn("gene_id")?.setFilterValue(value);
                 }}
-              ></Input>
+              />
             </div>
-            {/* Gene Sysmbol */}
-            <div className="flex flex-col gap-2">
+
+            {/* Gene Symbol */}
+            <div className="flex flex-col gap-2 min-w-[160px]">
               <Label className="text-lg">Gene Symbol</Label>
               <Input
-                className="max-w-sm"
+                className="h-10"
                 placeholder="Gene Symbol"
                 value={gene_symbol}
-                onChange={(event) => {
-                  const value = event.target.value;
+                onChange={(e) => {
+                  const value = e.target.value;
                   setGeneSymbol(value);
                   table.getColumn("gene_symbol")?.setFilterValue(value);
                 }}
-              ></Input>
+              />
             </div>
-            {/* Clinical Sign */}
-            <div className="flex flex-col gap-2">
+
+            {/* Clinical Significance */}
+            <div className="flex flex-col gap-2 min-w-[180px]">
               <Label className="text-lg">Clinical Significance</Label>
               <Input
-                className="max-w-sm"
+                className="h-10"
                 placeholder="Clinical Sign"
                 value={
                   (table
                     .getColumn("clinicalSign")
                     ?.getFilterValue() as string) ?? ""
                 }
-                onChange={(event) =>
+                onChange={(e) =>
                   table
                     .getColumn("clinicalSign")
-                    ?.setFilterValue(event.target.value)
+                    ?.setFilterValue(e.target.value)
                 }
-              ></Input>
+              />
             </div>
-            {/* Allele Population Frequency
-            <div className="flex flex-col gap-2">
-              <Label className="text-lg">Allele Population Frequency</Label>
-              <div className="flex flex-row gap-1">
-                <Input
-                  className="max-w-sm"
-                  type="number"
-                  placeholder="Gnomade"
-                ></Input>
-                <Input
-                  className="max-w-sm"
-                  placeholder="Gnomadg"
-                  type="number"
-                ></Input>
-              </div>
-            </div> */}
-            <div className="flex flex-col gap-2">
+
+            {/* Zygosity */}
+            <div className="flex flex-col gap-2 min-w-[160px]">
               <Label className="text-lg">Zygosity</Label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="ml-auto">
-                    Select Zygosity
-                    <ChevronDown className="ml-2 h-4 w-4" />
+                  <Button variant="outline" className="h-10">
+                    Select Zygosity <ChevronDown className="ml-2 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuCheckboxItem
-                    onCheckedChange={(isChecked) => {
-                      const value = isChecked ? "Homozygous" : null;
-                      setZygosityFilter(value);
-                      table.getColumn("zygosity")?.setFilterValue(value);
-                    }}
-                    checked={zygosityFilter === "Homozygous"}
-                  >
-                    Homozygous
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    onCheckedChange={(isChecked) => {
-                      const value = isChecked ? "Heterozygous" : null;
-                      setZygosityFilter(value);
-                      table.getColumn("zygosity")?.setFilterValue(value);
-                    }}
-                    checked={zygosityFilter === "Heterozygous"}
-                  >
-                    Heterozygous
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    onCheckedChange={(isChecked) => {
-                      const value = isChecked ? "Reference / Unknown" : null;
-                      setZygosityFilter(value);
-                      table.getColumn("zygosity")?.setFilterValue(value);
-                    }}
-                    checked={zygosityFilter === "Reference /Unknown"}
-                  >
-                    Reference / Unknown
-                  </DropdownMenuCheckboxItem>
+                  {["Homozygous", "Heterozygous", "Reference / Unknown"].map(
+                    (type) => (
+                      <DropdownMenuCheckboxItem
+                        key={type}
+                        checked={zygosityFilter === type}
+                        onCheckedChange={(isChecked) => {
+                          const value = isChecked ? type : null;
+                          setZygosityFilter(value);
+                          table.getColumn("zygosity")?.setFilterValue(value);
+                        }}
+                      >
+                        {type}
+                      </DropdownMenuCheckboxItem>
+                    )
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <div className="flex flex-col gap-2">
+
+            {/* Gnomad Combined Range */}
+            <div className="flex flex-col gap-2 min-w-[200px]">
+              <Label className="text-lg">Gnomad Combined Range</Label>
+              <div className="flex gap-2">
+                <Input
+                  type="number"
+                  className="w-20 h-10"
+                  placeholder="Min"
+                  value={gnomadRange[0]}
+                  onChange={(e) =>
+                    setGnomadRange([
+                      e.target.value ? parseFloat(e.target.value) : "",
+                      gnomadRange[1],
+                    ])
+                  }
+                />
+                <Input
+                  type="number"
+                  className="w-20 h-10"
+                  placeholder="Max"
+                  value={gnomadRange[1]}
+                  onChange={(e) =>
+                    setGnomadRange([
+                      gnomadRange[0],
+                      e.target.value ? parseFloat(e.target.value) : "",
+                    ])
+                  }
+                />
+              </div>
+            </div>
+
+            {/* ACMG */}
+            <div className="flex flex-col gap-2 min-w-[160px]">
               <Label className="text-lg">ACMG</Label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="ml-auto">
-                    ACMG Classification
-                    <ChevronDown className="ml-2 h-4 w-4" />
+                  <Button variant="outline" className="h-10">
+                    ACMG Classification <ChevronDown className="ml-2 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-
                 <DropdownMenuContent>
-                  <DropdownMenuCheckboxItem
-                    onCheckedChange={(isChecked) => {
-                      const value = isChecked ? "Pathogenic" : null;
-                      setACMGFilter(value);
-                      table.getColumn("acmg")?.setFilterValue(value);
-                    }}
-                    checked={acmgFilter === "Pathogenic"}
-                  >
-                    <div className="border-2 border-red-600 w-full p-2 rounded-sm bg-red-400">
-                      <p className="text-black font-semibold">Pathogenic</p>
-                    </div>
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    onCheckedChange={(isChecked) => {
-                      const value = isChecked ? "Likely Pathogenic" : null;
-                      setACMGFilter(value);
-                      table.getColumn("acmg")?.setFilterValue(value);
-                    }}
-                    checked={acmgFilter === "Likely Pathogenic"}
-                  >
-                    <div className="border-2 border-red-600 w-full p-2 rounded-sm bg-red-300">
-                      <p className="text-black font-semibold">
-                        Likely Pathogenic
-                      </p>
-                    </div>
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    onCheckedChange={(isChecked) => {
-                      const value = isChecked ? "VUS" : null;
-                      setACMGFilter(value);
-                      table.getColumn("acmg")?.setFilterValue(value);
-                    }}
-                    checked={acmgFilter === "VUS"}
-                  >
-                    <div className="border-2 border-yellow-600 w-full p-2 rounded-sm bg-yellow-300">
-                      <p className="text-black font-semibold">VUS</p>
-                    </div>
-                  </DropdownMenuCheckboxItem>
-
-                  <DropdownMenuCheckboxItem
-                    onCheckedChange={(isChecked) => {
-                      const value = isChecked ? "Likely Benign" : null;
-                      setACMGFilter(value);
-                      table.getColumn("acmg")?.setFilterValue(value);
-                    }}
-                    checked={acmgFilter === "Likely Benign"}
-                  >
-                    <div className="border-2 border-green-600 w-full p-2 rounded-sm bg-green-200">
-                      <p className="text-black font-semibold">Likely Benign</p>
-                    </div>
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    onCheckedChange={(isChecked) => {
-                      const value = isChecked ? "Benign" : null;
-                      setACMGFilter(value);
-                      table.getColumn("acmg")?.setFilterValue(value);
-                    }}
-                    checked={acmgFilter === "Benign"}
-                  >
-                    <div className="border-2 border-green-600 w-full p-2 rounded-sm bg-green-300">
-                      <p className="text-black font-semibold">Benign</p>
-                    </div>
-                  </DropdownMenuCheckboxItem>
+                  {[
+                    { label: "Pathogenic", color: "bg-red-400 border-red-600" },
+                    {
+                      label: "Likely Pathogenic",
+                      color: "bg-red-300 border-red-600",
+                    },
+                    { label: "VUS", color: "bg-yellow-300 border-yellow-600" },
+                    {
+                      label: "Likely Benign",
+                      color: "bg-green-200 border-green-600",
+                    },
+                    { label: "Benign", color: "bg-green-300 border-green-600" },
+                  ].map(({ label, color }) => (
+                    <DropdownMenuCheckboxItem
+                      key={label}
+                      checked={acmgFilter === label}
+                      onCheckedChange={(isChecked) => {
+                        const value = isChecked ? label : null;
+                        setACMGFilter(value);
+                        table.getColumn("acmg")?.setFilterValue(value);
+                      }}
+                    >
+                      <div
+                        className={`w-full p-2 rounded-sm border-2 ${color}`}
+                      >
+                        <p className="text-black font-semibold">{label}</p>
+                      </div>
+                    </DropdownMenuCheckboxItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-          </div>
-          <div className="flex flex-row ml-3 gap-2 items-center justify-center ">
-            <div className="flex flex-col gap-2">
+
+            {/* Select Column */}
+            <div className="flex flex-col gap-2 min-w-[180px]">
               <Label className="text-lg">Select Column</Label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="ml-auto">
-                    Select Column to Show
+                  <Button variant="outline" className="h-10">
+                    Select Column to Show{" "}
                     <ChevronDown className="ml-2 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   {table
                     .getAllColumns()
-                    .filter((column) => column.getCanHide())
-                    .map((column) => {
-                      return (
-                        <DropdownMenuCheckboxItem
-                          key={column.id}
-                          className="capitalize"
-                          checked={column.getIsVisible()}
-                          onCheckedChange={(value) => {
-                            column.toggleVisibility(!!value);
-                            if (column.id === "functional_impact") {
-                              setFiVis(!!value);
-                            }
-                          }}
-                        >
-                          {column.id}
-                        </DropdownMenuCheckboxItem>
-                      );
-                    })}
+                    .filter((col) => col.getCanHide())
+                    .map((col) => (
+                      <DropdownMenuCheckboxItem
+                        key={col.id}
+                        checked={col.getIsVisible()}
+                        onCheckedChange={(value) => {
+                          col.toggleVisibility(!!value);
+                          if (col.id === "functional_impact") {
+                            setFiVis(!!value);
+                          }
+                        }}
+                      >
+                        {col.id}
+                      </DropdownMenuCheckboxItem>
+                    ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <div className="flex flex-col gap-2">
+
+            {/* Download Buttons */}
+            <div className="flex flex-col gap-2 min-w-[200px]">
               <Label className="text-lg">Download Type</Label>
-              <div className="flex flex-row gap-1">
+              <div className="flex gap-2">
                 <Button
+                  variant="outline"
                   className={
                     activeDownloadCSV ? "bg-gray-200 cursor-not-allowed" : ""
                   }
-                  variant={"outline"}
-                  onClick={(e) => generateCSV()}
                   disabled={activeDownloadCSV}
+                  onClick={generateCSV}
                 >
-                  <Logs> </Logs>
+                  <Logs className="mr-1" />
                   {activeDownloadCSV ? "Processing.." : "CSV"}
                 </Button>
                 <Button
+                  variant="outline"
                   className={
                     activeDownloadJSON ? "bg-gray-200 cursor-not-allowed" : ""
                   }
-                  variant={"outline"}
-                  onClick={(e) => generateJSON()}
                   disabled={activeDownloadJSON}
+                  onClick={generateJSON}
                 >
-                  <FileJson></FileJson>
+                  <FileJson className="mr-1" />
                   {activeDownloadJSON ? "Processing.." : "JSON"}
                 </Button>
                 <Button
-                  variant={"outline"}
-                  onClick={(e) => generateXML("ID_RECORD", "ID_PATIENT")}
+                  variant="outline"
+                  onClick={() => generateXML("ID_RECORD", "ID_PATIENT")}
                 >
-                  <FileCode> </FileCode>XML
+                  <FileCode className="mr-1" /> XML
                 </Button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="flex flex-col overflow-x-auto w-full">
+
+      <div className="flex flex-col overflow-x-auto w-full bg-white rounded shadow-xl">
         <Table className="m-4 rounded-md min-w-full">
           <TableHeader className="h-[50px]">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className=" hover:bg-violet-200 bg-violet-200 border-y-4 border-gray-900 rounded-md"
+                className=" hover:bg-purple-500 bg-purple-500 border-y-4 border-gray-900 rounded-md"
               >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
-                      className="text-gray-90 px-2 md:px-4 h-[70px] text-lg  "
+                      className="text-white px-2 md:px-4 h-[70px] text-lg  "
                     >
                       {header.isPlaceholder
                         ? null
